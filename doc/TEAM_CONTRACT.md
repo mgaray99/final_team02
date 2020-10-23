@@ -5,7 +5,15 @@
  * communicate with the team regularly to keep everyone in the loop about the project.
 
  ### Team meetings:
- * 3/4 meetings per week. Once Tuesday/Wednesday, once Thursday/Friday, a couple times over the weekend. At night.
+ * Five scheduled meetings per week, at the following times:
+ * Wednesday: 8:30 pm
+ * Thursday: 10 pm
+ * Saturday: 4 pm 
+ * Sunday: 4 pm
+ * Monday: 8:30 pm 
+ * Every effort should be made to attend these meetings. If you cannot attend, let the group know ASAP, and text what you have accomplished. We
+ will work out over Slack/text what you should do before the next meeting.
+ 
  * At the beginning of the meeting, everyone says what they did (and, if they didn't finish anything, what they were supposed to do but didn't)
  * Everyone makes an agreement on what specific things they will do before the next meeting.
  * If you are going to miss a meeting, text ASAP, and communicate what you got done over text.
