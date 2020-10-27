@@ -1,3 +1,5 @@
+// This case tests for the program's ability to identify that the player has reached a goal point
+
 /**
  * The model of our game
  */

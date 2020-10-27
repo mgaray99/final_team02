@@ -1,3 +1,6 @@
+// This case tests for the program's ability to handle the user moving left and to update
+// accordingly
+
 /**
  * The controller of our game
  */
