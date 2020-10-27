@@ -18,7 +18,6 @@ MIke Garay
 * Flexibility
 * Allow users to select/make different configurations
 
-
 ### Project Progress
 
 #### Sprint 1 (Test)
