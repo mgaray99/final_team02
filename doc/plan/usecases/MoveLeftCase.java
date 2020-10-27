@@ -1,3 +1,6 @@
+// This case tests for the program's ability to handle the user moving left and to update
+// accordingly
+
 /**
  * The controller of our game
  */
@@ -8,7 +11,7 @@ class GameController {
    * Responds to a press of a key
    * @param code represents the key that the user pressed
    */
-  public void KeyHandler(KeyCode code) {
+  public void keyHandler(KeyCode code) {
     if (code.equals(KeyCode.LEFT)) {
       dispatchEvent(MOVE_LEFT);
     }
@@ -30,8 +33,8 @@ class GameController {
  */
 class GameView {
 
-  private GameController controller;
-  private GameModel currentModel;
+  private GameController currentController;
+  private GameModel currentModel = new GameModel();
   private static final String MOVE_LEFT = "move left";
 
   /**
@@ -39,15 +42,67 @@ class GameView {
    * events coming from GameController
    */
   private void buildGameController() {
-    GameController controller = new GameController();
+    currentController = new GameController();
     controller.addEventHandler(EventType.ROOT, event -> handleControllerEvent(
         event.getEventType().getName()));
   }
 
+  /**
+   * Responds to the situation where an event has happened in currentController
+   * @param event the String representation of the event that has occurred
+   */
   private void handleControllerEvent(String event) {
       if (event.equals(MOVE_LEFT)) {
         // Sets the player's next motion to be -1 in the x direction, 0 in the y direction
         currentModel.getPlayer().setMotion(new Vector2D(-1, 0));
       }
   }
+}
+
+/**
+ * Represents a game model
+ */
+class GameModel {
+
+  /**
+   * Returns the player associated with this game
+   * @return a new player entity object, in the real code, this would be a preinstantiated object
+   */
+  public PlayerEntity getPlayer() {
+    return new PlayerEntity();
+  }
+}
+
+/**
+ * Represents the player of the game
+ */
+class PlayerEntity {
+  Vector2D currentMotion;
+
+  /**
+   * Sets the current motion of the 2D vector to equal vect
+   * @param vect the new motion vector for the player to move with
+   */
+  public void setMotion(Vector2D vect) {
+    motion = vect;
+  }
+}
+
+/**
+ * Represents a 2D vector
+ */
+class Vector2D {
+  private double xcomponent;
+  private double ycomponent;
+
+  /**
+   * Builds a new 2D vector
+   * @param x the x component of the vector
+   * @param y the y component of the vector
+   */
+  public Vector2D(double x, double y) {
+    xcomponent = x;
+    ycomponent = y;
+  }
+
 }
