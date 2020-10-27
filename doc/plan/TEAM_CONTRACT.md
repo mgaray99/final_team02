@@ -28,7 +28,7 @@
  * Each team member will ask for help when needed
  * Each team member will "go above and beyond" as needed to support the team and even other teams
  
- ###Commitments:
+ ### Commitments:
  * Each team member will do work to the best of his/her ability and on time and provide commitments others on the team can rely on
  * If someone fails to meet a commitment: talk about it with the group in next team meeting. 
  * If, after a team discussion and at least 2 tries to get the person to do their commitments, they are still not resolved - 
