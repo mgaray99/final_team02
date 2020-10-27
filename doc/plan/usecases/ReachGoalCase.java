@@ -5,8 +5,8 @@
  */
 class GameModel {
 
-  private PlayerEntity currentPlayer;
-  private Collection<GoalEntity> currentGoals;
+  private PlayerEntity currentPlayer = new PlayerEntity();
+  private GoalEntity currentGoal = new GoalEntity();
 
   /**
    * Updates the current GameModel
@@ -20,11 +20,9 @@ class GameModel {
    * then if the goal has been reached, handling that case separately
    */
   private void checkForGoalReached() {
-    for (GoalEntity goal : currentGoals) {
-      if (goal.wasGoalReached()) {
-        handleGoal(goal);
+      if (currentGoal.wasGoalReached()) {
+        handleGoal(currentGoal);
       }
-    }
   }
 
   /**
@@ -42,4 +40,18 @@ class GameModel {
     System.out.println("you won!");
   }
 
+}
+
+/**
+ * This class represents a goal point somewhere on the map
+ */
+class GoalEntity {
+
+  /**
+   * Reveals whether or not the player has reached the Goal
+   * @return true, as a dummy variable, it would actually return something else later
+   */
+  public boolean wasGoalReached() {
+    return true;
+  }
 }
