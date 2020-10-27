@@ -33,7 +33,7 @@
 * View: build language flexibility 
 
 
-## eek 2: Basic
+## Week 2: Basic
 ### Goals
 - Add additional levels
 - Apply different textures to features of the game
