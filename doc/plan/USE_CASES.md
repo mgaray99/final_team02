@@ -7,6 +7,16 @@
 * A player presses a button and the screen scrolls automatically
 * A player presses space to jump over an obstacle
 
+
+###eka13 - Front End
+* Apply different textures to features of the game
+* Player should be able to win/lose
+* Player can use Power ups
+* Player can play multiple levels
+* Game should have different types of blocks
+
+
+
 ###rmk44 - Back End
 * A player presses P to pause / resume the game
 * A player presses R to reset the level
