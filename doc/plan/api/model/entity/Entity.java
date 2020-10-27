@@ -39,10 +39,11 @@ public interface Entity{
 
     /**
      * Compares the positions and hitboxes of this entity and another to see if there is a collision
-     * If colliding, an interaction of some type will occur between the two entities
+     * If colliding, an interaction of some type will occur between the two entities and the method will return true
      * @param collidingEntity The entity this entity is potentially colliding with
+     * @return Whether or not the two entities involved have collided
      */
-    void checkCollision(Entity collidingEntity);
+    boolean checkCollision(Entity collidingEntity);
 
     public enum Type{
         PLAYER,
