@@ -13,3 +13,10 @@
 * Recognize when a player reaches a certain "goal location" in the level
 * Read a CSV file and display a physical level
 * Read a .properties file that sets the rules for the game
+
+###meg89 - Back end
+* A player is to receive or lose a status effect from a power up
+* A player takes damage from or applies damage to an enemy
+* A player wishes to save their current progress and resume it later on
+* A player makes contact with an out-of-bounds area
+* A player presses 'I' to toggle the invincibility cheat
