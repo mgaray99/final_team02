@@ -30,7 +30,7 @@ class GameController {
  */
 class GameView {
 
-  private GameController controller;
+  private GameController currentController;
   private GameModel currentModel;
   private static final String MOVE_LEFT = "move left";
 
@@ -39,11 +39,15 @@ class GameView {
    * events coming from GameController
    */
   private void buildGameController() {
-    GameController controller = new GameController();
+    currentController = new GameController();
     controller.addEventHandler(EventType.ROOT, event -> handleControllerEvent(
         event.getEventType().getName()));
   }
 
+  /**
+   * Responds to the situation where an event has happened in currentController
+   * @param event the String representation of the event that has occurred
+   */
   private void handleControllerEvent(String event) {
       if (event.equals(MOVE_LEFT)) {
         // Sets the player's next motion to be -1 in the x direction, 0 in the y direction
