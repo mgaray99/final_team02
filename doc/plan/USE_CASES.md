@@ -1,6 +1,6 @@
-#Use Cases
+# Use Cases
 
-###atl16 - Front End
+### atl16 - Front End
 * A player clicks a button to start the game
 * A player presses left and moves to the left
 * A player presses right and moves to the right
@@ -8,7 +8,7 @@
 * A player presses space to jump over an obstacle
 
 
-###eka13 - Front End
+### eka13 - Front End
 * Apply different textures to features of the game
 * Player should be able to win/lose
 * Player can use Power ups
@@ -17,14 +17,14 @@
 
 
 
-###rmk44 - Back End
+### rmk44 - Back End
 * A player presses P to pause / resume the game
 * A player presses R to reset the level
 * Recognize when a player reaches a certain "goal location" in the level
 * Read a CSV file and display a physical level
 * Read a .properties file that sets the rules for the game
 
-###meg89 - Back end
+### meg89 - Back end
 * A player is to receive or lose a status effect from a power up
 * A player takes damage from or applies damage to an enemy
 * A player wishes to save their current progress and resume it later on
