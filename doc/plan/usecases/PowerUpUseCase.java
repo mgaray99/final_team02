@@ -1,6 +1,8 @@
+import PowerUpUseCase.PowerUpEntity.ModifierType;
+
 class PowerUpUseCase{
 
-    static playerCounter = 0;
+    int playerCounter = 0;
 
     static void main(String[] args){
         int playerHeight = 2;

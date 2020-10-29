@@ -1,3 +1,5 @@
+import PowerUpUseCase.Entity;
+
 public interface Level{
 
     int[][] getGrid();

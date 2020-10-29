@@ -1,4 +1,6 @@
-public interface Entity{
+package entity;
+
+public interface Entity {
 
     /**
      * Accessor for the type of this entity to be used in view for assigning a shape and texture
@@ -21,13 +23,13 @@ public interface Entity{
 
     /**
      * Accessor for the position of this entity in 2D space
-     * @return The Position2D representing this entity's current position
+     * @return The entity.Position2D representing this entity's current position
      */
     Position2D getPosition();
 
     /**
      * Setter for the position of this entity in 2D space
-     * @param position2D The Position2D that will become the entity's current position
+     * @param position2D The entity.Position2D that will become the entity's current position
      */
     void setPosition(Position2D position2D);
 
