@@ -86,6 +86,7 @@ public class ButtonBuilder {
    * @return a fully instantiated Button
    */
   private Button buildButtonFromLine(String line) {
+
     Button output = new Button();
     String[] outputComponents = line.split(" ");
 
@@ -100,7 +101,8 @@ public class ButtonBuilder {
     output.setLayoutY(HEIGHT * Double.parseDouble(outputComponents[2]) -
         output.getPrefHeight() / 2);
 
-    output.setOnAction(e -> handler.handlePush(outputComponents[0]));
+
+    output.setOnAction(e -> handler.handlePush(outputComponents[5]));
     return output;
   }
 

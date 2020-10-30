@@ -1,6 +1,6 @@
 SELECT_OPTIONS
-PrevCommand 0.30 0.90 0.10 0.05
-NextCommand 0.70 0.90 0.10 0.05
-Option1 0.50 0.30 0.40 0.05
-Option2 0.50 0.40 0.40 0.05
-Option3 0.50 0.50 0.40 0.05
+Option1 0.25 0.50 0.20 0.10 chooseTopChoice
+Option2 0.50 0.50 0.20 0.10 chooseMiddleChoice
+Option3 0.75 0.50 0.20 0.10 chooseBottomChoice
+PrevCommand 0.30 0.90 0.10 0.05 prevOptions
+NextCommand 0.70 0.90 0.10 0.05 nextOptions

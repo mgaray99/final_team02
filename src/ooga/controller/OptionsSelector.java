@@ -19,6 +19,8 @@ import javafx.scene.control.Button;
  *
  * @author Alex Lu
  */
+
+
 public class OptionsSelector extends Group implements ButtonPushHandler {
 
   private static final String PREV_COMMAND = "PrevCommand";
@@ -95,16 +97,15 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    * Is responsible for handling the situation where the user pushes a button - directs the query to
    * a different method depending on which button was pushed
    *
-   * @param type the button which was pushed
+   * @param type the method name to be called which was pushed
    */
 
   public void handlePush(String type) {
-    switch (type) {
-      case PREV_COMMAND -> prevOptions();
-      case NEXT_COMMAND -> nextOptions();
-      case OPTION1 -> chooseTopChoice();
-      case OPTION2 -> chooseMiddleChoice();
-      case OPTION3 -> chooseBottomChoice();
+    try {
+      getClass().getDeclaredMethod(type).invoke(this);
+    }
+    catch (Exception e) {
+      System.out.println("that method does not exist");
     }
   }
 
@@ -134,8 +135,6 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
     setOptionText(choices, (Button) lookup("#" + OPTION1), offset);
     setOptionText(choices, (Button) lookup("#" + OPTION2), offset + 1);
     setOptionText(choices, (Button) lookup("#" + OPTION3), offset + 2);
-
-
   }
 
   /**
