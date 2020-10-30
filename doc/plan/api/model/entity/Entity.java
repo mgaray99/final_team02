@@ -1,6 +1,11 @@
+<<<<<<< HEAD
+import model.logic.*;
+public interface Entity{
+=======
 package entity;
 
 public interface Entity {
+>>>>>>> c87663a14a34314ffc506b9983947883264fac1e
 
     /**
      * Accessor for the type of this entity to be used in view for assigning a shape and texture
