@@ -33,7 +33,7 @@ represent the player and enemies respectively
 * IRangedAttacker is an interface which allows ranged attacking
 * Level represents all of the data for a single level and the LevelReader will read that
 data from a file
-* We also include a few helper classes such as Position2D and Vector2D to assist in
+* We also include a few helper classes such as model.logic.Position2D and Vector2D to assist in
 some of our calculations.
 * We'll later write a class called Scroll to help determine which parts of the level will be visible
 * GameModel is responsible for running and updating the game
@@ -68,7 +68,7 @@ implementing IRangedAttacker
 using getModifierAmount()
 * ProjectileEntity extends MobileEntity and contains a method called getShooter() to determine who
 fired it. It heavily exploits the motion properties of MobileEntity.
-* Position2D is a location in 2D space that contains a x and y position and possesses four methods,
+* model.logic.Position2D is a location in 2D space that contains a x and y position and possesses four methods,
 getters and setters for x and y locations. It will be a variable that all Entity objects possess
 in order to define a location
 * Vector2D is a vector in 2D space that contains an x and y magnitude. It possesses four methods,

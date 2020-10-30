@@ -1,3 +1,5 @@
+package model.logic;
+
 public interface Position2D{
 
     /**
