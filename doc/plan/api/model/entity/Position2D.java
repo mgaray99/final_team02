@@ -1,4 +1,4 @@
-package model.logic;
+package entity;
 
 public interface Position2D{
 

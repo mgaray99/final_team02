@@ -1,4 +1,4 @@
-public interface LivingEntity extends MobEntity{
+public interface LivingEntity implements MobileEntity {
 
     /**
      * Accessor for the health of this living entity
