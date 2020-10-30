@@ -1,6 +1,10 @@
 package ooga.view;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -18,6 +22,8 @@ public class GameScene extends Scene {
   private GameController controller;
   private static final String CONTROLLER = "controller";
   private static final String BACKGROUND = "background";
+  private static final EventType SCENE_EVENT = new EventType("scene");
+  private List<String> buffer;
 
 
   public GameScene(Group myRoot, double width, double height) {
@@ -26,9 +32,10 @@ public class GameScene extends Scene {
     WIDTH = width;
     HEIGHT = height;
 
+    buffer = new ArrayList<>();
+
     Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
     background.setId(BACKGROUND);
-
     root.getChildren().add(background);
   }
 
@@ -57,7 +64,7 @@ public class GameScene extends Scene {
    * @param method the method to be called by the OptionsSelector
    */
   public void buildOptionsSelectorForController(String folder, String extension,
-      Method method) {
+      String method) {
     controller.addOptionsSelectorFromFolder(folder, extension, method);
   }
 
@@ -67,6 +74,14 @@ public class GameScene extends Scene {
    */
   public void addElementToRoot(Node toBeAdded) {
     root.getChildren().add(toBeAdded);
+  }
+
+  /**
+   * Returns the controller associated with this GameScene
+   * @return controller
+   */
+  public GameController getController() {
+    return controller;
   }
 
   /**
@@ -90,4 +105,5 @@ public class GameScene extends Scene {
     }
     throw new NullPointerException("Node not found!");
   }
+
 }

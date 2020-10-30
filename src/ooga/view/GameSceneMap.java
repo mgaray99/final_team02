@@ -3,6 +3,7 @@ package ooga.view;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.event.EventType;
 import javafx.scene.Group;
 import ooga.controller.GameController;
 import ooga.view.GameView.viewName;
@@ -40,7 +41,7 @@ public class GameSceneMap {
 
     for (GameView.viewName view : GameView.viewName.values()) {
       mapOfScenes.put(view, new GameScene(new Group(), WIDTH, HEIGHT));
-      mapOfScenes.get(view).setController(new GameController(gameView));
+      mapOfScenes.get(view).setController(new GameController());
     }
 
     buildOptionsSelectorsForControllers();
@@ -53,11 +54,9 @@ public class GameSceneMap {
   private void buildOptionsSelectorsForControllers() {
     try {
       mapOfScenes.get(viewName.SELECT_CSS_STYLESHEET).buildOptionsSelectorForController(
-          CSS_FOLDERPATH, CSS_EXTENSION,
-          getOptionSelectorMethodFromString("switchStylesheet"));
+          CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
       mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorForController(
-          LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION,
-          getOptionSelectorMethodFromString("updateLanguage"));
+          LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "updateLanguage");
     }
     catch (Exception e) {
       e.printStackTrace();

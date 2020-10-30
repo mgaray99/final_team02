@@ -2,6 +2,8 @@ package ooga.controller;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.EventType;
 import javafx.scene.Group;
@@ -18,10 +20,11 @@ public class GameController extends Group implements ButtonPushHandler {
   private static double WIDTH = 800;
   private static double HEIGHT = 800;
   private static String OPTIONS_SELECTOR_EVENTTYPE = "push";
-  private Object view;
+  private static final EventType CONTROLLER_EVENT = new EventType("controller");
+  private List<String> buffer;
 
-  public GameController(Object v) {
-    view = v;
+  public GameController() {
+    buffer = new ArrayList<>();
     addGameControllerElements();
   }
 
@@ -39,7 +42,7 @@ public class GameController extends Group implements ButtonPushHandler {
    * @param extension the allowed extension for each option (i.e. include if ".jpeg")
    * @param method the method to be called by the OptionsSelector
    */
-  public void addOptionsSelectorFromFolder(String folder, String extension, Method method) {
+  public void addOptionsSelectorFromFolder(String folder, String extension, String method) {
     FolderParser parser = new FolderParser(folder,
         extension);
     OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, parser.getFilenamesFromFolder());
@@ -56,26 +59,14 @@ public class GameController extends Group implements ButtonPushHandler {
    * @param text the String parameter to be inserted into the method if event matches
    *             OPTIONS_SELECTOR_EVENTTYPE
    */
-  private void callMethodOnOptionSelector(Event event, Method method, String text) {
+  private void callMethodOnOptionSelector(Event event, String method, String text) {
     if (event.getEventType().getName().equals(OPTIONS_SELECTOR_EVENTTYPE) && !text.equals("")) {
-        String[] methodArgs = {text};
-        invokeMethod(method, methodArgs);
+        List<String> args = new ArrayList<>();
+        args.add(text);
+        fillBuffer(method, args);
     }
   }
 
-  /**
-   * Calls the method "method" with the parameter "text"
-   *
-   * @param method the method to be invoked
-   * @param text the value of the string
-   */
-  private void invokeMethod(Method method, String[] text) {
-    try {
-      method.invoke(view, text);
-    } catch (Exception e) {
-      System.out.println("invalid method");
-    }
-  }
 
   /**
    * Adds a set of buttons as specified by file to the controller - when they are pushed they will
@@ -103,14 +94,36 @@ public class GameController extends Group implements ButtonPushHandler {
    */
   @Override
   public void handlePush(String methodName) {
-    try {
-      Method method = view.getClass().getDeclaredMethod(methodName);
-      method.invoke(view);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("invalid method view");
-    }
+    fillBuffer(methodName, new ArrayList<>());
+  }
+
+  /**
+   * Fires an event
+   */
+  private void dispatchEvent() {
+      fireEvent(new Event(CONTROLLER_EVENT));
+  }
+
+  /**
+   * Empties the buffer List and then fills it with methodName and a list of arguments
+   * @param methodName the String representation of the method
+   * @param args a list of arguments
+   */
+  private void fillBuffer(String methodName, List<String> args) {
+    buffer.clear();
+    buffer.add(methodName);
+    buffer.addAll(args);
+    dispatchEvent();
+  }
+
+  /**
+   * Returns the elements in the buffer, having been defensively copied into bufferHolder
+   * @return bufferHolder
+   */
+  public List<String> getBuffer() {
+    List<String> bufferHolder = new ArrayList<>();
+    bufferHolder.addAll(buffer);
+    return bufferHolder;
   }
 
 }
