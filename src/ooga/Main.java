@@ -1,14 +1,17 @@
 package ooga;
 
 
+import ooga.view.GameView;
+
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * Main method - runs our program
  */
 public class Main {
     /**
      * Start of the program.
      */
     public static void main (String[] args) {
-        System.out.println("Hello world");
+        GameView app = new GameView();
+        app.beginOoga(args);
     }
 }
