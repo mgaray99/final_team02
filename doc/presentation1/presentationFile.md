@@ -20,7 +20,7 @@ DoodleJump[Doodle Jump]-->Characteristics
 FlappyBirds[Flappy Bird]-->Characteristics
 Characteristics-->Similarities
 Characteristics-->Differences
-Similarities-->List[Scrollable<br/>Player Can Jump<br/>Player Evades Obstacle]
+Similarities-->List[Scrollable<br/>Player Can Jump<br/>Player Evades Obstacles]
 Differences-->Mario[Super Mario:<br/>Multiple Lives<br/>Scrolls Horizontally<br/>Has Win Factor<br/>Has Enemies]
 Differences-->Doodle[Doodle Jump:<br/>Single Life<br/>Scrolls Vertically<br/>Has No Win Factor<br/>Has No Enemies]
 Differences-->Flappy[Flappy Bird:<br/>Single Life<br/>Scrolls Horizontally<br/>Has No Win Factor<br/>Has No Enemies]
