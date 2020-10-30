@@ -1,8 +1,8 @@
 # Team 02 (BORAT)
 
-#### Edem Ahorlu
 #### Alex Lu
 #### Mike Garay
+### Edem Ahorlu
 #### Ryan Krakower
 
 
@@ -26,11 +26,11 @@ Differences-->Doodle[Doodle Jump:<br/>Single Life<br/>Scrolls Vertically<br/>Has
 Differences-->Flappy[Flappy Bird:<br/>Single Life<br/>Scrolls Horizontally<br/>Has No Win Factor<br/>Has No Enemies]
 ```
 
-## Features
+## Break Down/Features
 
 ```mermaid
 graph TD;
-  Planning-->Edem[Edem Ahorlu]
+  Planning-->Edem[**Edem Ahorlu**]
   Planning-->Alex[Alex Lu]
   Planning-->Mike[Mike Garay]
   Planning-->Ryan[Ryan Krakower]
