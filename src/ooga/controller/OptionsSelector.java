@@ -30,13 +30,13 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
   private static final EventType<Event> EVENT_TYPE = new EventType<>("push");
 
   private static final int NUM_OPTION_BUTTONS = 3;
-  private static final String RESOURCES = "resources/";
+  private static final String RESOURCES = "ooga/resources/";
   private static final String OPTIONS_SELECTOR_CONFIG_PATH = RESOURCES
       + "buttons/optionsselectorbuttons.txt";
 
   private ResourceBundle resourceBundle;
   private static final String EXTENSION = ".English";
-  private static final String LABELS = ".resourcebundles";
+  private static final String LABELS = "resourcebundles";
   private int choosableOptionOffset;
   private String bufferText;
 
@@ -60,7 +60,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
     choices = new ArrayList<>();
     copyIntoChoices(c);
 
-    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS + EXTENSION);
+    resourceBundle = ResourceBundle.getBundle("ooga/resources/resourcebundles.English");
 
     buildButtons();
     regenerateOptions();
@@ -87,7 +87,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
         super.getChildren().addAll(builder.getFoundButtons());
       }
     } catch (ButtonBuilderInstantiationException bbie) {
-      bbie.printStackTrace();
+      System.out.println("couldn't build buttons");
     }
   }
 

@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ooga.controller.GameController;
 
 public class GameView extends Application {
 
@@ -26,6 +27,8 @@ public class GameView extends Application {
   public void start(Stage stage) {
     buildMapOfScenes();
     stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
+    buildController();
+
     stage.show();
 
     Timeline animation = new Timeline();
@@ -50,12 +53,34 @@ public class GameView extends Application {
     }
   }
 
+  private void buildController() {
+    try {
+      GameController controller = new GameController(this);
+      controller.addOptionsSelectorFromFolder("./src/ooga/resources/cssstylesheets",
+          ".css", this.getClass().getDeclaredMethod("switchStylesheet", String.class));
+      ((GameScene)mapOfScenes.get(viewName.HOME_SCREEN))
+          .addElementToRoot(controller);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
   /**
    * Updates the view given that time has passed
    * @param timeElapsed the amount of time that has passed since the last update
    */
   private void update(double timeElapsed) {
 
+  }
+
+  public void switchStylesheet(String name) {
+    String stylesheetPath = "ooga/resources/cssstylesheets/";
+    String stylesheetExtension = ".css";
+    for (viewName view : viewName.values()) {
+      mapOfScenes.get(view).getStylesheets().clear();
+      mapOfScenes.get(view).getStylesheets().add(stylesheetPath + name + stylesheetExtension);
+    }
   }
 
   /**

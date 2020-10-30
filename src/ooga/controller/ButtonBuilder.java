@@ -51,7 +51,8 @@ public class ButtonBuilder {
     foundButtons = new ArrayList<>();
     handler = bph;
 
-    resourceBundle = ResourceBundle.getBundle(RESOURCES + "labels." + EXTENSION);
+    //resourceBundle = ResourceBundle.getBundle(RESOURCES + "labels." + EXTENSION);
+    resourceBundle = ResourceBundle.getBundle("ooga/resources/resourcebundles.English");
     try {
       makeButtons(path);
     } catch (Exception e) {
