@@ -15,7 +15,13 @@ graph TD;
 Platformer[Platformer Game]-->SuperMario[Super Mario]
 Platformer[Platformer Game]-->DoodleJump[Doodle Jump]
 Platformer[Platformer Game]-->FlappyBirds[Flappy Birds]
-SuperMario[Super Mario]-->Feature[]
+SuperMario[Super Mario]-->Characteristics
+DoodleJump[Doodle Jump]-->Characteristics
+FlappyBirds[Flappy Birds]-->Characteristics
+Characteristics-->Similarities
+Characteristics-->Differences
+Similarities-->List[Scrollable<br/>Player Can Jump<br/>Player Evades Obstacle]
+
 
 
 ```
