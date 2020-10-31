@@ -1,8 +1,12 @@
 package ooga.view;
 
+import java.lang.reflect.Method;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import ooga.controller.GameController;
 
 /**
  * Represents one scene in a game
@@ -11,6 +15,9 @@ public class GameScene extends Scene {
   private Group root;
   private final double WIDTH;
   private final double HEIGHT;
+  private GameController controller;
+  private static final String CONTROLLER = "controller";
+  private static final String BACKGROUND = "background";
 
 
   public GameScene(Group myRoot, double width, double height) {
@@ -18,6 +25,40 @@ public class GameScene extends Scene {
     root = myRoot;
     WIDTH = width;
     HEIGHT = height;
+
+    Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
+    background.setId(BACKGROUND);
+
+    root.getChildren().add(background);
+  }
+
+  /**
+   * Sets the controller associated with this particular scene
+   * @param cont the controller to serve as the game scene's controller
+   */
+  public void setController(GameController cont) {
+    controller = cont;
+    controller.setId("#" + CONTROLLER);
+    root.getChildren().add(controller);
+  }
+
+  /**
+   * Adds buttons from a file to the controller
+   * @param file the file containing the buttons to be included
+   */
+  public void addButtonsToControllerFromFile(String file) {
+    controller.addButtonsFromFile(file);
+  }
+
+  /**
+   * Builds an option selector for the controller associated with the scene
+   * @param folder the folder containing the list of options (i.e. "./ooga/resources/buttons")
+   * @param extension the allowed extension for each option (i.e. include if ".jpeg")
+   * @param method the method to be called by the OptionsSelector
+   */
+  public void buildOptionsSelectorForController(String folder, String extension,
+      Method method) {
+    controller.addOptionsSelectorFromFolder(folder, extension, method);
   }
 
   /**

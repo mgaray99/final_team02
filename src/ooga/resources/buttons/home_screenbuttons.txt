@@ -1,0 +1,4 @@
+HOME_SCREEN
+StartCommand 0.50 0.30 0.40 0.05 start
+SelectCssCommand 0.50 0.40 0.40 0.05 switchToSelectCssStylesheetScreen
+SelectLanguageCommand 0.50 0.50 0.40 0.05 switchToSelectLanguageScreen
