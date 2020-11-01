@@ -12,7 +12,9 @@ public interface ButtonPushHandler {
 
   /**
    * Determines what the user should do after a button is pushed
-   * @param s contains information that might help the user decide what to do
+   * @param type contains information that might help the user decide what to do
    */
-  void handlePush(String s);
+  void handlePush(String type);
+
+
 }

@@ -51,7 +51,8 @@ public class ButtonBuilder {
     foundButtons = new ArrayList<>();
     handler = bph;
 
-    resourceBundle = ResourceBundle.getBundle(RESOURCES + "labels." + EXTENSION);
+    //resourceBundle = ResourceBundle.getBundle(RESOURCES + "labels." + EXTENSION);
+    resourceBundle = ResourceBundle.getBundle("ooga/resources/resourcebundles.English");
     try {
       makeButtons(path);
     } catch (Exception e) {
@@ -85,6 +86,7 @@ public class ButtonBuilder {
    * @return a fully instantiated Button
    */
   private Button buildButtonFromLine(String line) {
+
     Button output = new Button();
     String[] outputComponents = line.split(" ");
 
@@ -99,7 +101,8 @@ public class ButtonBuilder {
     output.setLayoutY(HEIGHT * Double.parseDouble(outputComponents[2]) -
         output.getPrefHeight() / 2);
 
-    output.setOnAction(e -> handler.handlePush(outputComponents[0]));
+
+    output.setOnAction(e -> handler.handlePush(outputComponents[5]));
     return output;
   }
 
