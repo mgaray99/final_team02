@@ -1,4 +1,4 @@
-package ooga.util;
+package util;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

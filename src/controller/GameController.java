@@ -1,15 +1,10 @@
-package ooga.controller;
+package controller;
 
-import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.event.EventType;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.event.Event;
-import javafx.scene.control.Button;
 
 /**
  * Serves as the controller of our MVC model - handles button pushes and key inputs and keys them

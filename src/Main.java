@@ -1,7 +1,6 @@
-package ooga;
 
 
-import ooga.view.GameView;
+import view.GameView;
 
 /**
  * Main method - runs our program

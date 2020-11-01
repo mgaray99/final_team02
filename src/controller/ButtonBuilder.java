@@ -1,4 +1,4 @@
-package ooga.controller;
+package controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -52,7 +52,7 @@ public class ButtonBuilder {
     handler = bph;
 
     //resourceBundle = ResourceBundle.getBundle(RESOURCES + "labels." + EXTENSION);
-    resourceBundle = ResourceBundle.getBundle("ooga/resources/resourcebundles.English");
+    resourceBundle = ResourceBundle.getBundle("resources/resourcebundles.English");
     try {
       makeButtons(path);
     } catch (Exception e) {

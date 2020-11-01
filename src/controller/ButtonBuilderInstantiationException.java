@@ -1,4 +1,4 @@
-package ooga.controller;
+package controller;
 
 public class ButtonBuilderInstantiationException extends Exception {
   public ButtonBuilderInstantiationException(String message) {

@@ -1,4 +1,4 @@
-package ooga.controller;
+package controller;
 
 /**
  * An interface responsible for handling the event where the user pushes a button -

@@ -1,12 +1,12 @@
-package ooga.view;
+package view;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.EventType;
 import javafx.scene.Group;
-import ooga.controller.GameController;
-import ooga.view.GameView.viewName;
+import controller.GameController;
+import view.GameView.viewName;
 
 /**
  * The purpose of this class is to build the map of viewName (i.e. HOME_SCREEN,
@@ -17,10 +17,10 @@ public class GameSceneMap {
   private Map<viewName,GameScene> mapOfScenes;
   private static double WIDTH = 800;
   private static double HEIGHT = 800;
-  private static final String LANGUAGE_FOLDERPATH = "./src/ooga/resources/resourcebundles";
+  private static final String LANGUAGE_FOLDERPATH = "./src/resources/resourcebundles";
   private static final String PROPERTIES_EXTENSION = ".properties";
-  private static final String CSS_FOLDERPATH = "./src/ooga/resources/cssstylesheets";
-  private static final String BUTTON_FOLDERPATH_SLASH = "ooga/resources/buttons/";
+  private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";
+  private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
 
   public GameSceneMap() {

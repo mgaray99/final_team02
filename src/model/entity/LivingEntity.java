@@ -1,4 +1,4 @@
-package ooga.model.entity;
+package model.entity;
 
 public class LivingEntity extends Entity{
 
@@ -10,8 +10,7 @@ public class LivingEntity extends Entity{
     }
 
     public boolean checkCollision(Entity entityIn){
-        Entity.HitBox2D otherEntityHitbox = entityIn.getHitBox();
-        return this.getHitBox().intersects(otherEntityHitbox);
+        return this.getHitBox().intersects(entityIn.getHitBox());
     }
 
     public int getHealth(){

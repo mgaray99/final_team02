@@ -1,5 +1,6 @@
-package ooga.view;
+package view;
 
+import controller.GameController;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,6 @@ import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import ooga.controller.GameController;
 
 public class GameView extends Application {
 
@@ -104,7 +104,7 @@ public class GameView extends Application {
    * @param name the name of the stylesheet (i.e. dark/light)
    */
   public void switchStylesheet(String name) {
-    String stylesheetPath = "ooga/resources/cssstylesheets/";
+    String stylesheetPath = "resources/cssstylesheets/";
     for (viewName view : viewName.values()) {
       mapOfScenes.get(view).getStylesheets().clear();
       mapOfScenes.get(view).getStylesheets().add(stylesheetPath + name + CSS_EXTENSION);
@@ -116,7 +116,7 @@ public class GameView extends Application {
    * @param name the name of the resourcebundle
    */
   public void updateLanguage(String name) {
-    String languagePath = "ooga/resources/resourcebundles";
+    String languagePath = "resources/resourcebundles";
   }
 
   /**

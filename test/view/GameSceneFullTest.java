@@ -1,4 +1,4 @@
-package ooga.view;
+package view;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -6,7 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import ooga.util.DukeApplicationTest;
+import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
 
