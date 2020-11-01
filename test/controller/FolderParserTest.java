@@ -18,7 +18,7 @@ public class FolderParserTest extends DukeApplicationTest{
    */
   @Test
   public void testSimpleParse() {
-      FolderParser parser = new FolderParser("./src/ooga/resources/cssstylesheets",
+      FolderParser parser = new FolderParser("./src/resources/cssstylesheets",
           ".css");
       List<String> foundFiles = parser.getFilenamesFromFolder();
       assertEquals(foundFiles.size(), CURRENT_NUM_STYLESHEETS);
