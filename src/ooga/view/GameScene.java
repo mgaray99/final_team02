@@ -1,9 +1,7 @@
 package ooga.view;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -23,7 +21,6 @@ public class GameScene extends Scene {
   private static final String CONTROLLER = "controller";
   private static final String BACKGROUND = "background";
   private static final EventType SCENE_EVENT = new EventType("scene");
-  private List<String> buffer;
 
 
   public GameScene(Group myRoot, double width, double height) {
@@ -31,8 +28,6 @@ public class GameScene extends Scene {
     root = myRoot;
     WIDTH = width;
     HEIGHT = height;
-
-    buffer = new ArrayList<>();
 
     Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
     background.setId(BACKGROUND);
