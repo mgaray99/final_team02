@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import ooga.controller.GameController;
+import controller.GameController;
 
 /**
  * Represents one scene in a game

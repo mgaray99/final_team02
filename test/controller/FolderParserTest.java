@@ -1,15 +1,9 @@
-package ooga.controller;
+package controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
-import ooga.util.DukeApplicationTest;
+import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
 

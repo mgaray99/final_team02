@@ -1,28 +1,27 @@
-package ooga.model.entity;
+package model.entity;
 
-public class Entity{
+import java.awt.Rectangle;
 
-    private final HitBox2D hitBox2D;
+public class Entity {
 
-    public Entity(float xUpperLeft, float yUpperLeft){
-        this.hitBox2D = new HitBox2D(xUpperLeft, yUpperLeft);
+    private final int HIT_BOX_X_SIZE = 10;
+    private final int HIT_BOX_Y_SIZE = 10;
+
+    private final Rectangle hitBox;
+
+    public Entity(int xUpperLeft, int yUpperLeft){
+        this.hitBox = new Rectangle(xUpperLeft, yUpperLeft, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE);
     }
 
-    public void applyMotion(float deltaX, float deltaY){
-        this.hitBox2D.xUpperLeft += deltaX;
-        this.hitBox2D.yUpperLeft += deltaY;
+    //translate
+
+    //
+
+    protected Rectangle getHitBox(){
+        return this.hitBox;
     }
 
-    public void setPosition(float x, float y){
-        this.hitBox2D.xUpperLeft = x;
-        this.hitBox2D.yUpperLeft = y;
-    }
-
-    public HitBox2D getHitBox(){
-        return this.hitBox2D;
-    }
-
-    public static class HitBox2D{
+    /*public static class HitBox2D{
         private float xUpperLeft;
         private float yUpperLeft;
         private final float width = 1;
@@ -63,5 +62,5 @@ public class Entity{
                     otherY < this.yUpperLeft + this.height);
         }
 
-    }
+    }*/
 }

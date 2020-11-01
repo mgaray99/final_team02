@@ -1,5 +1,8 @@
 package model;
 
+import model.entity.Entity;
+import java.util.*;
+
 public class Level {
 
   List<Entity>  allEntities;

@@ -1,11 +1,11 @@
-package ooga.view;
+package view;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Group;
-import ooga.controller.GameController;
-import ooga.view.GameView.viewName;
+import controller.GameController;
+import view.GameView.viewName;
 
 /**
  * The purpose of this class is to build the map of viewName (i.e. HOME_SCREEN,
