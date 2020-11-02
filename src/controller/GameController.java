@@ -41,7 +41,13 @@ public class GameController extends Group implements ButtonPushHandler {
   public void addOptionsSelectorFromFolder(String folder, String extension, String method) {
     FolderParser parser = new FolderParser(folder,
         extension);
-    OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, parser.getFilenamesFromFolder());
+    buildOptionsSelector(parser.getFilenamesFromFolder(), method);
+  }
+
+  public void buildOptionsSelector(List<String> choices, String method) {
+    List<String> defensiveChoices = new ArrayList<>();
+    defensiveChoices.addAll(choices);
+    OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, defensiveChoices);
     selector.addEventHandler(EventType.ROOT, event->
         callMethodOnOptionSelector(event, method, selector.getTextInBuffer()));
     getChildren().add(selector);

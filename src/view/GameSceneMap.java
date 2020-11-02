@@ -54,9 +54,9 @@ public class GameSceneMap {
    */
   private void buildOptionsSelectorsForControllers() {
     try {
-      mapOfScenes.get(viewName.SELECT_CSS_STYLESHEET).buildOptionsSelectorForController(
+      mapOfScenes.get(viewName.SELECT_CSS_STYLESHEET).buildOptionsSelectorFromFolderForController(
           CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
-      mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorForController(
+      mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorFromFolderForController(
           LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "updateLanguage");
     }
     catch (Exception e) {

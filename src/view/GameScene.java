@@ -67,9 +67,13 @@ public class GameScene extends Scene {
    * @param extension the allowed extension for each option (i.e. include if ".jpeg")
    * @param method the method to be called by the OptionsSelector
    */
-  public void buildOptionsSelectorForController(String folder, String extension,
+  public void buildOptionsSelectorFromFolderForController(String folder, String extension,
       String method) {
     controller.addOptionsSelectorFromFolder(folder, extension, method);
+  }
+
+  public void buildOptionsSelectorFromListForController(List<String> choices, String method) {
+    controller.buildOptionsSelector(choices, method);
   }
 
   /**
