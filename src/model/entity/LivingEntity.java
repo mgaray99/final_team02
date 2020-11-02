@@ -9,8 +9,9 @@ public abstract class LivingEntity extends Entity{
         this.health = healthIn;
     }
 
-    public boolean checkCollision(Entity entityIn){
-        return this.getHitBox().intersects(entityIn.getHitBox());
+    @Override
+    public boolean shouldCheckCollisions() {
+        return true;
     }
 
     public int getHealth(){

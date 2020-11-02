@@ -15,6 +15,14 @@ public abstract class Entity {
         this.entityType = EntityType.EMPTY;
     }
 
+    public boolean shouldCheckCollisions(){
+        return false;
+    }
+
+    public final boolean isEmpty(){
+        return this.entityType == EntityType.EMPTY;
+    }
+
     public Entity(IEntityType entityType, int xUpperLeft, int yUpperLeft){
         this.hitBox = new Rectangle(xUpperLeft, yUpperLeft, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE);
         this.entityType = entityType;
@@ -22,10 +30,6 @@ public abstract class Entity {
 
     public IEntityType getEntityType() {
         return this.entityType;
-    }
-
-    public boolean isEmpty(){
-        return this.entityType == EntityType.EMPTY;
     }
 
     public boolean hasMatchingId(IEntityType entityType, int x, int y){
@@ -38,5 +42,9 @@ public abstract class Entity {
 
     public Rectangle getHitBox(){
         return this.hitBox;
+    }
+
+    public boolean checkCollision(Entity entityIn){
+        return this.getHitBox().intersects(entityIn.getHitBox());
     }
 }

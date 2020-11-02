@@ -1,5 +1,6 @@
-package model;
+package model.level;
 
+import model.configuration.GameConfiguration;
 import model.entity.EmptyEntity;
 import model.entity.Entity;
 import model.entity.IEntityType;
@@ -8,12 +9,16 @@ import java.util.*;
 
 public class Level {
 
-  List<Entity> allEntities;
+  private final List<Entity> allEntities = new ArrayList<>();
 
-  public Level() {}
+  public Level() {
+  }
+
+  public static Level fromConfiguration(GameConfiguration gameConfiguration) {
+    return new Level();
+  }
 
   int[][] getGrid() {return null;}
-
 
   public Entity getEntity(int xCoordinate, int yCoordinate) {
     for(Entity entity : this.allEntities){
@@ -39,9 +44,21 @@ public class Level {
     moveEntities();
   }
 
-  private void checkCollisions(){};
-  private void moveEntities(){};
+  private void checkCollisions(){
+    for(int i = 0; i < this.allEntities.size(); i++){
+      Entity currentEntity = this.allEntities.get(i);
+      if(currentEntity.shouldCheckCollisions()){
+        for(int j = 0; j < this.allEntities.size(); j++){
+          boolean otherEntityIsCurrentEntity = j == i;
+          if(otherEntityIsCurrentEntity) continue;
+          Entity otherEntity = this.allEntities.get(i);
+          currentEntity.checkCollision(otherEntity);
+        }
+      }
+    }
+  }
 
+  private void moveEntities(){};
   private void checkWinCondition(){};
 
 
