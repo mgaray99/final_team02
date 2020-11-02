@@ -31,7 +31,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
   private static final EventType<Event> EVENT_TYPE = new EventType<>("push");
 
   private static final int NUM_OPTION_BUTTONS = 3;
-  private static final String RESOURCES = "ooga/resources/";
+  private static final String RESOURCES = "resources/";
   private static final String OPTIONS_SELECTOR_CONFIG_PATH = RESOURCES
       + "buttons/optionsselectorbuttons.txt";
 
@@ -61,7 +61,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
     choices = new ArrayList<>();
     copyIntoChoices(c);
 
-    resourceBundle = ResourceBundle.getBundle("ooga/resources/resourcebundles.English");
+    resourceBundle = ResourceBundle.getBundle("resources/resourcebundles.English");
 
     buildButtons();
     regenerateOptions();

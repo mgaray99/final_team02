@@ -34,9 +34,8 @@ public class GameSceneMap {
    * builds a "GameScene" object corresponding to that "view" that will serve as the view's
    * scene
    *
-   * @param gameView the GameView that we're building the map for
    */
-  public void buildMapOfScenes(GameView gameView) {
+  public void buildMapOfScenes() {
     mapOfScenes = new HashMap<>();
 
     for (GameView.viewName view : GameView.viewName.values()) {
@@ -61,16 +60,6 @@ public class GameSceneMap {
     catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  /**
-   * Returns a method based on a String input
-   * @param methodName the String representation of the method name
-   * @return the method in GameView corresponding to methodName
-   * @throws NoSuchMethodException
-   */
-  private Method getOptionSelectorMethodFromString(String methodName) throws NoSuchMethodException{
-    return GameView.class.getDeclaredMethod(methodName, String.class);
   }
 
   /**

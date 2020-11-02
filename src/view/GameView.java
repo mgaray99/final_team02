@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class GameView extends Application {
 
-  enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET};
+  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET};
   viewName lastView;
   viewName currentView;
 
@@ -34,7 +34,7 @@ public class GameView extends Application {
     lastView = viewName.HOME_SCREEN;
     currentView = viewName.HOME_SCREEN;
     GameSceneMap map = new GameSceneMap();
-    map.buildMapOfScenes(this);
+    map.buildMapOfScenes();
     mapOfScenes = map.getMapOfScenes();
     listenOnControllers();
 
