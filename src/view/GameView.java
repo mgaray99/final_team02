@@ -164,7 +164,7 @@ public class GameView extends Application {
    * switches to Select Game Type Screen
    */
 
-  public void selectGameType() {setScene(viewName.GAMEVERSION);}
+  public void selectGameTypeScreen() {setScene(viewName.GAMEVERSION);}
 
   /**
    * Ends Game
@@ -174,6 +174,15 @@ public class GameView extends Application {
     animation.stop();
     stage.close();
   }
+
+  /**
+   * select game type
+   */
+
+  public void createGameTypeButtons(String GameType) {
+
+  }
+
 
 
 
