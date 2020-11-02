@@ -2,10 +2,13 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.event.Event;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 
 /**
  * Serves as the controller of our MVC model - handles button pushes and key inputs and keys them
@@ -21,15 +24,7 @@ public class GameController extends Group implements ButtonPushHandler {
 
   public GameController() {
     buffer = new ArrayList<>();
-    addGameControllerElements();
-  }
-
-  /**
-   * Is responsible for building the different elements (i.e. Button, OptionsSelector, that will
-   * be in our controller
-   */
-  private void addGameControllerElements() {
-
+    setOnKeyPressed(event -> handleKeyEvent(event));
   }
 
   /**
@@ -39,16 +34,20 @@ public class GameController extends Group implements ButtonPushHandler {
    * @param method the method to be called by the OptionsSelector
    */
   public void addOptionsSelectorFromFolder(String folder, String extension, String method) {
-    FolderParser parser = new FolderParser(folder,
-        extension);
-    OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, parser.getFilenamesFromFolder());
+    FolderParser parser = new FolderParser(folder, extension);
+    buildOptionsSelector(parser.getFilenamesFromFolder(), method);
+  }
+
+  public void buildOptionsSelector(List<String> choices, String method) {
+    List<String> defensiveChoices = new ArrayList<>();
+    defensiveChoices.addAll(choices);
+    OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, defensiveChoices);
     selector.addEventHandler(EventType.ROOT, event->
         callMethodOnOptionSelector(event, method, selector.getTextInBuffer()));
     getChildren().add(selector);
   }
 
   /**
-   *
    *
    * @param event the event that has occurred
    * @param method the method to be called if event matches OPTIONS_SELECTOR_EVENTTYPE
@@ -93,12 +92,22 @@ public class GameController extends Group implements ButtonPushHandler {
     fillBuffer(methodName, new ArrayList<>());
   }
 
-  /**
-   * Adds a button to the controller
-   * @param toBeAdded the button to be added
-   */
-  public void addButton(Button toBeAdded) {
-    getChildren().add(toBeAdded);
+ public void handleKeyEvent(KeyEvent event) {
+    List<String> keyArgs = new ArrayList<>();
+    keyArgs.add(event.getCode().toString());
+    fillBuffer("keyPressed", keyArgs);
+ }
+
+  public void updateResources(String name) {
+    for (Node n : getChildren()) {
+      if (n.getClass().getSimpleName().equals("Button")) {
+        ((Button)n).setText(ResourceBundle.getBundle("resources/resourcebundles."
+            + name).getString(n.getId()));
+      }
+      else if (n.getClass().getSimpleName().equals("OptionsSelector")) {
+        ((OptionsSelector)n).updateBundle(name);
+      }
+    }
   }
 
   /**
@@ -129,5 +138,4 @@ public class GameController extends Group implements ButtonPushHandler {
     bufferHolder.addAll(buffer);
     return bufferHolder;
   }
-
 }

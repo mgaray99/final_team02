@@ -15,15 +15,14 @@ import javafx.util.Duration;
 
 public class GameView extends Application {
 
-  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME};
+  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
   viewName lastView;
   viewName currentView;
 
   private Map<viewName, GameScene> mapOfScenes;
-
   private static final double ANIMATION_SPEED = 1/60.0;
-  private static final String CSS_EXTENSION = ".css";
   private Stage stage;
+  private Timeline animation;
 
   /**
    * Begins our view, (i.e. builds the scene and group objects responsible for showing our project)
@@ -56,7 +55,7 @@ public class GameView extends Application {
    * Builds the animation functionality that will run the program
    */
   private void prepareAnimation() {
-    Timeline animation = new Timeline();
+    animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
     KeyFrame frame = new KeyFrame(Duration.seconds(ANIMATION_SPEED), e -> update(ANIMATION_SPEED));
     animation.getKeyFrames().add(frame);
@@ -68,7 +67,7 @@ public class GameView extends Application {
    */
   private void listenOnControllers() {
       for (viewName view : viewName.values()) {
-        GameController cont = mapOfScenes.get(view).getController();
+        GameController cont = mapOfScenes.get(view).getGameController();
         cont.addEventHandler(EventType.ROOT, event -> handleControllerEvent(cont, event));
       }
   }
@@ -84,8 +83,14 @@ public class GameView extends Application {
       reflectionArgs.addAll(cont.getBuffer());
       performReflection(reflectionArgs);
     }
-    else if (event.getEventType().getName().equals("key")) {
-    }
+  }
+
+  /**
+   * Handles the event of a key press
+   * @param key the key that has been pressed
+   */
+  public void keyPressed(String key) {
+    System.out.println(key);
   }
 
   /**
@@ -105,6 +110,7 @@ public class GameView extends Application {
       }
       catch (Exception e) {
         System.out.println("bad reflection");
+        e.printStackTrace();
       }
   }
 
@@ -113,10 +119,8 @@ public class GameView extends Application {
    * @param name the name of the stylesheet (i.e. dark/light)
    */
   public void switchStylesheet(String name) {
-    String stylesheetPath = "resources/cssstylesheets/";
     for (viewName view : viewName.values()) {
-      mapOfScenes.get(view).getStylesheets().clear();
-      mapOfScenes.get(view).getStylesheets().add(stylesheetPath + name + CSS_EXTENSION);
+      mapOfScenes.get(view).updateStylesheet(name);
     }
   }
 
@@ -124,8 +128,8 @@ public class GameView extends Application {
    * Updates the language bundles that writes to all of the buttons
    * @param name the name of the resourcebundle
    */
-  public void updateLanguage(String name) {
-    String languagePath = "resources/resourcebundles";
+  public void switchLanguage(String name) {
+   mapOfScenes.keySet().forEach(key -> mapOfScenes.get(key).updateResources(name));
   }
 
   /**
@@ -155,8 +159,27 @@ public class GameView extends Application {
   /**
    * Switches to Select Language Screen
    */
-  public void switchToSelectLanguageScreen() {
-    setScene(viewName.SELECT_RESOURCE_BUNDLE);
+  public void switchToSelectLanguageScreen() {setScene(viewName.SELECT_RESOURCE_BUNDLE);
+  }
+
+  /**
+   * switches to Select Game Type Screen
+   */
+  public void selectGameTypeScreen() {setScene(viewName.GAMEVERSION);}
+
+  /**
+   * Ends Game
+   */
+  public void endGame(){
+    animation.stop();
+    stage.close();
+  }
+
+  /**
+   * select game type
+   */
+  public void createGameTypeButtons(String GameType) {
+
   }
 
   /**

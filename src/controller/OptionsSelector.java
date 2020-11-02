@@ -61,7 +61,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
     choices = new ArrayList<>();
     copyIntoChoices(c);
 
-    resourceBundle = ResourceBundle.getBundle("resources/resourcebundles.English");
+    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS  + EXTENSION);
 
     buildButtons();
     regenerateOptions();
@@ -242,7 +242,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    * @param path the String path leading to the properties file
    */
   public void updateBundle(String path) {
-    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS + path);
+    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS+ "." + path);
     updateAllButtonBundles();
     regenerateOptions();
   }
