@@ -61,22 +61,12 @@ public class GameSceneMap {
           CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
       mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorFromFolderForController(
           LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "updateLanguage");
-      buildGamesOptionsSelector();
     }
     catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-
-  /**
-   * Builds the Options Selector to choose between games
-   */
-  private void buildGamesOptionsSelector() {
-    String[] games = {"Mario", "Flappy Bird", "Doodle Jump"};
-    mapOfScenes.get(viewName.GAMEVERSION).buildOptionsSelectorFromListForController(
-        Arrays.asList(games), "setGame");
-  }
 
   /**
    * Adds a set of buttons to each scene represents by view

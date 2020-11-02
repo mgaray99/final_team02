@@ -161,13 +161,6 @@ public class GameView extends Application {
   }
 
   /**
-   * Sets the game to the desired game type
-   */
-  public void setGame(String game) {
-    System.out.println(game);
-  }
-
-  /**
    * switches to Select Game Type Screen
    */
 
