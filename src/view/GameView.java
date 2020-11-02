@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class GameView extends Application {
 
-  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET};
+  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME};
   viewName lastView;
   viewName currentView;
 
@@ -41,11 +41,7 @@ public class GameView extends Application {
     stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
     stage.show();
 
-    Timeline animation = new Timeline();
-    animation.setCycleCount(Timeline.INDEFINITE);
-    KeyFrame frame = new KeyFrame(Duration.seconds(ANIMATION_SPEED), e -> update(ANIMATION_SPEED));
-    animation.getKeyFrames().add(frame);
-    animation.play();
+    prepareAnimation();
   }
 
   /**
@@ -53,7 +49,18 @@ public class GameView extends Application {
    * @param timeElapsed the amount of time that has passed since the last update
    */
   private void update(double timeElapsed) {
+  }
 
+
+  /**
+   * Builds the animation functionality that will run the program
+   */
+  private void prepareAnimation() {
+    Timeline animation = new Timeline();
+    animation.setCycleCount(Timeline.INDEFINITE);
+    KeyFrame frame = new KeyFrame(Duration.seconds(ANIMATION_SPEED), e -> update(ANIMATION_SPEED));
+    animation.getKeyFrames().add(frame);
+    animation.play();
   }
 
   /**
@@ -76,6 +83,8 @@ public class GameView extends Application {
       List<String> reflectionArgs = new ArrayList<>();
       reflectionArgs.addAll(cont.getBuffer());
       performReflection(reflectionArgs);
+    }
+    else if (event.getEventType().getName().equals("key")) {
     }
   }
 
@@ -160,9 +169,7 @@ public class GameView extends Application {
   /**
    * Starts the game
    */
-  public void start() {
-
-  }
+  public void start() { setScene(viewName.GAME); }
 
   /**
    * Launches the application
