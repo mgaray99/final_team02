@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.scene.control.Button;
+import model.GameModel;
 
 /**
  * Is responsible for creating Buttons from a config file that takes the form XXXX.txt. The first
@@ -31,9 +32,9 @@ public class ButtonBuilder {
   private final List<Button> foundButtons;
   private final ButtonPushHandler handler;
 
-  private static final String RESOURCES = "resources/";
+  private static final String RESOURCES = "resources/resourcebundles";
   private final ResourceBundle resourceBundle;
-  private static final String EXTENSION = "English";
+  private static final String EXTENSION = ".English";
 
   /**
    * Instantiates a new ButtonBuilder object
@@ -51,8 +52,7 @@ public class ButtonBuilder {
     foundButtons = new ArrayList<>();
     handler = bph;
 
-    //resourceBundle = ResourceBundle.getBundle(RESOURCES + "labels." + EXTENSION);
-    resourceBundle = ResourceBundle.getBundle("resources/resourcebundles.English");
+    resourceBundle = ResourceBundle.getBundle(RESOURCES + EXTENSION);
     try {
       makeButtons(path);
     } catch (Exception e) {

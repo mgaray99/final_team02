@@ -1,0 +1,4 @@
+KEY_INPUTS
+A left
+D right
+P pause

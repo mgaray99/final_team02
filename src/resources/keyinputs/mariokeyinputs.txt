@@ -1,0 +1,6 @@
+KEY_INPUTS
+A left
+S down
+D right
+W up
+P pause

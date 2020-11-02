@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameController;
+import controller.KeyInputter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +13,20 @@ import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.GameModel;
+import model.configuration.GameConfiguration;
 
 public class GameView extends Application {
 
   public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
   viewName lastView;
   viewName currentView;
-
   private Map<viewName, GameScene> mapOfScenes;
   private static final double ANIMATION_SPEED = 1/60.0;
+  private GameModel model;
   private Stage stage;
   private Timeline animation;
+  private KeyInputter inputter;
 
   /**
    * Begins our view, (i.e. builds the scene and group objects responsible for showing our project)
@@ -35,11 +39,13 @@ public class GameView extends Application {
     GameSceneMap map = new GameSceneMap();
     map.buildMapOfScenes();
     mapOfScenes = map.getMapOfScenes();
+
     listenOnControllers();
+    model = new GameModel(new GameConfiguration());
+    inputter = new KeyInputter(model);
 
     stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
     stage.show();
-
     prepareAnimation();
   }
 
@@ -48,6 +54,7 @@ public class GameView extends Application {
    * @param timeElapsed the amount of time that has passed since the last update
    */
   private void update(double timeElapsed) {
+    model.updateGame();
   }
 
 
@@ -90,7 +97,7 @@ public class GameView extends Application {
    * @param key the key that has been pressed
    */
   public void keyPressed(String key) {
-    System.out.println(key);
+    inputter.keyInput(key);
   }
 
   /**

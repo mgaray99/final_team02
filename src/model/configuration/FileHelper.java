@@ -1,6 +1,6 @@
 package model.configuration;
 
-import org.jetbrains.annotations.Nullable;
+//import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,7 +116,7 @@ public class FileHelper {
      * @param resource A String representing the properties file name
      * @return An InputStream, or null if unable to be created
      */
-    @Nullable
+    //@Nullable
     public static InputStream tryCreateInputStreamFromPropertiesFileName(Class clazz, String resource) {
         return isPropertiesFile(resource) ? clazz.getClassLoader().getResourceAsStream(resource) : null;
     }
