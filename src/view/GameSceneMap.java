@@ -26,6 +26,7 @@ public class GameSceneMap {
   private static final String DEFAULT_CSS_FILEPATH = "resources/cssstylesheets/default.css";
   private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
+  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump"};
 
   public GameSceneMap() {
   }
@@ -61,10 +62,8 @@ public class GameSceneMap {
           CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
       mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorFromFolderForController(
           LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "updateLanguage");
-      String[] as = {"a", "b", "c", "d"};
-      List<String> choices = Arrays.asList(as);
       mapOfScenes.get(viewName.GAMEVERSION).buildOptionsSelectorFromListForController(
-          choices, "back");
+              Arrays.asList(GAME_TYPES), "createGameTypeButtons");
     }
     catch (Exception e) {
       e.printStackTrace();
