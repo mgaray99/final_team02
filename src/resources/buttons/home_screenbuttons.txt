@@ -3,4 +3,4 @@ StartCommand 0.50 0.30 0.40 0.05 start
 SelectCssCommand 0.50 0.40 0.40 0.05 switchToSelectCssStylesheetScreen
 SelectLanguageCommand 0.50 0.50 0.40 0.05 switchToSelectLanguageScreen
 SelectGameTypeCommand 0.50 0.60 0.40 0.05 selectGameType
-QuitGameCommand       0.50 0.70 0.40 0.05 endGame
+QuitGameCommand 0.50 0.70 0.40 0.05 endGame

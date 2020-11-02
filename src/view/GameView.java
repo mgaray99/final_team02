@@ -24,6 +24,7 @@ public class GameView extends Application {
   private static final double ANIMATION_SPEED = 1/60.0;
   private static final String CSS_EXTENSION = ".css";
   private Stage stage;
+  private Timeline animation;
 
   /**
    * Begins our view, (i.e. builds the scene and group objects responsible for showing our project)
@@ -56,7 +57,7 @@ public class GameView extends Application {
    * Builds the animation functionality that will run the program
    */
   private void prepareAnimation() {
-    Timeline animation = new Timeline();
+    animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
     KeyFrame frame = new KeyFrame(Duration.seconds(ANIMATION_SPEED), e -> update(ANIMATION_SPEED));
     animation.getKeyFrames().add(frame);
@@ -168,7 +169,10 @@ public class GameView extends Application {
    * Ends Game
    */
 
-  public void endGame(){}
+  public void endGame(){
+    animation.stop();
+    stage.close();
+  }
 
 
 
