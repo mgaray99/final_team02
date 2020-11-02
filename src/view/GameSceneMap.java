@@ -20,6 +20,7 @@ public class GameSceneMap {
   private static final String LANGUAGE_FOLDERPATH = "./src/resources/resourcebundles";
   private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";
+  private static final String DEFAULT_CSS_FILEPATH = "resources/cssstylesheets/default.css";
   private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
 
@@ -41,6 +42,7 @@ public class GameSceneMap {
     for (GameView.viewName view : GameView.viewName.values()) {
       mapOfScenes.put(view, new GameScene(new Group(), WIDTH, HEIGHT));
       mapOfScenes.get(view).setController(new GameController());
+      mapOfScenes.get(view).getStylesheets().add(DEFAULT_CSS_FILEPATH);
     }
 
     buildOptionsSelectorsForControllers();

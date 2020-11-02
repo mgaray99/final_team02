@@ -5,6 +5,7 @@ import java.util.List;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.event.Event;
+import javafx.scene.control.Button;
 
 /**
  * Serves as the controller of our MVC model - handles button pushes and key inputs and keys them
@@ -90,6 +91,14 @@ public class GameController extends Group implements ButtonPushHandler {
   @Override
   public void handlePush(String methodName) {
     fillBuffer(methodName, new ArrayList<>());
+  }
+
+  /**
+   * Adds a button to the controller
+   * @param toBeAdded the button to be added
+   */
+  public void addButton(Button toBeAdded) {
+    getChildren().add(toBeAdded);
   }
 
   /**

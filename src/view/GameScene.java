@@ -6,6 +6,7 @@ import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import controller.GameController;
@@ -50,6 +51,14 @@ public class GameScene extends Scene {
    */
   public void addButtonsToControllerFromFile(String file) {
     controller.addButtonsFromFile(file);
+  }
+
+  /**
+   * Adds a button to this scene's controller
+   * @param toBeAdded the button to add
+   */
+  public void addButton(Button toBeAdded) {
+    controller.addButton(toBeAdded);
   }
 
   /**
