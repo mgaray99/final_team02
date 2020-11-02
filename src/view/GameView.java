@@ -106,6 +106,7 @@ public class GameView extends Application {
       }
       catch (Exception e) {
         System.out.println("bad reflection");
+        e.printStackTrace();
       }
   }
 
@@ -126,7 +127,7 @@ public class GameView extends Application {
    * @param name the name of the resourcebundle
    */
   public void updateLanguage(String name) {
-    String languagePath = "resources/resourcebundles";
+   mapOfScenes.keySet().forEach(key -> mapOfScenes.get(key).updateResources(name));
   }
 
   /**
@@ -157,6 +158,13 @@ public class GameView extends Application {
    * Switches to Select Language Screen
    */
   public void switchToSelectLanguageScreen() {setScene(viewName.SELECT_RESOURCE_BUNDLE);
+  }
+
+  /**
+   * Sets the game to the desired game type
+   */
+  public void setGame(String game) {
+    System.out.println(game);
   }
 
   /**

@@ -1,7 +1,10 @@
 package view;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javafx.event.EventType;
 import javafx.scene.Group;
@@ -58,10 +61,21 @@ public class GameSceneMap {
           CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
       mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorFromFolderForController(
           LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "updateLanguage");
+      buildGamesOptionsSelector();
     }
     catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+
+  /**
+   * Builds the Options Selector to choose between games
+   */
+  private void buildGamesOptionsSelector() {
+    String[] games = {"Mario", "Flappy Bird", "Doodle Jump"};
+    mapOfScenes.get(viewName.GAMEVERSION).buildOptionsSelectorFromListForController(
+        Arrays.asList(games), "setGame");
   }
 
   /**

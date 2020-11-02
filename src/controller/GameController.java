@@ -2,9 +2,11 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.event.Event;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 /**
@@ -21,15 +23,6 @@ public class GameController extends Group implements ButtonPushHandler {
 
   public GameController() {
     buffer = new ArrayList<>();
-    addGameControllerElements();
-  }
-
-  /**
-   * Is responsible for building the different elements (i.e. Button, OptionsSelector, that will
-   * be in our controller
-   */
-  private void addGameControllerElements() {
-
   }
 
   /**
@@ -54,7 +47,6 @@ public class GameController extends Group implements ButtonPushHandler {
   }
 
   /**
-   *
    *
    * @param event the event that has occurred
    * @param method the method to be called if event matches OPTIONS_SELECTOR_EVENTTYPE
@@ -105,6 +97,18 @@ public class GameController extends Group implements ButtonPushHandler {
    */
   public void addButton(Button toBeAdded) {
     getChildren().add(toBeAdded);
+  }
+
+  public void updateResources(String name) {
+    for (Node n : getChildren()) {
+      if (n.getClass().getSimpleName().equals("Button")) {
+        ((Button)n).setText(ResourceBundle.getBundle("resources/resourcebundles."
+            + name).getString(n.getId()));
+      }
+      else if (n.getClass().getSimpleName().equals("OptionsSelector")) {
+        ((OptionsSelector)n).updateBundle(name);
+      }
+    }
   }
 
   /**

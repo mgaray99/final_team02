@@ -114,4 +114,12 @@ public class GameScene extends Scene {
     throw new NullPointerException("Node not found!");
   }
 
+  /**
+   * Updates the resource bundle displaying text for each scene
+   * @param name the name of the resource bundle
+   */
+  public void updateResources(String name) {
+    controller.updateResources(name);
+  }
+
 }
