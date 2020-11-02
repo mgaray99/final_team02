@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class GameView extends Application {
 
-  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME};
+  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
   viewName lastView;
   viewName currentView;
 
@@ -155,9 +155,22 @@ public class GameView extends Application {
   /**
    * Switches to Select Language Screen
    */
-  public void switchToSelectLanguageScreen() {
-    setScene(viewName.SELECT_RESOURCE_BUNDLE);
+  public void switchToSelectLanguageScreen() {setScene(viewName.SELECT_RESOURCE_BUNDLE);
   }
+
+  /**
+   * switches to Select Game Type Screen
+   */
+
+  public void selectGameType() {setScene(viewName.GAMEVERSION);}
+
+  /**
+   * Ends Game
+   */
+
+  public void endGame(){}
+
+
 
   /**
    * Switches back to the last view
