@@ -1,18 +1,36 @@
 package model;
 
+import model.entity.EmptyEntity;
 import model.entity.Entity;
+import model.entity.IEntityType;
+
 import java.util.*;
 
 public class Level {
 
-  List<Entity>  allEntities;
+  List<Entity> allEntities;
 
   public Level() {}
 
   int[][] getGrid() {return null;}
 
+
   public Entity getEntity(int xCoordinate, int yCoordinate) {
-    return null;
+    for(Entity entity : this.allEntities){
+      if(entity.getHitBox().x == xCoordinate && entity.getHitBox().y == yCoordinate){
+        return entity;
+      }
+    }
+    return EmptyEntity.INSTANCE;
+  }
+
+  public Entity getEntity(IEntityType entityType, int xCoordinate, int yCoordinate){
+    for(Entity entity : this.allEntities){
+      if(entity.hasMatchingId(entityType, xCoordinate, yCoordinate)){
+        return entity;
+      }
+    }
+    return EmptyEntity.INSTANCE;
   }
 
   public void step() {
