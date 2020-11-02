@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 
 /**
  * Serves as the controller of our MVC model - handles button pushes and key inputs and keys them
@@ -23,6 +24,7 @@ public class GameController extends Group implements ButtonPushHandler {
 
   public GameController() {
     buffer = new ArrayList<>();
+    setOnKeyPressed(event -> handleKeyEvent(event));
   }
 
   /**
@@ -32,8 +34,7 @@ public class GameController extends Group implements ButtonPushHandler {
    * @param method the method to be called by the OptionsSelector
    */
   public void addOptionsSelectorFromFolder(String folder, String extension, String method) {
-    FolderParser parser = new FolderParser(folder,
-        extension);
+    FolderParser parser = new FolderParser(folder, extension);
     buildOptionsSelector(parser.getFilenamesFromFolder(), method);
   }
 
@@ -91,13 +92,11 @@ public class GameController extends Group implements ButtonPushHandler {
     fillBuffer(methodName, new ArrayList<>());
   }
 
-  /**
-   * Adds a button to the controller
-   * @param toBeAdded the button to be added
-   */
-  public void addButton(Button toBeAdded) {
-    getChildren().add(toBeAdded);
-  }
+ public void handleKeyEvent(KeyEvent event) {
+    List<String> keyArgs = new ArrayList<>();
+    keyArgs.add(event.getCode().toString());
+    fillBuffer("keyPressed", keyArgs);
+ }
 
   public void updateResources(String name) {
     for (Node n : getChildren()) {
@@ -139,5 +138,4 @@ public class GameController extends Group implements ButtonPushHandler {
     bufferHolder.addAll(buffer);
     return bufferHolder;
   }
-
 }

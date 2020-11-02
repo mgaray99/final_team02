@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
  */
 public class FolderParserTest extends DukeApplicationTest{
 
-  private static final int CURRENT_NUM_STYLESHEETS = 2;
+  private static final int CURRENT_NUM_STYLESHEETS = 3;
   /**
    * Tests the FolderParser's ability to perform a simple parse
    */
@@ -24,5 +24,6 @@ public class FolderParserTest extends DukeApplicationTest{
       assertEquals(foundFiles.size(), CURRENT_NUM_STYLESHEETS);
       assertTrue(foundFiles.contains("dark"));
       assertTrue(foundFiles.contains("light"));
+      assertTrue(foundFiles.contains("default"));
   }
 }

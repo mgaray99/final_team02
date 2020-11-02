@@ -18,7 +18,7 @@ import view.GameView.viewName;
 public class GameSceneMapTest extends DukeApplicationTest {
 
   private GameSceneMap testMap;
-  private static final int currentNumViews = 3;
+  private static final int currentNumViews = 5;
 
   /**
    * Runs before each test

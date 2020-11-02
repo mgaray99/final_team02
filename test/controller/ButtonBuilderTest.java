@@ -61,7 +61,7 @@ public class ButtonBuilderTest extends DukeApplicationTest{
       }
       assertEquals(option1.getLayoutX(), WIDTH * 0.25 - 0.20 * WIDTH / 2);
       assertEquals(option1.getLayoutY(), HEIGHT * 0.50 - 0.10 * HEIGHT / 2);
-      assertEquals(prevOptions.getLayoutX(), WIDTH * 0.30 - 0.10 * WIDTH/2);
+      assertEquals(prevOptions.getLayoutX(), WIDTH * 0.30 - 0.15 * WIDTH/2);
       assertEquals(prevOptions.getLayoutY(), HEIGHT * 0.90 - 0.05 * HEIGHT/2);
   }
 }
