@@ -61,6 +61,10 @@ public class GameSceneMap {
           CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
       mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorFromFolderForController(
           LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "updateLanguage");
+      String[] as = {"a", "b", "c", "d"};
+      List<String> choices = Arrays.asList(as);
+      mapOfScenes.get(viewName.GAMEVERSION).buildOptionsSelectorFromListForController(
+          choices, "back");
     }
     catch (Exception e) {
       e.printStackTrace();
