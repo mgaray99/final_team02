@@ -32,17 +32,17 @@ public class KeyInputter {
    */
   public void loadKeyInputsFromFile(String path) {
     try {
-      KeyInputBuilder builder = new KeyInputBuilder(path);
+      PairBuilder builder = new PairBuilder(path);
 
       List<Pair<String, String>> keyPairs = new ArrayList<>();
-      keyPairs.addAll(builder.getKeyPairs());
+      keyPairs.addAll(builder.getFoundPairs());
       keyToMethodMap.clear();
 
       for (Pair<String, String> pair : keyPairs) {
         keyToMethodMap.put(pair.getKey(), pair.getValue());
       }
     }
-    catch (KeyInputBuilderInstantiationException kibie) {
+    catch (PairBuilderInstantiationException kibie) {
       System.out.println(kibie.getMessage());
     }
   }

@@ -5,29 +5,32 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import javafx.util.Pair;
 
 /**
  * Builds a set of pairs <String, String> (i.e. <"D", "down">) that map keys to their methods from a
- * file and stores these pairs in keyPairs to be queried when the user wishes
+ * file and stores these pairs in foundPairs to be queried when the user wishes
  *
  * @author Alex Lu
  */
-public class KeyInputBuilder {
+public class PairBuilder {
 
-  private List<Pair<String, String>> keyPairs;
+  private List<Pair<String, String>> foundPairs;
   private String path;
-  private static final String KEY_INPUT_IDENTIFIER = "KEY_INPUTS";
+  private static final String PAIR_IDENTIFIER = "PAIRS";
 
-  public KeyInputBuilder(String filePath) throws KeyInputBuilderInstantiationException {
+  public PairBuilder(String filePath) throws PairBuilderInstantiationException {
     try {
       path = filePath;
-      keyPairs = new ArrayList<>();
-      setUpBuildKeyInputs();
+      foundPairs = new ArrayList<>();
+      setUpBuildPairings();
     } catch (Exception e) {
-      throw new KeyInputBuilderInstantiationException("Unable to build key inputs indexed by "
+      e.printStackTrace();
+      throw new PairBuilderInstantiationException("Unable to build pair inputs indexed by "
         + path);
     }
   }
@@ -39,13 +42,13 @@ public class KeyInputBuilder {
    * @throws URISyntaxException
    * @throws IOException
    */
-  private void setUpBuildKeyInputs() throws URISyntaxException, IOException {
+  private void setUpBuildPairings() throws URISyntaxException, IOException {
     Path file = Paths.get(ButtonBuilder.class.getClassLoader().getResource(path).toURI());
     Scanner fileScan = new Scanner(file);
     String identifier = getNextLine(fileScan);
 
-    if (identifier.equals(KEY_INPUT_IDENTIFIER)) {
-      buildKeyInputs(fileScan);
+    if (identifier.equals(PAIR_IDENTIFIER)) {
+      buildPairInputs(fileScan);
     }
     else {
       throw new IOException("should bubble up to a catch statement to throw a different exception");
@@ -53,17 +56,17 @@ public class KeyInputBuilder {
   }
 
   /**
-   * Builds the KeyInput pairs from the file mapping key->method and stores them in keyPairs
+   * Builds the pairs from the file mapping key->value and stores them in foundPairs
    */
-  private void buildKeyInputs(Scanner fileScan) {
+  private void buildPairInputs(Scanner fileScan) {
     while (fileScan.hasNextLine()) {
       Pair<String, String> pair = buildKeyPairFromLine(fileScan.nextLine());
-      keyPairs.add(pair);
+      foundPairs.add(pair);
     }
   }
 
   /**
-   * Builds the <key, method> pair from a given line in the .txt file
+   * Builds the <key, value> pair from a given line in the .txt file
    * @param line the line in the .txt file to be parsed
    */
   private Pair<String, String> buildKeyPairFromLine(String line) {
@@ -86,12 +89,23 @@ public class KeyInputBuilder {
   /**
    * Returns the list of <"Key", "Method"> <String, String> pairs found by this KeyInputBuilder
    *
-   * @return keyPairs as a defensively copied List, defensiveKeyPairs
+   * @return foundPairs as a defensively copied List, defensiveKeyPairs
    */
-  public List<Pair<String, String>> getKeyPairs() {
-    List<Pair<String, String>> defensiveKeyPairs = new ArrayList<>();
-    defensiveKeyPairs.addAll(keyPairs);
-    return defensiveKeyPairs;
+  public List<Pair<String, String>> getFoundPairs() {
+    List<Pair<String, String>> defensiveFoundPairs = new ArrayList<>();
+    defensiveFoundPairs.addAll(foundPairs);
+    return defensiveFoundPairs;
+  }
+
+  /**
+   * Turns the pairs found into a map from the key of each pair to the value associated with that
+   * key in the pair
+   * @return foundPairs as a Map from key -> value
+   */
+  public Map<String, String> getFoundMap() {
+    Map<String, String> keyToValueMap = new HashMap<>();
+    foundPairs.forEach(pair -> keyToValueMap.put(pair.getKey(), pair.getValue()));
+    return keyToValueMap;
   }
 
 }

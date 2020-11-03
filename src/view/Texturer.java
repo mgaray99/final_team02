@@ -1,11 +1,13 @@
 package view;
 
 import controller.ImageBuilder;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.GameModel;
 import model.entity.Entity;
@@ -15,6 +17,9 @@ public class Texturer {
   private Group textureGroup;
   private final double WIDTH;
   private final double HEIGHT;
+  private static final double VISIBLE_AMOUNT = 100;
+  private final double XSTRETCH_FACTOR;
+  private final double YSTRETCH_FACTOR;
   private double numBlocksWide;
   private double numBlocksHigh;
   private static final String TEXTURES = "textures";
@@ -30,6 +35,8 @@ public class Texturer {
   public Texturer(double w, double h, String path, Group tGroup) {
     WIDTH = w;
     HEIGHT = h;
+    XSTRETCH_FACTOR = WIDTH/VISIBLE_AMOUNT;
+    YSTRETCH_FACTOR = WIDTH/VISIBLE_AMOUNT;
     textureGroup = tGroup;
 
     ImageBuilder builder = new ImageBuilder(WIDTH, HEIGHT, path);
@@ -65,6 +72,7 @@ public class Texturer {
    * Inserts the new textures into texturedScene
    */
   private void insertNewTextures(List<Entity> entityList) {
+    //System.out.println(entityList.size());
     entityList.forEach(entity -> addNewTexture(entity));
   }
 
@@ -73,10 +81,23 @@ public class Texturer {
    * @param currentEntity
    */
   private void addNewTexture(Entity currentEntity) {
-    ImageView view = textureMap.get(currentEntity.getId());
-    view.setX(currentEntity.get)
-    if (view!=null) {
+    Image image = textureMap.get(currentEntity.getTypeId()).getImage();
+    ImageView view = new ImageView(image);
+
+
+    if (view!=null && !currentEntity.getTypeId().equals("EMPTY")) {
+      placeLocationOfView(currentEntity, view);
       textureGroup.getChildren().add(view);
     }
+  }
+
+  private void placeLocationOfView(Entity currentEntity, ImageView view) {
+    Rectangle2D.Float flo = currentEntity.getHitBox();
+    System.out.println(currentEntity.getTypeId());
+    System.out.printf("x: %f, y: %f, width: %f, height: %f\n", flo.x, flo.y, flo.width, flo.height);
+    view.setX(currentEntity.getHitBox().x * XSTRETCH_FACTOR);
+    view.setY(currentEntity.getHitBox().y * YSTRETCH_FACTOR);
+    view.setFitWidth(currentEntity.getHitBox().width * XSTRETCH_FACTOR);
+    view.setFitHeight(currentEntity.getHitBox().height * YSTRETCH_FACTOR);
   }
 }

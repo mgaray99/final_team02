@@ -58,10 +58,10 @@ public class GameView extends Application {
       map.buildMapOfScenes();
       mapOfScenes = map.getMapOfScenes();
 
+      buildModel();
       prepareAnimation();
       stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
       stage.show();
-      buildModel();
   }
 
   /**

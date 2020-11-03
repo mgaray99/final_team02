@@ -2,8 +2,6 @@ package controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -12,7 +10,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import model.GameModel;
-import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -43,7 +40,7 @@ public class KeyBinderTest extends DukeApplicationTest {
   private Text instructionsLabel;
 
   @Override
-  public void start(Stage stage) throws KeyInputBuilderInstantiationException,
+  public void start(Stage stage) throws PairBuilderInstantiationException,
       InvalidFileException {
 
     testInputter = new KeyInputter(new GameModel());

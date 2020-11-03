@@ -1,4 +1,4 @@
-KEY_INPUTS
+PAIRS
 A left
 D right
 P pause

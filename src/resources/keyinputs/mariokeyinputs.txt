@@ -1,4 +1,4 @@
-KEY_INPUTS
+PAIRS
 A left
 S down
 D right
