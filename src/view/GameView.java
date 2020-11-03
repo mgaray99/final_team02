@@ -219,6 +219,11 @@ public class GameView extends Application {
    */
   public void start() { setScene(viewName.GAME); }
 
+  /**
+   * Returns to the home screen
+   */
+  public void homeScreen() { setScene(viewName.HOME_SCREEN); }
+
 
   /**
    * Launches the application

@@ -30,10 +30,6 @@ public class KeyInputterTest extends DukeApplicationTest {
   private static final String DOWN = "down";
   private static final String PAUSE = "pause";
 
-
-
-
-
   @Override
   public void start(Stage stage) {
       testInputter = new KeyInputter(new GameModel(new GameConfiguration()));

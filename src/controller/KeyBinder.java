@@ -22,6 +22,7 @@ public class KeyBinder extends Group {
     private static final double UPDATE_LABEL_Y = HEIGHT/16;
     private static final String UPDATE_LABEL_TEXT = "Press a key to replace ";
     private static final String BAD_KEY_TEXT = "That key is invalid!";
+    private static final String UPDATE_ID = "UPDATE";
     private boolean isUpdatingKey;
     private String currentKeyBeingUpdated;
     private Text updateLabel;
@@ -38,7 +39,8 @@ public class KeyBinder extends Group {
    * Builds the update label, inserts it into this root node and makes it invisible
    */
   private void buildUpdateLabel() {
-      updateLabel = new Text(UPDATE_LABEL_TEXT);
+      updateLabel = new Text();
+      updateLabel.setId(UPDATE_ID);
       updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth());
       updateLabel.setLayoutY(UPDATE_LABEL_Y - updateLabel.getLayoutBounds().getHeight());
     }

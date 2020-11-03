@@ -115,6 +115,22 @@ class GameViewTest extends DukeApplicationTest {
   }
 
   /**
+   * Tests that the homeScreen() method opens the HOME_SCREEN scene
+   */
+  @Test
+  public void testBackToMenu() {
+    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    javafxRun(() -> view.start());
+
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), viewName.GAME.toString());
+    javafxRun(() -> view.homeScreen());
+
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+  }
+
+  /**
    * Tests that the switchToSelectCssStylesheetScreen() method opens the SELECT_CSS_STYLESHEET scene
    */
   @Test

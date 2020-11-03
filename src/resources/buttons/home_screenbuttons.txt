@@ -1,7 +1,6 @@
 HOME_SCREEN
-StartCommand 0.50 0.25 0.40 0.05 start
-SelectCssCommand 0.50 0.35 0.40 0.05 switchToSelectCssStylesheetScreen
-SelectLanguageCommand 0.50 0.45 0.40 0.05 switchToSelectLanguageScreen
-SelectGameTypeCommand 0.50 0.55 0.40 0.05 selectGameTypeScreen
-ControlsCommand 0.50 0.65 0.40 0.05 switchToControlScreen
-QuitGameCommand 0.50 0.75 0.40 0.05 endGame
+StartCommand 0.50 0.30 0.40 0.05 start
+SelectCssCommand 0.50 0.40 0.40 0.05 switchToSelectCssStylesheetScreen
+SelectLanguageCommand 0.50 0.50 0.40 0.05 switchToSelectLanguageScreen
+SelectGameTypeCommand 0.50 0.60 0.40 0.05 selectGameTypeScreen
+QuitGameCommand 0.50 0.70 0.40 0.05 endGame
