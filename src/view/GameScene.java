@@ -40,6 +40,7 @@ public class GameScene extends Scene {
     sceneId = id;
 
     Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
+
     background.setId(BACKGROUND);
     root.getChildren().add(background);
     getStylesheets().add(DEFAULT_CSS_FILEPATH);
