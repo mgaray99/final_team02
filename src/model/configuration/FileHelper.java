@@ -16,7 +16,6 @@ public class FileHelper {
 
     public static final String CSV_FILE_TYPE = "csv";
     public static final String PROPERTIES_FILE_TYPE = "properties";
-    public static final int PARSE_FAILURE_REPLACEMENT = -1;
 
     /**
      * A function that obtains the extension of a given file
@@ -75,39 +74,6 @@ public class FileHelper {
      */
     public static boolean isPropertiesFile(String path){
         return getFileExtension(path).equals(PROPERTIES_FILE_TYPE);
-    }
-
-    /**
-     * A function that attempts to parse an integer
-     * @param string The String from which an integer is attempted to be parsed from
-     * @return The parsed integer, or -1 which represents a parse failure
-     */
-    public static int tryParseInt(String string){
-        try{
-            return Integer.parseInt(string);
-        } catch(NumberFormatException e){
-            return PARSE_FAILURE_REPLACEMENT;
-        }
-    }
-
-    /**
-     * A function that attempts to parse a String array into an int array
-     * @param stringArrayIn The String array from which an integer array is attempted to be parsed from
-     * @return The parsed integer array, with -1 representing any parse failures
-     */
-
-    public static int[] parseIntForStringArray(String[] stringArrayIn){
-        int[] intArray = new int[stringArrayIn.length];
-        for (int index = 0; index < stringArrayIn.length; index++) {
-            try {
-                intArray[index] = Integer.parseInt(stringArrayIn[index]);
-            }
-            catch (NumberFormatException e){
-                System.out.println("Unable to parse integer at index " + index + "! Attempted to parse: " + stringArrayIn[index]);
-                intArray[index] = PARSE_FAILURE_REPLACEMENT;
-            }
-        }
-        return intArray;
     }
 
     /**

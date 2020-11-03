@@ -3,17 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import model.configuration.LevelLoader;
-import model.entity.BarrierBlockEntity;
-import model.entity.BreakableBlockEntity;
-import model.entity.DamagingBlockEntity;
-import model.entity.EmptyEntity;
-import model.entity.EnemyEntity;
-import model.entity.Entity;
-import model.entity.GoalEntity;
-import model.entity.IEntityType;
-import model.entity.PlayerEntity;
-import model.entity.PowerUpBlock;
-import model.entity.PowerUpEntity;
+import model.entity.*;
 
 public class Level {
 
@@ -24,31 +14,20 @@ public class Level {
   private final int MOVEMENT_SPEED = 1;
   private final int JUMP_SPEED = 3;
 
+
+  private float gravityFactor = 0.1f;
+
   public Level(LevelLoader levelLoader) {
     this.buildEntityList(levelLoader.getLevelMatrix());
   }
 
-  //note: ask TA how to refactor this
-  private void buildEntityList(int[][] levelMatrix){
-    for(int i = 0; i < levelMatrix.length; i++){
-      int[] currentRow = levelMatrix[i];
-      for(int j = 0; j < currentRow.length; j++){
-        int entityValue = currentRow[j];
-        Entity entity;
-        switch (entityValue) {
-          case 1 -> entity = new BarrierBlockEntity(i, j);
-          case 2 -> entity = new BreakableBlockEntity(i, j);
-          case 3 -> entity = new DamagingBlockEntity(i, j);
-          case 4 -> entity = new EnemyEntity(i, j, 100);
-          case 5 -> entity = new GoalEntity(i, j);
-          case 6 -> {
-            entity = new PlayerEntity(i, j, 100);
-            playerEntity = (PlayerEntity) entity; //casting necessary to store playerEntity
-          }
-          case 7 -> entity = new PowerUpEntity(i, j);
-          case 8 -> entity = new PowerUpBlock(i, j);
-          default -> entity = EmptyEntity.INSTANCE;
-        }
+  private void buildEntityList(ArrayList<ArrayList<IEntityType>> levelMatrix){
+    for(int i = 0; i < levelMatrix.size(); i++){
+      ArrayList<IEntityType> currentRow = levelMatrix.get(i);
+      for(int j = 0; j < currentRow.size(); j++){
+        IEntityType entityValue = currentRow.get(j);
+        EntityFactory entityFactory = new EntityFactory();
+        Entity entity = entityFactory.createEntity(entityValue, i, j);
         this.allEntities.add(entity);
       }
     }
@@ -97,12 +76,16 @@ public class Level {
     }
   }
 
+
+
   private void updateEntities() {
-    checkForPlayerMovement();
+    checkForKeyPresses();
+    applyGravity();
+
   }
 
 
-  private void checkForPlayerMovement() {
+  private void checkForKeyPresses() {
     if (keyPressFunctions.isPlayerMovingRight()) {
       playerEntity.setXVel(MOVEMENT_SPEED);
     } else if (keyPressFunctions.isPlayerMovingLeft()) {
@@ -110,6 +93,14 @@ public class Level {
     }
     if (keyPressFunctions.isPlayerJumping()) {
       playerEntity.setYVel(JUMP_SPEED);
+    }
+  }
+
+  public void applyGravity() {
+    for (Entity entity : allEntities) {
+      if (entity.affectedByGravity() && !entity.isGrounded()) {
+        entity.setYVel(entity.getYVel() - gravityFactor);
+      }
     }
   }
 

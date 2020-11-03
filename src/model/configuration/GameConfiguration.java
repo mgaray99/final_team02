@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Properties;
 
 public class GameConfiguration {
-    public static final String LEVEL_FILE_KEY = "level_file";
+    public static final String LEVEL_KEY = "level";
     private final Properties properties;
     private File levelFile;
 
@@ -14,7 +14,8 @@ public class GameConfiguration {
     }
 
     private void setLevelFile() {
-        String levelFileName = this.properties.getProperty(LEVEL_FILE_KEY);
+        String levelFileName = this.properties.getProperty(LEVEL_KEY);
+
         this.levelFile = new File(levelFileName);
     }
 
