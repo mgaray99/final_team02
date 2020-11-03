@@ -2,6 +2,7 @@ package controller;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class KeyInputter {
   private Map<String, String> keyToMethodMap;
   private static final String DEFAULT_KEY_INPUT_PATH = "resources/keyinputs/mariokeyinputs.txt";
   private String lastMethodFromKeyPress;
+  private static final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
   public KeyInputter(GameModel myModel) {
     model = myModel;
@@ -71,9 +73,6 @@ public class KeyInputter {
     if (keyToMethodMap.containsKey(press)) {
       keyPressed(press);
     }
-    else {
-      lastMethodFromKeyPress = "";
-    }
   }
 
   /**
@@ -129,10 +128,32 @@ public class KeyInputter {
   }
 
   /**
+   * Returns a mapping of keys to methods (defensively create rather than return existing map
+   * @return a mapping of String keys to String methods
+   */
+  public List<Pair<String, String>> getKeyMethodPairings() {
+    List<Pair<String, String>> pairings = new ArrayList<>();
+    keyToMethodMap.keySet().forEach(key -> pairings.add(new Pair<>(key, keyToMethodMap.get(key))));
+    return pairings;
+  }
+
+  /**
+   * Checks to make sure that a key is valid
+   * @param key the String key
+   * @return a boolean revealing whether or not the key is valid
+   */
+  public boolean isValidKey(String key) {
+    List<String> blockedKeysList = Arrays.asList(bannedKeys);
+    return !keyToMethodMap.containsKey(key) && !blockedKeysList.contains(key);
+  }
+
+  /**
    * For testing - return the String representation of the last method to occur out of a key press
    * @return the String representation of the last method to be called
    */
   String getLastPush() {
-    return lastMethodFromKeyPress;
+    String tempPush = lastMethodFromKeyPress;
+    lastMethodFromKeyPress = "";
+    return tempPush;
   }
 }

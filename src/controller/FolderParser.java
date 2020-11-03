@@ -6,6 +6,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A class whose main job is to return the String names of all files in a folder without their
+ * extensions. (If the folder held {dark.css, light.css, default.css} a String list containing
+ * {"dark", "default", "light"} would return.
+ *
+ * @author Alex Lu
+ */
 public class FolderParser {
 
   private List<String> matchingFilenames;
