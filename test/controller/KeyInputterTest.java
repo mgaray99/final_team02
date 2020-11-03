@@ -33,7 +33,8 @@ public class KeyInputterTest extends DukeApplicationTest {
 
   @Override
   public void start(Stage stage) throws InvalidFileException {
-      testInputter = new KeyInputter(new GameModel(new GameConfiguration("")));
+      testInputter = new KeyInputter(
+          new GameModel(new GameConfiguration("configuration.properties")));
   }
 
   /**
@@ -42,7 +43,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testLeft() {
-    testInputter.keyInput(DEFAULT_LEFT);
+    testInputter.keyPressed(DEFAULT_LEFT);
     assertEquals(LEFT, testInputter.getLastPush());
   }
 
@@ -52,7 +53,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testUp() {
-    testInputter.keyInput(DEFAULT_UP);
+    testInputter.keyPressed(DEFAULT_UP);
     assertEquals(UP, testInputter.getLastPush());
   }
   /**
@@ -61,7 +62,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testRight() {
-    testInputter.keyInput(DEFAULT_RIGHT);
+    testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
   }
   /**
@@ -70,7 +71,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testDown() {
-    testInputter.keyInput(DEFAULT_DOWN);
+    testInputter.keyPressed(DEFAULT_DOWN);
     assertEquals(DOWN, testInputter.getLastPush());
   }
 
@@ -80,7 +81,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testPause() {
-    testInputter.keyInput(DEFAULT_PAUSE);
+    testInputter.keyPressed(DEFAULT_PAUSE);
     assertEquals(PAUSE, testInputter.getLastPush());
   }
 
@@ -90,7 +91,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testIrrelevantKeyPush() {
-    testInputter.keyInput("L");
+    testInputter.keyPressed("L");
     assertEquals("", testInputter.getLastPush());
   }
 
@@ -101,14 +102,14 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testValidSwap() {
-    testInputter.keyInput(DEFAULT_RIGHT);
+    testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
 
     testInputter.swapKeyInput(DEFAULT_RIGHT, "B");
-    testInputter.keyInput(DEFAULT_RIGHT);
+    testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals("", testInputter.getLastPush());
 
-    testInputter.keyInput("B");
+    testInputter.keyPressed("B");
     assertEquals(RIGHT, testInputter.getLastPush());
   }
 
@@ -119,13 +120,13 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testValidSwapInvalidCurrentKey() {
-    testInputter.keyInput(DEFAULT_RIGHT);
+    testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
 
     testInputter.swapKeyInput("C", "B");
-    testInputter.keyInput("C");
+    testInputter.keyPressed("C");
     assertEquals("", testInputter.getLastPush());
-    testInputter.keyInput("B");
+    testInputter.keyPressed("B");
     assertEquals("", testInputter.getLastPush());
 
 
@@ -145,7 +146,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    */
   @Test
   public void testValidSwapInvalidReplacementKey() {
-    testInputter.keyInput(DEFAULT_RIGHT);
+    testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
 
     testInputter.swapKeyInput(DEFAULT_RIGHT, DEFAULT_LEFT);

@@ -45,7 +45,10 @@ public class KeyBinderTest extends DukeApplicationTest {
   @Override
   public void start(Stage stage) throws KeyInputBuilderInstantiationException,
       InvalidFileException {
-    testInputter = new KeyInputter(new GameModel(new GameConfiguration("")));
+
+    testInputter = new KeyInputter(
+        new GameModel(new GameConfiguration("configuration.properties")));
+
     testBinder = new KeyBinder();
     testBinder.updateKeyInputScreen(testInputter);
     instructionsLabel = (Text)(testBinder.lookup("#" + UPDATE_ID));

@@ -11,14 +11,14 @@ import model.GameModel;
 
 public class KeyInputter {
 
-  private GameModel model;
+  private KeyInputterMethodCaller methodCaller;
   private Map<String, String> keyToMethodMap;
   private static final String DEFAULT_KEY_INPUT_PATH = "resources/keyinputs/mariokeyinputs.txt";
   private String lastMethodFromKeyPress;
   private static final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
-  public KeyInputter(GameModel myModel) {
-    model = myModel;
+  public KeyInputter(GameModel model) {
+    methodCaller = new KeyInputterMethodCaller(model);
     lastMethodFromKeyPress = "";
     keyToMethodMap = new HashMap<>();
 
@@ -69,9 +69,23 @@ public class KeyInputter {
    *
    * @param press the String representation of the key that has been pressed
    */
-  public void keyInput(String press) {
+  public void keyPressed(String press) {
     if (keyToMethodMap.containsKey(press)) {
-      keyPressed(press);
+      String methodPath = keyToMethodMap.get(press);
+      invokeMethod(methodPath);
+    }
+  }
+
+  /**
+   * Handles the event that a key has been released - checks to make sure there is a method to call on
+   * that key press and if so calls keyPressed
+   *
+   * @param press the String representation of the key that has been pressed
+   */
+  public void keyReleased(String press) {
+    if (keyToMethodMap.containsKey(press)) {
+      String methodPath = keyToMethodMap.get(press) + "Release";
+      invokeMethod(methodPath);
     }
   }
 
@@ -79,52 +93,16 @@ public class KeyInputter {
    * Handles the event where a key has been pressed (invariant - we know that key corresponds to
    * a method) and then invokes the method stored in the map
    *
-   * @param press the key that has been pressed
+   * @param methodPath the String representation of the method to be called
    */
-  private void keyPressed(String press) {
+  private void invokeMethod(String methodPath) {
     try {
-      String methodPath = keyToMethodMap.get(press);
       Method method = this.getClass().getDeclaredMethod(methodPath);
-      method.invoke(this);
+      method.invoke(methodCaller);
       lastMethodFromKeyPress = methodPath;
     } catch (Exception e) {
       System.out.println("the method attached to that key input broke");
     }
-  }
-
-  /**
-   * Tells the model to move the player left
-   */
-  private void left() {
-    System.out.println("moving left");
-  }
-
-  /**
-   * Tells the model to move right
-   */
-  private void right() {
-    System.out.println("moving right");
-  }
-
-  /**
-   * Tells the model to move up (i.e. jump)
-   */
-  private void up() {
-    System.out.println("moving up");
-  }
-
-  /**
-   * Tells the model to move down (i.e. crouch)
-   */
-  private void down() {
-    System.out.println("moving down");
-  }
-
-  /**
-   * Tells the model to pause
-   */
-  private void pause() {
-    System.out.println("pausing");
   }
 
   /**

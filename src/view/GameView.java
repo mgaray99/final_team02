@@ -62,7 +62,7 @@ public class GameView extends Application {
   private void buildModel() {
     try {
       listenOnControllers();
-      model = new GameModel(new GameConfiguration(""));
+      model = new GameModel(new GameConfiguration("configuration.properties"));
       inputter = new KeyInputter(model);
     } catch (InvalidFileException ife) {
       endGame();
@@ -117,7 +117,15 @@ public class GameView extends Application {
    * @param key the key that has been pressed
    */
   public void keyPressed(String key) {
-    inputter.keyInput(key);
+    inputter.keyPressed(key);
+  }
+
+  /**
+   * Handles the event of a key release
+   * @param key the key that has been pressed
+   */
+  public void keyReleased(String key) {
+    inputter.keyReleased(key);
   }
 
   /**
@@ -220,9 +228,7 @@ public class GameView extends Application {
   /**
    * Switches back to the last view
    */
-  public void back() {
-    setScene(lastView);
-  }
+  public void back() { setScene(lastView); }
 
   /**
    * Starts the game

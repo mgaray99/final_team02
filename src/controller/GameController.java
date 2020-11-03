@@ -24,7 +24,8 @@ public class GameController extends Group implements ButtonPushHandler {
 
   public GameController() {
     buffer = new ArrayList<>();
-    setOnKeyPressed(event -> handleKeyEvent(event));
+    setOnKeyPressed(event -> handleKeyPress(event));
+    setOnKeyReleased(event -> handleKeyRelease(event));
   }
 
   /**
@@ -92,11 +93,25 @@ public class GameController extends Group implements ButtonPushHandler {
     fillBuffer(methodName, new ArrayList<>());
   }
 
- public void handleKeyEvent(KeyEvent event) {
+  /**
+   * Handles the event that a key has been pressed
+   * @param event the KeyEvent that has happened
+   */
+ public void handleKeyPress(KeyEvent event) {
     List<String> keyArgs = new ArrayList<>();
     keyArgs.add(event.getCode().toString());
     fillBuffer("keyPressed", keyArgs);
  }
+
+  /**
+   * Handles the event that a key has been released
+   * @param event the KeyEvent that has happened
+   */
+  public void handleKeyRelease(KeyEvent event) {
+    List<String> keyArgs = new ArrayList<>();
+    keyArgs.add(event.getCode().toString());
+    fillBuffer("keyReleased", keyArgs);
+  }
 
   public void updateResources(String name) {
     for (Node n : getChildren()) {
