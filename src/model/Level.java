@@ -2,12 +2,23 @@ package model;
 
 import model.entity.Entity;
 import java.util.*;
+import model.entity.LivingEntity;
+import model.entity.MobileEntity;
 
 public class Level {
 
-  List<Entity>  allEntities;
+  List<Entity> allEntities;
+  List<MobileEntity> mobileEntities;
+  List<LivingEntity> livingEntities;
 
-  public Level() {}
+  public Level(List<Entity> allEntities) {
+    this.allEntities = allEntities;
+    for (Entity entity : allEntities) {
+      if (entity instanceof LivingEntity) {
+
+      }
+    }
+  }
 
   int[][] getGrid() {return null;}
 
@@ -21,8 +32,19 @@ public class Level {
     moveEntities();
   }
 
-  private void checkCollisions(){};
-  private void moveEntities(){};
+  private void checkCollisions(){
+    for (LivingEntity livingEntity : livingEntities) {
+      for (Entity anyEntity : allEntities) {
+        livingEntity.checkCollision(anyEntity);
+      }
+    }
+  };
+
+  private void moveEntities(){
+    for (MobileEntity mobileEntity : mobileEntities) {
+      mobileEntity.moveOneStep();
+    }
+  };
 
   private void checkWinCondition(){};
 

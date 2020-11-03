@@ -1,23 +1,23 @@
 package model.entity;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Entity {
 
     private final int HIT_BOX_X_SIZE = 10;
     private final int HIT_BOX_Y_SIZE = 10;
 
-    private final Rectangle hitBox;
+    protected List<Rectangle> hitBox = new ArrayList<>();
 
     public Entity(int xUpperLeft, int yUpperLeft){
-        this.hitBox = new Rectangle(xUpperLeft, yUpperLeft, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE);
+        this.hitBox.add(new Rectangle(xUpperLeft, yUpperLeft, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE));
     }
 
-    //translate
+    //public void addToHitBox(Enum direction)
 
-    //
-
-    protected Rectangle getHitBox(){
+    protected List<Rectangle> getHitBox(){
         return this.hitBox;
     }
 

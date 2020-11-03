@@ -1,5 +1,7 @@
 package model.entity;
 
+import java.awt.Rectangle;
+
 public class LivingEntity extends Entity{
 
     private int health;
@@ -9,8 +11,16 @@ public class LivingEntity extends Entity{
         this.health = healthIn;
     }
 
+
     public boolean checkCollision(Entity entityIn){
-        return this.getHitBox().intersects(entityIn.getHitBox());
+        for (Rectangle thisSubHitBox : this.getHitBox()) {
+            for (Rectangle otherSubHitBox : entityIn.getHitBox()) {
+                if (thisSubHitBox.intersects(otherSubHitBox)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public int getHealth(){
