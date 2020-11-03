@@ -1,4 +1,4 @@
-package model.level;
+package model;
 
 public class KeyPressFunctions {
 
@@ -6,8 +6,7 @@ public class KeyPressFunctions {
   private boolean movePlayerLeft;
   private boolean movePlayerRight;
   private boolean jumpPlayer;
-
-  protected boolean isPaused() {
+  public boolean isPaused() {
     return isPaused;
   }
 

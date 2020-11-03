@@ -7,8 +7,9 @@ public abstract class Entity {
     private static final int HIT_BOX_X_SIZE = 10;
     private static final int HIT_BOX_Y_SIZE = 10;
     private final IEntityType entityType;
-
     private final Rectangle hitBox;
+    private int xVel = 0;
+    private int yVel = 0;
 
     protected Entity(){
         this.hitBox = new Rectangle();
@@ -47,4 +48,20 @@ public abstract class Entity {
     public boolean checkCollision(Entity entityIn){
         return this.getHitBox().intersects(entityIn.getHitBox());
     }
+
+  public void setVelocity(int xVel, int yVel) {
+    this.xVel = xVel;
+    this.yVel = yVel;
+  }
+
+    public void setXVel(int xVel) {
+        this.xVel =xVel;
+    }
+
+    public void setYVel(int yVel) {
+        this.yVel =yVel;
+    }
+
+  public void moveOneStep() { hitBox.translate(xVel, yVel); }
 }
+
