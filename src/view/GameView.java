@@ -12,6 +12,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventType;
+import javafx.scene.Group;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameModel;
@@ -31,11 +32,19 @@ public class GameView extends Application {
   viewName lastView;
   viewName currentView;
   private Map<viewName, GameScene> mapOfScenes;
+
+  private static final double WIDTH = 800;
+  private static final double HEIGHT = 800;
   private static final double ANIMATION_SPEED = 1/60.0;
+  private static final String CONFIG_PATH = "configuration.properties";
+  private static final String TEXTURE_PATH = "resources/images/gametextures.txt";
+  private static final String TEXTURES = "textures";
+
   private GameModel model;
   private Stage stage;
   private Timeline animation;
   private KeyInputter inputter;
+  private Texturer texturer;
 
   /**
    * Begins our view, (i.e. builds the scene and group objects responsible for showing our project)
@@ -49,24 +58,25 @@ public class GameView extends Application {
       map.buildMapOfScenes();
       mapOfScenes = map.getMapOfScenes();
 
-      buildModel();
-
+      prepareAnimation();
       stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
       stage.show();
-      prepareAnimation();
+      buildModel();
   }
 
   /**
    * Prepares the model that the view will update with an animation timer and display
    */
   private void buildModel() {
-    //try {
+    try {
       listenOnControllers();
-      model = new GameModel();
+      model = new GameModel(new GameConfiguration(CONFIG_PATH));
       inputter = new KeyInputter(model);
-    //} catch (InvalidFileException ife) {
-      //endGame();
-    //}
+      texturer = new Texturer(WIDTH, HEIGHT, TEXTURE_PATH,
+          (Group)(mapOfScenes.get(viewName.GAME).lookup("#" + TEXTURES)));
+    } catch (InvalidFileException ife) {
+      endGame();
+    }
   }
 
   /**
@@ -74,7 +84,8 @@ public class GameView extends Application {
    * @param timeElapsed the amount of time that has passed since the last update
    */
   private void update(double timeElapsed) {
-    //model.updateGame();
+    model.updateGame();
+    texturer.updateTextures(model.getAllEntitiesInLevel());
   }
 
 
@@ -239,7 +250,6 @@ public class GameView extends Application {
    * Returns to the home screen
    */
   public void homeScreen() { setScene(viewName.HOME_SCREEN); }
-
 
   /**
    * Launches the application

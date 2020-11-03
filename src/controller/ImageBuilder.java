@@ -56,7 +56,7 @@ public class ImageBuilder {
         try {
             makeImages(path);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Couldn't build images at " + path);
 
         }
     }

@@ -1,0 +1,2 @@
+GAME_TEXTURES
+mario 0 0 1 1 src/resources/images/homeImage/mario.jpg

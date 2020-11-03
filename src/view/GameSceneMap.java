@@ -27,6 +27,7 @@ public class GameSceneMap {
   private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";
   private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
+  private static final String TEXTURES = "textures";
   private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump", "Penu"};
 
   public GameSceneMap() {
@@ -49,11 +50,11 @@ public class GameSceneMap {
       mapOfScenes.get(view).setGameController(new GameController());
     }
 
-    addImagesToControllers();
+    addImagesToHomeScreen();
     buildOptionsSelectorsForControllers();
     addButtonsToControllers();
     addKeyBinders();
-
+    addTextureGroupToGame();
   }
 
   /**
@@ -94,17 +95,26 @@ public class GameSceneMap {
   }
 
 
-  private void addImagesToControllers() {
+  /**
+   * Adds images to the home screen
+   */
+  private void addImagesToHomeScreen() {
     Node background = mapOfScenes.get(viewName.HOME_SCREEN).lookupElementInRoot("background");
     mapOfScenes.get(viewName.HOME_SCREEN).removeElementFromRoot(background);
-    ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT, "resources/images/home_screenimages.txt");
+    ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
+        "resources/images/home_screenimages.txt");
+
     for (ImageView view: image.getFoundImages()) {
-    mapOfScenes.get(viewName.HOME_SCREEN).addElementToRoot(view);
-    view.toBack();
+      mapOfScenes.get(viewName.HOME_SCREEN).addElementToRoot(view);
+      view.toBack();
     }
   }
 
-
+private void addTextureGroupToGame() {
+    Group textures = new Group();
+    textures.setId(TEXTURES);
+    mapOfScenes.get(viewName.GAME).addElementToRoot(textures);
+}
 
 
   /**

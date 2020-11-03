@@ -7,7 +7,7 @@ public class KeyPressFunctions {
   private boolean movePlayerRight = false;
   private boolean jumpPlayer = false;
 
-  protected boolean isPaused() {
+  public boolean isPaused() {
     return isPaused;
   }
 

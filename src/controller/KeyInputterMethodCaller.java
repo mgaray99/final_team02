@@ -9,7 +9,7 @@ public class KeyInputterMethodCaller {
 
   public KeyInputterMethodCaller(GameModel mo) {
     model = mo;
-    //functions = model.getKeyPressFunctions();
+    functions = model.getKeyPressFunctions();
     functions = new KeyPressFunctions();
   }
 
@@ -33,7 +33,7 @@ public class KeyInputterMethodCaller {
    * Tells the model to move up (i.e. jump)
    */
   public void up() {
-    functions.startPlayerJump();
+    functions.startPlayerJumping();
     System.out.println("moving up");
   }
 
@@ -78,7 +78,7 @@ public class KeyInputterMethodCaller {
    * Tells the model to move up (i.e. jump)
    */
   public void upRelease() {
-    functions.stopPlayerJump();
+    functions.stopPlayerJumping();
     System.out.println("releasing up");
   }
 

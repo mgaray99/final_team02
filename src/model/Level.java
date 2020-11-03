@@ -13,11 +13,15 @@ public class Level {
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
   private final int MOVEMENT_SPEED = 1;
   private final int JUMP_SPEED = 3;
+  private static final int STARTX = 50;
+  private static final int STARTY = 600;
+  private static final int START_HEALTH = 10;
 
 
   private float gravityFactor = 0.1f;
 
   public Level(LevelLoader levelLoader) {
+    playerEntity = new PlayerEntity(STARTX, STARTY, START_HEALTH);
     this.buildEntityList(levelLoader.getLevelMatrix());
   }
 
@@ -125,6 +129,17 @@ public class Level {
 
   public KeyPressFunctions getKeyPressFunctions() {
     return keyPressFunctions;
+  }
+
+  /**
+   * Returns all of the entities in the Level - however, we defensively copy them into a separate
+   * list to avoid aliasing issues
+   * @return a defensive copy of allEntities
+   */
+  public List<Entity> getAllEntities() {
+    List<Entity> defensiveCopyOfEntities = new ArrayList<>();
+    defensiveCopyOfEntities.addAll(allEntities);
+    return defensiveCopyOfEntities;
   }
 
 }
