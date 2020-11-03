@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import model.GameModel;
 import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -31,8 +32,8 @@ public class KeyInputterTest extends DukeApplicationTest {
   private static final String PAUSE = "pause";
 
   @Override
-  public void start(Stage stage) {
-      testInputter = new KeyInputter(new GameModel(new GameConfiguration()));
+  public void start(Stage stage) throws InvalidFileException {
+      testInputter = new KeyInputter(new GameModel(new GameConfiguration("")));
   }
 
   /**

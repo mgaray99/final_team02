@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameModel;
 import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
@@ -41,20 +42,31 @@ public class GameView extends Application {
    * @param sta the main stage of the program
    */
   public void start(Stage sta) {
-    stage = sta;
-    lastView = viewName.HOME_SCREEN;
-    currentView = viewName.HOME_SCREEN;
-    GameSceneMap map = new GameSceneMap();
-    map.buildMapOfScenes();
-    mapOfScenes = map.getMapOfScenes();
+      stage = sta;
+      lastView = viewName.HOME_SCREEN;
+      currentView = viewName.HOME_SCREEN;
+      GameSceneMap map = new GameSceneMap();
+      map.buildMapOfScenes();
+      mapOfScenes = map.getMapOfScenes();
 
-    listenOnControllers();
-    model = new GameModel(new GameConfiguration());
-    inputter = new KeyInputter(model);
+      buildModel();
 
-    stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
-    stage.show();
-    prepareAnimation();
+      stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
+      stage.show();
+      prepareAnimation();
+  }
+
+  /**
+   * Prepares the model that the view will update with an animation timer and display
+   */
+  private void buildModel() {
+    try {
+      listenOnControllers();
+      model = new GameModel(new GameConfiguration(""));
+      inputter = new KeyInputter(model);
+    } catch (InvalidFileException ife) {
+      endGame();
+    }
   }
 
   /**
@@ -193,9 +205,7 @@ public class GameView extends Application {
   /**
    * select game type
    */
-  public void createGameTypeButtons(String GameType) {
-
-  }
+  public void createGameTypeButtons(String GameType) { }
 
   /**
    * Switches to the controller screen
