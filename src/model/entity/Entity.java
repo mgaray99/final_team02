@@ -18,6 +18,7 @@ public abstract class Entity {
 
     public boolean shouldCheckCollisions() {return false;};
     public boolean affectedByGravity() {return false;};
+    public boolean isGrounded() {return true;}
 
 
     public final boolean isEmpty(){
@@ -55,10 +56,10 @@ public abstract class Entity {
 
     public float getYVel(){return yVel;}
 
-    public void setYVel(int yVel) {
+    public void setYVel(float yVel) {
         this.yVel =yVel;
     }
-
+    
   public void moveOneStep() {
       hitBox.setRect(hitBox.getX() + xVel, hitBox.getY() + yVel, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE);
   }

@@ -20,6 +20,13 @@ public abstract class LivingEntity extends Entity{
         return true;
     }
 
+    //@Override
+    //public boolean checkCollisions(Entity entityIn) {
+    //    if (this.getYVel() <= 0 &&
+    //        entityIn.getHitBox().get)
+    //    return this.getHitBox().intersects(entityIn.getHitBox());
+    //}
+
     public int getHealth(){
         return this.health;
     }

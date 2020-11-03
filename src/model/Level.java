@@ -25,7 +25,7 @@ public class Level {
   private final int JUMP_SPEED = 3;
 
 
-  private int gravityFactor = 1;
+  private float gravityFactor = 0.1f;
 
   public Level(LevelLoader levelLoader) {
     this.buildEntityList(levelLoader.getLevelMatrix());
@@ -103,8 +103,8 @@ public class Level {
 
 
   private void updateEntities() {
-
     checkForKeyPresses();
+    applyGravity();
 
   }
 
@@ -117,6 +117,14 @@ public class Level {
     }
     if (keyPressFunctions.isPlayerJumping()) {
       playerEntity.setYVel(JUMP_SPEED);
+    }
+  }
+
+  public void applyGravity() {
+    for (Entity entity : allEntities) {
+      if (entity.affectedByGravity() && !entity.isGrounded()) {
+        entity.setYVel(entity.getYVel() - gravityFactor);
+      }
     }
   }
 
