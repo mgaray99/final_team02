@@ -1,11 +1,14 @@
 package view;
 
+import controller.ImageBuilder;
 import controller.KeyBinder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Group;
 import controller.GameController;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import view.GameView.viewName;
 
 /**
@@ -46,9 +49,11 @@ public class GameSceneMap {
       mapOfScenes.get(view).setGameController(new GameController());
     }
 
+    addImagesToControllers();
     buildOptionsSelectorsForControllers();
     addButtonsToControllers();
     addKeyBinders();
+
   }
 
   /**
@@ -87,6 +92,20 @@ public class GameSceneMap {
           view.toString().toLowerCase()+"buttons.txt");
     }
   }
+
+
+  private void addImagesToControllers() {
+    Node background = mapOfScenes.get(viewName.HOME_SCREEN).lookupElementInRoot("background");
+    mapOfScenes.get(viewName.HOME_SCREEN).removeElementFromRoot(background);
+    ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT, "resources/images/home_screenimages.txt");
+    for (ImageView view: image.getFoundImages()) {
+    mapOfScenes.get(viewName.HOME_SCREEN).addElementToRoot(view);
+    view.toBack();
+    }
+  }
+
+
+
 
   /**
    * Returns the map of viewName to GameScene
