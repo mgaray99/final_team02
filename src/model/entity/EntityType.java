@@ -1,15 +1,15 @@
 package model.entity;
 
 public enum EntityType implements IEntityType{
-    PLAYER("player"),
-    ENEMY("enemy"),
-    BARRIER_BLOCK("barrier_block"),
-    BREAKABLE_BLOCK("breakable_block"),
-    DAMAGING_BLOCK("damaging_block"),
-    POWER_UP_BLOCK("power_up_block"),
-    POWER_UP("power_up"),
-    GOAL("goal"),
-    EMPTY("empty");
+    PLAYER("PLAYER"),
+    ENEMY("ENEMY"),
+    BARRIER_BLOCK("BARRIER_BLOCK"),
+    BREAKABLE_BLOCK("BREAKABLE_BLOCK"),
+    DAMAGING_BLOCK("DAMAGING_BLOCK"),
+    POWER_UP_BLOCK("POWER_UP_BLOCK"),
+    POWER_UP("POWER_UP"),
+    GOAL("GOAL"),
+    EMPTY("EMPTY");
 
     private final String typeID;
 
@@ -21,4 +21,5 @@ public enum EntityType implements IEntityType{
     public String getTypeID() {
         return typeID;
     }
+
 }
