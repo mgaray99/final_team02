@@ -1,16 +1,16 @@
-package model;
+package model.entity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import model.entity.*;
-import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
+import util.DukeApplicationTest;
 
 
 /**
  * Tests the GameScene class
  */
-public class EntityCollisionTest extends DukeApplicationTest {
+public class EntityTest extends DukeApplicationTest {
 
   @Test
   public void collisionTrueTest() {
