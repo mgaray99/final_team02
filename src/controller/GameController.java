@@ -1,9 +1,14 @@
 package controller;
 
-import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.event.Event;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 
 /**
  * Serves as the controller of our MVC model - handles button pushes and key inputs and keys them
@@ -14,19 +19,12 @@ public class GameController extends Group implements ButtonPushHandler {
   private static double WIDTH = 800;
   private static double HEIGHT = 800;
   private static String OPTIONS_SELECTOR_EVENTTYPE = "push";
-  private Object view;
+  private static final EventType CONTROLLER_EVENT = new EventType("controller");
+  private List<String> buffer;
 
-  public GameController(Object v) {
-    view = v;
-    addGameControllerElements();
-  }
-
-  /**
-   * Is responsible for building the different elements (i.e. Button, OptionsSelector, that will
-   * be in our controller
-   */
-  private void addGameControllerElements() {
-
+  public GameController() {
+    buffer = new ArrayList<>();
+    setOnKeyPressed(event -> handleKeyEvent(event));
   }
 
   /**
@@ -35,10 +33,15 @@ public class GameController extends Group implements ButtonPushHandler {
    * @param extension the allowed extension for each option (i.e. include if ".jpeg")
    * @param method the method to be called by the OptionsSelector
    */
-  public void addOptionsSelectorFromFolder(String folder, String extension, Method method) {
-    FolderParser parser = new FolderParser(folder,
-        extension);
-    OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, parser.getFilenamesFromFolder());
+  public void addOptionsSelectorFromFolder(String folder, String extension, String method) {
+    FolderParser parser = new FolderParser(folder, extension);
+    buildOptionsSelector(parser.getFilenamesFromFolder(), method);
+  }
+
+  public void buildOptionsSelector(List<String> choices, String method) {
+    List<String> defensiveChoices = new ArrayList<>();
+    defensiveChoices.addAll(choices);
+    OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, defensiveChoices);
     selector.addEventHandler(EventType.ROOT, event->
         callMethodOnOptionSelector(event, method, selector.getTextInBuffer()));
     getChildren().add(selector);
@@ -46,32 +49,19 @@ public class GameController extends Group implements ButtonPushHandler {
 
   /**
    *
-   *
    * @param event the event that has occurred
    * @param method the method to be called if event matches OPTIONS_SELECTOR_EVENTTYPE
    * @param text the String parameter to be inserted into the method if event matches
    *             OPTIONS_SELECTOR_EVENTTYPE
    */
-  private void callMethodOnOptionSelector(Event event, Method method, String text) {
+  private void callMethodOnOptionSelector(Event event, String method, String text) {
     if (event.getEventType().getName().equals(OPTIONS_SELECTOR_EVENTTYPE) && !text.equals("")) {
-        String[] methodArgs = {text};
-        invokeMethod(method, methodArgs);
+        List<String> args = new ArrayList<>();
+        args.add(text);
+        fillBuffer(method, args);
     }
   }
 
-  /**
-   * Calls the method "method" with the parameter "text"
-   *
-   * @param method the method to be invoked
-   * @param text the value of the string
-   */
-  private void invokeMethod(Method method, String[] text) {
-    try {
-      method.invoke(view, text);
-    } catch (Exception e) {
-      System.out.println("invalid method");
-    }
-  }
 
   /**
    * Adds a set of buttons as specified by file to the controller - when they are pushed they will
@@ -99,14 +89,53 @@ public class GameController extends Group implements ButtonPushHandler {
    */
   @Override
   public void handlePush(String methodName) {
-    try {
-      Method method = view.getClass().getDeclaredMethod(methodName);
-      method.invoke(view);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("invalid method view");
+    fillBuffer(methodName, new ArrayList<>());
+  }
+
+ public void handleKeyEvent(KeyEvent event) {
+    List<String> keyArgs = new ArrayList<>();
+    keyArgs.add(event.getCode().toString());
+    fillBuffer("keyPressed", keyArgs);
+ }
+
+  public void updateResources(String name) {
+    for (Node n : getChildren()) {
+      if (n.getClass().getSimpleName().equals("Button")) {
+        ((Button)n).setText(ResourceBundle.getBundle("resources/resourcebundles."
+            + name).getString(n.getId()));
+      }
+      else if (n.getClass().getSimpleName().equals("OptionsSelector")) {
+        ((OptionsSelector)n).updateBundle(name);
+      }
     }
   }
 
+  /**
+   * Fires an event
+   */
+  private void dispatchEvent() {
+      fireEvent(new Event(CONTROLLER_EVENT));
+  }
+
+  /**
+   * Empties the buffer List and then fills it with methodName and a list of arguments
+   * @param methodName the String representation of the method
+   * @param args a list of arguments
+   */
+  private void fillBuffer(String methodName, List<String> args) {
+    buffer.clear();
+    buffer.add(methodName);
+    buffer.addAll(args);
+    dispatchEvent();
+  }
+
+  /**
+   * Returns the elements in the buffer, having been defensively copied into bufferHolder
+   * @return bufferHolder
+   */
+  public List<String> getBuffer() {
+    List<String> bufferHolder = new ArrayList<>();
+    bufferHolder.addAll(buffer);
+    return bufferHolder;
+  }
 }

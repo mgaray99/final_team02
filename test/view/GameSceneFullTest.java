@@ -21,7 +21,7 @@ public class GameSceneFullTest extends DukeApplicationTest {
 
   @Override
   public void start(Stage stage) {
-    testScene = new GameScene(new Group(), WIDTH, HEIGHT);
+    testScene = new GameScene(new Group(), "Test", WIDTH, HEIGHT);
   }
 
   /**

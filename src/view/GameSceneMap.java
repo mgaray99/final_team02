@@ -1,8 +1,12 @@
 package view;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import javafx.event.EventType;
 import javafx.scene.Group;
 import controller.GameController;
 import view.GameView.viewName;
@@ -21,6 +25,7 @@ public class GameSceneMap {
   private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";
   private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
+  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump"};
 
   public GameSceneMap() {
   }
@@ -33,14 +38,13 @@ public class GameSceneMap {
    * builds a "GameScene" object corresponding to that "view" that will serve as the view's
    * scene
    *
-   * @param gameView the GameView that we're building the map for
    */
-  public void buildMapOfScenes(GameView gameView) {
+  public void buildMapOfScenes() {
     mapOfScenes = new HashMap<>();
 
     for (GameView.viewName view : GameView.viewName.values()) {
-      mapOfScenes.put(view, new GameScene(new Group(), WIDTH, HEIGHT));
-      mapOfScenes.get(view).setController(new GameController(gameView));
+      mapOfScenes.put(view, new GameScene(new Group(), view.toString(), WIDTH, HEIGHT));
+      mapOfScenes.get(view).setGameController(new GameController());
     }
 
     buildOptionsSelectorsForControllers();
@@ -52,27 +56,18 @@ public class GameSceneMap {
    */
   private void buildOptionsSelectorsForControllers() {
     try {
-      mapOfScenes.get(viewName.SELECT_CSS_STYLESHEET).buildOptionsSelectorForController(
-          CSS_FOLDERPATH, CSS_EXTENSION,
-          getOptionSelectorMethodFromString("switchStylesheet"));
-      mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorForController(
-          LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION,
-          getOptionSelectorMethodFromString("updateLanguage"));
+      mapOfScenes.get(viewName.SELECT_CSS_STYLESHEET).buildOptionsSelectorFromFolderForController(
+          CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
+      mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorFromFolderForController(
+          LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "switchLanguage");
+      mapOfScenes.get(viewName.GAMEVERSION).buildOptionsSelectorFromListForController(
+              Arrays.asList(GAME_TYPES), "createGameTypeButtons");
     }
     catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  /**
-   * Returns a method based on a String input
-   * @param methodName the String representation of the method name
-   * @return the method in GameView corresponding to methodName
-   * @throws NoSuchMethodException
-   */
-  private Method getOptionSelectorMethodFromString(String methodName) throws NoSuchMethodException{
-    return GameView.class.getDeclaredMethod(methodName, String.class);
-  }
 
   /**
    * Adds a set of buttons to each scene represents by view
