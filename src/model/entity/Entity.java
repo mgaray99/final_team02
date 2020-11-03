@@ -1,31 +1,31 @@
 package model.entity;
 
-import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public abstract class Entity {
 
     private static final int HIT_BOX_X_SIZE = 10;
     private static final int HIT_BOX_Y_SIZE = 10;
     private final IEntityType entityType;
-    private final Rectangle hitBox;
-    private int xVel = 0;
-    private int yVel = 0;
+    private final Rectangle2D.Float hitBox;
+    private float xVel = 0;
+    private float yVel = 0;
 
     protected Entity(){
-        this.hitBox = new Rectangle();
+        this.hitBox = new Rectangle2D.Float();
         this.entityType = EntityType.EMPTY;
     }
 
-    public boolean shouldCheckCollisions(){
-        return false;
-    }
+    public boolean shouldCheckCollisions() {return false;};
+    public boolean affectedByGravity() {return false;};
+
 
     public final boolean isEmpty(){
         return this.entityType == EntityType.EMPTY;
     }
 
     public Entity(IEntityType entityType, int xUpperLeft, int yUpperLeft){
-        this.hitBox = new Rectangle(xUpperLeft, yUpperLeft, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE);
+        this.hitBox = new Rectangle2D.Float(xUpperLeft, yUpperLeft, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE);
         this.entityType = entityType;
     }
 
@@ -41,7 +41,7 @@ public abstract class Entity {
         return this.entityType.getTypeID() + "@x=" + this.hitBox.x  + "@y=" + this.hitBox.y;
     }
 
-    public Rectangle getHitBox(){
+    public Rectangle2D.Float getHitBox(){
         return this.hitBox;
     }
 
@@ -49,19 +49,18 @@ public abstract class Entity {
         return this.getHitBox().intersects(entityIn.getHitBox());
     }
 
-  public void setVelocity(int xVel, int yVel) {
-    this.xVel = xVel;
-    this.yVel = yVel;
-  }
-
     public void setXVel(int xVel) {
         this.xVel =xVel;
     }
+
+    public float getYVel(){return yVel;}
 
     public void setYVel(int yVel) {
         this.yVel =yVel;
     }
 
-  public void moveOneStep() { hitBox.translate(xVel, yVel); }
+  public void moveOneStep() {
+      hitBox.setRect(hitBox.getX() + xVel, hitBox.getY() + yVel, HIT_BOX_X_SIZE, HIT_BOX_Y_SIZE);
+  }
 }
 

@@ -24,6 +24,9 @@ public class Level {
   private final int MOVEMENT_SPEED = 1;
   private final int JUMP_SPEED = 3;
 
+
+  private int gravityFactor = 1;
+
   public Level(LevelLoader levelLoader) {
     this.buildEntityList(levelLoader.getLevelMatrix());
   }
@@ -97,12 +100,16 @@ public class Level {
     }
   }
 
+
+
   private void updateEntities() {
-    checkForPlayerMovement();
+
+    checkForKeyPresses();
+
   }
 
 
-  private void checkForPlayerMovement() {
+  private void checkForKeyPresses() {
     if (keyPressFunctions.isPlayerMovingRight()) {
       playerEntity.setXVel(MOVEMENT_SPEED);
     } else if (keyPressFunctions.isPlayerMovingLeft()) {

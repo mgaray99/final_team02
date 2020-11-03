@@ -7,7 +7,7 @@ public class KeyPressFunctions {
   private boolean movePlayerRight = false;
   private boolean jumpPlayer = false;
 
-  public boolean isPaused() {
+  protected boolean isPaused() {
     return isPaused;
   }
 
@@ -15,11 +15,9 @@ public class KeyPressFunctions {
     return movePlayerLeft;
   }
 
-
   protected boolean isPlayerMovingRight() {
     return movePlayerRight;
   }
-
 
   protected boolean isPlayerJumping() {
     return jumpPlayer;
