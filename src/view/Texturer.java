@@ -72,7 +72,6 @@ public class Texturer {
    * Inserts the new textures into texturedScene
    */
   private void insertNewTextures(List<Entity> entityList) {
-    //System.out.println(entityList.size());
     entityList.forEach(entity -> addNewTexture(entity));
   }
 
@@ -85,7 +84,7 @@ public class Texturer {
     ImageView view = new ImageView(image);
 
 
-    if (view!=null && !currentEntity.getTypeId().equals("EMPTY")) {
+    if (view!=null){
       placeLocationOfView(currentEntity, view);
       textureGroup.getChildren().add(view);
     }
@@ -93,11 +92,10 @@ public class Texturer {
 
   private void placeLocationOfView(Entity currentEntity, ImageView view) {
     Rectangle2D.Float flo = currentEntity.getHitBox();
-    System.out.println(currentEntity.getTypeId());
-    System.out.printf("x: %f, y: %f, width: %f, height: %f\n", flo.x, flo.y, flo.width, flo.height);
-    view.setX(currentEntity.getHitBox().x * XSTRETCH_FACTOR);
-    view.setY(currentEntity.getHitBox().y * YSTRETCH_FACTOR);
-    view.setFitWidth(currentEntity.getHitBox().width * XSTRETCH_FACTOR);
-    view.setFitHeight(currentEntity.getHitBox().height * YSTRETCH_FACTOR);
+
+    view.setX(flo.x * flo.width * XSTRETCH_FACTOR);
+    view.setY(flo.y * flo.height * YSTRETCH_FACTOR);
+    view.setFitWidth(flo.width * XSTRETCH_FACTOR);
+    view.setFitHeight(flo.height * YSTRETCH_FACTOR);
   }
 }

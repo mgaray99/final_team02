@@ -10,7 +10,6 @@ public class KeyInputterMethodCaller {
   public KeyInputterMethodCaller(GameModel mo) {
     model = mo;
     functions = model.getKeyPressFunctions();
-    functions = new KeyPressFunctions();
   }
 
   /**

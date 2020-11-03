@@ -31,9 +31,21 @@ public class Level {
       for(int j = 0; j < currentRow.size(); j++){
         IEntityType entityValue = currentRow.get(j);
         EntityFactory entityFactory = new EntityFactory();
-        Entity entity = entityFactory.createEntity(entityValue, i, j);
-        this.allEntities.add(entity);
+        Entity entity = entityFactory.createEntity(entityValue, j, i);
+        placeEntity(entity);
       }
+    }
+  }
+
+  /**
+   * Checks the entity to see what type it is and then inserts it into the correct list based
+   * on that type (i.e. an entity of ENEMY goes into allEntities and enemyEntities)
+   * @param entity
+   */
+  private void placeEntity(Entity entity) {
+    this.allEntities.add(entity);
+    if (entity.getTypeId().equals(EntityType.PLAYER.toString())) {
+      playerEntity = (PlayerEntity)entity;
     }
   }
 
@@ -94,6 +106,8 @@ public class Level {
       playerEntity.setXVel(MOVEMENT_SPEED);
     } else if (keyPressFunctions.isPlayerMovingLeft()) {
       playerEntity.setXVel(MOVEMENT_SPEED * -1);
+    } else {
+      playerEntity.setXVel(0);
     }
     if (keyPressFunctions.isPlayerJumping()) {
       playerEntity.setYVel(JUMP_SPEED);

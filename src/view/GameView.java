@@ -35,7 +35,7 @@ public class GameView extends Application {
 
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
-  private static final double ANIMATION_SPEED = 1/60.0;
+  private static final double ANIMATION_SPEED = 1/10.0;
   private static final String CONFIG_PATH = "configuration.properties";
   private static final String TEXTURE_PATH = "resources/images/gametextures.txt";
   private static final String TEXTURES = "textures";

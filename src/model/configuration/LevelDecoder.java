@@ -2,17 +2,14 @@ package model.configuration;
 
 import controller.PairBuilder;
 import controller.PairBuilderInstantiationException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javafx.util.Pair;
 
-public class IdToEntityMap {
+public class LevelDecoder {
   private Map<String, String> keyToEntityTypeMap;
   private static final String ID_TO_ENTITY_PATH = "resources/game_configuration/idtoentitymap.txt";
 
-  public IdToEntityMap() throws PairBuilderInstantiationException {
+  public LevelDecoder() throws PairBuilderInstantiationException {
     buildKeyToEntityTypeMap();
   }
 
