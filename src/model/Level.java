@@ -5,6 +5,9 @@ import java.util.List;
 import model.configuration.LevelLoader;
 import model.entity.*;
 
+// Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
+// stop the player from moving indefinitely when left or right is pressed and I created a method
+// placeEntity which checks to see if an entity is a player and if so makes playerEntity equal it
 public class Level {
 
   private final List<Entity> allEntities = new ArrayList<>();
@@ -32,6 +35,7 @@ public class Level {
         IEntityType entityValue = currentRow.get(j);
         EntityFactory entityFactory = new EntityFactory();
         Entity entity = entityFactory.createEntity(entityValue, j, i);
+        this.allEntities.add(entity);
         placeEntity(entity);
       }
     }
@@ -39,11 +43,10 @@ public class Level {
 
   /**
    * Checks the entity to see what type it is and then inserts it into the correct list based
-   * on that type (i.e. an entity of ENEMY goes into allEntities and enemyEntities)
+   * on that type (i.e. an entity of ENEMY goes into enemyEntities)
    * @param entity
    */
   private void placeEntity(Entity entity) {
-    this.allEntities.add(entity);
     if (entity.getTypeId().equals(EntityType.PLAYER.toString())) {
       playerEntity = (PlayerEntity)entity;
     }

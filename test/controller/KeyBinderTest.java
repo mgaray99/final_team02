@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import model.GameModel;
+import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -43,8 +44,8 @@ public class KeyBinderTest extends DukeApplicationTest {
   public void start(Stage stage) throws PairBuilderInstantiationException,
       InvalidFileException {
 
-    testInputter = new KeyInputter(new GameModel());
-        //new GameModel(new GameConfiguration("configuration.properties")));
+    testInputter = new KeyInputter(
+        new GameModel(new GameConfiguration("configuration.properties")));
 
     testBinder = new KeyBinder();
     testBinder.updateKeyInputScreen(testInputter);
