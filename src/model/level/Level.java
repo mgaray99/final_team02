@@ -8,6 +8,11 @@ import model.entity.EnemyEntity;
 import model.entity.Entity;
 import model.entity.IEntityType;
 import model.entity.PlayerEntity;
+import model.configuration.LevelLoader;
+import model.entity.*;
+
+import java.io.File;
+import java.util.*;
 
 public class Level {
 
@@ -16,14 +21,31 @@ public class Level {
   private List<EnemyEntity> enemyEntities;
   private final KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
 
-  public Level() {
+  public Level(LevelLoader levelLoader) {
+    this.buildEntityList(levelLoader.getLevelMatrix());
   }
 
-  public static Level fromConfiguration(GameConfiguration gameConfiguration) {
-    return new Level();
+  private void buildEntityList(int[][] levelMatrix){
+    for(int i = 0; i < levelMatrix.length; i++){
+      int[] currentRow = levelMatrix[i];
+      for(int j = 0; j < currentRow.length; j++){
+        int entityValue = currentRow[j];
+        Entity entity;
+        switch (entityValue) {
+          case 1 -> entity = new BarrierBlockEntity(i, j);
+          case 2 -> entity = new BreakableBlockEntity(i, j);
+          case 3 -> entity = new DamagingBlockEntity(i, j);
+          case 4 -> entity = new EnemyEntity(i, j, 100);
+          case 5 -> entity = new GoalEntity(i, j);
+          case 6 -> entity = new PlayerEntity(i, j, 100);
+          case 7 -> entity = new PowerUpEntity(i, j);
+          case 8 -> entity = new PowerUpBlock(i, j);
+          default -> entity = EmptyEntity.INSTANCE;
+        }
+        this.allEntities.add(entity);
+      }
+    }
   }
-
-  int[][] getGrid() {return null;}
 
   public Entity getEntity(int xCoordinate, int yCoordinate) {
     for(Entity entity : this.allEntities){

@@ -128,13 +128,12 @@ public class FileHelper {
     public static Properties createPropertiesAndTryLoadFromStream(InputStream inputStream) {
         Properties properties = new Properties();
         if(inputStream == null){
-            System.out.println("Received null input stream, returning early!");
             return properties;
         }
         try {
             properties.load(inputStream);
-        } catch (IOException ignored) {
-            System.out.println("Did not load properties from input stream!");
+        } catch (IOException ioException) {
+            return properties;
         }
         return properties;
     }
