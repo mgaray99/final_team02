@@ -1,10 +1,8 @@
 package model.entity;
 
-import java.awt.Rectangle;
-
 public class MobileEntity extends Entity{
 
-  private int xVel = 0;
+  /*private int xVel = 0;
   private int yVel = 0;
 
   public MobileEntity(int xUpperLeft, int yUpperLeft){
@@ -17,13 +15,13 @@ public class MobileEntity extends Entity{
   }
 
   public void moveOneStep() {
-    for (Rectangle subHitBox : hitBox) {
-      subHitBox.translate(xVel, yVel);
-    }
+    //for (Rectangle subHitBox : hitBox) {
+     // subHitBox.translate(xVel, yVel);
+    //}
   }
 
   //translate
 
   //
-
+*/
 }

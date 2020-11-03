@@ -1,15 +1,20 @@
 package model.level;
 
+import java.util.ArrayList;
+import java.util.List;
 import model.configuration.GameConfiguration;
 import model.entity.EmptyEntity;
+import model.entity.EnemyEntity;
 import model.entity.Entity;
 import model.entity.IEntityType;
-
-import java.util.*;
+import model.entity.PlayerEntity;
 
 public class Level {
 
   private final List<Entity> allEntities = new ArrayList<>();
+  private PlayerEntity playerEntity;
+  private List<EnemyEntity> enemyEntities;
+  private final KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
 
   public Level() {
   }
@@ -39,9 +44,11 @@ public class Level {
   }
 
   public void step() {
-    checkCollisions();
-    checkWinCondition();
-    moveEntities();
+    if (!keyPressFunctions.isPaused()) {
+      checkCollisions();
+      checkWinCondition();
+      moveEntities();
+    }
   }
 
   private void checkCollisions(){
@@ -58,7 +65,21 @@ public class Level {
     }
   }
 
-  private void moveEntities(){};
+  private void moveEntities(){
+    movePlayer();
+  };
+
+  private void movePlayer() {
+    if (keyPressFunctions.isPlayerMovingRight()) {
+      //move player right
+    } else if (keyPressFunctions.isPlayerMovingLeft()) {
+      // move player left
+    }
+    if (keyPressFunctions.isPlayerJumping()) {
+      //jump player
+    }
+  }
+
   private void checkWinCondition(){};
 
 
