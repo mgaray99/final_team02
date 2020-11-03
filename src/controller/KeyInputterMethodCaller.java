@@ -1,18 +1,23 @@
 package controller;
 
 import model.GameModel;
+import model.KeyPressFunctions;
 
 public class KeyInputterMethodCaller {
   private GameModel model;
+  private KeyPressFunctions functions;
 
   public KeyInputterMethodCaller(GameModel mo) {
     model = mo;
+    //functions = model.getKeyPressFunctions();
+    functions = new KeyPressFunctions();
   }
 
   /**
    * Tells the model to move the player left
    */
   public void left() {
+    functions.startMovingPlayerLeft();
     System.out.println("moving left");
   }
 
@@ -20,6 +25,7 @@ public class KeyInputterMethodCaller {
    * Tells the model to move right
    */
   public void right() {
+    functions.startMovingPlayerRight();
     System.out.println("moving right");
   }
 
@@ -27,6 +33,7 @@ public class KeyInputterMethodCaller {
    * Tells the model to move up (i.e. jump)
    */
   public void up() {
+    functions.startPlayerJump();
     System.out.println("moving up");
   }
 
@@ -41,13 +48,21 @@ public class KeyInputterMethodCaller {
    * Tells the model to pause
    */
   public void pause() {
-    System.out.println("pausing");
+    if (functions.isPaused()) {
+      functions.resumeGame();
+      System.out.println("resuming");
+    }
+    else {
+      functions.pauseGame();
+      System.out.println("pausing");
+    }
   }
 
   /**
    * Tells the model to move the player left
    */
   public void leftRelease() {
+    functions.stopMovingPlayerLeft();
     System.out.println("releasing left");
   }
 
@@ -55,6 +70,7 @@ public class KeyInputterMethodCaller {
    * Tells the model to move right
    */
   public void rightRelease() {
+    functions.stopMovingPlayerRight();
     System.out.println("releasing right");
   }
 
@@ -62,6 +78,7 @@ public class KeyInputterMethodCaller {
    * Tells the model to move up (i.e. jump)
    */
   public void upRelease() {
+    functions.stopPlayerJump();
     System.out.println("releasing up");
   }
 

@@ -97,10 +97,11 @@ public class KeyInputter {
    */
   private void invokeMethod(String methodPath) {
     try {
-      Method method = this.getClass().getDeclaredMethod(methodPath);
+      Method method = methodCaller.getClass().getDeclaredMethod(methodPath);
       method.invoke(methodCaller);
       lastMethodFromKeyPress = methodPath;
     } catch (Exception e) {
+      e.printStackTrace();
       System.out.println("the method attached to that key input broke");
     }
   }

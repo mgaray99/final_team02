@@ -60,13 +60,13 @@ public class GameView extends Application {
    * Prepares the model that the view will update with an animation timer and display
    */
   private void buildModel() {
-    try {
+    //try {
       listenOnControllers();
-      model = new GameModel(new GameConfiguration("configuration.properties"));
+      model = new GameModel();
       inputter = new KeyInputter(model);
-    } catch (InvalidFileException ife) {
-      endGame();
-    }
+    //} catch (InvalidFileException ife) {
+      //endGame();
+    //}
   }
 
   /**
@@ -74,7 +74,7 @@ public class GameView extends Application {
    * @param timeElapsed the amount of time that has passed since the last update
    */
   private void update(double timeElapsed) {
-    model.updateGame();
+    //model.updateGame();
   }
 
 

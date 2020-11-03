@@ -33,8 +33,8 @@ public class KeyInputterTest extends DukeApplicationTest {
 
   @Override
   public void start(Stage stage) throws InvalidFileException {
-      testInputter = new KeyInputter(
-          new GameModel(new GameConfiguration("configuration.properties")));
+      testInputter = new KeyInputter(new GameModel());
+          //new GameModel(new GameConfiguration("configuration.properties")));
   }
 
   /**

@@ -1,20 +1,34 @@
-package model.level;
+package model;
 
-import model.configuration.GameConfiguration;
+import java.util.ArrayList;
+import java.util.List;
 import model.configuration.LevelLoader;
-import model.entity.*;
-
-import java.io.File;
-import java.util.*;
+import model.entity.BarrierBlockEntity;
+import model.entity.BreakableBlockEntity;
+import model.entity.DamagingBlockEntity;
+import model.entity.EmptyEntity;
+import model.entity.EnemyEntity;
+import model.entity.Entity;
+import model.entity.GoalEntity;
+import model.entity.IEntityType;
+import model.entity.PlayerEntity;
+import model.entity.PowerUpBlock;
+import model.entity.PowerUpEntity;
 
 public class Level {
 
   private final List<Entity> allEntities = new ArrayList<>();
+  private PlayerEntity playerEntity;
+  private List<EnemyEntity> enemyEntities;
+  public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
+  private final int MOVEMENT_SPEED = 1;
+  private final int JUMP_SPEED = 3;
 
   public Level(LevelLoader levelLoader) {
     this.buildEntityList(levelLoader.getLevelMatrix());
   }
 
+  //note: ask TA how to refactor this
   private void buildEntityList(int[][] levelMatrix){
     for(int i = 0; i < levelMatrix.length; i++){
       int[] currentRow = levelMatrix[i];
@@ -27,7 +41,10 @@ public class Level {
           case 3 -> entity = new DamagingBlockEntity(i, j);
           case 4 -> entity = new EnemyEntity(i, j, 100);
           case 5 -> entity = new GoalEntity(i, j);
-          case 6 -> entity = new PlayerEntity(i, j, 100);
+          case 6 -> {
+            entity = new PlayerEntity(i, j, 100);
+            playerEntity = (PlayerEntity) entity; //casting necessary to store playerEntity
+          }
           case 7 -> entity = new PowerUpEntity(i, j);
           case 8 -> entity = new PowerUpBlock(i, j);
           default -> entity = EmptyEntity.INSTANCE;
@@ -56,10 +73,15 @@ public class Level {
   }
 
   public void step() {
-    checkCollisions();
-    checkWinCondition();
-    moveEntities();
+    if (!keyPressFunctions.isPaused()) {
+      checkCollisions();
+      updateEntities();
+      checkWinCondition();
+      moveEntities();
+    }
   }
+
+
 
   private void checkCollisions(){
     for(int i = 0; i < this.allEntities.size(); i++){
@@ -75,7 +97,26 @@ public class Level {
     }
   }
 
-  private void moveEntities(){};
+  private void updateEntities() {
+    checkForPlayerMovement();
+  }
+
+
+  private void checkForPlayerMovement() {
+    if (keyPressFunctions.isPlayerMovingRight()) {
+      playerEntity.setXVel(MOVEMENT_SPEED);
+    } else if (keyPressFunctions.isPlayerMovingLeft()) {
+      playerEntity.setXVel(MOVEMENT_SPEED * -1);
+    }
+    if (keyPressFunctions.isPlayerJumping()) {
+      playerEntity.setYVel(JUMP_SPEED);
+    }
+  }
+
+  private void moveEntities(){
+    playerEntity.moveOneStep();
+  };
+
   private void checkWinCondition(){};
 
 
@@ -89,6 +130,10 @@ public class Level {
     if (isLevelLost) {
       return;
     }
+  }
+
+  public KeyPressFunctions getKeyPressFunctions() {
+    return keyPressFunctions;
   }
 
 }

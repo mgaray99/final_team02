@@ -46,8 +46,8 @@ public class KeyBinderTest extends DukeApplicationTest {
   public void start(Stage stage) throws KeyInputBuilderInstantiationException,
       InvalidFileException {
 
-    testInputter = new KeyInputter(
-        new GameModel(new GameConfiguration("configuration.properties")));
+    testInputter = new KeyInputter(new GameModel());
+        //new GameModel(new GameConfiguration("configuration.properties")));
 
     testBinder = new KeyBinder();
     testBinder.updateKeyInputScreen(testInputter);
@@ -59,9 +59,55 @@ public class KeyBinderTest extends DukeApplicationTest {
    * @param code the code
    */
   private void keyPress(KeyCode code) {
-    testBinder.getOnKeyPressed().handle(new KeyEvent(KeyEvent.KEY_PRESSED, KeyCode.F.getChar(),
+    testBinder.getOnKeyPressed().handle(new KeyEvent(KeyEvent.KEY_PRESSED, code.getChar(),
         code.getName(), code, false, false,
         false, false));
+  }
+
+  /**
+   * Tests that when the user provides a valid switch (i.e. swaps out a key in the
+   * key -> method map for another valid key), that the new key is mapped to the correct method
+   */
+  @Test
+  public void testSimpleSwitch() {
+    Button upButton = (Button)(testBinder.lookup("#" + DEFAULT_UP));
+    upButton.fire();
+    keyPress(KeyCode.C);
+
+    List<Pair<String, String>> keyMethodPairs = testInputter.getKeyMethodPairings();
+
+    boolean foundNewKey = false;
+    for (Pair<String, String> pair : keyMethodPairs) {
+      assertNotEquals(DEFAULT_UP, pair.getKey());
+      if (pair.getKey().equals("C")) {
+        foundNewKey = true;
+        assertEquals(UP, pair.getValue());
+      }
+    }
+    assertTrue(foundNewKey);
+  }
+
+  /**
+   * Tests that when the user attempts to swap in an invalid key (i.e. ENTER or a key already
+   * mapped to a method) for an existing key, that the map of key -> method doesn't change
+   */
+  @Test
+  public void testInvalidSwitch() {
+    Button upButton = (Button)(testBinder.lookup("#" + DEFAULT_UP));
+    upButton.fire();
+    keyPress(KeyCode.A);
+
+    List<Pair<String, String>> keyMethodPairs = testInputter.getKeyMethodPairings();
+
+    for (Pair<String, String> pair : keyMethodPairs) {
+      if (pair.getKey().equals(DEFAULT_UP)) {
+        assertEquals(UP, pair.getValue());
+      }
+      else if (pair.getKey().equals(DEFAULT_LEFT)) {
+        assertEquals(LEFT, pair.getValue());
+      }
+    }
+
   }
 
   /**
@@ -71,18 +117,26 @@ public class KeyBinderTest extends DukeApplicationTest {
    */
   @Test
   public void buttonLabelChangesOnValidSwitch() {
-    Button pauseButton = (Button)(testBinder.lookup("#" + DEFAULT_LEFT));
-    pauseButton.fire();
+    Button leftButton = (Button)(testBinder.lookup("#" + DEFAULT_LEFT));
+    assertEquals(DEFAULT_LEFT, leftButton.getText());
+    leftButton.fire();
 
-
+    keyPress(KeyCode.Y);
+    assertEquals("Y", leftButton.getText());
   }
 
   /**
-   *
+   * This test makes sure that the label on the button which shows which key is mapped to the method
+   * at its left does not update if the user tries to replace that key with an invalid replacement
    */
   @Test
   public void buttonLabelDoesNotChangeOnInvalidSwitch() {
+    Button leftButton = (Button)(testBinder.lookup("#" + DEFAULT_LEFT));
+    assertEquals(DEFAULT_LEFT, leftButton.getText());
+    leftButton.fire();
 
+    keyPress(KeyCode.W);
+    assertEquals(DEFAULT_LEFT, leftButton.getText());
   }
 
   /**
@@ -111,10 +165,7 @@ public class KeyBinderTest extends DukeApplicationTest {
 
     assertEquals(UPDATE_LABEL_TEXT + DEFAULT_PAUSE, instructionsLabel.getText());
 
-    testBinder.getOnKeyPressed().handle(new KeyEvent(KeyEvent.KEY_PRESSED, KeyCode.F.getChar(),
-        KeyCode.F.getName(), KeyCode.F, false, false,
-        false, false));
-
+    keyPress(KeyCode.F);
     assertEquals("", instructionsLabel.getText());
   }
 
@@ -129,10 +180,7 @@ public class KeyBinderTest extends DukeApplicationTest {
 
     assertEquals(UPDATE_LABEL_TEXT + DEFAULT_PAUSE, instructionsLabel.getText());
 
-    testBinder.getOnKeyPressed().handle(new KeyEvent(KeyEvent.KEY_PRESSED, KeyCode.D.getChar(),
-        KeyCode.D.getName(), KeyCode.D, false, false,
-        false, false));
-
+    keyPress(KeyCode.ENTER);
     assertEquals(BAD_KEY_TEXT, instructionsLabel.getText());
   }
 }
