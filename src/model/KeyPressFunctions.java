@@ -2,10 +2,11 @@ package model;
 
 public class KeyPressFunctions {
 
-  private boolean isPaused;
-  private boolean movePlayerLeft;
-  private boolean movePlayerRight;
-  private boolean jumpPlayer;
+  private boolean isPaused = false;
+  private boolean movePlayerLeft = false;
+  private boolean movePlayerRight = false;
+  private boolean jumpPlayer = false;
+
   public boolean isPaused() {
     return isPaused;
   }
@@ -48,11 +49,11 @@ public class KeyPressFunctions {
     movePlayerRight = false;
   }
 
-  public void startPlayerJump() {
+  public void startPlayerJumping() {
     jumpPlayer = true;
   }
 
-  public void stopPlayerJump() {
+  public void stopPlayerJumping() {
     jumpPlayer = false;
   }
 }
