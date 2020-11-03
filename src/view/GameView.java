@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameController;
+import controller.KeyBinder;
 import controller.KeyInputter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,9 +17,16 @@ import javafx.util.Duration;
 import model.GameModel;
 import model.configuration.GameConfiguration;
 
+/**
+ * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
+ * and stylesheet
+ *
+ * @author Alex Lu & Edem Ahorlu
+ */
 public class GameView extends Application {
 
-  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
+  public enum viewName {HOME_SCREEN, CONTROLS,
+    SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
   viewName lastView;
   viewName currentView;
   private Map<viewName, GameScene> mapOfScenes;
@@ -190,6 +198,16 @@ public class GameView extends Application {
   }
 
   /**
+   * Switches to the controller screen
+   */
+  public void switchToControlScreen() {
+    KeyBinder binder = (KeyBinder)(mapOfScenes.get(viewName.CONTROLS).lookupElementInRoot(
+        "KeyBinder"));
+    binder.updateKeyInputScreen(inputter);
+    setScene(viewName.CONTROLS);
+  }
+
+  /**
    * Switches back to the last view
    */
   public void back() {
@@ -200,6 +218,7 @@ public class GameView extends Application {
    * Starts the game
    */
   public void start() { setScene(viewName.GAME); }
+
 
   /**
    * Launches the application

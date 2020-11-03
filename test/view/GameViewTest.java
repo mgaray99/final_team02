@@ -103,6 +103,18 @@ class GameViewTest extends DukeApplicationTest {
   }
 
   /**
+   * Tests that the switchToControlScreen() method opens the CONTROLS scene
+   */
+  @Test
+  public void testSetControls() {
+    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    javafxRun(() -> view.switchToControlScreen());
+
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), viewName.CONTROLS.toString());
+  }
+
+  /**
    * Tests that the switchToSelectCssStylesheetScreen() method opens the SELECT_CSS_STYLESHEET scene
    */
   @Test

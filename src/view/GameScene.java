@@ -10,7 +10,11 @@ import javafx.scene.shape.Rectangle;
 import controller.GameController;
 
 /**
- * Represents one scene in a game
+ * Represents one scene in our GameView - holds data and methods beyond that of a typical Scene
+ * object like a GameController variable and methods to update the text of all of its
+ * children node
+ *
+ * @author Alex Lu & Edem Ahorlu
  */
 public class GameScene extends Scene {
   private Group root;

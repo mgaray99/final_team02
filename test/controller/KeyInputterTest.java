@@ -1,8 +1,12 @@
 package controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+import java.util.List;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import model.GameModel;
 import model.configuration.GameConfiguration;
 import org.junit.jupiter.api.Test;
@@ -171,5 +175,29 @@ public class KeyInputterTest extends DukeApplicationTest {
     testDown();
     testUp();
     testPause();
+  }
+
+  /**
+   * Tests the method getKeyMethodPairings() to return the key -> method <String, String> pairs
+   * that the KeyInputter currently contains
+   */
+  @Test
+  public void testGetKeyMethodPairings() {
+    List<Pair<String, String>> keyMethodPairings = testInputter.getKeyMethodPairings();
+
+    assertEquals(5, keyMethodPairings.size());
+    String[] keys = {"A", "S", "D", "W", "P"};
+    List<String> keysList = Arrays.asList(keys);
+
+    for (Pair<String, String> pair : keyMethodPairings) {
+      assertTrue(keysList.contains(pair.getKey()));
+      switch (pair.getKey()) {
+        case "A" -> assertEquals("left", pair.getValue());
+        case "S" -> assertEquals("down", pair.getValue());
+        case "D" -> assertEquals("right", pair.getValue());
+        case "W" -> assertEquals("up", pair.getValue());
+        case "P" -> assertEquals("pause", pair.getValue());
+      }
+    }
   }
 }

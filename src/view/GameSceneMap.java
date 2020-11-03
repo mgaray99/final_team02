@@ -1,5 +1,6 @@
 package view;
 
+import controller.KeyBinder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,8 @@ import view.GameView.viewName;
  * The purpose of this class is to build the map of viewName (i.e. HOME_SCREEN,
  * SELECT_CSS_STYLESHEET etc.) to fully prepared GameScene objects that contain Controllers which
  * contain Buttons and OptionSelectors
+ *
+ * @author Alex Lu & Edem Ahorlu
  */
 public class GameSceneMap {
   private Map<viewName,GameScene> mapOfScenes;
@@ -21,7 +24,7 @@ public class GameSceneMap {
   private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";
   private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
-  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump"};
+  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump", "Penu"};
 
   public GameSceneMap() {
   }
@@ -45,6 +48,7 @@ public class GameSceneMap {
 
     buildOptionsSelectorsForControllers();
     addButtonsToControllers();
+    addKeyBinders();
   }
 
   /**
@@ -62,6 +66,15 @@ public class GameSceneMap {
     catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Adds a key binder to the scene in question
+   */
+  private void addKeyBinders() {
+    KeyBinder key = new KeyBinder();
+    key.setId(key.getClass().getSimpleName());
+    mapOfScenes.get(viewName.CONTROLS).addElementToRoot(key);
   }
 
 
