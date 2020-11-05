@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import model.GameModel;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
+import model.entity.Entity;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
@@ -85,7 +86,8 @@ public class GameView extends Application {
    */
   private void update(double timeElapsed) {
     model.updateGame();
-    texturer.updateTextures(model.getAllEntitiesInLevel());
+    List<Entity> entityList = model.getAllEntitiesInLevel();
+    texturer.updateTextures(entityList, 10, 10);
   }
 
 
