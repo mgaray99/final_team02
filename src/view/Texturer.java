@@ -37,7 +37,8 @@ public class Texturer {
     textureGroup = tGroup;
 
     ImageBuilder builder = new ImageBuilder(WIDTH, HEIGHT, path);
-    constructTextureMap(builder.getFoundImages());
+    List<ImageView> viewList = builder.getFoundImages();
+    constructTextureMap(viewList);
 
     MISSING_IMAGE = buildMissingImage(1,1);
   }
@@ -54,8 +55,6 @@ public class Texturer {
   /**
    * Updates the textures
    * @param entityList the list of Entities to be textured
-   * @param blocksWide the number of blocks wide to be shown at a time
-   * @param blocksHigh the number of blocks high to be shown at a time
    */
   public void updateTextures(List<Entity> entityList, double blocksWide, double blocksHigh) {
     numBlocksWide = blocksWide;
@@ -94,6 +93,7 @@ public class Texturer {
     }
 
     ImageView view  = new ImageView(image);
+
     if (!currentEntity.getTypeId().equals(EntityType.EMPTY.toString())) {
       placeLocationOfView(currentEntity, view);
       textureGroup.getChildren().add(view);
@@ -109,10 +109,10 @@ public class Texturer {
   private void placeLocationOfView(Entity currentEntity, ImageView view) {
     Rectangle2D.Float flo = currentEntity.getHitBox();
 
-    view.setX(flo.x * WIDTH/numBlocksWide);
-    view.setY(flo.y * HEIGHT/numBlocksHigh);
-    view.setFitWidth(WIDTH/numBlocksWide);
-    view.setFitHeight(HEIGHT/numBlocksHigh);
+    view.setX(flo.x * WIDTH/ numBlocksWide);
+    view.setY(flo.y * HEIGHT/ numBlocksHigh);
+    view.setFitWidth(WIDTH/ numBlocksWide);
+    view.setFitHeight(HEIGHT/ numBlocksHigh);
     view.setId(currentEntity.getTypeId() + "x" + (int)flo.x + "y" + (int)flo.y);
   }
 
