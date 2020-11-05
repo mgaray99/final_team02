@@ -41,7 +41,7 @@ public class KeyBinder extends Group {
   private void buildUpdateLabel() {
       updateLabel = new Text();
       updateLabel.setId(UPDATE_ID);
-      updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth());
+      updateLabel.setLayoutX(CENTERX - updateLabel.getWrappingWidth()/2);
       updateLabel.setLayoutY(UPDATE_LABEL_Y - updateLabel.getLayoutBounds().getHeight());
     }
 
@@ -53,7 +53,7 @@ public class KeyBinder extends Group {
   public void updateKeyInputScreen(KeyInputter in) {
         prepareUpdate(in);
         fillScreenWithKeyMap();
-    }
+  }
 
   /**
    * Prepares the screen to be filled with the key map
@@ -97,6 +97,7 @@ public class KeyBinder extends Group {
         Button keyButton = new Button(pair.getKey());
         keyButton.setId(pair.getKey());
         keyButton.setOnAction(e -> enableUpdate(keyButton.getId()));
+        keyButton.setOnKeyPressed(e -> handleKey(e));
         keyButton.setLayoutX(COLUMN2X);
         keyButton.setLayoutY(START_VISIBLE_Y + VISIBLE_Y * offset);
 

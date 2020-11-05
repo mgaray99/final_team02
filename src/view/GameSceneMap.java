@@ -28,7 +28,7 @@ public class GameSceneMap {
   private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
   private static final String TEXTURES = "textures";
-  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump", "Penu"};
+  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump"};
 
   public GameSceneMap() {
   }
@@ -46,8 +46,10 @@ public class GameSceneMap {
     mapOfScenes = new HashMap<>();
 
     for (GameView.viewName view : GameView.viewName.values()) {
-      mapOfScenes.put(view, new GameScene(new Group(), view.toString(), WIDTH, HEIGHT));
-      mapOfScenes.get(view).setGameController(new GameController());
+      GameScene scene = new GameScene(new Group(), view.toString(), WIDTH, HEIGHT);
+      scene.setGameController(new GameController());
+
+      mapOfScenes.put(view, scene);
     }
 
     addImagesToHomeScreen();

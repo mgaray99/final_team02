@@ -18,7 +18,7 @@ public class KeyInputterTest extends DukeApplicationTest {
 
   private KeyInputter testInputter;
 
-  private static final String DJ_INPUTS = "resources/keyinputs/doodlejumpkeyinputs.txt";
+  private static final String DJ_INPUTS = "resources/keyinputs/doodlejumpkeyinputs.properties";
   private static final String DEFAULT_PAUSE = "P";
   private static final String DEFAULT_UP = "W";
   private static final String DEFAULT_RIGHT = "D";

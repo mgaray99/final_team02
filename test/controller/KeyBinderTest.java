@@ -41,7 +41,7 @@ public class KeyBinderTest extends DukeApplicationTest {
   private Text instructionsLabel;
 
   @Override
-  public void start(Stage stage) throws PairBuilderInstantiationException,
+  public void start(Stage stage) throws
       InvalidFileException {
 
     testInputter = new KeyInputter(

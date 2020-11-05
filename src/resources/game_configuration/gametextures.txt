@@ -1,4 +1,4 @@
-GAME_TEXTURES
+IMAGES
 BARRIER_BLOCK 0 0 0 0 src/resources/images/gametextures/barrierblock.png
 BREAKABLE_BLOCK 0 0 0 0 src/resources/images/homeImage/mario.jpg
 DAMAGING_BLOCK 0 0 0 0 src/resources/images/homeImage/mario.jpg

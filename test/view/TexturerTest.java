@@ -97,7 +97,7 @@ public class TexturerTest extends DukeApplicationTest{
         factory.createEntity(EntityType.BARRIER_BLOCK, 5,6);
     entityList.add(bbe);
 
-    texturer.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,
+    badFile.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,
         DEFAULT_BLOCKS_HIGH);
     assertEquals(1, textureNode.getChildren().size());
 
