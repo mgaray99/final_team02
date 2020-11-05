@@ -1,6 +1,6 @@
 package model.configuration;
 
-public enum ExceptionReason {
+public enum ModelExceptionReason {
     INVALID_CONFIG_KEY,
     INVALID_CONFIG_FILE,
     FILE_NOT_FOUND,

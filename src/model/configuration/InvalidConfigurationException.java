@@ -6,7 +6,7 @@ package model.configuration;
  * @author Mike Garay
  */
 public class InvalidConfigurationException extends Exception{
-    private final ExceptionReason exceptionReason;
+    private final ModelExceptionReason modelExceptionReason;
 
     /**
      * Constructs an InvalidConfigurationException due to an invalid config key
@@ -15,7 +15,7 @@ public class InvalidConfigurationException extends Exception{
      */
     public InvalidConfigurationException(String configKey, String configValue){
         super("Invalid configuration value for configuration key " + configKey + ": " + configValue);
-        this.exceptionReason = ExceptionReason.INVALID_CONFIG_KEY;
+        this.modelExceptionReason = ModelExceptionReason.INVALID_CONFIG_KEY;
     }
 
     /**
@@ -24,6 +24,6 @@ public class InvalidConfigurationException extends Exception{
      */
     public InvalidConfigurationException(String resource){
         super("Invalid configuration file: " + resource);
-        this.exceptionReason = ExceptionReason.INVALID_CONFIG_FILE;
+        this.modelExceptionReason = ModelExceptionReason.INVALID_CONFIG_FILE;
     }
 }

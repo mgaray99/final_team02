@@ -19,13 +19,25 @@ public class Level {
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
+  private int levelLength;
+  private int levelWidth;
 
 
   private float gravityFactor = 0.1f;
 
   public Level(LevelLoader levelLoader) {
     playerEntity = new PlayerEntity(STARTX, STARTY, START_HEALTH);
+    levelLength = levelLoader.getMaxArrayLength();
+    levelWidth = levelLoader.getMaxArrayWidth();
     this.buildEntityList(levelLoader.getLevelMatrix());
+  }
+
+  public int getLevelLength() {
+    return this.levelLength;
+  }
+
+  public int getLevelWidth() {
+    return this.levelWidth;
   }
 
   private void buildEntityList(ArrayList<ArrayList<IEntityType>> levelMatrix){
