@@ -24,8 +24,6 @@ public class GameController extends Group implements ButtonPushHandler {
 
   public GameController() {
     buffer = new ArrayList<>();
-    setOnKeyPressed(event -> handleKeyPress(event));
-    setOnKeyReleased(event -> handleKeyRelease(event));
   }
 
   /**

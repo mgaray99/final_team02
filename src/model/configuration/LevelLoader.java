@@ -32,7 +32,7 @@ public class LevelLoader {
             LevelDecoder decoderMap = new LevelDecoder();
             levelDecoder = decoderMap.getIdToEntityMap();
         }
-        catch (IOException ioe) {
+        catch (Exception e) {
             throw new InvalidFileException(ExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
         }
         //alex end

@@ -1,10 +1,16 @@
 package view;
 
-import controller.ImageBuilder;
 import java.awt.geom.Rectangle2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,11 +42,65 @@ public class Texturer {
     HEIGHT = h;
     textureGroup = tGroup;
 
-    ImageBuilder builder = new ImageBuilder(WIDTH, HEIGHT, path);
-    List<ImageView> viewList = builder.getFoundImages();
-    constructTextureMap(viewList);
-
     MISSING_IMAGE = buildMissingImage(1,1);
+
+    List<ImageView> viewList = buildViewList(path);
+    constructTextureMap(viewList);
+  }
+
+  /**
+   * Builds a list of ImageViews from a properties file
+   * @param propertiesPath the filepath leading to the .properties file
+   */
+  private List<ImageView> buildViewList(String propertiesPath) {
+    List<ImageView> viewList = new ArrayList<>();
+
+    try {
+      Map<String, String> idToFilepathMap = buildPropertiesMap(propertiesPath);
+      for (String id : idToFilepathMap.keySet()) {
+        String value = idToFilepathMap.get(id);
+        viewList.add(buildImageView(id, value));
+      }
+      return viewList;
+    }
+    catch (Exception e) {
+      return new ArrayList<>();
+    }
+  }
+
+  /**
+   * Builds a TreeMap based on a properties file
+   * @param propertiesPath the String path leading to the .properties file
+   * @return a new Map of properties
+   * @throws IOException
+   */
+  private TreeMap buildPropertiesMap(String propertiesPath) throws IOException,
+      NullPointerException {
+    Properties properties = new Properties();
+    InputStream stream =  getClass().getClassLoader().getResourceAsStream(propertiesPath);
+    properties.load(stream);
+    return new TreeMap(properties);
+  }
+
+  /**
+   * Constructs an ImageView with ID of id and Image from filepath
+   * @param id the id to give the ImageView
+   * @param filepath the filepath leading to the correct image
+   * @return a new ImageView
+   */
+  private ImageView buildImageView(String id, String filepath) {
+    ImageView view = new ImageView();
+    view.setId(id);
+
+    try {
+      Image image = new Image(new FileInputStream(filepath));
+      view.setImage(image);
+    }
+    catch (FileNotFoundException fnfe) {
+      view.setImage(MISSING_IMAGE);
+    }
+
+    return view;
   }
 
   /**
@@ -84,7 +144,6 @@ public class Texturer {
    */
   private void addNewTexture(Entity currentEntity) {
     Image image;
-
     try {
       image = textureMap.get(currentEntity.getTypeId()).getImage();
     }
