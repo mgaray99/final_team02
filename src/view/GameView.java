@@ -85,7 +85,7 @@ public class GameView extends Application {
    */
   private void update(double timeElapsed) {
     model.updateGame();
-    texturer.updateTextures(model.getAllEntitiesInLevel());
+    texturer.updateTextures(model.getAllEntitiesInLevel(), 10, 10);
   }
 
 
