@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests the OptionsSelector class - note the .handlePush(String s) method is used to simulate
  * pushing a button on an OptionsSelector because the all buttons on the OptionsSelector call that
- * method with a String that will be reflexively decoded to call the method the button should call
+ * method with a String input
  */
 public class OptionsSelectorTest extends DukeApplicationTest{
 

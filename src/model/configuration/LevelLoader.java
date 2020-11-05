@@ -1,5 +1,8 @@
 package model.configuration;
 
+import controller.PairBuilderInstantiationException;
+import java.util.List;
+import java.util.Map;
 import model.entity.EntityType;
 import model.entity.IEntityType;
 
@@ -15,7 +18,7 @@ import java.util.Scanner;
 
 public class LevelLoader {
     private final ArrayList<ArrayList<IEntityType>> levelMatrix = new ArrayList<>();
-
+    private final Map<String, String> levelDecoder;
     /**
      * Constructs a LevelLoader given a CSV file
      * @param levelFileIn The CSV File to be used for seed creation
@@ -24,6 +27,15 @@ public class LevelLoader {
      */
     public LevelLoader(File levelFileIn) throws InvalidFileException {
         this.handleConstructionExceptions(levelFileIn);
+        //alex start
+        try {
+            LevelDecoder decoderMap = new LevelDecoder();
+            levelDecoder = decoderMap.getIdToEntityMap();
+        }
+        catch (PairBuilderInstantiationException pbie) {
+            throw new InvalidFileException(ExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
+        }
+        //alex end
         this.createLevelMatrix(levelFileIn);
     }
 
@@ -34,21 +46,40 @@ public class LevelLoader {
                 String currentLine = fileReader.nextLine();
                 String[] currentStringArray = currentLine.split(",");
                 ArrayList<IEntityType> currentRow = new ArrayList<>();
-                for(String entityString : currentStringArray){
-                    String formattedEntityString = entityString.toUpperCase();
-                    IEntityType entityType;
-                    try{
-                        entityType = EntityType.valueOf(formattedEntityString); // Should make this allow for other enums
-                    }catch (IllegalArgumentException illegalArgumentException){
-                        entityType = EntityType.EMPTY;
-                    }
-                    currentRow.add(entityType);
-                }
+                buildRow(currentStringArray, currentRow);
                 this.levelMatrix.add(currentRow);
             }
             fileReader.close();
         } catch (FileNotFoundException e) {
             throw new InvalidFileException(ExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
+        }
+    }
+
+    /**
+     * Fills an empty List of IEntityType with the IEntityTypes corresponding to String values
+     * in an array (i.e. "ENEMY" -> IEntityType.ENEMY)
+     *
+     * @param currentStringArray the String array containing the entity Strings to add to the row
+     * @param currentRow the List object to store the IEntityTypes corresponding to those entity
+     *                   Strings
+     */
+    private void buildRow(String[] currentStringArray, List<IEntityType> currentRow) {
+        for (String entityString : currentStringArray) {
+            String formattedEntityString = entityString.toUpperCase();
+            IEntityType entityType;
+            // alex start
+            formattedEntityString = levelDecoder.get(entityString);
+            // alex end
+            try {
+                entityType = EntityType
+                    .valueOf(formattedEntityString); // Should make this allow for other enums
+            } catch (IllegalArgumentException illegalArgumentException) {
+                entityType = EntityType.EMPTY;
+            }
+
+            if (entityType != EntityType.EMPTY) {
+                currentRow.add(entityType);
+            }
         }
     }
 

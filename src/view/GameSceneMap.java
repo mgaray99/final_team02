@@ -1,20 +1,22 @@
 package view;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
+import controller.ImageBuilder;
+import controller.KeyBinder;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javafx.event.EventType;
 import javafx.scene.Group;
 import controller.GameController;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import view.GameView.viewName;
 
 /**
  * The purpose of this class is to build the map of viewName (i.e. HOME_SCREEN,
  * SELECT_CSS_STYLESHEET etc.) to fully prepared GameScene objects that contain Controllers which
  * contain Buttons and OptionSelectors
+ *
+ * @author Alex Lu & Edem Ahorlu
  */
 public class GameSceneMap {
   private Map<viewName,GameScene> mapOfScenes;
@@ -25,7 +27,8 @@ public class GameSceneMap {
   private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";
   private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
   private static final String CSS_EXTENSION = ".css";
-  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump"};
+  private static final String TEXTURES = "textures";
+  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump", "Penu"};
 
   public GameSceneMap() {
   }
@@ -47,8 +50,11 @@ public class GameSceneMap {
       mapOfScenes.get(view).setGameController(new GameController());
     }
 
+    addImagesToHomeScreen();
     buildOptionsSelectorsForControllers();
     addButtonsToControllers();
+    addKeyBinders();
+    addTextureGroupToGame();
   }
 
   /**
@@ -68,6 +74,15 @@ public class GameSceneMap {
     }
   }
 
+  /**
+   * Adds a key binder to the scene in question
+   */
+  private void addKeyBinders() {
+    KeyBinder key = new KeyBinder();
+    key.setId(key.getClass().getSimpleName());
+    mapOfScenes.get(viewName.CONTROLS).addElementToRoot(key);
+  }
+
 
   /**
    * Adds a set of buttons to each scene represents by view
@@ -78,6 +93,29 @@ public class GameSceneMap {
           view.toString().toLowerCase()+"buttons.txt");
     }
   }
+
+
+  /**
+   * Adds images to the home screen
+   */
+  private void addImagesToHomeScreen() {
+    Node background = mapOfScenes.get(viewName.HOME_SCREEN).lookupElementInRoot("background");
+    mapOfScenes.get(viewName.HOME_SCREEN).removeElementFromRoot(background);
+    ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
+        "resources/images/home_screenimages.txt");
+
+    for (ImageView view: image.getFoundImages()) {
+      mapOfScenes.get(viewName.HOME_SCREEN).addElementToRoot(view);
+      view.toBack();
+    }
+  }
+
+private void addTextureGroupToGame() {
+    Group textures = new Group();
+    textures.setId(TEXTURES);
+    mapOfScenes.get(viewName.GAME).addElementToRoot(textures);
+}
+
 
   /**
    * Returns the map of viewName to GameScene

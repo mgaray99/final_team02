@@ -5,6 +5,9 @@ import java.util.List;
 import model.configuration.LevelLoader;
 import model.entity.*;
 
+// Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
+// stop the player from moving indefinitely when left or right is pressed and I created a method
+// placeEntity which checks to see if an entity is a player and if so makes playerEntity equal it
 public class Level {
 
   private final List<Entity> allEntities = new ArrayList<>();
@@ -13,11 +16,15 @@ public class Level {
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
   private final int MOVEMENT_SPEED = 1;
   private final int JUMP_SPEED = 3;
+  private static final int STARTX = 50;
+  private static final int STARTY = 600;
+  private static final int START_HEALTH = 10;
 
 
   private float gravityFactor = 0.1f;
 
   public Level(LevelLoader levelLoader) {
+    playerEntity = new PlayerEntity(STARTX, STARTY, START_HEALTH);
     this.buildEntityList(levelLoader.getLevelMatrix());
   }
 
@@ -27,9 +34,21 @@ public class Level {
       for(int j = 0; j < currentRow.size(); j++){
         IEntityType entityValue = currentRow.get(j);
         EntityFactory entityFactory = new EntityFactory();
-        Entity entity = entityFactory.createEntity(entityValue, i, j);
+        Entity entity = entityFactory.createEntity(entityValue, j, i);
         this.allEntities.add(entity);
+        placeEntity(entity);
       }
+    }
+  }
+
+  /**
+   * Checks the entity to see what type it is and then inserts it into the correct list based
+   * on that type (i.e. an entity of ENEMY goes into enemyEntities)
+   * @param entity
+   */
+  private void placeEntity(Entity entity) {
+    if (entity.getTypeId().equals(EntityType.PLAYER.toString())) {
+      playerEntity = (PlayerEntity)entity;
     }
   }
 
@@ -90,6 +109,8 @@ public class Level {
       playerEntity.setXVel(MOVEMENT_SPEED);
     } else if (keyPressFunctions.isPlayerMovingLeft()) {
       playerEntity.setXVel(MOVEMENT_SPEED * -1);
+    } else {
+      playerEntity.setXVel(0);
     }
     if (keyPressFunctions.isPlayerJumping()) {
       playerEntity.setYVel(JUMP_SPEED);
@@ -125,6 +146,17 @@ public class Level {
 
   public KeyPressFunctions getKeyPressFunctions() {
     return keyPressFunctions;
+  }
+
+  /**
+   * Returns all of the entities in the Level - however, we defensively copy them into a separate
+   * list to avoid aliasing issues
+   * @return a defensive copy of allEntities
+   */
+  public List<Entity> getAllEntities() {
+    List<Entity> defensiveCopyOfEntities = new ArrayList<>();
+    defensiveCopyOfEntities.addAll(allEntities);
+    return defensiveCopyOfEntities;
   }
 
 }

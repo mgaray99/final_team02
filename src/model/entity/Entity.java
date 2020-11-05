@@ -42,6 +42,8 @@ public abstract class Entity {
         return this.entityType.getTypeID() + "@x=" + this.hitBox.x  + "@y=" + this.hitBox.y;
     }
 
+    public String getTypeId() { return this.entityType.getTypeID(); }
+
     public Rectangle2D.Float getHitBox(){
         return this.hitBox;
     }

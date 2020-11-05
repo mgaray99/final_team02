@@ -1,6 +1,8 @@
 package view;
 
 import controller.GameController;
+import controller.KeyBinder;
+import controller.KeyInputter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,37 +12,71 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventType;
+import javafx.scene.Group;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.GameModel;
+import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
 
+/**
+ * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
+ * and stylesheet
+ *
+ * @author Alex Lu & Edem Ahorlu
+ */
 public class GameView extends Application {
 
-  public enum viewName {HOME_SCREEN, SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
+  public enum viewName {HOME_SCREEN, CONTROLS,
+    SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
   viewName lastView;
   viewName currentView;
-
   private Map<viewName, GameScene> mapOfScenes;
-  private static final double ANIMATION_SPEED = 1/60.0;
+
+  private static final double WIDTH = 800;
+  private static final double HEIGHT = 800;
+  private static final double ANIMATION_SPEED = 1/10.0;
+  private static final String CONFIG_PATH = "configuration.properties";
+  private static final String TEXTURE_PATH = "resources/images/gametextures.txt";
+  private static final String TEXTURES = "textures";
+
+  private GameModel model;
   private Stage stage;
   private Timeline animation;
+  private KeyInputter inputter;
+  private Texturer texturer;
 
   /**
    * Begins our view, (i.e. builds the scene and group objects responsible for showing our project)
    * @param sta the main stage of the program
    */
   public void start(Stage sta) {
-    stage = sta;
-    lastView = viewName.HOME_SCREEN;
-    currentView = viewName.HOME_SCREEN;
-    GameSceneMap map = new GameSceneMap();
-    map.buildMapOfScenes();
-    mapOfScenes = map.getMapOfScenes();
-    listenOnControllers();
+      stage = sta;
+      lastView = viewName.HOME_SCREEN;
+      currentView = viewName.HOME_SCREEN;
+      GameSceneMap map = new GameSceneMap();
+      map.buildMapOfScenes();
+      mapOfScenes = map.getMapOfScenes();
 
-    stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
-    stage.show();
+      buildModel();
+      prepareAnimation();
+      stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
+      stage.show();
+  }
 
-    prepareAnimation();
+  /**
+   * Prepares the model that the view will update with an animation timer and display
+   */
+  private void buildModel() {
+    try {
+      listenOnControllers();
+      model = new GameModel(new GameConfiguration(CONFIG_PATH));
+      inputter = new KeyInputter(model);
+      texturer = new Texturer(WIDTH, HEIGHT, TEXTURE_PATH,
+          (Group)(mapOfScenes.get(viewName.GAME).lookup("#" + TEXTURES)));
+    } catch (InvalidFileException ife) {
+      endGame();
+    }
   }
 
   /**
@@ -48,6 +84,8 @@ public class GameView extends Application {
    * @param timeElapsed the amount of time that has passed since the last update
    */
   private void update(double timeElapsed) {
+    model.updateGame();
+    texturer.updateTextures(model.getAllEntitiesInLevel());
   }
 
 
@@ -90,7 +128,15 @@ public class GameView extends Application {
    * @param key the key that has been pressed
    */
   public void keyPressed(String key) {
-    System.out.println(key);
+    inputter.keyPressed(key);
+  }
+
+  /**
+   * Handles the event of a key release
+   * @param key the key that has been pressed
+   */
+  public void keyReleased(String key) {
+    inputter.keyReleased(key);
   }
 
   /**
@@ -178,21 +224,32 @@ public class GameView extends Application {
   /**
    * select game type
    */
-  public void createGameTypeButtons(String GameType) {
+  public void createGameTypeButtons(String GameType) { }
 
+  /**
+   * Switches to the controller screen
+   */
+  public void switchToControlScreen() {
+    KeyBinder binder = (KeyBinder)(mapOfScenes.get(viewName.CONTROLS).lookupElementInRoot(
+        "KeyBinder"));
+    binder.updateKeyInputScreen(inputter);
+    setScene(viewName.CONTROLS);
   }
 
   /**
    * Switches back to the last view
    */
-  public void back() {
-    setScene(lastView);
-  }
+  public void back() { setScene(lastView); }
 
   /**
    * Starts the game
    */
   public void start() { setScene(viewName.GAME); }
+
+  /**
+   * Returns to the home screen
+   */
+  public void homeScreen() { setScene(viewName.HOME_SCREEN); }
 
   /**
    * Launches the application

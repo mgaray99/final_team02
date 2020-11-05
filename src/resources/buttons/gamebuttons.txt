@@ -1,2 +1,3 @@
 GAME
-BackCommand 0.05 0.05 0.20 0.10 back
+MenuCommand 0.10 0.05 0.15 0.05 homeScreen
+ControlsCommand 0.90 0.05 0.15 0.05 switchToControlScreen

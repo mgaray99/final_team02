@@ -164,13 +164,11 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    */
   private int determineSelectionOffset(List<String> options) {
     int offset = choosableOptionOffset * NUM_OPTION_BUTTONS;
-    if (offset / NUM_OPTION_BUTTONS >
-        options.size() / NUM_OPTION_BUTTONS) {
+    if (offset >= options.size()) {
       choosableOptionOffset = 0;
       return 0;
     } else if (offset < 0) {
-      choosableOptionOffset = Math.max((options.size() - 1)
-          / NUM_OPTION_BUTTONS, 0);
+      choosableOptionOffset = Math.max((options.size() - 1) / NUM_OPTION_BUTTONS, 0);
       return choosableOptionOffset * NUM_OPTION_BUTTONS;
     }
     return offset;

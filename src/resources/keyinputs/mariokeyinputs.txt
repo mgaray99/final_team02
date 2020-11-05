@@ -1,0 +1,6 @@
+PAIRS
+A left
+S down
+D right
+W up
+P pause

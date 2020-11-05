@@ -1,5 +1,6 @@
 package model.configuration;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ public class FileHelper {
 
     public static final String CSV_FILE_TYPE = "csv";
     public static final String PROPERTIES_FILE_TYPE = "properties";
+    private static final String RESOURCES_PATH = "resources/game_configuration/";
 
     /**
      * A function that obtains the extension of a given file
@@ -83,7 +85,8 @@ public class FileHelper {
      */
     @Nullable
     public static InputStream tryCreateInputStreamFromPropertiesFileName(Class clazz, String resource) {
-        return isPropertiesFile(resource) ? clazz.getClassLoader().getResourceAsStream(resource) : null;
+        return isPropertiesFile(resource) ? clazz.getClassLoader()
+         .getResourceAsStream(RESOURCES_PATH + resource) : null;
     }
 
     /**
