@@ -46,7 +46,16 @@ for Simulation. We learned that the inclusion of additional features can be made
 simply by how certain team members decided to accomplish implementing planned features.
 
 ## TEAMWORK AND COMMUNICATION ANALYSIS:
+Teamwork and communication between team members has been pretty solid. We rely on platforms like imessage and Slack for quick questions and rescheduling interviews. Our team also meets up frequently, about 5 times a week, to provide updates on the project, reflect on our progress and plan ahead. Team members show interest in the project and are always quick to respond to questions and voice out their opinions. Also with the division of the project into backend and frontend enhances collaboration between each half of the team.
 
 
 ## PLAN FOR SPRINT #2:
+Our plan for Sprint #2 is basically enhancing the Mario game we started implementing in Sprint #1. Features to be implemented include:
+- Making the game scrollable: autoscroll, follow the player scroll type
+- Adding additional levels
+- Applying different textures to features of the game
+- Adding functional Power ups.
+- Making different types of Blocks: Breakable, Unbreakable, Powerup, Damage
+- Making enemies/oppositions
+
 
