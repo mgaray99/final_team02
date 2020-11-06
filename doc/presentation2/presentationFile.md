@@ -5,6 +5,10 @@
 
 ## SPRINT #1 PLANNED FEATURES COMPLETION:
 
+####SPRINT 1 DIAGRAM
+* This was what we planned to have done by the end of Sprint 1
+![hello](testlevel.jpg)
+
 #### COMPLETED
 * Be able to load a level of a platform game
 * Move player around using arrow keys and jump with spacebar
@@ -45,8 +49,15 @@ that we could use it to convert the current level state into a save file, like o
 for Simulation. We learned that the inclusion of additional features can be made easy
 simply by how certain team members decided to accomplish implementing planned features.
 
+![hello](basiclevel.jpg)
+
 ## TEAMWORK AND COMMUNICATION ANALYSIS:
-Teamwork and communication between team members has been pretty solid. We rely on platforms like imessage and Slack for quick questions and rescheduling interviews. Our team also meets up frequently, about 5 times a week, to provide updates on the project, reflect on our progress and plan ahead. Team members show interest in the project and are always quick to respond to questions and voice out their opinions. Also with the division of the project into backend and frontend enhances collaboration between each half of the team.
+Teamwork and communication between team members has been pretty solid. We rely on platforms like 
+imessage and Slack for quick questions and rescheduling interviews. Our team also meets up frequently, 
+about 5 times a week, to provide updates on the project, reflect on our progress and plan ahead. 
+Team members show interest in the project and are always quick to respond to questions and voice 
+out their opinions. Also with the division of the project into backend and frontend enhances 
+collaboration between each half of the team.
 
 
 ## PLAN FOR SPRINT #2:
@@ -57,5 +68,8 @@ Our plan for Sprint #2 is basically enhancing the Mario game we started implemen
 - Adding functional Power ups.
 - Making different types of Blocks: Breakable, Unbreakable, Powerup, Damage
 - Making enemies/oppositions
+
+## SPRINT 2 DIAGRAM
+![hello](basiclevel.jpg)
 
 
