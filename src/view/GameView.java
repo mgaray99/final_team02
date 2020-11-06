@@ -19,6 +19,7 @@ import model.GameModel;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.entity.Entity;
+import view.scenes.PlayGameScene;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
@@ -214,6 +215,13 @@ public class GameView extends Application {
    * switches to Select Game Type Screen
    */
   public void selectGameTypeScreen() {setScene(viewName.GAMEVERSION);}
+
+  /**
+   * Launches a save box to save the current state of the level in a csv file
+   */
+  public void saveGame() {
+    ((PlayGameScene)mapOfScenes.get(viewName.GAME)).launchSave(model.getLevel());
+  }
 
   /**
    * Ends Game

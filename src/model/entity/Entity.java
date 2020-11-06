@@ -17,7 +17,7 @@ public abstract class Entity {
     }
 
     public boolean shouldCheckCollisions() {return false;};
-    public boolean affectedByGravity() {return false;};
+    public boolean affectedByGravity() { return false; };
     public boolean isGrounded() {return true;}
 
 
