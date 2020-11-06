@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import controller.GameController;
+import javafx.scene.text.Text;
 
 /**
  * Represents one scene in our GameView - holds data and methods beyond that of a typical Scene
@@ -22,6 +23,7 @@ public class GameScene extends Scene {
   protected final double WIDTH;
   protected final double HEIGHT;
   private GameController controller;
+  private Text errorLabel;
   private static final String CONTROLLER = "controller";
   private static final String BACKGROUND = "background";
   private static final String DEFAULT_CSS_FILEPATH = "resources/cssstylesheets/default.css";
@@ -41,12 +43,45 @@ public class GameScene extends Scene {
 
     setGameController(new GameController());
 
+    makeBackground();
+    makeErrorText();
+
+    getStylesheets().add(DEFAULT_CSS_FILEPATH);
+  }
+
+  private void makeBackground() {
     Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
     background.setId(BACKGROUND);
     root.getChildren().add(background);
     background.toBack();
+  }
 
-    getStylesheets().add(DEFAULT_CSS_FILEPATH);
+  /**
+   * Makes the error text label that will appear at the top of the screen
+   */
+  private void makeErrorText() {
+    errorLabel = new Text();
+    errorLabel.setText("");
+    errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
+    errorLabel.setLayoutY(HEIGHT/20);
+    root.getChildren().add(errorLabel);
+  }
+
+  /**
+   * Updates the error text label that will appear at the top of the screen
+   * @param newText the new text to fill that label
+   */
+  public void updateErrorText(String newText) {
+    errorLabel.setText(newText);
+    errorLabel.setVisible(true);
+    errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
+  }
+
+  /**
+   * Hides the error text from view
+   */
+  public void hideErrorText() {
+    errorLabel.setVisible(false);
   }
 
 

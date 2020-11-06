@@ -35,7 +35,7 @@ public class LevelLoader {
             levelDecoder = decoderMap.getIdToEntityMap();
         }
         catch (Exception e) {
-            throw new InvalidFileException(ExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
+            throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
         }
         //alex end
         this.createLevelMatrix(levelFileIn);

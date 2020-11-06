@@ -51,6 +51,7 @@ public class GameSaver {
             writeFile(fileNameToWrite);
         } catch (IOException ioException){
             // TODO:
+            ioException.printStackTrace();
         }
 
     }
