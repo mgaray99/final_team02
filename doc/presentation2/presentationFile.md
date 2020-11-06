@@ -5,7 +5,7 @@
 
 ## SPRINT #1 PLANNED FEATURES COMPLETION:
 
-####SPRINT 1 DIAGRAM
+#### SPRINT 1 DIAGRAM
 * This was what we planned to have done by the end of Sprint 1
 ![hello](testlevel.jpg)
 
@@ -49,7 +49,8 @@ that we could use it to convert the current level state into a save file, like o
 for Simulation. We learned that the inclusion of additional features can be made easy
 simply by how certain team members decided to accomplish implementing planned features.
 
-![hello](basiclevel.jpg)
+## EXAMPLE CSV FILE
+![hello](csvfile.png)
 
 ## TEAMWORK AND COMMUNICATION ANALYSIS:
 Teamwork and communication between team members has been pretty solid. We rely on platforms like 
