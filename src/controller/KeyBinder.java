@@ -124,7 +124,7 @@ public class KeyBinder extends Group {
    *
    * @param event the KeyEvent that has occurred
    */
-  private void handleKey(KeyEvent event) {
+   void handleKey(KeyEvent event) {
       if (isUpdatingKey) {
         isUpdatingKey = false;
         updateLabel.setText(WAITING_FOR_UPDATE_TEXT);

@@ -10,6 +10,12 @@ import controller.GameController;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import view.GameView.viewName;
+import view.scenes.ControlsScene;
+import view.scenes.MenuScene;
+import view.scenes.PlayGameScene;
+import view.scenes.SelectGameScene;
+import view.scenes.SelectLanguageScene;
+import view.scenes.SelectStyleScene;
 
 /**
  * The purpose of this class is to build the map of viewName (i.e. HOME_SCREEN,
@@ -22,13 +28,6 @@ public class GameSceneMap {
   private Map<viewName,GameScene> mapOfScenes;
   private static double WIDTH = 800;
   private static double HEIGHT = 800;
-  private static final String LANGUAGE_FOLDERPATH = "./src/resources/resourcebundles";
-  private static final String PROPERTIES_EXTENSION = ".properties";
-  private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";
-  private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
-  private static final String CSS_EXTENSION = ".css";
-  private static final String TEXTURES = "textures";
-  private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump"};
 
   public GameSceneMap() {
   }
@@ -44,79 +43,19 @@ public class GameSceneMap {
    */
   public void buildMapOfScenes() {
     mapOfScenes = new HashMap<>();
-
-    for (GameView.viewName view : GameView.viewName.values()) {
-      GameScene scene = new GameScene(new Group(), view.toString(), WIDTH, HEIGHT);
-      scene.setGameController(new GameController());
-
-      mapOfScenes.put(view, scene);
-    }
-
-    addImagesToHomeScreen();
-    buildOptionsSelectorsForControllers();
-    addButtonsToControllers();
-    addKeyBinders();
-    addTextureGroupToGame();
+    mapOfScenes.put(viewName.GAME,
+        new PlayGameScene(new Group(), WIDTH, HEIGHT));
+    mapOfScenes.put(viewName.HOME_SCREEN,
+        new MenuScene(new Group(), WIDTH, HEIGHT));
+    mapOfScenes.put(viewName.SELECT_RESOURCE_BUNDLE,
+        new SelectLanguageScene(new Group(), WIDTH, HEIGHT));
+    mapOfScenes.put(viewName.SELECT_CSS_STYLESHEET,
+        new SelectStyleScene(new Group(), WIDTH, HEIGHT));
+    mapOfScenes.put(viewName.CONTROLS,
+        new ControlsScene(new Group(), WIDTH, HEIGHT));
+    mapOfScenes.put(viewName.GAMEVERSION,
+        new SelectGameScene(new Group(), WIDTH, HEIGHT));
   }
-
-  /**
-   * Builds the OptionsSelectors for specific scenes
-   */
-  private void buildOptionsSelectorsForControllers() {
-    try {
-      mapOfScenes.get(viewName.SELECT_CSS_STYLESHEET).buildOptionsSelectorFromFolderForController(
-          CSS_FOLDERPATH, CSS_EXTENSION, "switchStylesheet");
-      mapOfScenes.get(viewName.SELECT_RESOURCE_BUNDLE).buildOptionsSelectorFromFolderForController(
-          LANGUAGE_FOLDERPATH, PROPERTIES_EXTENSION, "switchLanguage");
-      mapOfScenes.get(viewName.GAMEVERSION).buildOptionsSelectorFromListForController(
-              Arrays.asList(GAME_TYPES), "createGameTypeButtons");
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * Adds a key binder to the scene in question
-   */
-  private void addKeyBinders() {
-    KeyBinder key = new KeyBinder();
-    key.setId(key.getClass().getSimpleName());
-    mapOfScenes.get(viewName.CONTROLS).addElementToRoot(key);
-  }
-
-
-  /**
-   * Adds a set of buttons to each scene represents by view
-   */
-  private void addButtonsToControllers() {
-    for (viewName view : GameView.viewName.values()) {
-      mapOfScenes.get(view).addButtonsToControllerFromFile(BUTTON_FOLDERPATH_SLASH +
-          view.toString().toLowerCase()+"buttons.txt");
-    }
-  }
-
-
-  /**
-   * Adds images to the home screen
-   */
-  private void addImagesToHomeScreen() {
-    Node background = mapOfScenes.get(viewName.HOME_SCREEN).lookupElementInRoot("background");
-    mapOfScenes.get(viewName.HOME_SCREEN).removeElementFromRoot(background);
-    ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
-        "resources/images/home_screenimages.txt");
-
-    for (ImageView view: image.getFoundImages()) {
-      mapOfScenes.get(viewName.HOME_SCREEN).addElementToRoot(view);
-      view.toBack();
-    }
-  }
-
-private void addTextureGroupToGame() {
-    Group textures = new Group();
-    textures.setId(TEXTURES);
-    mapOfScenes.get(viewName.GAME).addElementToRoot(textures);
-}
 
 
   /**

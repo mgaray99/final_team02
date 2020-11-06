@@ -77,9 +77,7 @@ public class LevelLoader {
                 entityType = EntityType.EMPTY;
             }
 
-            if (entityType != EntityType.EMPTY) {
                 currentRow.add(entityType);
-            }
         }
     }
 

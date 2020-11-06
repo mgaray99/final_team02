@@ -58,7 +58,7 @@ public class KeyBinderTest extends DukeApplicationTest {
    * @param code the code
    */
   private void keyPress(KeyCode code) {
-    testBinder.getOnKeyPressed().handle(new KeyEvent(KeyEvent.KEY_PRESSED, code.getChar(),
+    testBinder.handleKey(new KeyEvent(KeyEvent.KEY_PRESSED, code.getChar(),
         code.getName(), code, false, false,
         false, false));
   }
