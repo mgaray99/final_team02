@@ -45,8 +45,6 @@ public class ImageBuilder {
      * @param w    the WIDTH of the area in which buttons can be placed
      * @param h    the HEIGHT of the area in which buttons can be placed
      * @param path the filepath leading to the .txt file containing data on the button
-     * @param bph  the handler who will respond when a Button that has been created is pushed
-     * @throws ButtonBuilderInstantiationException if failing to build a button
      */
     public ImageBuilder(double w, double h, String path) {
         WIDTH = w;

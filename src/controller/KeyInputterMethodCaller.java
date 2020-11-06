@@ -17,7 +17,6 @@ public class KeyInputterMethodCaller {
    */
   public void left() {
     functions.startMovingPlayerLeft();
-    System.out.println("moving left");
   }
 
   /**
@@ -25,7 +24,6 @@ public class KeyInputterMethodCaller {
    */
   public void right() {
     functions.startMovingPlayerRight();
-    System.out.println("moving right");
   }
 
   /**
@@ -33,7 +31,6 @@ public class KeyInputterMethodCaller {
    */
   public void up() {
     functions.startPlayerJumping();
-    System.out.println("moving up");
   }
 
   /**
@@ -49,11 +46,9 @@ public class KeyInputterMethodCaller {
   public void pause() {
     if (functions.isPaused()) {
       functions.resumeGame();
-      System.out.println("resuming");
     }
     else {
       functions.pauseGame();
-      System.out.println("pausing");
     }
   }
 
@@ -62,7 +57,6 @@ public class KeyInputterMethodCaller {
    */
   public void leftRelease() {
     functions.stopMovingPlayerLeft();
-    System.out.println("releasing left");
   }
 
   /**
@@ -70,7 +64,6 @@ public class KeyInputterMethodCaller {
    */
   public void rightRelease() {
     functions.stopMovingPlayerRight();
-    System.out.println("releasing right");
   }
 
   /**
@@ -78,7 +71,6 @@ public class KeyInputterMethodCaller {
    */
   public void upRelease() {
     functions.stopPlayerJumping();
-    System.out.println("releasing up");
   }
 
   /**

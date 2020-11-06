@@ -33,7 +33,7 @@ public class TexturerTest extends DukeApplicationTest{
   private static final double DEFAULT_BLOCKS_WIDE = 10;
   private static final double DEFAULT_BLOCKS_HIGH = 10;
   private static final String TEST_ENTITY = "entity";
-  private static final String PATH = "resources/images/gametextures.txt";
+  private static final String PATH = "resources/game_configuration/gametextures.properties";
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
 
@@ -97,7 +97,7 @@ public class TexturerTest extends DukeApplicationTest{
         factory.createEntity(EntityType.BARRIER_BLOCK, 5,6);
     entityList.add(bbe);
 
-    texturer.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,
+    badFile.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,
         DEFAULT_BLOCKS_HIGH);
     assertEquals(1, textureNode.getChildren().size());
 
