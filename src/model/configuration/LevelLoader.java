@@ -19,6 +19,8 @@ import java.util.Scanner;
 public class LevelLoader {
     private final ArrayList<ArrayList<IEntityType>> levelMatrix = new ArrayList<>();
     private final Map<String, String> levelDecoder;
+    private int maxArrayLength;
+    private int maxArrayWidth;
     /**
      * Constructs a LevelLoader given a CSV file
      * @param levelFileIn The CSV File to be used for seed creation
@@ -39,19 +41,35 @@ public class LevelLoader {
         this.createLevelMatrix(levelFileIn);
     }
 
+    public int getMaxArrayLength() {
+        return this.maxArrayLength;
+    }
+
+    public int getMaxArrayWidth() {
+        return this.maxArrayWidth;
+    }
+
     private void createLevelMatrix(File levelFileIn) throws InvalidFileException {
         try {
             Scanner fileReader = new Scanner(levelFileIn);
             while (fileReader.hasNextLine()) {
                 String currentLine = fileReader.nextLine();
                 String[] currentStringArray = currentLine.split(",");
+                // updates length of level being loaded in
+                if(this.maxArrayLength < currentStringArray.length){
+                    maxArrayLength = currentStringArray.length;
+                }
                 ArrayList<IEntityType> currentRow = new ArrayList<>();
                 buildRow(currentStringArray, currentRow);
+                // updates width of level being loaded in
+                if(this.maxArrayWidth < currentRow.size()){
+                    this.maxArrayWidth = currentRow.size();
+                }
                 this.levelMatrix.add(currentRow);
             }
             fileReader.close();
         } catch (FileNotFoundException e) {
-            throw new InvalidFileException(ExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
+            throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
         }
     }
 
@@ -92,19 +110,19 @@ public class LevelLoader {
     private void handleConstructionExceptions(File levelFileIn) throws InvalidFileException {
         if(levelFileIn.isDirectory()){
             throw new InvalidFileException(
-                    ExceptionReason.DIRECTORY,
+                    ModelExceptionReason.DIRECTORY,
                     levelFileIn.getPath());
         }
 
         else if(!levelFileIn.isFile()){
             throw new InvalidFileException(
-                    ExceptionReason.NOT_A_FILE,
+                    ModelExceptionReason.NOT_A_FILE,
                     levelFileIn.getPath());
         }
 
         else if(!FileHelper.isCSVFile(levelFileIn)){
             throw new InvalidFileException(
-                    ExceptionReason.NOT_A_CSV_FILE,
+                    ModelExceptionReason.NOT_A_CSV_FILE,
                     levelFileIn.getPath());
         }
     }
