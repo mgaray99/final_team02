@@ -87,7 +87,7 @@ public class GameView extends Application {
     model.updateGame();
 
     List<Entity> entityList = model.getAllEntitiesInLevel();
-    texturer.updateTextures(entityList, 10, 10);
+    texturer.updateTextures(entityList, 15, 15);
   }
 
 
