@@ -215,6 +215,8 @@ public class GameView extends Application {
    */
   public void selectGameTypeScreen() {setScene(viewName.GAMEVERSION);}
 
+  public void saveGame() {}
+
   /**
    * Ends Game
    */

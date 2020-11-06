@@ -16,6 +16,14 @@ public class PlayGameScene extends GameScene {
     addButtonsToControllerFromFile(
         BUTTON_FOLDERPATH_SLASH + ID.toLowerCase()+ "buttons.txt");
 
+    addTexturesGroup();
+
+  }
+
+  /**
+   * Makes the group node that will hold the textures
+   */
+  private void addTexturesGroup() {
     Group textures = new Group();
     textures.setId(TEXTURES);
     addElementToRoot(textures);

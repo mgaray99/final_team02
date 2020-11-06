@@ -1,6 +1,5 @@
 package model;
 
-import controller.PairBuilderInstantiationException;
 import model.configuration.FileHelper;
 import model.configuration.LevelDecoder;
 import model.entity.IEntityType;
@@ -61,7 +60,7 @@ public class GameSaver {
 
     }
 
-    private void writeFile(String fileNameToWrite) throws IOException, PairBuilderInstantiationException {
+    private void writeFile(String fileNameToWrite) throws IOException {
         LevelDecoder levelDecoder = new LevelDecoder();
         Map<String, String> levelDecoderMap = levelDecoder.getIdToEntityMap();
         FileWriter seedCSVWriter = new FileWriter(fileNameToWrite);
