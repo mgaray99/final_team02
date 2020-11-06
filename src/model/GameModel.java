@@ -33,6 +33,12 @@ public class GameModel {
     }
 
     /**
+     * Returns the level of this model
+     * @return level
+     */
+    public Level getLevel() { return this.level; }
+
+    /**
      * Returns a defensively copied list of all of the entities present in level
      * @return defensively copied list of all entities in Level
      */
