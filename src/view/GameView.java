@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import model.GameModel;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
+import model.entity.Entity;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
@@ -37,7 +38,7 @@ public class GameView extends Application {
   private static final double HEIGHT = 800;
   private static final double ANIMATION_SPEED = 1/10.0;
   private static final String CONFIG_PATH = "configuration.properties";
-  private static final String TEXTURE_PATH = "resources/images/gametextures.txt";
+  private static final String TEXTURE_PATH = "resources/game_configuration/gametextures.properties";
   private static final String TEXTURES = "textures";
 
   private GameModel model;
@@ -81,11 +82,12 @@ public class GameView extends Application {
 
   /**
    * Updates the view given that time has passed
-   * @param timeElapsed the amount of time that has passed since the last update
    */
-  private void update(double timeElapsed) {
+  private void update() {
     model.updateGame();
-    texturer.updateTextures(model.getAllEntitiesInLevel());
+
+    List<Entity> entityList = model.getAllEntitiesInLevel();
+    texturer.updateTextures(entityList, 15, 15);
   }
 
 
@@ -95,7 +97,7 @@ public class GameView extends Application {
   private void prepareAnimation() {
     animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
-    KeyFrame frame = new KeyFrame(Duration.seconds(ANIMATION_SPEED), e -> update(ANIMATION_SPEED));
+    KeyFrame frame = new KeyFrame(Duration.seconds(ANIMATION_SPEED), e -> update());
     animation.getKeyFrames().add(frame);
     animation.play();
   }
@@ -127,7 +129,7 @@ public class GameView extends Application {
    * Handles the event of a key press
    * @param key the key that has been pressed
    */
-  public void keyPressed(String key) {
+  private void keyPressed(String key) {
     inputter.keyPressed(key);
   }
 
@@ -135,7 +137,7 @@ public class GameView extends Application {
    * Handles the event of a key release
    * @param key the key that has been pressed
    */
-  public void keyReleased(String key) {
+  private void keyReleased(String key) {
     inputter.keyReleased(key);
   }
 

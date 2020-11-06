@@ -1,6 +1,6 @@
 package model.configuration;
 
-import controller.PairBuilderInstantiationException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import model.entity.EntityType;
@@ -34,8 +34,8 @@ public class LevelLoader {
             LevelDecoder decoderMap = new LevelDecoder();
             levelDecoder = decoderMap.getIdToEntityMap();
         }
-        catch (PairBuilderInstantiationException pbie) {
-            throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
+        catch (Exception e) {
+            throw new InvalidFileException(ExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
         }
         //alex end
         this.createLevelMatrix(levelFileIn);
@@ -95,9 +95,7 @@ public class LevelLoader {
                 entityType = EntityType.EMPTY;
             }
 
-            if (entityType != EntityType.EMPTY) {
                 currentRow.add(entityType);
-            }
         }
     }
 

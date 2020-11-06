@@ -24,8 +24,6 @@ public class GameController extends Group implements ButtonPushHandler {
 
   public GameController() {
     buffer = new ArrayList<>();
-    setOnKeyPressed(event -> handleKeyPress(event));
-    setOnKeyReleased(event -> handleKeyRelease(event));
   }
 
   /**
@@ -42,9 +40,11 @@ public class GameController extends Group implements ButtonPushHandler {
   public void buildOptionsSelector(List<String> choices, String method) {
     List<String> defensiveChoices = new ArrayList<>();
     defensiveChoices.addAll(choices);
+
     OptionsSelector selector = new OptionsSelector(WIDTH, HEIGHT, defensiveChoices);
     selector.addEventHandler(EventType.ROOT, event->
         callMethodOnOptionSelector(event, method, selector.getTextInBuffer()));
+
     getChildren().add(selector);
   }
 
@@ -57,9 +57,11 @@ public class GameController extends Group implements ButtonPushHandler {
    */
   private void callMethodOnOptionSelector(Event event, String method, String text) {
     if (event.getEventType().getName().equals(OPTIONS_SELECTOR_EVENTTYPE) && !text.equals("")) {
+
         List<String> args = new ArrayList<>();
         args.add(text);
         fillBuffer(method, args);
+
     }
   }
 
@@ -73,7 +75,12 @@ public class GameController extends Group implements ButtonPushHandler {
   public void addButtonsFromFile(String file) {
       try {
         ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT, file, this);
-        getChildren().addAll(builder.getFoundButtons());
+        List<Button> foundButtons = builder.getFoundButtons();
+
+        foundButtons.forEach(button -> button.setOnKeyPressed(event -> handleKeyPress(event)));
+        foundButtons.forEach(button -> button.setOnKeyReleased(event -> handleKeyRelease(event)));
+
+        getChildren().addAll(foundButtons);
       }
       catch (ButtonBuilderInstantiationException bbie) {
         System.out.println("couldn't build buttons");

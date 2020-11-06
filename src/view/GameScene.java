@@ -19,8 +19,8 @@ import controller.GameController;
 public class GameScene extends Scene {
   private Group root;
   private String sceneId;
-  private final double WIDTH;
-  private final double HEIGHT;
+  protected final double WIDTH;
+  protected final double HEIGHT;
   private GameController controller;
   private static final String CONTROLLER = "controller";
   private static final String BACKGROUND = "background";
@@ -39,10 +39,13 @@ public class GameScene extends Scene {
     HEIGHT = height;
     sceneId = id;
 
-    Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
+    setGameController(new GameController());
 
+    Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
     background.setId(BACKGROUND);
     root.getChildren().add(background);
+    background.toBack();
+
     getStylesheets().add(DEFAULT_CSS_FILEPATH);
   }
 

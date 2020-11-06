@@ -34,6 +34,7 @@ public class KeyBinderTest extends DukeApplicationTest {
 
   private static final String UPDATE_LABEL_TEXT = "Press a key to replace ";
   private static final String BAD_KEY_TEXT = "That key is invalid!";
+  private static final String WAITING_FOR_UPDATE_TEXT = "Press a button to update controls";
   private static final String UPDATE_ID = "UPDATE";
 
   private KeyInputter testInputter;
@@ -41,7 +42,7 @@ public class KeyBinderTest extends DukeApplicationTest {
   private Text instructionsLabel;
 
   @Override
-  public void start(Stage stage) throws PairBuilderInstantiationException,
+  public void start(Stage stage) throws
       InvalidFileException {
 
     testInputter = new KeyInputter(
@@ -57,7 +58,7 @@ public class KeyBinderTest extends DukeApplicationTest {
    * @param code the code
    */
   private void keyPress(KeyCode code) {
-    testBinder.getOnKeyPressed().handle(new KeyEvent(KeyEvent.KEY_PRESSED, code.getChar(),
+    testBinder.handleKey(new KeyEvent(KeyEvent.KEY_PRESSED, code.getChar(),
         code.getName(), code, false, false,
         false, false));
   }
@@ -143,7 +144,7 @@ public class KeyBinderTest extends DukeApplicationTest {
    */
   @Test
   public void testInstructionLabelChangesOnButtonPush() {
-    assertEquals("", instructionsLabel.getText());
+    assertEquals(WAITING_FOR_UPDATE_TEXT, instructionsLabel.getText());
 
     Button pauseButton = (Button)(testBinder.lookup("#" + DEFAULT_PAUSE));
     pauseButton.fire();
@@ -164,7 +165,7 @@ public class KeyBinderTest extends DukeApplicationTest {
     assertEquals(UPDATE_LABEL_TEXT + DEFAULT_PAUSE, instructionsLabel.getText());
 
     keyPress(KeyCode.F);
-    assertEquals("", instructionsLabel.getText());
+    assertEquals(WAITING_FOR_UPDATE_TEXT, instructionsLabel.getText());
   }
 
   /**

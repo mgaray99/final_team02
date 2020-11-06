@@ -1,11 +1,15 @@
 package controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 import javafx.util.Pair;
 import model.GameModel;
 
@@ -13,7 +17,7 @@ public class KeyInputter {
 
   private KeyInputterMethodCaller methodCaller;
   private Map<String, String> keyToMethodMap;
-  private static final String DEFAULT_KEY_INPUT_PATH = "resources/keyinputs/mariokeyinputs.txt";
+  private static final String DEFAULT_KEY_INPUT_PATH = "resources/keyinputs/mariokeyinputs.properties";
   private String lastMethodFromKeyPress;
   private static final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
@@ -32,18 +36,19 @@ public class KeyInputter {
    */
   public void loadKeyInputsFromFile(String path) {
     try {
-      PairBuilder builder = new PairBuilder(path);
+      Properties properties = new Properties();
+      InputStream stream =  getClass().getClassLoader().getResourceAsStream(
+          path);
+      properties.load(stream);
+      Map<String, String> loadedMap = new TreeMap(properties);
 
-      List<Pair<String, String>> keyPairs = new ArrayList<>();
-      keyPairs.addAll(builder.getFoundPairs());
       keyToMethodMap.clear();
+      loadedMap.keySet().forEach(key -> keyToMethodMap.put(key, loadedMap.get(key)));
 
-      for (Pair<String, String> pair : keyPairs) {
-        keyToMethodMap.put(pair.getKey(), pair.getValue());
-      }
+
     }
-    catch (PairBuilderInstantiationException kibie) {
-      System.out.println(kibie.getMessage());
+    catch (Exception e) {
+      System.out.println(e.getMessage());
     }
   }
 
