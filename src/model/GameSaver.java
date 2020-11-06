@@ -39,11 +39,8 @@ public class GameSaver {
     /**
      * Writes a new CSV file given a file name
      * @param fileNameIn The name of the file to be written
-     * @throws IOException if the named file exists but is a directory rather
-     * than a regular file, does not exist but cannot be created,
-     * or cannot be opened for any other reason
      */
-    public void writeNewLevelCSVFile(String fileNameIn) throws IOException {
+    public void writeNewLevelCSVFile(String fileNameIn) {
         String fileNameToWrite =
                 FileHelper.isCSVFile(fileNameIn) ?
                         fileNameIn :
@@ -52,8 +49,6 @@ public class GameSaver {
 
         try {
             writeFile(fileNameToWrite);
-        } catch (PairBuilderInstantiationException pairBuilderInstantiationException) {
-            // TODO:
         } catch (IOException ioException){
             // TODO:
         }
