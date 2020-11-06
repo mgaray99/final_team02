@@ -57,7 +57,7 @@ Teamwork and communication between team members has been pretty solid. We rely o
 imessage and Slack for quick questions and rescheduling interviews. Our team also meets up frequently, 
 about 5 times a week, to provide updates on the project, reflect on our progress and plan ahead. 
 Team members show interest in the project and are always quick to respond to questions and voice 
-out their opinions. Also with the division of the project into backend and frontend enhances 
+out their opinions. Also, the division of the project into backend and frontend enhances 
 collaboration between each half of the team.
 
 
