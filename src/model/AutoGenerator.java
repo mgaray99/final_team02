@@ -58,7 +58,7 @@ public class AutoGenerator {
     }
 
   /**
-   * Initialize every value in the new level block to the default value found in CONFIG_PATH
+   * Initialize every entityType in the new level block to the default entityType found in CONFIG_PATH
    */
   private void fillInDefaultValues() {
       for (int row = 0; row < currentNewBlock.length; row+=1) {

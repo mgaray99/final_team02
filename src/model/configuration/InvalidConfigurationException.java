@@ -11,10 +11,10 @@ public class InvalidConfigurationException extends Exception{
     /**
      * Constructs an InvalidConfigurationException due to an invalid config key
      * @param configKey The config key involved
-     * @param configValue The invalid config value
+     * @param configValue The invalid config entityType
      */
     public InvalidConfigurationException(String configKey, String configValue){
-        super("Invalid configuration value for configuration key " + configKey + ": " + configValue);
+        super("Invalid configuration entityType for configuration key " + configKey + ": " + configValue);
         this.modelExceptionReason = ModelExceptionReason.INVALID_CONFIG_KEY;
     }
 
