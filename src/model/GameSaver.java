@@ -22,7 +22,7 @@ public class GameSaver {
 
     /**
      * Constructs a GameSaver
-     * @param currentLevel A ConwayGrid representing the current state of the simulation
+     * @param currentLevel A Level representing the current state of the level
      */
     public GameSaver(Level currentLevel){
         this.currentLevel = currentLevel;

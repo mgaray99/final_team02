@@ -26,4 +26,8 @@ public class InvalidConfigurationException extends Exception{
         super("Invalid configuration file: " + resource);
         this.modelExceptionReason = ModelExceptionReason.INVALID_CONFIG_FILE;
     }
+
+    public ModelExceptionReason getModelExceptionReason() {
+        return this.modelExceptionReason;
+    }
 }

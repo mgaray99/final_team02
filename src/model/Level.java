@@ -10,8 +10,11 @@ import model.entity.*;
 // placeEntity which checks to see if an entity is a player and if so makes playerEntity equal it
 public class Level {
 
+  private boolean isLost;
+  private boolean isWon;
   private final List<Entity> allEntities = new ArrayList<>();
   private PlayerEntity playerEntity;
+  private GoalEntity goalEntity;
   private List<EnemyEntity> enemyEntities;
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
   private final int MOVEMENT_SPEED = 1;
@@ -62,6 +65,9 @@ public class Level {
     if (entity.getTypeId().equals(EntityType.PLAYER.toString())) {
       playerEntity = (PlayerEntity)entity;
     }
+    if(entity.getTypeId().equals(EntityType.POWER_UP.toString())){
+      goalEntity = (GoalEntity)entity;
+    }
   }
 
   public Entity getEntity(int xCoordinate, int yCoordinate) {
@@ -83,10 +89,10 @@ public class Level {
   }
 
   public void step() {
-    if (!keyPressFunctions.isPaused()) {
+    if (!keyPressFunctions.isPaused() || this.isWon || this.isLost) {
       checkCollisions();
       updateEntities();
-      checkWinCondition();
+      checkWinOrLose();
       moveEntities();
     }
   }
@@ -141,19 +147,21 @@ public class Level {
     playerEntity.moveOneStep();
   };
 
-  private void checkWinCondition(){};
-
-
-  void isLevelWon(boolean isLevelWon) {
-    if (isLevelWon) {
-      return;
+  private void checkWinOrLose(){
+    if(this.playerEntity.getHealth() <= 0){
+      this.isLost = true;
+    }
+    else if(this.playerEntity.hasWonLevel()){
+      this.isWon = true;
     }
   }
 
-  void isLevelLost(boolean isLevelLost) {
-    if (isLevelLost) {
-      return;
-    }
+  public boolean isLost() {
+    return this.isLost;
+  }
+
+  public boolean isWon() {
+    return this.isWon;
   }
 
   public KeyPressFunctions getKeyPressFunctions() {
