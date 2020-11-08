@@ -32,7 +32,7 @@ public class Level {
     playerEntity = new PlayerEntity(STARTX, STARTY, START_HEALTH);
     levelLength = levelLoader.getMaxArrayLength();
     levelWidth = levelLoader.getMaxArrayWidth();
-    scroller = new ManualScroller(true, false);
+    scroller = new HorizontalGenerationScroller(-0.10, 0, 15, GENERATION_PATH);
     this.buildEntityList(levelLoader.getLevelMatrix());
   }
 
