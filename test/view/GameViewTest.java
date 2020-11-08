@@ -60,7 +60,7 @@ class GameViewTest extends DukeApplicationTest {
           .lookup("#" + START_BUTTON_ID);
 
       assertEquals("Start",  startButton.getText());
-      javafxRun(() -> view.switchLanguage("Spanish"));
+      javafxRun(() -> view.switchLanguage("Espanol"));
       assertEquals("Empezar", startButton.getText());
     }
 

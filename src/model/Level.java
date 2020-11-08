@@ -4,21 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import model.configuration.LevelLoader;
 import model.entity.*;
+import model.scroll.AutoScroller;
+import model.scroll.HorizontalGenerationScroller;
+import model.scroll.ManualScroller;
+import model.scroll.Scroller;
 
-// Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
-// stop the player from moving indefinitely when left or right is pressed and I created a method
-// placeEntity which checks to see if an entity is a player and if so makes playerEntity equal it
 public class Level {
 
   private final List<Entity> allEntities = new ArrayList<>();
   private PlayerEntity playerEntity;
   private List<EnemyEntity> enemyEntities;
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
+  private Scroller scroller;
   private final int MOVEMENT_SPEED = 1;
   private final int JUMP_SPEED = 3;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
+  private static final String GENERATION_PATH = "resources/game_configuration/autoflappy.txt";
   private int levelLength;
   private int levelWidth;
 
@@ -29,6 +32,7 @@ public class Level {
     playerEntity = new PlayerEntity(STARTX, STARTY, START_HEALTH);
     levelLength = levelLoader.getMaxArrayLength();
     levelWidth = levelLoader.getMaxArrayWidth();
+    scroller = new ManualScroller(true, false);
     this.buildEntityList(levelLoader.getLevelMatrix());
   }
 
@@ -47,7 +51,6 @@ public class Level {
         IEntityType entityValue = currentRow.get(j);
         EntityFactory entityFactory = new EntityFactory();
         Entity entity = entityFactory.createEntity(entityValue, j, i);
-        this.allEntities.add(entity);
         placeEntity(entity);
       }
     }
@@ -59,9 +62,16 @@ public class Level {
    * @param entity
    */
   private void placeEntity(Entity entity) {
-    if (entity.getTypeId().equals(EntityType.PLAYER.toString())) {
-      playerEntity = (PlayerEntity)entity;
+    if (entity.getTypeId().equals(EntityType.EMPTY.toString())) {
+      return;
     }
+
+
+    if (entity.getTypeId().equals(EntityType.PLAYER.toString())) {
+      playerEntity = (PlayerEntity) entity;
+    }
+
+    this.allEntities.add(entity);
   }
 
   public Entity getEntity(int xCoordinate, int yCoordinate) {
@@ -88,10 +98,9 @@ public class Level {
       updateEntities();
       checkWinCondition();
       moveEntities();
+      scroll();
     }
   }
-
-
 
   private void checkCollisions(){
     for(int i = 0; i < this.allEntities.size(); i++){
@@ -140,6 +149,13 @@ public class Level {
   private void moveEntities(){
     playerEntity.moveOneStep();
   };
+
+  /**
+   * Moves the entities in the level based on data from the List<Entity> and the player
+   */
+  private void scroll() {
+    scroller.scroll(allEntities, playerEntity);
+  }
 
   private void checkWinCondition(){};
 

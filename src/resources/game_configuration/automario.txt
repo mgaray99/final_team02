@@ -1,0 +1,7 @@
+Dimensions 15 15
+Default 0
+Constant 3 14:14 *:*
+Random 4 RIGHT:UP 13 U R(1,2,3;0.5,0.3,0.2) 1
+Random 4 RIGHT:DOWN U U 1 R(3,4,5,6;0.2,0.3,0.3,0.2)
+Random 4 RIGHT:DOWN U U 1 R(3,4,5,6;0.2,0.3,0.3,0.2)
+Random 0 RIGHT:DOWN 14 U 1 R(2,3,4;0.3,0.3,0.4)

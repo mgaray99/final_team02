@@ -1,9 +1,7 @@
 package model.autogenerator;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import java.util.Scanner;
 public class AutoGenerator {
 
   private static final String SET = "set";
+  private static final String AUTO_GENERATION_FAILED = "Automatic level generation failed";
   private int numBlocksWide;
   private int numBlocksHigh;
   private String defaultValue;
@@ -21,13 +20,16 @@ public class AutoGenerator {
   private List<ConstantGeneration> constantSpecifications;
   private List<RandomGeneration> randomSpecifications;
 
-  public AutoGenerator(int w, int h, String path) throws URISyntaxException, IOException,
-      NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-
-    Path file = Paths.get(AutoGenerator.class.getClassLoader().getResource(
-        path).toURI());
-    Scanner fileScan = new Scanner(file);
-    buildSpecification(fileScan);
+  public AutoGenerator(String path) {
+    try {
+      Path file = Paths.get(AutoGenerator.class.getClassLoader().getResource(
+          path).toURI());
+      Scanner fileScan = new Scanner(file);
+      buildSpecification(fileScan);
+    }
+    catch (Exception e) {
+      throw new GenerationException(AUTO_GENERATION_FAILED);
+    }
   }
 
   /**
@@ -45,6 +47,7 @@ public class AutoGenerator {
       String[] lineParts = line.split(" ");
 
       String methodPiece = lineParts[0];
+      System.out.println(lineParts[0]);
       Method method = getClass().getDeclaredMethod(SET + methodPiece, String[].class);
       method.invoke(this, (Object)lineParts);
     }
@@ -133,26 +136,4 @@ public class AutoGenerator {
       }
     }
   }
-
-  public void printArray(String[][] printedArray) {
-    for (int row = 0; row < printedArray.length; row+=1) {
-      System.out.println();
-      for (int column = 0; column < printedArray[0].length; column+=1) {
-        System.out.print(printedArray[row][column] + ", ");
-      }
-    }
-  }
-
-  public static void main(String[] args) {
-    try {
-      AutoGenerator gen = new AutoGenerator(6, 5, "resources/game_configuration/"
-          + "auto.txt");
-      String[][] block = gen.generateNextBlock();
-      gen.printArray(block);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
 }

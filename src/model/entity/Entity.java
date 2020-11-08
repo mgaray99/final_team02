@@ -58,6 +58,8 @@ public abstract class Entity {
 
     public float getYVel(){return yVel;}
 
+    public float getXVel(){return xVel;}
+
     public void setYVel(float yVel) {
         this.yVel =yVel;
     }

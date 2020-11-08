@@ -82,13 +82,15 @@ public class GameView extends Application {
   }
 
   /**
-   * Updates the view given that time has passed
+   * Updates the view
    */
   private void update() {
-    model.updateGame();
+    if (currentView.equals(viewName.GAME)) {
+      model.updateGame();
 
-    List<Entity> entityList = model.getAllEntitiesInLevel();
-    texturer.updateTextures(entityList, 15, 15);
+      List<Entity> entityList = model.getAllEntitiesInLevel();
+      texturer.updateTextures(entityList, 15, 15);
+    }
   }
 
 
