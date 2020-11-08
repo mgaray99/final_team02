@@ -30,6 +30,7 @@ public abstract class AutoGenerationScroller extends AutoScroller {
       decoderMap = decoder.getIdToEntityMap();
     }
     catch (Exception e) {
+      e.printStackTrace();
       throw new GenerationException("");
     }
   }

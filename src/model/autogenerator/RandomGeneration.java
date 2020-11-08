@@ -30,10 +30,10 @@ public class RandomGeneration extends GenerationInstruction {
    *
    * args[2] = direction that this random instruction builds in (i.e. LEFT:UP)
    *
-   * args[3] = x coordinate specification (i.e. 3)
-   * args[4] = y coordinate specification (i.e. 4)
-   * Note, an argument of U to either args[2] or args[3] means unifomrly randomize the
-   * x or y coordinate between [0,numRows] or [0,numCols]
+   * args[3] = start row specification (i.e. 3)
+   * args[4] = start column specification (i.e. 4)
+   * Note, an argument of U(x:y) to either args[2] or args[3] means unifomrly generate the
+   * start row or column in the range [x,y]
    *
    * args[5] = width specification in the form of a Randomizer String
    * args[6] = height specification in the form of a Randomizer String
@@ -49,8 +49,8 @@ public class RandomGeneration extends GenerationInstruction {
   private void buildInstruction(String[] args) {
     entityType = args[1];
     setDirectionOfGrowth(args[2]);
-    buildX(args[3]);
-    buildY(args[4]);
+    buildStartRow(args[3]);
+    buildStartCol(args[4]);
     buildRowDepth(args[5]);
     buildColDepth(args[6]);
   }
@@ -75,16 +75,36 @@ public class RandomGeneration extends GenerationInstruction {
    * Determines the startRow coordinate from xArg
    * @param xArg either the starting x coordinate or "R" if we should randomize to calculate it
    */
-  private void buildX(String xArg) {
-    startRow =  (xArg.equals("U")) ? (int)(Math.random() * numRows) : Integer.parseInt(xArg);
+  private void buildStartRow(String xArg) {
+    startRow = decodeStartArg(xArg, numRows);
   }
 
   /**
    * Determines the startCol coordinate from yArg
    * @param yArg either the starting y coordinate or "U" if we should randomize to calculate it
    */
-  private void buildY(String yArg) {
-    startCol =  (yArg.equals("U")) ? (int)(Math.random() * numCols) : Integer.parseInt(yArg);
+  private void buildStartCol(String yArg) {
+    startCol = decodeStartArg(yArg, numCols);
+  }
+
+  /**
+   * Creates a int value based on a String passed into args[3] or args[4] (startRow or startCol
+   * parameters)
+   *
+   * @param arg the String configuration argyment
+   * @param numOffset either numRows or numCols depending on if we're decoding the startRow or
+   *                  startCol (i.e. this will be multiplied by a random number to return a
+   *                 value in the range [0, numOffset])
+   * @return an int based on the String argument
+   */
+  private int decodeStartArg(String arg, int numOffset) {
+    if (arg.charAt(0) == 'U') {
+      UniformRandomizer randomizer = new UniformRandomizer(arg);
+      return randomizer.getUniformValue();
+    }
+    else {
+      return Integer.parseInt(arg);
+    }
   }
 
   /**

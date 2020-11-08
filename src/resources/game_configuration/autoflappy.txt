@@ -1,4 +1,4 @@
 Dimensions 15 7
 Default 0
 Constant 3 *:* 5:6
-Random 0 RIGHT:DOWN U 5 4 2
+Random 0 RIGHT:DOWN U(0:12) 5 4 2

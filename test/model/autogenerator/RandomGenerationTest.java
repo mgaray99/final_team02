@@ -119,7 +119,7 @@ public class RandomGenerationTest extends DukeApplicationTest{
    */
   @Test
   public void testRandomStartRow() {
-    String[] args = {"Random", "2", "RIGHT:DOWN", "U", "10", "3", "2"};
+    String[] args = {"Random", "2", "RIGHT:DOWN", "U(2:9)", "10", "3", "2"};
     RandomGeneration inst = new RandomGeneration(NUM_ROWS, NUM_COLS, args);
 
     int maxStartRow = Integer.MIN_VALUE;
@@ -130,8 +130,8 @@ public class RandomGenerationTest extends DukeApplicationTest{
       minStartRow = Math.min(minStartRow, inst.getStartRow());
     }
 
-    assertTrue(maxStartRow <= NUM_ROWS - 1);
-    assertTrue(minStartRow >= 0);
+    assertTrue(maxStartRow <= 9);
+    assertTrue(minStartRow >= 2);
   }
 
   /**
@@ -140,7 +140,7 @@ public class RandomGenerationTest extends DukeApplicationTest{
    */
   @Test
   public void testRandomStartCol() {
-    String[] args = {"Random", "2", "RIGHT:DOWN", "5", "U", "3", "2"};
+    String[] args = {"Random", "2", "RIGHT:DOWN", "5", "U(4:13)", "3", "2"};
     RandomGeneration inst = new RandomGeneration(NUM_ROWS, NUM_COLS, args);
 
     int maxStartCol = Integer.MIN_VALUE;
@@ -152,8 +152,8 @@ public class RandomGenerationTest extends DukeApplicationTest{
       minStartCol = Math.min(minStartCol, inst.getStartCol());
     }
 
-    assertTrue(maxStartCol <= NUM_COLS - 1);
-    assertTrue(minStartCol >= 0);
+    assertTrue(maxStartCol <= 13);
+    assertTrue(minStartCol >= 4);
   }
 
   /**

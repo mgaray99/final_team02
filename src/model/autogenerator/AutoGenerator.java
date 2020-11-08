@@ -28,6 +28,7 @@ public class AutoGenerator {
       buildSpecification(fileScan);
     }
     catch (Exception e) {
+      e.printStackTrace();
       throw new GenerationException(AUTO_GENERATION_FAILED);
     }
   }
@@ -47,7 +48,6 @@ public class AutoGenerator {
       String[] lineParts = line.split(" ");
 
       String methodPiece = lineParts[0];
-      System.out.println(lineParts[0]);
       Method method = getClass().getDeclaredMethod(SET + methodPiece, String[].class);
       method.invoke(this, (Object)lineParts);
     }
