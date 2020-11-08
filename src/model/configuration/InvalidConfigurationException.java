@@ -22,9 +22,9 @@ public class InvalidConfigurationException extends Exception{
      * Constructs in InvalidConfigurationException due to an invalid config file
      * @param resource The name of the file involved
      */
-    public InvalidConfigurationException(String resource){
+    public InvalidConfigurationException(String resource, ModelExceptionReason modelExceptionReason){
         super("Invalid configuration file: " + resource);
-        this.modelExceptionReason = ModelExceptionReason.INVALID_CONFIG_FILE;
+        this.modelExceptionReason = modelExceptionReason;
     }
 
     public ModelExceptionReason getModelExceptionReason() {

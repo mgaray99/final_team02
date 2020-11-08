@@ -1,15 +1,15 @@
 package model;
 
+import model.configuration.LevelLoader;
+import model.entity.*;
+import model.entity2.Block;
+import model.entity2.Enemy;
+import model.entity2.Player;
+import model.entity2.PowerUp;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import model.configuration.LevelLoader;
-import model.entity.EmptyEntity;
-import model.entity.Entity;
-import model.entity.EntityType;
-import model.entity.IEntityType;
 
 // Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
 // stop the player from moving indefinitely when left or right is pressed and I created a method
@@ -23,20 +23,26 @@ public class Level {
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
+
+
+  private List<Player> playerList;
+  private List<Enemy> enemyList;
+  private List<PowerUp> powerUpList;
+  private List<Block> blockList;
+  private List<IEntity> entityList;
+
+  private float gravityFactor = 0.2f;
   private int levelLength;
   private int levelWidth;
 
-  private Map<IEntityType, ArrayList<Entity>> allEntityMap = new HashMap<>();
-  private List<Entity> collidableEntities = new ArrayList<>();
-  private List<Entity> gravityEntities = new ArrayList<>();
-  private List<Entity> allEntityList = new ArrayList<>();
-
-  private float gravityFactor = 0.2f;
-
   public Level(LevelLoader levelLoader) {
-    levelLength = levelLoader.getMaxArrayLength();
-    levelWidth = levelLoader.getMaxArrayWidth();
-    this.buildEntityMap(levelLoader.getLevelMatrix());
+    this.playerList = levelLoader.getPlayerList();
+    this.enemyList = levelLoader.getEnemyList();
+    this.blockList = levelLoader.getBlockList();
+    this.powerUpList = levelLoader.getPowerUpList();
+    this.entityList = levelLoader.getEntityList();
+    this.levelLength = levelLoader.getLevelLength();
+    this.levelWidth = levelLoader.getLevelWidth();
   }
 
   public int getLevelLength() {
@@ -47,25 +53,8 @@ public class Level {
     return this.levelWidth;
   }
 
-  private void buildEntityMap(ArrayList<ArrayList<IEntityType>> levelMatrix){
-    for(int i = 0; i < levelMatrix.size(); i++){
-      ArrayList<IEntityType> currentRow = levelMatrix.get(i);
-      for(int j = 0; j < currentRow.size(); j++){
-        IEntityType entityValue = currentRow.get(j);
-        EntityFactory entityFactory = new EntityFactory();
-        Entity entity = entityFactory.createEntity(entityValue, j, i);
-
-        ArrayList<Entity> entitiesOfType = allEntityMap.getOrDefault(entity.getEntityType(), new ArrayList<>());
-        entitiesOfType.add(entity);
-        this.allEntityMap.put(entity.getEntityType(), entitiesOfType);
-
-        this.addEntity(entity);
-      }
-    }
-  }
-
   private void addEntity(Entity entity) {
-    this.allEntityList.add(entity);
+    this.entityList.add(entity);
     if(entity.getEntityType().shouldCheckCollisions()){
       this.collidableEntities.add(entity);
     }
