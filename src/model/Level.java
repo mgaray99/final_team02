@@ -27,6 +27,8 @@ public class Level {
   private int levelWidth;
 
   private Map<IEntityType, ArrayList<Entity>> allEntityMap = new HashMap<>();
+  private List<Entity> collidableEntities = new ArrayList<>();
+  private List<Entity> gravityEntities = new ArrayList<>();
   private List<Entity> allEntityList = new ArrayList<>();
 
   private float gravityFactor = 0.2f;
@@ -45,19 +47,6 @@ public class Level {
     return this.levelWidth;
   }
 
-  /*private void buildEntityList(ArrayList<ArrayList<IEntityType>> levelMatrix){
-    for(int i = 0; i < levelMatrix.size(); i++){
-      ArrayList<IEntityType> currentRow = levelMatrix.get(i);
-      for(int j = 0; j < currentRow.size(); j++){
-        IEntityType entityValue = currentRow.get(j);
-        EntityFactory entityFactory = new EntityFactory();
-        Entity entity = entityFactory.createEntity(entityValue, j, i);
-        this.allEntities.put(entity.getEntityType(), entity);
-        placeEntity(entity);
-      }
-    }
-  }*/
-
   private void buildEntityMap(ArrayList<ArrayList<IEntityType>> levelMatrix){
     for(int i = 0; i < levelMatrix.size(); i++){
       ArrayList<IEntityType> currentRow = levelMatrix.get(i);
@@ -65,25 +54,39 @@ public class Level {
         IEntityType entityValue = currentRow.get(j);
         EntityFactory entityFactory = new EntityFactory();
         Entity entity = entityFactory.createEntity(entityValue, j, i);
-        ArrayList entitiesOfType = allEntityMap.getOrDefault(entity.getEntityType(), new ArrayList<>());
+
+        ArrayList<Entity> entitiesOfType = allEntityMap.getOrDefault(entity.getEntityType(), new ArrayList<>());
         entitiesOfType.add(entity);
         this.allEntityMap.put(entity.getEntityType(), entitiesOfType);
+
+        this.addEntity(entity);
       }
     }
   }
 
-  public Entity getEntity(int xCoordinate, int yCoordinate) {
-    for(Entity entity : getAllEntityMap()){
+  private void addEntity(Entity entity) {
+    this.allEntityList.add(entity);
+    if(entity.getEntityType().shouldCheckCollisions()){
+      this.collidableEntities.add(entity);
+    }
+    if(entity.getEntityType().isAffectedByGravity()){
+      this.gravityEntities.add(entity);
+    }
+  }
+
+  public void removeEntity(Entity entityToRemove){
+    this.allEntityList.remove(entityToRemove);
+    if(entityToRemove.getEntityType().shouldCheckCollisions()){
+      this.collidableEntities.remove(entityToRemove);
+    }
+    if(entityToRemove.getEntityType().isAffectedByGravity()){
+      this.gravityEntities.remove(entityToRemove);
+    }
+  }
+
+  public Entity getEntityAt(int xCoordinate, int yCoordinate) {
+    for(Entity entity : getAllEntitiesInMapAsList()){
       if(entity.getHitBox().x == xCoordinate && entity.getHitBox().y == yCoordinate){
-        return entity;
-      }
-    }
-    return EmptyEntity.INSTANCE;
-  }
-
-  public Entity getEntity(IEntityType entityType, int xCoordinate, int yCoordinate){
-    for(Entity entity : allEntityMap.get(entityType)){
-      if(entity.hasMatchingId(entityType, xCoordinate, yCoordinate)){
         return entity;
       }
     }
@@ -99,23 +102,15 @@ public class Level {
     }
   }
 
-
-  //redo this to get the enums that need to check collisions
-  private void checkCollisions(){
-    for(int i = 0; i < this.allEntityMap.size(); i++){
-      Entity currentEntity = this.allEntityMap.get(i);
-      if(currentEntity.shouldCheckCollisions()){
-        for(int j = 0; j < this.allEntityMap.size(); j++){
-          boolean otherEntityIsCurrentEntity = j == i;
-          if(otherEntityIsCurrentEntity) continue;
-          Entity otherEntity = this.allEntityMap.get(i);
-          currentEntity.checkCollision(otherEntity);
+  public void checkCollisions(){
+    for(Entity entity : this.collidableEntities){
+      for(Entity otherEntity : this.allEntityList){
+        if(!entity.equals(otherEntity)){
+          entity.checkCollision(otherEntity);
         }
       }
     }
   }
-
-
 
   private void updateEntities() {
     checkForKeyPresses();
@@ -124,29 +119,32 @@ public class Level {
 
 
   private void checkForKeyPresses() {
-    Entity playerEntity = allEntityMap.get(EntityType.PLAYER).get(0);
-    if (keyPressFunctions.isPlayerMovingRight()) {
-      playerEntity.setXVel(MOVEMENT_SPEED);
-    } else if (keyPressFunctions.isPlayerMovingLeft()) {
-      playerEntity.setXVel(MOVEMENT_SPEED * -1);
-    } else {
-      playerEntity.setXVel(0);
+    ArrayList<Entity> playerEntities = allEntityMap.get(EntityType.PLAYER);
+    if(!playerEntities.isEmpty()){
+      Entity playerEntity = playerEntities.get(0);
+      if (keyPressFunctions.isPlayerMovingRight()) {
+        playerEntity.setXVel(MOVEMENT_SPEED);
+      } else if (keyPressFunctions.isPlayerMovingLeft()) {
+        playerEntity.setXVel(MOVEMENT_SPEED * -1);
+      } else {
+        playerEntity.setXVel(0);
+      }
+      if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
+        playerEntity.setYVel(JUMP_SPEED);
+        //playerEntity.setOnGround(false);
+      }
     }
-    if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
-      playerEntity.setYVel(JUMP_SPEED);
-      //playerEntity.setOnGround(false);
+    else{
+      // TODO: Missing player exception?
     }
   }
 
   public void applyGravity() {
-    /*if (playerEntity.affectedByGravity() && !playerEntity.isGrounded()) {
-      playerEntity.setYVel(playerEntity.getYVel() + gravityFactor);
-    }*/
-    /*for (Entity entity : allEntities) {
-      if (entity.affectedByGravity() && !entity.isGrounded()) {
+    for(Entity entity : this.gravityEntities){
+      if(!entity.isGrounded()){
         entity.setYVel(entity.getYVel() - gravityFactor);
       }
-    }*/
+    }
   }
 
   private void moveEntities(){
@@ -177,7 +175,7 @@ public class Level {
    * list to avoid aliasing issues
    * @return a defensive copy of allEntities
    */
-  public List<Entity> getAllEntityMap() {
+  public List<Entity> getAllEntitiesInMapAsList() {
     List<Entity> allEntityList = new ArrayList<>();
     Collection<ArrayList<Entity>> entityLists = this.allEntityMap.values();
     for (ArrayList<Entity> entityList : entityLists) {
