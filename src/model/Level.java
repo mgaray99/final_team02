@@ -15,7 +15,7 @@ public class Level {
   private List<EnemyEntity> enemyEntities;
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
   private final int MOVEMENT_SPEED = 1;
-  private final int JUMP_SPEED = 3;
+  private final float JUMP_SPEED = -2f;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
@@ -23,7 +23,7 @@ public class Level {
   private int levelWidth;
 
 
-  private float gravityFactor = 0.1f;
+  private float gravityFactor = 0.2f;
 
   public Level(LevelLoader levelLoader) {
     playerEntity = new PlayerEntity(STARTX, STARTY, START_HEALTH);
@@ -73,6 +73,20 @@ public class Level {
     return EmptyEntity.INSTANCE;
   }
 
+  public List<Entity> getEntitiesOfType(IEntityType entityType) {
+    List<Entity> entities = new ArrayList<>();
+    for(Entity entity : this.allEntities){
+      if(entity.getEntityType() == entityType){
+        entities.add(entity);
+      }
+    }
+    return entities;
+  }
+
+  public PlayerEntity getPlayerEntity() {
+    return playerEntity;
+  }
+
   public Entity getEntity(IEntityType entityType, int xCoordinate, int yCoordinate){
     for(Entity entity : this.allEntities){
       if(entity.hasMatchingId(entityType, xCoordinate, yCoordinate)){
@@ -112,7 +126,6 @@ public class Level {
   private void updateEntities() {
     checkForKeyPresses();
     applyGravity();
-
   }
 
 
@@ -124,17 +137,21 @@ public class Level {
     } else {
       playerEntity.setXVel(0);
     }
-    if (keyPressFunctions.isPlayerJumping()) {
+    if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
       playerEntity.setYVel(JUMP_SPEED);
+      playerEntity.setOnGround(false);
     }
   }
 
   public void applyGravity() {
-    for (Entity entity : allEntities) {
+    if (playerEntity.affectedByGravity() && !playerEntity.isGrounded()) {
+      playerEntity.setYVel(playerEntity.getYVel() + gravityFactor);
+    }
+    /*for (Entity entity : allEntities) {
       if (entity.affectedByGravity() && !entity.isGrounded()) {
         entity.setYVel(entity.getYVel() - gravityFactor);
       }
-    }
+    }*/
   }
 
   private void moveEntities(){

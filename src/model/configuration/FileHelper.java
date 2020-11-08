@@ -16,6 +16,8 @@ public class FileHelper {
 
     public static final String CSV_FILE_TYPE = "csv";
     public static final String PROPERTIES_FILE_TYPE = "properties";
+    //private static final String TEST_RESOURCES_PATH = "resources/testPropertiesFiles/";
+    private static final String TEST_INDICATOR = "TestLevel";
     private static final String RESOURCES_PATH = "resources/game_configuration/";
 
     /**
@@ -85,8 +87,14 @@ public class FileHelper {
      */
     @Nullable
     public static InputStream tryCreateInputStreamFromPropertiesFileName(Class clazz, String resource) {
-        return isPropertiesFile(resource) ? clazz.getClassLoader()
-         .getResourceAsStream(RESOURCES_PATH + resource) : null;
+        if (isPropertiesFile(resource)) {
+            //if (resource.contains(TEST_INDICATOR)) {
+            //    return clazz.getClassLoader().getResourceAsStream(TEST_RESOURCES_PATH + resource);
+            //} else {
+                return clazz.getClassLoader().getResourceAsStream(RESOURCES_PATH + resource);
+            //}
+        }
+        return null;
     }
 
     /**
@@ -96,7 +104,7 @@ public class FileHelper {
      */
     public static Properties createPropertiesAndTryLoadFromStream(InputStream inputStream) {
         Properties properties = new Properties();
-        if(inputStream == null){
+          if(inputStream == null){
             return properties;
         }
         try {
