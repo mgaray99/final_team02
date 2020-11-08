@@ -38,7 +38,7 @@ public class HitBox {
     yTop += deltaY;
   }
 
-  public Enum checkCollision(HitBox otherBox) {
+  public CollisionDirections checkCollision(HitBox otherBox) {
     if (xLeft+xSize <= otherBox.getXLeft()) {
       return CollisionDirections.RIGHT;
     }
