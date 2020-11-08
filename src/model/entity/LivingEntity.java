@@ -8,6 +8,7 @@ public abstract class LivingEntity extends Entity{
     public LivingEntity(IEntityType entityType, int xUpperLeft, int yUpperLeft, int healthIn) {
         super(entityType, xUpperLeft, yUpperLeft);
         this.health = healthIn;
+        onGround = true;
     }
 
     @Override
@@ -20,8 +21,18 @@ public abstract class LivingEntity extends Entity{
         return true;
     }
 
+    @Override
+    public boolean checkCollision(Entity entityIn) {
+        if(this.getHitBox().intersects(entityIn.getHitBox())) {
+            onGround = true;
+            return true;
+        };
+        onGround = false;
+        return false;
+    }
+
     //@Override
-    //public boolean checkCollisions(Entity entityIn) {
+    //public boolean checkCollision(Entity entityIn) {
     //    if (this.getYVel() <= 0 &&
     //        entityIn.getHitBox().get)
     //    return this.getHitBox().intersects(entityIn.getHitBox());
@@ -35,7 +46,7 @@ public abstract class LivingEntity extends Entity{
         this.health = healthIn;
     }
 
-    public boolean getOnGround() {return onGround;}
+    public boolean isGrounded() {return onGround;}
 
     public void setOnGround(boolean onGround) {this.onGround = onGround;}
 }

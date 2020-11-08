@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
  */
 public class ButtonBuilderTest extends DukeApplicationTest{
 
-  private static final String TEST_PATH = "resources/buttons/optionsselectorbuttons.txt";
+  private static final String TEST_PATH = "./data/resources/buttons/optionsselectorbuttons.txt";
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
   private ButtonBuilder builder;

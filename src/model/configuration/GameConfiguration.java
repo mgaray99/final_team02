@@ -5,7 +5,8 @@ import java.util.Properties;
 
 public class GameConfiguration {
     public static final String LEVEL_KEY = "level";
-    private static final String LEVEL_FILEPATH = "./data/";
+    private static final String DEFAULT_LEVEL_FILEPATH = "./data/";
+    private static final String ROOT_SOURCE_INDICATOR = "./";
     private final Properties properties;
     private File levelFile;
 
@@ -14,10 +15,18 @@ public class GameConfiguration {
         this.setLevelFile();
     }
 
+    public GameConfiguration(String resource, Class clazz){
+        this.properties = FileHelper.createPropertiesAndTryLoadFromResource(clazz, resource);
+        this.setLevelFile();
+    }
+
     private void setLevelFile() {
         String levelFileName = this.properties.getProperty(LEVEL_KEY);
-
-        this.levelFile = new File(LEVEL_FILEPATH + levelFileName);
+        if (levelFileName.contains(ROOT_SOURCE_INDICATOR)) {
+            this.levelFile = new File(levelFileName);
+        } else {
+            this.levelFile = new File(DEFAULT_LEVEL_FILEPATH + levelFileName);
+        }
     }
 
     public File getLevelFile() {
