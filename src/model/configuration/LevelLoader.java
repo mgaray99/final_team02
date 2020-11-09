@@ -91,7 +91,7 @@ public class LevelLoader {
                 String[] currentStringArray = currentLine.split(",");
                 for (int colIndex = 0; colIndex < currentStringArray.length; colIndex++) {
                     String entityString = currentStringArray[colIndex];
-                    this.createAndAddEntity(entityString, rowCounter, colIndex);
+                    this.createAndAddEntity(entityString, colIndex, rowCounter);
                     if(this.levelWidth < colIndex){
                         this.levelWidth = colIndex;
                     }

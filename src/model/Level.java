@@ -170,7 +170,7 @@ public class Level {
     return keyPressFunctions;
   }
 
-  protected List<IEntity> getAllEntities() {
+  public List<IEntity> getAllEntities() {
     return entityList;
   }
 
