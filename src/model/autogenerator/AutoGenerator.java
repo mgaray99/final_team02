@@ -28,7 +28,6 @@ public class AutoGenerator {
       buildSpecification(fileScan);
     }
     catch (Exception e) {
-      e.printStackTrace();
       throw new GenerationException(AUTO_GENERATION_FAILED);
     }
   }

@@ -1,13 +1,12 @@
 package model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
-
-import java.io.File;
-import model.entity.Entity;
+import model.entity.IEntity;
 
 public class GameModel {
 
@@ -42,8 +41,8 @@ public class GameModel {
      * Returns a defensively copied list of all of the entities present in level
      * @return defensively copied list of all entities in Level
      */
-    public List<Entity> getAllEntitiesInLevel() {
-        List<Entity> defensivelyCopiedEntityList = new ArrayList<>();
+    public List<IEntity> getAllEntitiesInLevel() {
+        List<IEntity> defensivelyCopiedEntityList = new ArrayList<>();
         defensivelyCopiedEntityList.addAll(level.getAllEntities());
         return defensivelyCopiedEntityList;
     }

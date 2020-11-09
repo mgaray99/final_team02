@@ -1,9 +1,9 @@
 package model.scroll;
 
-import java.awt.geom.Rectangle2D;
 import java.util.List;
-import model.entity.Entity;
-import model.entity.PlayerEntity;
+import model.HitBox;
+import model.entity.IEntity;
+import model.entity.Player;
 
 public class ManualScroller extends Scroller {
     private boolean scrollsX;
@@ -22,7 +22,7 @@ public class ManualScroller extends Scroller {
    * @param player the player whose data we are to use
    */
   @Override
-  public void scroll(List<Entity> entityList, PlayerEntity player) {
+  public void scroll(List<IEntity> entityList, Player player) {
       double xScroll = 0;
       double yScroll = 0;
 
@@ -34,7 +34,7 @@ public class ManualScroller extends Scroller {
       yScroll = -1 * player.getYVel();
     }
 
-    for (Entity entity : entityList) {
+    for (IEntity entity : entityList) {
       scrollEntity(entity, xScroll, yScroll);
     }
   }
@@ -45,9 +45,9 @@ public class ManualScroller extends Scroller {
    * @param xScroll the amount to scroll the entity in the x direction
    * @param yScroll the amount to scroll the entity in the y direction
    */
-  private void scrollEntity(Entity entity, double xScroll, double yScroll) {
-    Rectangle2D.Float hitBox = entity.getHitBox();
-    hitBox.x += xScroll;
-    hitBox.y += yScroll;
+  private void scrollEntity(IEntity entity, double xScroll, double yScroll) {
+    HitBox hitBox = entity.getHitBox();
+    hitBox.translateX(xScroll);
+    hitBox.translateY(yScroll);
   }
 }

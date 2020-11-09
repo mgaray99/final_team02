@@ -1,9 +1,9 @@
 package model.scroll;
 
-import java.awt.geom.Rectangle2D;
 import java.util.List;
-import model.entity.Entity;
-import model.entity.PlayerEntity;
+import model.HitBox;
+import model.entity.IEntity;
+import model.entity.Player;
 
 public class AutoScroller extends Scroller{
     protected double xScroll;
@@ -20,7 +20,7 @@ public class AutoScroller extends Scroller{
    * @param player the player of the level
    */
   @Override
-  public void scroll(List<Entity> entityList, PlayerEntity player) {
+  public void scroll(List<IEntity> entityList, Player player) {
     entityList.forEach(entity -> scrollEntity(entity));
   }
 
@@ -28,9 +28,9 @@ public class AutoScroller extends Scroller{
    * Moves the Entity
    * @param entity the Entity to be scrolled
    */
-  private void scrollEntity(Entity entity) {
-    Rectangle2D.Float hitBox = entity.getHitBox();
-    hitBox.x += xScroll;
-    hitBox.y += yScroll;
+  private void scrollEntity(IEntity entity) {
+    HitBox hitBox = entity.getHitBox();
+    hitBox.translateX(xScroll);
+    hitBox.translateY(yScroll);
   }
 }

@@ -1,15 +1,15 @@
 package model.scroll;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
-import model.entity.BarrierBlockEntity;
-import model.entity.EnemyEntity;
-import model.entity.Entity;
-import model.entity.PlayerEntity;
+import model.entity.Block;
+import model.entity.Enemy;
+import model.entity.IEntity;
+import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -30,19 +30,19 @@ public class ManualScrollerTest extends DukeApplicationTest {
   private static final int ENEMYX = 6;
   private static final int ENEMYY = 7;
 
-  private PlayerEntity playerEntity;
-  private BarrierBlockEntity barrierBlockEntity;
-  private EnemyEntity enemyEntity;
+  private Player playerEntity;
+  private Block barrierBlockEntity;
+  private Enemy enemyEntity;
 
-  private List<Entity> entityList;
+  private List<IEntity> entityList;
 
   @Override
   public void start(Stage stage) {
     entityList = new ArrayList<>();
 
-    playerEntity = new PlayerEntity(PLAYERX, PLAYERY, 10);
-    barrierBlockEntity = new BarrierBlockEntity(BARRIERX, BARRIERY);
-    enemyEntity = new EnemyEntity(ENEMYX, ENEMYY, 10);
+    playerEntity = new Player(PLAYERX, PLAYERY);
+    barrierBlockEntity = new Block(BARRIERX, BARRIERY);
+    enemyEntity = new Enemy(ENEMYX, ENEMYY);
 
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
@@ -63,13 +63,13 @@ public class ManualScrollerTest extends DukeApplicationTest {
     playerEntity.moveOneStep();
     scroller.scroll(entityList, playerEntity);
 
-    assertEquals(PLAYERX, playerEntity.getHitBox().x);
-    assertEquals(BARRIERX - PLAYER_XVEL, barrierBlockEntity.getHitBox().x);
-    assertEquals(ENEMYX - PLAYER_XVEL, enemyEntity.getHitBox().x);
+    assertEquals(PLAYERX, playerEntity.getHitBox().getXLeft());
+    assertEquals(BARRIERX - PLAYER_XVEL, barrierBlockEntity.getHitBox().getXLeft());
+    assertEquals(ENEMYX - PLAYER_XVEL, enemyEntity.getHitBox().getXLeft());
 
-    assertEquals(PLAYERY + PLAYER_YVEL, playerEntity.getHitBox().y);
-    assertEquals(BARRIERY, barrierBlockEntity.getHitBox().y);
-    assertEquals(ENEMYY, enemyEntity.getHitBox().y);
+    assertEquals(PLAYERY + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
+    assertEquals(BARRIERY, barrierBlockEntity.getHitBox().getYTop());
+    assertEquals(ENEMYY, enemyEntity.getHitBox().getYTop());
   }
 
   /**
@@ -83,13 +83,13 @@ public class ManualScrollerTest extends DukeApplicationTest {
     playerEntity.moveOneStep();
     scroller.scroll(entityList, playerEntity);
 
-    assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().x);
-    assertEquals(BARRIERX, barrierBlockEntity.getHitBox().x);
-    assertEquals(ENEMYX, enemyEntity.getHitBox().x);
+    assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
+    assertEquals(BARRIERX, barrierBlockEntity.getHitBox().getXLeft());
+    assertEquals(ENEMYX, enemyEntity.getHitBox().getXLeft());
 
-    assertEquals(PLAYERY, playerEntity.getHitBox().y);
-    assertEquals(BARRIERY - PLAYER_YVEL, barrierBlockEntity.getHitBox().y);
-    assertEquals(ENEMYY - PLAYER_YVEL, enemyEntity.getHitBox().y);
+    assertEquals(PLAYERY, playerEntity.getHitBox().getYTop());
+    assertEquals(BARRIERY - PLAYER_YVEL, barrierBlockEntity.getHitBox().getYTop());
+    assertEquals(ENEMYY - PLAYER_YVEL, enemyEntity.getHitBox().getYTop());
   }
 
   /**
@@ -103,12 +103,12 @@ public class ManualScrollerTest extends DukeApplicationTest {
     playerEntity.moveOneStep();
     scroller.scroll(entityList, playerEntity);
 
-    assertEquals(PLAYERX, playerEntity.getHitBox().x);
-    assertEquals(BARRIERX - PLAYER_XVEL, barrierBlockEntity.getHitBox().x);
-    assertEquals(ENEMYX - PLAYER_XVEL, enemyEntity.getHitBox().x);
+    assertEquals(PLAYERX, playerEntity.getHitBox().getXLeft());
+    assertEquals(BARRIERX - PLAYER_XVEL, barrierBlockEntity.getHitBox().getXLeft());
+    assertEquals(ENEMYX - PLAYER_XVEL, enemyEntity.getHitBox().getXLeft());
 
-    assertEquals(PLAYERY, playerEntity.getHitBox().y);
-    assertEquals(BARRIERY - PLAYER_YVEL, barrierBlockEntity.getHitBox().y);
-    assertEquals(ENEMYY - PLAYER_YVEL, enemyEntity.getHitBox().y);
+    assertEquals(PLAYERY, playerEntity.getHitBox().getYTop());
+    assertEquals(BARRIERY - PLAYER_YVEL, barrierBlockEntity.getHitBox().getYTop());
+    assertEquals(ENEMYY - PLAYER_YVEL, enemyEntity.getHitBox().getYTop());
   }
 }

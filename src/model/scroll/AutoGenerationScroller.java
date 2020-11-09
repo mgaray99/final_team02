@@ -1,16 +1,13 @@
 package model.scroll;
 
-import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Map;
-import model.EntityFactory;
+import model.configuration.EntityFactory;
 import model.autogenerator.AutoGenerator;
 import model.autogenerator.GenerationException;
 import model.configuration.LevelDecoder;
-import model.entity.Entity;
-import model.entity.EntityType;
-import model.entity.IEntityType;
-import model.entity.PlayerEntity;
+import model.entity.IEntity;
+import model.entity.Player;
 
 public abstract class AutoGenerationScroller extends AutoScroller {
 
@@ -41,7 +38,7 @@ public abstract class AutoGenerationScroller extends AutoScroller {
    * @param player the player of the level
    */
   @Override
-  public void scroll(List<Entity> entityList, PlayerEntity player) {
+  public void scroll(List<IEntity> entityList, Player player) {
     super.scroll(entityList, player);
   }
 
@@ -51,7 +48,7 @@ public abstract class AutoGenerationScroller extends AutoScroller {
    * Creates a new part of the level and adds it to the entity list
    * @param entityList the list of entities
    */
-  protected void generateForEntityList(List<Entity> entityList, int rowOffset, int colOffset) {
+  protected void generateForEntityList(List<IEntity> entityList, int rowOffset, int colOffset) {
     currentGeneration = generator.generateNextBlock();
 
     for (int row = 0; row < currentGeneration.length; row+=1) {
@@ -69,28 +66,11 @@ public abstract class AutoGenerationScroller extends AutoScroller {
    * @param entityCode the String containing the type of entity
    * @param entityList the List of Entity to have the new entity inserted into itself
    */
-  private void insertIntoEntityList(String entityCode, List<Entity> entityList, int row, int col) {
-    IEntityType type = determineType(entityCode);
-
-    if (!type.equals(EntityType.EMPTY)) {
-      Entity entity = factory.createEntity(type, col, row);
+  private void insertIntoEntityList(String entityCode, List<IEntity> entityList, int row, int col) {
+    IEntity entity = factory.createEntity(entityCode, col, row);
+    if (entity!=null) {
       entityList.add(entity);
     }
   }
 
-  /**
-   * Determines the entity type represented from a String entityCode -> if this String is invalid,
-   * returns EntityType.EMPTY
-   * @param entityCode the code mapping to the entity type
-   * @return an IEntityType representing the type of entity represented or EntityType.EMPTY
-   */
-  private IEntityType determineType(String entityCode) {
-    try {
-      entityCode = decoderMap.get(entityCode);
-      return EntityType.valueOf(entityCode);
-    }
-    catch (IllegalArgumentException illegalArgumentException) {
-      return  EntityType.EMPTY;
-    }
-  }
 }

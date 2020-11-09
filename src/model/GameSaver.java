@@ -1,14 +1,13 @@
 package model;
 
-import model.configuration.FileHelper;
-import model.configuration.LevelDecoder;
-import model.entity.IEntityType;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+import model.configuration.FileHelper;
+import model.configuration.LevelDecoder;
+import model.entity.IEntity;
 
 /**
  * A class responsible for writing an existing state of the simulation to a CSV file
@@ -18,11 +17,12 @@ public class GameSaver {
 
     private static final String CSV_EXTENSION = ".csv";
     private static final int DEFAULT_ENTITY_KEY = 0;
+    public static final String EMPTY = "EMPTY";
     private Level currentLevel;
 
     /**
      * Constructs a GameSaver
-     * @param currentLevel A ConwayGrid representing the current state of the simulation
+     * @param currentLevel A Level representing the current state of the level
      */
     public GameSaver(Level currentLevel){
         this.currentLevel = currentLevel;
@@ -60,11 +60,14 @@ public class GameSaver {
         LevelDecoder levelDecoder = new LevelDecoder();
         Map<String, String> levelDecoderMap = levelDecoder.getIdToEntityMap();
         FileWriter seedCSVWriter = new FileWriter(fileNameToWrite);
-        for(int i = 0; i < currentLevel.getLevelLength(); i++){
+        for(int yIndex = 0; yIndex < currentLevel.getLevelLength(); yIndex++){
             StringBuilder currentRow = new StringBuilder();
-            for(int j = 0; j < currentLevel.getLevelWidth(); j++){
-                IEntityType entityType = currentLevel.getEntity(j, i).getEntityType();
-                String entityTypeString = entityType.getTypeID();
+            for(int xIndex = 0; xIndex < currentLevel.getLevelWidth(); xIndex++){
+                IEntity entity = currentLevel.getEntityAt(xIndex, yIndex);
+                String entityTypeString = EMPTY;
+                if (entity != null) {
+                    entityTypeString = entity.getType();
+                }
                 Stream<String> matchingKeysForEntity = getMatchingKeysForValue(levelDecoderMap, entityTypeString);
                 // Use the first key found, regardless of if there are multiple
                 Optional<String> optionalEntityDecoderKey = matchingKeysForEntity.findFirst();
@@ -74,12 +77,12 @@ public class GameSaver {
                 else{
                     currentRow.append(DEFAULT_ENTITY_KEY);
                 }
-                if(j < currentLevel.getLevelWidth() - 1){
+                if(xIndex < currentLevel.getLevelWidth() - 1){
                     currentRow.append(",");
                 }
             }
             seedCSVWriter.append(currentRow);
-            if(i < currentLevel.getLevelLength() - 1){
+            if(yIndex < currentLevel.getLevelLength() - 1){
                 seedCSVWriter.append("\n");
             }
         }

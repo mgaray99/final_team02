@@ -1,14 +1,12 @@
 package view;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
-import view.GameSceneMap;
+import util.DukeApplicationTest;
 import view.GameView.viewName;
 
 

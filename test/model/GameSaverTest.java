@@ -1,14 +1,13 @@
 package model;
 
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
-import org.junit.Test;
-import util.TestFiles;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.junit.Assert.assertTrue;
+import model.configuration.InvalidFileException;
+import model.configuration.LevelLoader;
+import org.junit.jupiter.api.Test;
+import util.TestFiles;
 
 public class GameSaverTest {
 

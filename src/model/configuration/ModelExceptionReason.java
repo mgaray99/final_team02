@@ -6,5 +6,6 @@ public enum ModelExceptionReason {
     FILE_NOT_FOUND,
     DIRECTORY,
     NOT_A_FILE,
-    NOT_A_CSV_FILE
+    NOT_A_CSV_FILE,
+    ENTITY_CLASS_NOT_FOUND
 }

@@ -1,39 +1,49 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 import model.configuration.LevelLoader;
 import model.entity.*;
-import model.scroll.AutoScroller;
 import model.scroll.HorizontalGenerationScroller;
-import model.scroll.ManualScroller;
 import model.scroll.Scroller;
+import model.entity.Block;
+import model.entity.Enemy;
+import model.entity.IEntity;
+import model.entity.Player;
+import model.entity.PowerUp;
+import org.jetbrains.annotations.Nullable;
 
 public class Level {
 
-  private final List<Entity> allEntities = new ArrayList<>();
-  private PlayerEntity playerEntity;
-  private List<EnemyEntity> enemyEntities;
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
   private Scroller scroller;
   private final int MOVEMENT_SPEED = 1;
-  private final int JUMP_SPEED = 3;
+  private final float JUMP_SPEED = -2f;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
   private static final String GENERATION_PATH = "resources/game_configuration/autoflappy.txt";
+
+  private List<Player> playerList;
+  private List<Enemy> enemyList;
+  private List<PowerUp> powerUpList;
+  private List<Block> blockList;
+  private List<IEntity> entityList;
+
+  private float gravityFactor = 0.2f;
   private int levelLength;
   private int levelWidth;
 
-
-  private float gravityFactor = 0.1f;
-
   public Level(LevelLoader levelLoader) {
-    playerEntity = new PlayerEntity(STARTX, STARTY, START_HEALTH);
-    levelLength = levelLoader.getMaxArrayLength();
-    levelWidth = levelLoader.getMaxArrayWidth();
+
     scroller = new HorizontalGenerationScroller(-0.10, 0, 15, GENERATION_PATH);
-    this.buildEntityList(levelLoader.getLevelMatrix());
+
+    this.playerList = levelLoader.getPlayerList();
+    this.enemyList = levelLoader.getEnemyList();
+    this.blockList = levelLoader.getBlockList();
+    this.powerUpList = levelLoader.getPowerUpList();
+    this.entityList = levelLoader.getEntityList();
+    this.levelLength = levelLoader.getLevelLength();
+    this.levelWidth = levelLoader.getLevelWidth();
   }
 
   public int getLevelLength() {
@@ -44,52 +54,50 @@ public class Level {
     return this.levelWidth;
   }
 
-  private void buildEntityList(ArrayList<ArrayList<IEntityType>> levelMatrix){
-    for(int i = 0; i < levelMatrix.size(); i++){
-      ArrayList<IEntityType> currentRow = levelMatrix.get(i);
-      for(int j = 0; j < currentRow.size(); j++){
-        IEntityType entityValue = currentRow.get(j);
-        EntityFactory entityFactory = new EntityFactory();
-        Entity entity = entityFactory.createEntity(entityValue, j, i);
-        placeEntity(entity);
-      }
+
+  private void addEntity(IEntity entity) {
+    if (entity!=null) {
+      entityList.add(entity);
+    }
+
+    if (entity instanceof Block) {
+      blockList.add((Block)entity);
+    }
+    if (entity instanceof Enemy) {
+      enemyList.add((Enemy)entity);
+    }
+    if (entity instanceof Player) {
+      playerList.add((Player)entity);
+    }
+    if (entity instanceof PowerUp) {
+      powerUpList.add((PowerUp)entity);
     }
   }
 
-  /**
-   * Checks the entity to see what type it is and then inserts it into the correct list based
-   * on that type (i.e. an entity of ENEMY goes into enemyEntities)
-   * @param entity
-   */
-  private void placeEntity(Entity entity) {
-    if (entity.getTypeId().equals(EntityType.EMPTY.toString())) {
-      return;
+  private void removeEntity(IEntity entity) {
+    entityList.remove(entity);
+    if (entity instanceof Block) {
+      blockList.remove(entity);
     }
-
-
-    if (entity.getTypeId().equals(EntityType.PLAYER.toString())) {
-      playerEntity = (PlayerEntity) entity;
+    if (entity instanceof Enemy) {
+      enemyList.remove(entity);
     }
-
-    this.allEntities.add(entity);
+    if (entity instanceof Player) {
+      playerList.remove(entity);
+    }
+    if (entity instanceof PowerUp) {
+      powerUpList.remove(entity);
+    }
   }
 
-  public Entity getEntity(int xCoordinate, int yCoordinate) {
-    for(Entity entity : this.allEntities){
-      if(entity.getHitBox().x == xCoordinate && entity.getHitBox().y == yCoordinate){
+  @Nullable
+  public IEntity getEntityAt(int xCoordinate, int yCoordinate) {
+    for(IEntity entity : entityList){
+      if(entity.getHitBox().getXLeft() == xCoordinate && entity.getHitBox().getYTop() == yCoordinate){
         return entity;
       }
     }
-    return EmptyEntity.INSTANCE;
-  }
-
-  public Entity getEntity(IEntityType entityType, int xCoordinate, int yCoordinate){
-    for(Entity entity : this.allEntities){
-      if(entity.hasMatchingId(entityType, xCoordinate, yCoordinate)){
-        return entity;
-      }
-    }
-    return EmptyEntity.INSTANCE;
+    return null;
   }
 
   public void step() {
@@ -102,59 +110,64 @@ public class Level {
     }
   }
 
-  private void checkCollisions(){
-    for(int i = 0; i < this.allEntities.size(); i++){
-      Entity currentEntity = this.allEntities.get(i);
-      if(currentEntity.shouldCheckCollisions()){
-        for(int j = 0; j < this.allEntities.size(); j++){
-          boolean otherEntityIsCurrentEntity = j == i;
-          if(otherEntityIsCurrentEntity) continue;
-          Entity otherEntity = this.allEntities.get(i);
-          currentEntity.checkCollision(otherEntity);
+
+  public void checkCollisions(){
+    for(Player player : this.playerList){
+      for(IEntity otherEntity : this.entityList){
+        if(!player.equals(otherEntity)){
+          player.checkCollision(otherEntity);
         }
       }
     }
   }
 
-
-
   private void updateEntities() {
     checkForKeyPresses();
-    applyGravity();
-
+    //applyGravity();
   }
 
 
   private void checkForKeyPresses() {
-    if (keyPressFunctions.isPlayerMovingRight()) {
-      playerEntity.setXVel(MOVEMENT_SPEED);
-    } else if (keyPressFunctions.isPlayerMovingLeft()) {
-      playerEntity.setXVel(MOVEMENT_SPEED * -1);
-    } else {
-      playerEntity.setXVel(0);
+    if(!playerList.isEmpty()){
+      Player playerEntity = playerList.get(0);
+      if (keyPressFunctions.isPlayerMovingRight()) {
+        playerEntity.setXVel(MOVEMENT_SPEED);
+      } else if (keyPressFunctions.isPlayerMovingLeft()) {
+        playerEntity.setXVel(MOVEMENT_SPEED * -1);
+      } else {
+        playerEntity.setXVel(0);
+      }
+      if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
+        playerEntity.setYVel(JUMP_SPEED);
+        //playerEntity.setOnGround(false);
+      }
     }
-    if (keyPressFunctions.isPlayerJumping()) {
-      playerEntity.setYVel(JUMP_SPEED);
+    else{
+      // TODO: Missing player exception?
     }
   }
 
   public void applyGravity() {
-    for (Entity entity : allEntities) {
-      if (entity.affectedByGravity() && !entity.isGrounded()) {
-        entity.setYVel(entity.getYVel() - gravityFactor);
+    //note: add enemies to this later
+    for(Player player : this.playerList){
+      if(!player.isGrounded()){
+        player.setYVel(player.getYVel() - gravityFactor);
       }
     }
   }
 
   private void moveEntities(){
-    playerEntity.moveOneStep();
-  };
+    if(!playerList.isEmpty()) {
+      Player playerEntity = playerList.get(0);
+      playerEntity.moveOneStep();
+    }
+  }
 
   /**
    * Moves the entities in the level based on data from the List<Entity> and the player
    */
   private void scroll() {
-    scroller.scroll(allEntities, playerEntity);
+    scroller.scroll(entityList, playerList.get(0));
   }
 
   private void checkWinCondition(){};
@@ -176,15 +189,8 @@ public class Level {
     return keyPressFunctions;
   }
 
-  /**
-   * Returns all of the entities in the Level - however, we defensively copy them into a separate
-   * list to avoid aliasing issues
-   * @return a defensive copy of allEntities
-   */
-  public List<Entity> getAllEntities() {
-    List<Entity> defensiveCopyOfEntities = new ArrayList<>();
-    defensiveCopyOfEntities.addAll(allEntities);
-    return defensiveCopyOfEntities;
+  public List<IEntity> getAllEntities() {
+    return entityList;
   }
 
 }

@@ -1,8 +1,8 @@
 package model.scroll;
 
 import java.util.List;
-import model.entity.Entity;
-import model.entity.PlayerEntity;
+import model.entity.IEntity;
+import model.entity.Player;
 
 public class HorizontalGenerationScroller extends AutoGenerationScroller {
   private double flagX;
@@ -20,7 +20,7 @@ public class HorizontalGenerationScroller extends AutoGenerationScroller {
    * @param player the player of the level
    */
   @Override
-  public void scroll(List<Entity> entityList, PlayerEntity player) {
+  public void scroll(List<IEntity> entityList, Player player) {
     checkForGeneration(entityList);
     flagX+=xScroll;
 
@@ -30,7 +30,7 @@ public class HorizontalGenerationScroller extends AutoGenerationScroller {
   /**
    * Checks to see if it's necessary to generate a new generation
    */
-  private void checkForGeneration(List<Entity> entityList) {
+  private void checkForGeneration(List<IEntity> entityList) {
     if (flagX <= GENERATE_MAX_BOUND) {
       generateForEntityList(entityList, 0, GENERATE_MAX_BOUND);
       flagX+=currentGeneration[0].length;
