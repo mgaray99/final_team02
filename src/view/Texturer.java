@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.geom.Rectangle2D;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,8 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import model.entity.Entity;
-import model.entity.EntityType;
+import model.HitBox;
+import model.entity.IEntity;
 
 public class Texturer {
   private Map<String, ImageView> textureMap;
@@ -116,7 +115,7 @@ public class Texturer {
    * Updates the textures
    * @param entityList the list of Entities to be textured
    */
-  public void updateTextures(List<Entity> entityList, double blocksWide, double blocksHigh) {
+  public void updateTextures(List<IEntity> entityList, double blocksWide, double blocksHigh) {
     numBlocksWide = blocksWide;
     numBlocksHigh = blocksHigh;
 
@@ -133,8 +132,9 @@ public class Texturer {
 
   /**
    * Inserts the new textures into textureGroup
+   * @param entityList
    */
-  private void insertNewTextures(List<Entity> entityList) {
+  private void insertNewTextures(List<IEntity> entityList) {
     entityList.forEach(entity -> addNewTexture(entity));
   }
 
@@ -142,10 +142,10 @@ public class Texturer {
    * Adds a single new texture to the group textureGroup
    * @param currentEntity
    */
-  private void addNewTexture(Entity currentEntity) {
+  private void addNewTexture(IEntity currentEntity) {
     Image image;
     try {
-      image = textureMap.get(currentEntity.getTypeId()).getImage();
+      image = textureMap.get(currentEntity.getType()).getImage();
     }
     catch (NullPointerException npe) {
       image = MISSING_IMAGE;
@@ -153,7 +153,7 @@ public class Texturer {
 
     ImageView view  = new ImageView(image);
 
-    if (!currentEntity.getTypeId().equals(EntityType.EMPTY.toString())) {
+    if (!currentEntity.getType().equals("EMPTY")) {
       placeLocationOfView(currentEntity, view);
       textureGroup.getChildren().add(view);
     }
@@ -165,14 +165,14 @@ public class Texturer {
    * @param currentEntity the Entity whose texture is being placed in (x,y) space
    * @param view the ImageView representing that texture
    */
-  private void placeLocationOfView(Entity currentEntity, ImageView view) {
-    Rectangle2D.Float flo = currentEntity.getHitBox();
+  private void placeLocationOfView(IEntity currentEntity, ImageView view) {
+    HitBox hitBox = currentEntity.getHitBox();
 
-    view.setX(flo.x * WIDTH/ numBlocksWide);
-    view.setY(flo.y * HEIGHT/ numBlocksHigh);
+    view.setX(hitBox.getXLeft() * WIDTH/ numBlocksWide);
+    view.setY(hitBox.getYTop() * HEIGHT/ numBlocksHigh);
     view.setFitWidth(WIDTH/ numBlocksWide);
     view.setFitHeight(HEIGHT/ numBlocksHigh);
-    view.setId(currentEntity.getTypeId() + "x" + (int)flo.x + "y" + (int)flo.y);
+    view.setId(currentEntity.getType() + "x" + (int)hitBox.getXLeft() + "y" + (int)hitBox.getYTop());
   }
 
   /**

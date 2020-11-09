@@ -1,32 +1,26 @@
 package model.entity;
 
-import java.awt.geom.Rectangle2D;
+import model.HitBox;
 
 public interface IEntity {
 
-  boolean shouldCheckCollisions();
+    HitBox getHitBox();
 
-  boolean affectedByGravity();
+    boolean checkCollision(IEntity entity);
 
-  boolean isGrounded();
+    void setXVel(double xVel);
 
-  boolean isEmpty();
+    void setYVel(double yVel);
 
-  boolean hasMatchingId();
+    double getYVel();
 
-  String getId();
+    String getType();
 
-  String getTypeId();
+    double getXVel();
 
-  Rectangle2D.Float getHitBox();
+    default void moveOneStep(){
+        this.getHitBox().translateX(this.getXVel());
+        this.getHitBox().translateY(this.getYVel());
+    }
 
-  boolean checkCollision();
-
-  void setXVel();
-
-  float getYVel();
-
-  void setYVel();
-
-  void moveOneStep();
 }

@@ -1,15 +1,13 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import model.configuration.LevelLoader;
-import model.entity.EmptyEntity;
-import model.entity.Entity;
-import model.entity.EntityType;
-import model.entity.IEntityType;
+import model.entity.Block;
+import model.entity.Enemy;
+import model.entity.IEntity;
+import model.entity.Player;
+import model.entity.PowerUp;
+import org.assertj.core.annotations.Nullable;
 
 // Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
 // stop the player from moving indefinitely when left or right is pressed and I created a method
@@ -23,18 +21,26 @@ public class Level {
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
+
+
+  private List<Player> playerList;
+  private List<Enemy> enemyList;
+  private List<PowerUp> powerUpList;
+  private List<Block> blockList;
+  private List<IEntity> entityList;
+
+  private float gravityFactor = 0.2f;
   private int levelLength;
   private int levelWidth;
 
-  private Map<IEntityType, ArrayList<Entity>> allEntityMap = new HashMap<>();
-  private List<Entity> allEntityList = new ArrayList<>();
-
-  private float gravityFactor = 0.2f;
-
   public Level(LevelLoader levelLoader) {
-    levelLength = levelLoader.getMaxArrayLength();
-    levelWidth = levelLoader.getMaxArrayWidth();
-    this.buildEntityMap(levelLoader.getLevelMatrix());
+    this.playerList = levelLoader.getPlayerList();
+    this.enemyList = levelLoader.getEnemyList();
+    this.blockList = levelLoader.getBlockList();
+    this.powerUpList = levelLoader.getPowerUpList();
+    this.entityList = levelLoader.getEntityList();
+    this.levelLength = levelLoader.getLevelLength();
+    this.levelWidth = levelLoader.getLevelWidth();
   }
 
   public int getLevelLength() {
@@ -45,49 +51,46 @@ public class Level {
     return this.levelWidth;
   }
 
-  /*private void buildEntityList(ArrayList<ArrayList<IEntityType>> levelMatrix){
-    for(int i = 0; i < levelMatrix.size(); i++){
-      ArrayList<IEntityType> currentRow = levelMatrix.get(i);
-      for(int j = 0; j < currentRow.size(); j++){
-        IEntityType entityValue = currentRow.get(j);
-        EntityFactory entityFactory = new EntityFactory();
-        Entity entity = entityFactory.createEntity(entityValue, j, i);
-        this.allEntities.put(entity.getEntityType(), entity);
-        placeEntity(entity);
-      }
+  private void addEntity(IEntity entity) {
+    entityList.add(entity);
+    if (entity instanceof Block) {
+      blockList.add((Block)entity);
     }
-  }*/
-
-  private void buildEntityMap(ArrayList<ArrayList<IEntityType>> levelMatrix){
-    for(int i = 0; i < levelMatrix.size(); i++){
-      ArrayList<IEntityType> currentRow = levelMatrix.get(i);
-      for(int j = 0; j < currentRow.size(); j++){
-        IEntityType entityValue = currentRow.get(j);
-        EntityFactory entityFactory = new EntityFactory();
-        Entity entity = entityFactory.createEntity(entityValue, j, i);
-        ArrayList entitiesOfType = allEntityMap.getOrDefault(entity.getEntityType(), new ArrayList<>());
-        entitiesOfType.add(entity);
-        this.allEntityMap.put(entity.getEntityType(), entitiesOfType);
-      }
+    if (entity instanceof Enemy) {
+      enemyList.add((Enemy)entity);
+    }
+    if (entity instanceof Player) {
+      playerList.add((Player)entity);
+    }
+    if (entity instanceof PowerUp) {
+      powerUpList.add((PowerUp)entity);
     }
   }
 
-  public Entity getEntity(int xCoordinate, int yCoordinate) {
-    for(Entity entity : getAllEntityMap()){
-      if(entity.getHitBox().x == xCoordinate && entity.getHitBox().y == yCoordinate){
-        return entity;
-      }
+  private void removeEntity(IEntity entity) {
+    entityList.remove(entity);
+    if (entity instanceof Block) {
+      blockList.remove(entity);
     }
-    return EmptyEntity.INSTANCE;
+    if (entity instanceof Enemy) {
+      enemyList.remove(entity);
+    }
+    if (entity instanceof Player) {
+      playerList.remove(entity);
+    }
+    if (entity instanceof PowerUp) {
+      powerUpList.remove(entity);
+    }
   }
 
-  public Entity getEntity(IEntityType entityType, int xCoordinate, int yCoordinate){
-    for(Entity entity : allEntityMap.get(entityType)){
-      if(entity.hasMatchingId(entityType, xCoordinate, yCoordinate)){
+  @Nullable
+  public IEntity getEntityAt(int xCoordinate, int yCoordinate) {
+    for(IEntity entity : entityList){
+      if(entity.getHitBox().getXLeft() == xCoordinate && entity.getHitBox().getYTop() == yCoordinate){
         return entity;
       }
     }
-    return EmptyEntity.INSTANCE;
+    return null;
   }
 
   public void step() {
@@ -99,59 +102,57 @@ public class Level {
     }
   }
 
-
-  //redo this to get the enums that need to check collisions
-  private void checkCollisions(){
-    for(int i = 0; i < this.allEntityMap.size(); i++){
-      Entity currentEntity = this.allEntityMap.get(i);
-      if(currentEntity.shouldCheckCollisions()){
-        for(int j = 0; j < this.allEntityMap.size(); j++){
-          boolean otherEntityIsCurrentEntity = j == i;
-          if(otherEntityIsCurrentEntity) continue;
-          Entity otherEntity = this.allEntityMap.get(i);
-          currentEntity.checkCollision(otherEntity);
+  public void checkCollisions(){
+    for(Player player : this.playerList){
+      for(IEntity otherEntity : this.entityList){
+        if(!player.equals(otherEntity)){
+          player.checkCollision(otherEntity);
         }
       }
     }
   }
 
-
-
   private void updateEntities() {
     checkForKeyPresses();
-    applyGravity();
+    //applyGravity();
   }
 
 
   private void checkForKeyPresses() {
-    Entity playerEntity = allEntityMap.get(EntityType.PLAYER).get(0);
-    if (keyPressFunctions.isPlayerMovingRight()) {
-      playerEntity.setXVel(MOVEMENT_SPEED);
-    } else if (keyPressFunctions.isPlayerMovingLeft()) {
-      playerEntity.setXVel(MOVEMENT_SPEED * -1);
-    } else {
-      playerEntity.setXVel(0);
+    if(!playerList.isEmpty()){
+      Player playerEntity = playerList.get(0);
+      if (keyPressFunctions.isPlayerMovingRight()) {
+        playerEntity.setXVel(MOVEMENT_SPEED);
+      } else if (keyPressFunctions.isPlayerMovingLeft()) {
+        playerEntity.setXVel(MOVEMENT_SPEED * -1);
+      } else {
+        playerEntity.setXVel(0);
+      }
+      if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
+        playerEntity.setYVel(JUMP_SPEED);
+        //playerEntity.setOnGround(false);
+      }
     }
-    if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
-      playerEntity.setYVel(JUMP_SPEED);
-      //playerEntity.setOnGround(false);
+    else{
+      // TODO: Missing player exception?
     }
   }
 
   public void applyGravity() {
-    /*if (playerEntity.affectedByGravity() && !playerEntity.isGrounded()) {
-      playerEntity.setYVel(playerEntity.getYVel() + gravityFactor);
-    }*/
-    /*for (Entity entity : allEntities) {
-      if (entity.affectedByGravity() && !entity.isGrounded()) {
-        entity.setYVel(entity.getYVel() - gravityFactor);
+    //note: add enemies to this later
+    for(Player player : this.playerList){
+      if(!player.isGrounded()){
+        player.setYVel(player.getYVel() - gravityFactor);
       }
-    }*/
+    }
   }
 
   private void moveEntities(){
-    //playerEntity.moveOneStep();
-  };
+    if(!playerList.isEmpty()) {
+      Player playerEntity = playerList.get(0);
+      playerEntity.moveOneStep();
+    }
+  }
 
   private void checkWinCondition(){};
 
@@ -172,26 +173,8 @@ public class Level {
     return keyPressFunctions;
   }
 
-  /**
-   * Returns all of the entities in the Level - however, we defensively copy them into a separate
-   * list to avoid aliasing issues
-   * @return a defensive copy of allEntities
-   */
-  public List<Entity> getAllEntityMap() {
-    List<Entity> allEntityList = new ArrayList<>();
-    Collection<ArrayList<Entity>> entityLists = this.allEntityMap.values();
-    for (ArrayList<Entity> entityList : entityLists) {
-      allEntityList.addAll(entityList);
-    }
-    return allEntityList;
-  }
-
-  public List<Entity> getAllEntitiesOfType(List<IEntityType> desiredEntityTypes) {
-    List<Entity> allEntitiesOfType = new ArrayList<>();
-    for (IEntityType type : desiredEntityTypes) {
-      allEntitiesOfType.addAll(allEntityMap.get(type));
-    }
-    return allEntitiesOfType;
+  public List<IEntity> getAllEntities() {
+    return entityList;
   }
 
 }

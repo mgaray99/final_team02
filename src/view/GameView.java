@@ -18,7 +18,7 @@ import javafx.util.Duration;
 import model.GameModel;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
-import model.entity.Entity;
+import model.entity.IEntity;
 import view.scenes.PlayGameScene;
 
 /**
@@ -87,7 +87,7 @@ public class GameView extends Application {
   private void update() {
     model.updateGame();
 
-    List<Entity> entityList = model.getAllEntitiesInLevel();
+    List<IEntity> entityList = model.getAllEntitiesInLevel();
     texturer.updateTextures(entityList, 15, 15);
   }
 

@@ -1,11 +1,5 @@
 package model.entity;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import model.GameModel;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
 
@@ -13,7 +7,7 @@ import util.DukeApplicationTest;
  * Tests whether the PlayerEntity can actually move
  */
 public class PlayerMovementTest extends DukeApplicationTest {
-
+/*
   private static final String TEST_LEVEL_FILE_PATH = "playerMovementTestLevel.properties";
 
   GameModel gameModel = new GameModel(new GameConfiguration(TEST_LEVEL_FILE_PATH, this.getClass()));
@@ -74,5 +68,5 @@ public class PlayerMovementTest extends DukeApplicationTest {
     double newYPos = playerEntity.getHitBox().getY();
     assertTrue(Math.abs(newYPos - oldYPos) < 0.01);
   }
-
+*/
 }
