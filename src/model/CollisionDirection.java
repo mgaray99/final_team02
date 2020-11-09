@@ -1,6 +1,6 @@
 package model;
 
-public enum CollisionDirections {
+public enum CollisionDirection {
   RIGHT,
   LEFT,
   TOP,

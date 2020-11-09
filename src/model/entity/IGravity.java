@@ -2,5 +2,6 @@ package model.entity;
 
 public interface IGravity {
 
-  boolean isGrounded();
+  boolean getGrounded();
+  void setGrounded(boolean grounded);
 }
