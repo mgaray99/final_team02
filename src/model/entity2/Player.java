@@ -25,7 +25,6 @@ public class Player implements IEntity, IGravity {
 
     @Override
     public void setXVel(double xVel) {
-
     }
 
     @Override

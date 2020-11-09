@@ -1,5 +1,13 @@
 package model;
 
+/**
+ * A HitBox class for the entities.
+ * Essentially a non-JavaFX version of a Rectangle.
+ * It is also capable of detecting collisions with other HitBoxes,
+ * and returning the direction of the collision.
+ * @author Ryan Krakower
+ */
+
 public class HitBox {
 
   public static final int X_SIZE = 10;
