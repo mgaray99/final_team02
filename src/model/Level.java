@@ -29,7 +29,7 @@ public class Level {
   private List<Block> blockList;
   private List<IEntity> entityList;
 
-  private float gravityFactor = 0.2f;
+  private float gravityFactor = 0.25f;
   private int levelLength;
   private int levelWidth;
 
@@ -114,7 +114,7 @@ public class Level {
 
   private void updateEntities() {
     checkForKeyPresses();
-    //applyGravity();
+    applyGravity();
   }
 
 
@@ -128,9 +128,9 @@ public class Level {
       } else {
         playerEntity.setXVel(0);
       }
-      if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
+      if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
         playerEntity.setYVel(JUMP_SPEED);
-        //playerEntity.setOnGround(false);
+        playerEntity.setGrounded(false);
       }
     }
     else{
@@ -141,8 +141,8 @@ public class Level {
   public void applyGravity() {
     //note: add enemies to this later
     for(Player player : this.playerList){
-      if(!player.isGrounded()){
-        player.setYVel(player.getYVel() - gravityFactor);
+      if(!player.getGrounded()){
+        player.setYVel(player.getYVel() + gravityFactor);
       }
     }
   }
@@ -176,5 +176,7 @@ public class Level {
   public List<IEntity> getAllEntities() {
     return entityList;
   }
+
+  public List<Player> getPlayerList() {return playerList;}
 
 }

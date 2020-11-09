@@ -5,6 +5,7 @@ import model.HitBox;
 public class Enemy implements IEntity, IGravity{
     private HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
+    private boolean grounded;
 
 
     public Enemy(double x, double y){
@@ -17,8 +18,7 @@ public class Enemy implements IEntity, IGravity{
     }
 
     @Override
-    public boolean checkCollision(IEntity entity) {
-        return false;
+    public void checkCollision(IEntity entity) {
     }
 
     @Override
@@ -47,7 +47,12 @@ public class Enemy implements IEntity, IGravity{
     }
 
     @Override
-    public boolean isGrounded() {
-        return false;
+    public boolean getGrounded() {
+        return grounded;
+    }
+
+    @Override
+    public void setGrounded(boolean grounded) {
+        this.grounded = grounded;
     }
 }

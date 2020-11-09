@@ -1,5 +1,11 @@
 package model.entity;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import model.GameModel;
+import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
+import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
 
@@ -7,11 +13,11 @@ import util.DukeApplicationTest;
  * Tests whether the PlayerEntity can actually move
  */
 public class PlayerMovementTest extends DukeApplicationTest {
-/*
+
   private static final String TEST_LEVEL_FILE_PATH = "playerMovementTestLevel.properties";
 
   GameModel gameModel = new GameModel(new GameConfiguration(TEST_LEVEL_FILE_PATH, this.getClass()));
-  PlayerEntity playerEntity = gameModel.getLevel().getPlayerEntity();
+  Player player = gameModel.getLevel().getPlayerList().get(0);
 
   public PlayerMovementTest() throws InvalidFileException {
   }
@@ -19,29 +25,30 @@ public class PlayerMovementTest extends DukeApplicationTest {
 
   @Test
   public void PlayerMoveLeftTest() {
-    double oldXPos = playerEntity.getHitBox().getX();
+    double oldXPos = player.getHitBox().getXLeft();
     gameModel.getKeyPressFunctions().startMovingPlayerLeft();
     gameModel.getLevel().step();
-    double newXPos = playerEntity.getHitBox().getX();
+    double newXPos = player.getHitBox().getXLeft();
     assertTrue(newXPos < oldXPos);
   }
 
   @Test
   public void PlayerMoveRightTest() {
-    double oldXPos = playerEntity.getHitBox().getX();
+    double oldXPos = player.getHitBox().getXLeft();
     gameModel.getKeyPressFunctions().startMovingPlayerRight();
     gameModel.getLevel().step();
-    double newXPos = playerEntity.getHitBox().getX();
+    double newXPos = player.getHitBox().getXLeft();
     assertTrue(newXPos > oldXPos);
   }
 
   @Test
   public void PlayerJumpPlayerGoesUpTest() {
-    double oldYPos = playerEntity.getHitBox().getY();
+    double oldYPos = player.getHitBox().getYTop();
     gameModel.getKeyPressFunctions().startPlayerJumping();
     gameModel.getLevel().step();
-    double newYPos = playerEntity.getHitBox().getY();
-    assertTrue(newYPos > oldYPos);
+    gameModel.getLevel().step();
+    double newYPos = player.getHitBox().getYTop();
+    assertTrue(newYPos < oldYPos);
   }
 
   @Test
@@ -50,23 +57,22 @@ public class PlayerMovementTest extends DukeApplicationTest {
     for(int i=0; i < 5; i++) {
       gameModel.getLevel().step();
     }
-    double oldYPos = playerEntity.getHitBox().getY();
+    double oldYPos = player.getHitBox().getYTop();
     for(int i=0; i < 200; i++) {
       gameModel.getLevel().step();
     }
-    double newYPos = playerEntity.getHitBox().getY();
-    assertTrue(newYPos < oldYPos);
+    double newYPos = player.getHitBox().getYTop();
+    assertTrue(newYPos > oldYPos);
   }
 
   @Test
   public void PlayerJumpStopsAtGroundTest() {
-    double oldYPos = playerEntity.getHitBox().getY();
+    double oldYPos = player.getHitBox().getYTop();
     gameModel.getKeyPressFunctions().startPlayerJumping();
     for(int i=0; i < 200; i++) {
       gameModel.getLevel().step();
     }
-    double newYPos = playerEntity.getHitBox().getY();
-    assertTrue(Math.abs(newYPos - oldYPos) < 0.01);
+    double newYPos = player.getHitBox().getYTop();
+    assertTrue(Math.abs(newYPos - oldYPos) < 1);
   }
-*/
 }
