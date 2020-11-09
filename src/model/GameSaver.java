@@ -17,6 +17,7 @@ public class GameSaver {
 
     private static final String CSV_EXTENSION = ".csv";
     private static final int DEFAULT_ENTITY_KEY = 0;
+    public static final String EMPTY = "EMPTY";
     private Level currentLevel;
 
     /**
@@ -63,7 +64,7 @@ public class GameSaver {
             StringBuilder currentRow = new StringBuilder();
             for(int j = 0; j < currentLevel.getLevelWidth(); j++){
                 IEntity entity = currentLevel.getEntityAt(j, i);
-                String entityTypeString = null;
+                String entityTypeString = EMPTY;
                 if (entity != null) {
                     entityTypeString = entity.getType();
                 }

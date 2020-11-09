@@ -23,7 +23,7 @@ import java.util.Scanner;
  */
 
 public class LevelLoader {
-    private static final String ENTITY_PACKAGE_PATH = "src.model.entity2.";
+    private static final String ENTITY_PACKAGE_PATH = "model.entity2.";
     private final List<Player> playerList = new ArrayList<>();
     private final List<Enemy> enemyList = new ArrayList<>();
     private final List<PowerUp> powerUpList = new ArrayList<>();
