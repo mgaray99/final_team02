@@ -25,7 +25,7 @@ public class RandomGeneration extends GenerationInstruction {
 
   /**
    * Builds a constant instruction based on a String array. The array should be specified as follows
-   * args[0] = type (i.e. "Constant")
+   * args[0] = type (i.e. "Random")
    * args[1] = entity type (i.e. "2" for enemy)
    *
    * args[2] = direction that this random instruction builds in (i.e. LEFT:UP)
@@ -37,9 +37,9 @@ public class RandomGeneration extends GenerationInstruction {
    *
    * args[5] = width specification in the form of a Randomizer String
    * args[6] = height specification in the form of a Randomizer String
-   * Note, a randomizer String is R(1, 2, 3; 0.50, 0.30, 0.20) where the set of arguments before the
+   * Note, a randomizer String is R(1,2,3;0.50,0.30,0.20) where the set of arguments before the
    * semi colon is the set of valid values and the set of arguments after the semi-colon is the
-   * set of probabilities corresponding to those values
+   * set of probabilities corresponding to each of those values
    *
    * In this case we would generate 1 with probability 0.50, 2 with probability 0.30 and 3 with
    * probability 0.20
