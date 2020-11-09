@@ -5,11 +5,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
-import model.entity2.Block;
-import model.entity2.Enemy;
-import model.entity2.IEntity;
-import model.entity2.Player;
-import model.entity2.PowerUp;
+import model.entity.Block;
+import model.entity.Enemy;
+import model.entity.IEntity;
+import model.entity.Player;
+import model.entity.PowerUp;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -23,7 +23,7 @@ import java.util.Scanner;
  */
 
 public class LevelLoader {
-    private static final String ENTITY_PACKAGE_PATH = "model.entity2.";
+    private static final String ENTITY_PACKAGE_PATH = "model.entity.";
     private final List<Player> playerList = new ArrayList<>();
     private final List<Enemy> enemyList = new ArrayList<>();
     private final List<PowerUp> powerUpList = new ArrayList<>();
@@ -85,21 +85,21 @@ public class LevelLoader {
     private void initializeEntityLists(File levelFileIn) throws InvalidFileException {
         try {
             Scanner fileReader = new Scanner(levelFileIn);
-            int rowCounter = 0;
+            int yCounter = 0;
             while (fileReader.hasNextLine()) {
                 String currentLine = fileReader.nextLine();
                 String[] currentStringArray = currentLine.split(",");
-                for (int colIndex = 0; colIndex < currentStringArray.length; colIndex++) {
-                    String entityString = currentStringArray[colIndex];
-                    this.createAndAddEntity(entityString, colIndex, rowCounter);
-                    if(this.levelWidth < colIndex){
-                        this.levelWidth = colIndex;
+                for (int xIndex = 0; xIndex < currentStringArray.length; xIndex++) {
+                    String entityString = currentStringArray[xIndex];
+                    this.createAndAddEntity(entityString, xIndex, yCounter);
+                    if(this.levelWidth < xIndex+1){
+                        this.levelWidth = xIndex+1;
                     }
 
                 }
-                rowCounter++;
+                yCounter++;
             }
-            this.levelLength = rowCounter;
+            this.levelLength = yCounter;
             fileReader.close();
         } catch (FileNotFoundException e) {
             throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());

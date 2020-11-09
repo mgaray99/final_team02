@@ -1,4 +1,4 @@
-package model.entity2;
+package model.entity;
 
 public interface IGravity {
 

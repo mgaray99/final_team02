@@ -1,4 +1,4 @@
-package model.entity2;
+package model.entity;
 
 import model.HitBox;
 
@@ -17,4 +17,10 @@ public interface IEntity {
     String getType();
 
     double getXVel();
+
+    default void moveOneStep(){
+        this.getHitBox().translateX(this.getXVel());
+        this.getHitBox().translateY(this.getYVel());
+    }
+
 }

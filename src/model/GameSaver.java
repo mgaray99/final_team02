@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import model.configuration.FileHelper;
 import model.configuration.LevelDecoder;
-import model.entity2.IEntity;
+import model.entity.IEntity;
 
 /**
  * A class responsible for writing an existing state of the simulation to a CSV file
@@ -60,10 +60,10 @@ public class GameSaver {
         LevelDecoder levelDecoder = new LevelDecoder();
         Map<String, String> levelDecoderMap = levelDecoder.getIdToEntityMap();
         FileWriter seedCSVWriter = new FileWriter(fileNameToWrite);
-        for(int i = 0; i < currentLevel.getLevelLength(); i++){
+        for(int yIndex = 0; yIndex < currentLevel.getLevelLength(); yIndex++){
             StringBuilder currentRow = new StringBuilder();
-            for(int j = 0; j < currentLevel.getLevelWidth(); j++){
-                IEntity entity = currentLevel.getEntityAt(j, i);
+            for(int xIndex = 0; xIndex < currentLevel.getLevelWidth(); xIndex++){
+                IEntity entity = currentLevel.getEntityAt(xIndex, yIndex);
                 String entityTypeString = EMPTY;
                 if (entity != null) {
                     entityTypeString = entity.getType();
@@ -77,12 +77,12 @@ public class GameSaver {
                 else{
                     currentRow.append(DEFAULT_ENTITY_KEY);
                 }
-                if(j < currentLevel.getLevelWidth() - 1){
+                if(xIndex < currentLevel.getLevelWidth() - 1){
                     currentRow.append(",");
                 }
             }
             seedCSVWriter.append(currentRow);
-            if(i < currentLevel.getLevelLength() - 1){
+            if(yIndex < currentLevel.getLevelLength() - 1){
                 seedCSVWriter.append("\n");
             }
         }

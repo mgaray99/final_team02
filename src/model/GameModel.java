@@ -6,7 +6,7 @@ import java.util.List;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
-import model.entity2.IEntity;
+import model.entity.IEntity;
 
 public class GameModel {
 

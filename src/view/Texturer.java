@@ -17,8 +17,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import model.HitBox;
-import model.entity.EntityType;
-import model.entity2.IEntity;
+import model.entity.IEntity;
 
 public class Texturer {
   private Map<String, ImageView> textureMap;
@@ -154,7 +153,7 @@ public class Texturer {
 
     ImageView view  = new ImageView(image);
 
-    if (!currentEntity.getType().equals(EntityType.EMPTY.toString())) {
+    if (!currentEntity.getType().equals("EMPTY")) {
       placeLocationOfView(currentEntity, view);
       textureGroup.getChildren().add(view);
     }
