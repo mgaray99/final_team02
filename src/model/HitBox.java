@@ -27,6 +27,14 @@ public class HitBox {
     return xLeft;
   }
 
+  public int getXSize() {
+    return xSize;
+  }
+
+  public int getYSize() {
+    return ySize;
+  }
+
   public double getXRight() {
     return xLeft + xSize;
   }

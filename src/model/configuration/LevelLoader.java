@@ -5,9 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
-import model.entity.IEntity;
 import model.entity2.Block;
 import model.entity2.Enemy;
+import model.entity2.IEntity;
 import model.entity2.Player;
 import model.entity2.PowerUp;
 import org.jetbrains.annotations.Nullable;

@@ -1,7 +1,6 @@
 package model.entity2;
 
 import model.HitBox;
-import model.entity.IEntityType;
 
 public interface IEntity {
 
@@ -9,4 +8,13 @@ public interface IEntity {
 
     boolean checkCollision(IEntity entity);
 
+    void setXVel(double xVel);
+
+    void setYVel(double yVel);
+
+    double getYVel();
+
+    String getType();
+
+    double getXVel();
 }

@@ -1,14 +1,13 @@
 package model;
 
-import model.configuration.FileHelper;
-import model.configuration.LevelDecoder;
-import model.entity.IEntityType;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+import model.configuration.FileHelper;
+import model.configuration.LevelDecoder;
+import model.entity2.IEntity;
 
 /**
  * A class responsible for writing an existing state of the simulation to a CSV file
@@ -63,8 +62,11 @@ public class GameSaver {
         for(int i = 0; i < currentLevel.getLevelLength(); i++){
             StringBuilder currentRow = new StringBuilder();
             for(int j = 0; j < currentLevel.getLevelWidth(); j++){
-                IEntityType entityType = currentLevel.getEntityAt(j, i).getEntityType();
-                String entityTypeString = entityType.getTypeID();
+                IEntity entity = currentLevel.getEntityAt(j, i);
+                String entityTypeString = null;
+                if (entity != null) {
+                    entityTypeString = entity.getType();
+                }
                 Stream<String> matchingKeysForEntity = getMatchingKeysForValue(levelDecoderMap, entityTypeString);
                 // Use the first key found, regardless of if there are multiple
                 Optional<String> optionalEntityDecoderKey = matchingKeysForEntity.findFirst();

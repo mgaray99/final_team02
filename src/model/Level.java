@@ -1,15 +1,13 @@
 package model;
 
+import java.util.List;
 import model.configuration.LevelLoader;
-import model.entity.*;
 import model.entity2.Block;
 import model.entity2.Enemy;
+import model.entity2.IEntity;
 import model.entity2.Player;
 import model.entity2.PowerUp;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import org.assertj.core.annotations.Nullable;
 
 // Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
 // stop the player from moving indefinitely when left or right is pressed and I created a method
@@ -53,33 +51,46 @@ public class Level {
     return this.levelWidth;
   }
 
-  private void addEntity(Entity entity) {
-    this.entityList.add(entity);
-    if(entity.getEntityType().shouldCheckCollisions()){
-      this.collidableEntities.add(entity);
+  private void addEntity(IEntity entity) {
+    entityList.add(entity);
+    if (entity instanceof Block) {
+      blockList.add((Block)entity);
     }
-    if(entity.getEntityType().isAffectedByGravity()){
-      this.gravityEntities.add(entity);
+    if (entity instanceof Enemy) {
+      enemyList.add((Enemy)entity);
     }
-  }
-
-  public void removeEntity(Entity entityToRemove){
-    this.allEntityList.remove(entityToRemove);
-    if(entityToRemove.getEntityType().shouldCheckCollisions()){
-      this.collidableEntities.remove(entityToRemove);
+    if (entity instanceof Player) {
+      playerList.add((Player)entity);
     }
-    if(entityToRemove.getEntityType().isAffectedByGravity()){
-      this.gravityEntities.remove(entityToRemove);
+    if (entity instanceof PowerUp) {
+      powerUpList.add((PowerUp)entity);
     }
   }
 
-  public Entity getEntityAt(int xCoordinate, int yCoordinate) {
-    for(Entity entity : getAllEntitiesInMapAsList()){
-      if(entity.getHitBox().x == xCoordinate && entity.getHitBox().y == yCoordinate){
+  private void removeEntity(IEntity entity) {
+    entityList.remove(entity);
+    if (entity instanceof Block) {
+      blockList.remove(entity);
+    }
+    if (entity instanceof Enemy) {
+      enemyList.remove(entity);
+    }
+    if (entity instanceof Player) {
+      playerList.remove(entity);
+    }
+    if (entity instanceof PowerUp) {
+      powerUpList.remove(entity);
+    }
+  }
+
+  @Nullable
+  public IEntity getEntityAt(int xCoordinate, int yCoordinate) {
+    for(IEntity entity : entityList){
+      if(entity.getHitBox().getXLeft() == xCoordinate && entity.getHitBox().getYTop() == yCoordinate){
         return entity;
       }
     }
-    return EmptyEntity.INSTANCE;
+    return null;
   }
 
   public void step() {
@@ -92,10 +103,10 @@ public class Level {
   }
 
   public void checkCollisions(){
-    for(Entity entity : this.collidableEntities){
-      for(Entity otherEntity : this.allEntityList){
-        if(!entity.equals(otherEntity)){
-          entity.checkCollision(otherEntity);
+    for(Player player : this.playerList){
+      for(IEntity otherEntity : this.entityList){
+        if(!player.equals(otherEntity)){
+          player.checkCollision(otherEntity);
         }
       }
     }
@@ -108,9 +119,8 @@ public class Level {
 
 
   private void checkForKeyPresses() {
-    ArrayList<Entity> playerEntities = allEntityMap.get(EntityType.PLAYER);
-    if(!playerEntities.isEmpty()){
-      Entity playerEntity = playerEntities.get(0);
+    if(!playerList.isEmpty()){
+      Player playerEntity = playerList.get(0);
       if (keyPressFunctions.isPlayerMovingRight()) {
         playerEntity.setXVel(MOVEMENT_SPEED);
       } else if (keyPressFunctions.isPlayerMovingLeft()) {
@@ -129,9 +139,10 @@ public class Level {
   }
 
   public void applyGravity() {
-    for(Entity entity : this.gravityEntities){
-      if(!entity.isGrounded()){
-        entity.setYVel(entity.getYVel() - gravityFactor);
+    //note: add enemies to this later
+    for(Player player : this.playerList){
+      if(!player.isGrounded()){
+        player.setYVel(player.getYVel() - gravityFactor);
       }
     }
   }
@@ -159,26 +170,8 @@ public class Level {
     return keyPressFunctions;
   }
 
-  /**
-   * Returns all of the entities in the Level - however, we defensively copy them into a separate
-   * list to avoid aliasing issues
-   * @return a defensive copy of allEntities
-   */
-  public List<Entity> getAllEntitiesInMapAsList() {
-    List<Entity> allEntityList = new ArrayList<>();
-    Collection<ArrayList<Entity>> entityLists = this.allEntityMap.values();
-    for (ArrayList<Entity> entityList : entityLists) {
-      allEntityList.addAll(entityList);
-    }
-    return allEntityList;
-  }
-
-  public List<Entity> getAllEntitiesOfType(List<IEntityType> desiredEntityTypes) {
-    List<Entity> allEntitiesOfType = new ArrayList<>();
-    for (IEntityType type : desiredEntityTypes) {
-      allEntitiesOfType.addAll(allEntityMap.get(type));
-    }
-    return allEntitiesOfType;
+  protected List<IEntity> getAllEntities() {
+    return entityList;
   }
 
 }

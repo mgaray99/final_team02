@@ -1,6 +1,6 @@
 package view;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +8,11 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.EntityFactory;
-import model.entity.BarrierBlockEntity;
-import model.entity.BreakableBlockEntity;
-import model.entity.EmptyEntity;
-import model.entity.Entity;
-import model.entity.EntityType;
-import model.entity.IEntityType;
-import model.entity.PlayerEntity;
-import org.jetbrains.annotations.NotNull;
-import util.DukeApplicationTest;
+import model.entity2.Block;
+import model.entity2.IEntity;
+import model.entity2.Player;
 import org.junit.jupiter.api.Test;
+import util.DukeApplicationTest;
 
 
 /**
@@ -27,7 +22,7 @@ public class TexturerTest extends DukeApplicationTest{
 
   private Group textureNode;
   private Texturer texturer;
-  private List<Entity> entityList;
+  private List<IEntity> entityList;
   private EntityFactory factory;
 
   private static final double DEFAULT_BLOCKS_WIDE = 10;
@@ -51,7 +46,7 @@ public class TexturerTest extends DukeApplicationTest{
    */
   @Test
   public void testSimpleTexture() {
-      PlayerEntity pe = (PlayerEntity)factory.createEntity(EntityType.PLAYER, 2,3);
+      Player pe = new Player(2,3);
       entityList.add(pe);
 
       texturer.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,
@@ -67,34 +62,12 @@ public class TexturerTest extends DukeApplicationTest{
   }
 
   /**
-   * Tests that the texturer does not texture EMPTY EntityViews into the textureGroup node
-   */
-  @Test
-  public void testNoEmptyTextures() {
-    PlayerEntity pe = (PlayerEntity)factory.createEntity(EntityType.PLAYER, 2,3);
-    EmptyEntity ee = (EmptyEntity)factory.createEntity(EntityType.EMPTY, 1,3);
-    BreakableBlockEntity bbe = (BreakableBlockEntity)factory.createEntity
-        (EntityType.BREAKABLE_BLOCK, 3,3);
-    entityList.add(pe);
-    entityList.add(ee);
-    entityList.add(bbe);
-
-    texturer.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,
-        DEFAULT_BLOCKS_HIGH);
-    assertEquals(2, textureNode.getChildren().size());
-    assertNotNull(textureNode.lookup("#PLAYERx2y3"));
-    assertNotNull(textureNode.lookup("#BREAKABLE_BLOCKx3y3"));
-    assertNull(textureNode.lookup("#EMPTYx1y3"));
-  }
-
-  /**
    * Tests that the texturer does not break when given a bad texture file
    */
   @Test
   public void testBadTextureFile() {
     Texturer badFile = new Texturer(WIDTH, HEIGHT, "hi", textureNode);
-    BarrierBlockEntity bbe = (BarrierBlockEntity)
-        factory.createEntity(EntityType.BARRIER_BLOCK, 5,6);
+    Block bbe = new Block(5,6);
     entityList.add(bbe);
 
     badFile.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,
