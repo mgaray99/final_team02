@@ -5,7 +5,7 @@ import model.HitBox;
 import model.entity.IEntity;
 import model.entity.Player;
 
-public class ManualScroller extends Scroller {
+public class ManualScroller implements Scroller {
     private boolean scrollsX;
     private boolean scrollsY;
 

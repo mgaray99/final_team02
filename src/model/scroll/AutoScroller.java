@@ -5,7 +5,7 @@ import model.HitBox;
 import model.entity.IEntity;
 import model.entity.Player;
 
-public class AutoScroller extends Scroller{
+public class AutoScroller implements Scroller{
     protected double xScroll;
     protected double yScroll;
 
