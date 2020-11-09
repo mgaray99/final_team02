@@ -17,6 +17,7 @@ public class Level {
   //private final List<Entity> allEntities = new ArrayList<>();
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
   private final int MOVEMENT_SPEED = 1;
+  private final double ENEMY_MOVEMENT_SPEED = 0.1;
   private final float JUMP_SPEED = -2f;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
@@ -86,7 +87,7 @@ public class Level {
   @Nullable
   public IEntity getEntityAt(int xCoordinate, int yCoordinate) {
     for(IEntity entity : entityList){
-      if(entity.getHitBox().getXLeft() == xCoordinate && entity.getHitBox().getYTop() == yCoordinate){
+      if((int)entity.getHitBox().getXLeft() == xCoordinate && (int)entity.getHitBox().getYTop() == yCoordinate){
         return entity;
       }
     }
@@ -151,6 +152,17 @@ public class Level {
     if(!playerList.isEmpty()) {
       Player playerEntity = playerList.get(0);
       playerEntity.moveOneStep();
+      if(!enemyList.isEmpty()){
+        for(Enemy enemy : enemyList){
+          if(playerEntity.getHitBox().getXLeft() < enemy.getHitBox().xLeft){
+            enemy.setXVel(ENEMY_MOVEMENT_SPEED * -1);
+          }
+          else if(playerEntity.getHitBox().getXLeft() > enemy.getHitBox().xLeft){
+            enemy.setXVel(ENEMY_MOVEMENT_SPEED);
+          }
+          enemy.moveOneStep();
+        }
+      }
     }
   }
 
