@@ -4,7 +4,7 @@ import model.HitBox;
 
 public class Enemy implements IEntity, IGravity{
     private HitBox hitBox;
-    private final String type = "Enemy";
+    private final String type = this.getClass().getSimpleName();
 
 
     public Enemy(double x, double y){

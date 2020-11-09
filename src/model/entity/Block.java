@@ -4,7 +4,7 @@ import model.HitBox;
 
 public class Block implements IEntity {
     private HitBox hitBox;
-    private final String type = "Block";
+    private final String type = this.getClass().getSimpleName();
 
 
     public Block(double x, double y){

@@ -4,7 +4,7 @@ import model.HitBox;
 
 public class PowerUp implements IEntity {
     private HitBox hitBox;
-    private final String type = "PowerUp";
+    private final String type = this.getClass().getSimpleName();
 
 
     public PowerUp(double x, double y){
