@@ -7,10 +7,9 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import model.EntityFactory;
-import model.entity2.Block;
-import model.entity2.IEntity;
-import model.entity2.Player;
+import model.entity.Block;
+import model.entity.IEntity;
+import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -23,7 +22,6 @@ public class TexturerTest extends DukeApplicationTest{
   private Group textureNode;
   private Texturer texturer;
   private List<IEntity> entityList;
-  private EntityFactory factory;
 
   private static final double DEFAULT_BLOCKS_WIDE = 10;
   private static final double DEFAULT_BLOCKS_HIGH = 10;
@@ -37,7 +35,6 @@ public class TexturerTest extends DukeApplicationTest{
     textureNode = new Group();
     entityList = new ArrayList<>();
     texturer = new Texturer(WIDTH, HEIGHT, PATH, textureNode);
-    factory = new EntityFactory();
   }
 
   /**

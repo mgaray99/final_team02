@@ -1,13 +1,16 @@
-package model.entity2;
+package model.entity;
 
 import model.HitBox;
 
-public class Block implements IEntity {
+public class Player implements IEntity, IGravity {
+
+    private final String type = "Player";
+
+    private double xVel = 0;
+    private double yVel = 0;
     private HitBox hitBox;
-    private final String type = "block";
 
-
-    public Block(double x, double y){
+    public Player(double x, double y){
         this.hitBox = new HitBox(x, y);
     }
 
@@ -24,17 +27,22 @@ public class Block implements IEntity {
 
     @Override
     public void setXVel(double xVel) {
-
+        this.xVel = xVel;
     }
 
     @Override
     public void setYVel(double yVel) {
+        this.yVel = yVel;
+    }
 
+    @Override
+    public double getXVel() {
+        return xVel;
     }
 
     @Override
     public double getYVel() {
-        return 0;
+        return yVel;
     }
 
     @Override
@@ -42,8 +50,9 @@ public class Block implements IEntity {
         return type;
     }
 
+
     @Override
-    public double getXVel() {
-        return 0;
+    public boolean isGrounded() {
+        return false;
     }
 }

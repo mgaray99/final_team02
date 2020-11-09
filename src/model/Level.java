@@ -2,11 +2,11 @@ package model;
 
 import java.util.List;
 import model.configuration.LevelLoader;
-import model.entity2.Block;
-import model.entity2.Enemy;
-import model.entity2.IEntity;
-import model.entity2.Player;
-import model.entity2.PowerUp;
+import model.entity.Block;
+import model.entity.Enemy;
+import model.entity.IEntity;
+import model.entity.Player;
+import model.entity.PowerUp;
 import org.assertj.core.annotations.Nullable;
 
 // Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
@@ -114,7 +114,7 @@ public class Level {
 
   private void updateEntities() {
     checkForKeyPresses();
-    applyGravity();
+    //applyGravity();
   }
 
 
@@ -148,8 +148,11 @@ public class Level {
   }
 
   private void moveEntities(){
-    //playerEntity.moveOneStep();
-  };
+    if(!playerList.isEmpty()) {
+      Player playerEntity = playerList.get(0);
+      playerEntity.moveOneStep();
+    }
+  }
 
   private void checkWinCondition(){};
 
@@ -170,7 +173,7 @@ public class Level {
     return keyPressFunctions;
   }
 
-  protected List<IEntity> getAllEntities() {
+  public List<IEntity> getAllEntities() {
     return entityList;
   }
 

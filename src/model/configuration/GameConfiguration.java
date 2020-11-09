@@ -22,6 +22,7 @@ public class GameConfiguration {
 
     private void setLevelFile() {
         String levelFileName = this.properties.getProperty(LEVEL_KEY);
+        //make exception here for when levelFileName is null
         if (levelFileName.contains(ROOT_SOURCE_INDICATOR)) {
             this.levelFile = new File(levelFileName);
         } else {

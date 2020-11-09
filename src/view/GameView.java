@@ -18,7 +18,7 @@ import javafx.util.Duration;
 import model.GameModel;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
-import model.entity2.IEntity;
+import model.entity.IEntity;
 import view.scenes.PlayGameScene;
 
 /**

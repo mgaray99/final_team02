@@ -1,10 +1,10 @@
-package model.entity2;
+package model.entity;
 
 import model.HitBox;
 
 public class PowerUp implements IEntity {
     private HitBox hitBox;
-    private final String type = "powerUp";
+    private final String type = "PowerUp";
 
 
     public PowerUp(double x, double y){

@@ -1,14 +1,13 @@
-package model.entity2;
+package model.entity;
 
 import model.HitBox;
 
-public class Player implements IEntity, IGravity {
-
-    private final String type = "player";
-
+public class Enemy implements IEntity, IGravity{
     private HitBox hitBox;
+    private final String type = "Enemy";
 
-    public Player(double x, double y){
+
+    public Enemy(double x, double y){
         this.hitBox = new HitBox(x, y);
     }
 
@@ -20,11 +19,11 @@ public class Player implements IEntity, IGravity {
     @Override
     public boolean checkCollision(IEntity entity) {
         return false;
-
     }
 
     @Override
     public void setXVel(double xVel) {
+
     }
 
     @Override
@@ -46,7 +45,6 @@ public class Player implements IEntity, IGravity {
     public double getXVel() {
         return 0;
     }
-
 
     @Override
     public boolean isGrounded() {
