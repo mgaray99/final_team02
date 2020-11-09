@@ -4,7 +4,7 @@ import model.HitBox;
 
 public class Player implements IEntity, IGravity {
 
-    private final String type = "Player";
+    private final String type = this.getClass().getSimpleName();
 
     private double xVel = 0;
     private double yVel = 0;
