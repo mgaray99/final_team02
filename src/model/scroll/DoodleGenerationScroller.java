@@ -11,12 +11,12 @@ public class DoodleGenerationScroller extends ManualScroller{
   private double flagY;
 
   public DoodleGenerationScroller(double left, double right, double up, double down,
-      int max, String path) {
+      String path) {
     super(left,right,up,down);
     helper = new AutoGenerationHelper(path);
 
-    GENERATE_MAX_BOUND = max;
-    flagY = max;
+    GENERATE_MAX_BOUND = -1 * helper.getAddedNumRows();
+    flagY = GENERATE_MAX_BOUND;
   }
 
   /**

@@ -7,15 +7,14 @@ import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
 import model.entity.IEntity;
+import model.scroll.Scroller;
+import model.scroll.ScrollerFactory;
 
 public class GameModel {
 
-    //public static final int FRAMES_PER_SECOND = 60;
-    //public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-
     private GameConfiguration gameConfiguration;
     private Level level;
-    private KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
+    private ScrollerFactory scrollerFactory;
 
     public GameModel() {}
 
@@ -24,6 +23,7 @@ public class GameModel {
         File levelFile = gameConfiguration.getLevelFile();
         LevelLoader levelLoader = new LevelLoader(levelFile);
         this.level = new Level(levelLoader);
+        setLevelScroller();
     }
 
     public KeyPressFunctions getKeyPressFunctions() {
@@ -35,10 +35,15 @@ public class GameModel {
     }
 
     /**
-     * Returns the level of this model
-     * @return level
+     * Sets the scroller on level to a specific Scroller based on the contents of the level
      */
-    public Level getLevel() { return this.level; }
+    private void setLevelScroller() {
+        scrollerFactory = new ScrollerFactory();
+        String[] scrollerArgs = gameConfiguration.getScrollerArgs();
+        String autoGenerationPath = gameConfiguration.getAutoGeneratorPath();
+        Scroller builtScroller = scrollerFactory.buildScroller(scrollerArgs, autoGenerationPath);
+        level.setScroller(builtScroller);
+    }
 
     /**
      * Returns a defensively copied list of all of the entities present in level
@@ -49,4 +54,27 @@ public class GameModel {
         defensivelyCopiedEntityList.addAll(level.getAllEntities());
         return defensivelyCopiedEntityList;
     }
+
+    /**
+     * Returns the String path to the .properties file containing data on key inputs
+     * @return the String keyInputsPath
+     */
+    public String getKeyInputsPath() {
+        return gameConfiguration.getKeyInputsPath();
+    }
+
+    /**
+     * Returns the String path to the .properties file containing data on textures
+     * @return the String texturesPath
+     */
+    public String getTexturesPath() {
+        return gameConfiguration.getTexturesPath();
+    }
+
+    /**
+     * Returns the level of this model
+     * @return level
+     */
+    public Level getLevel() { return this.level; }
+
 }

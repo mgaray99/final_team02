@@ -2,9 +2,8 @@ package model;
 
 import java.util.List;
 import model.configuration.LevelLoader;
+import model.scroll.AutoScroller;
 import model.scroll.DoodleGenerationScroller;
-import model.scroll.FlappyGenerationScroller;
-import model.scroll.ManualScroller;
 import model.scroll.Scroller;
 import model.entity.Block;
 import model.entity.Enemy;
@@ -48,9 +47,9 @@ public class Level {
     this.entityList = levelLoader.getEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
-
-    scroller = new DoodleGenerationScroller(NO_SCROLL, NO_SCROLL, 3, NO_SCROLL, -7, GENERATION_PATH);
+    scroller = new AutoScroller(0,0);
   }
+
 
   public int getLevelLength() {
     return this.levelLength;
@@ -185,6 +184,14 @@ public class Level {
    */
   private void scroll() {
     scroller.scroll(entityList, playerList.get(0));
+  }
+
+  /**
+   * Sets the scroller of the level equal to the Scroller passed in
+   * @param configScroller the Scroller that will serve as this level's new Scroller
+   */
+  public void setScroller(Scroller configScroller) {
+    scroller = configScroller;
   }
 
   private void checkWinCondition(){};

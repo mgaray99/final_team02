@@ -5,19 +5,19 @@ import model.autogenerator.GenerationException;
 import model.entity.IEntity;
 import model.entity.Player;
 
-public class FlappyGenerationScroller extends AutoScroller {
+public class AutoGenerationScroller extends AutoScroller {
   private double flagX;
   private AutoGenerationHelper helper;
   private final int GENERATE_MAX_BOUND;
   private static final String EXCEPTION_MESSAGE = "Failed to build auto-generation";
 
-  public FlappyGenerationScroller(double xScr, double yScr, int max, String path) {
+  public AutoGenerationScroller(double xScr, double yScr, String path) {
     super(xScr,yScr);
     try {
       helper = new AutoGenerationHelper(path);
 
-      GENERATE_MAX_BOUND = max;
-      flagX = max;
+      GENERATE_MAX_BOUND = NUM_BLOCKS + helper.getAddedNumColumns();
+      flagX = GENERATE_MAX_BOUND;
     }
     catch (Exception e) {
       throw new GenerationException(EXCEPTION_MESSAGE);
