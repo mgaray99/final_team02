@@ -7,6 +7,7 @@ import model.collision.CollisionDirection;
  * Essentially a non-JavaFX version of a Rectangle.
  * It is also capable of detecting collisions with other HitBoxes,
  * and returning the direction of the collision.
+ *
  * @author Ryan Krakower
  */
 
