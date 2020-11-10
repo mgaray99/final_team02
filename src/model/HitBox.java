@@ -1,7 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import model.collision.CollisionDirection;
 
 /**
  * A HitBox class for the entities.
@@ -14,6 +13,7 @@ import java.util.List;
 public class HitBox {
 
   public static final double MAX_INTERSECT = 0.5;
+  public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.01;
   public static final int X_SIZE = 1;
   public static final int Y_SIZE = 1;
   double xLeft;
@@ -55,6 +55,14 @@ public class HitBox {
     return yTop;
   }
 
+  public void setYTop(double yTop) {
+    this.yTop = yTop;
+  }
+
+  public void setXLeft(double xLeft) {
+    this.xLeft = xLeft;
+  }
+
   public double getYBottom() {
     return yTop + ySize;
   }
@@ -68,30 +76,31 @@ public class HitBox {
   }
 
 
-  public List<CollisionDirection> getCollisionDirections(HitBox otherBox) {
+  public CollisionDirection getCollisionDirections(HitBox otherBox) {
 
-    List<CollisionDirection> collisions = new ArrayList<>();
     double xRight = xLeft + xSize;
     double yBottom = yTop + ySize;
-    if (!((xRight > otherBox.getXLeft() && xLeft < otherBox.getXRight()) &&
-        (yBottom > otherBox.getYTop() && yTop < otherBox.getYBottom()))) {
-      collisions.add(CollisionDirection.NONE);
-      //System.out.print("bbbbbbbbbbb");
-      return collisions;
-    } else {}//System.out.print("collision");}
-    if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
-      collisions.add(CollisionDirection.RIGHT);
+    if (!((xRight >= otherBox.getXLeft() && xLeft <= otherBox.getXRight()) &&
+        (yBottom >= otherBox.getYTop() && yTop <= otherBox.getYBottom()))) {
+      return CollisionDirection.NONE;
     }
-    if (between(otherBox.getXRight() - xLeft, 0, MAX_INTERSECT))  {
-      collisions.add(CollisionDirection.LEFT);
-    }
+
     if (between(yBottom - otherBox.getYTop(), 0, MAX_INTERSECT))  {
-      collisions.add(CollisionDirection.BOTTOM);
+      return CollisionDirection.BOTTOM;
     }
     if (between(otherBox.getYBottom() - yTop, 0, MAX_INTERSECT))  {
-        collisions.add(CollisionDirection.TOP);
+        return CollisionDirection.TOP;
     }
-    return collisions;
+
+    if (yTop >= otherBox.getYTop() + CORNER_GLITCH_AVOIDANCE_OFFSET && yBottom <= otherBox.getYBottom() - CORNER_GLITCH_AVOIDANCE_OFFSET) {
+      if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
+        return CollisionDirection.RIGHT;
+      }
+      if (between(otherBox.getXRight() - xLeft, 0, MAX_INTERSECT))  {
+        return CollisionDirection.LEFT;
+      }
+    }
+    return CollisionDirection.NONE;
   }
 
   private boolean between(double value, double min, double max) {

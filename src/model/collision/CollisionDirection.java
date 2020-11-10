@@ -1,4 +1,4 @@
-package model;
+package model.collision;
 
 public enum CollisionDirection {
   RIGHT,

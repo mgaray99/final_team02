@@ -52,7 +52,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     player.setXVel(5);
     player.setYVel(5);
     player.checkCollision(block);
-    assertEquals(0, player.getXVel());
+    assertEquals(5, player.getXVel());
     assertEquals(0, player.getYVel());
   }
 

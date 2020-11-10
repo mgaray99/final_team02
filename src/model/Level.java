@@ -2,15 +2,13 @@ package model;
 
 import java.util.List;
 import model.configuration.LevelLoader;
-import model.scroll.DoodleGenerationScroller;
-import model.scroll.FlappyGenerationScroller;
-import model.scroll.ManualScroller;
-import model.scroll.Scroller;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
 import model.entity.Player;
 import model.entity.PowerUp;
+import model.scroll.DoodleGenerationScroller;
+import model.scroll.Scroller;
 import org.jetbrains.annotations.Nullable;
 
 public class Level {
@@ -108,10 +106,11 @@ public class Level {
 
   public void step() {
     if (!keyPressFunctions.isPaused()) {
-      checkCollisions();
-      updateEntities();
-      checkWinCondition();
+      checkForKeyPresses();
+      applyGravity();
       moveEntities();
+      checkCollisions();
+      checkWinCondition();
       scroll();
     }
   }
@@ -125,11 +124,6 @@ public class Level {
         }
       }
     }
-  }
-
-  private void updateEntities() {
-    checkForKeyPresses();
-    applyGravity();
   }
 
 
@@ -157,7 +151,11 @@ public class Level {
     //note: add enemies to this later
     for(Player player : this.playerList){
       if(!player.getGrounded()){
-        player.setYVel(player.getYVel() + gravityFactor);
+        if (player.getGracePeriodBeforeFalling()) {
+          player.setGracePeriodBeforeFalling(false);
+        } else {
+          player.setYVel(player.getYVel() + gravityFactor);
+        }
       }
     }
   }
