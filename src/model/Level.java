@@ -7,7 +7,8 @@ import model.entity.Enemy;
 import model.entity.IEntity;
 import model.entity.Player;
 import model.entity.PowerUp;
-import org.assertj.core.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
+
 
 // Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
 // stop the player from moving indefinitely when left or right is pressed and I created a method
