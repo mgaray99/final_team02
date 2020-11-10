@@ -33,7 +33,7 @@ public class AutoGenerationHelper {
    * Creates a new part of the level and adds it to the entity list
    * @param entityList the list of entities
    */
-  public void generateForEntityList(List<IEntity> entityList, int rowOffset, int colOffset) {
+  public void generateForEntityList(List<IEntity> entityList, double rowOffset, double colOffset) {
     currentGeneration = generator.generateNextBlock();
 
     for (int row = 0; row < currentGeneration.length; row+=1) {
@@ -51,7 +51,7 @@ public class AutoGenerationHelper {
    * @param entityCode the String containing the type of entity
    * @param entityList the List of Entity to have the new entity inserted into itself
    */
-  private void insertIntoEntityList(String entityCode, List<IEntity> entityList, int row, int col) {
+  private void insertIntoEntityList(String entityCode, List<IEntity> entityList, double row, double col) {
     IEntity entity = factory.createEntity(entityCode, col, row);
     if (entity!=null) {
       entityList.add(entity);

@@ -7,6 +7,8 @@ public class Enemy implements IEntity, IGravity{
     private final String type = this.getClass().getSimpleName();
     private double xVel = 0;
     private double yVel = 0;
+    private boolean grounded;
+
 
     public Enemy(double x, double y){
         this.hitBox = new HitBox(x, y);
@@ -18,10 +20,8 @@ public class Enemy implements IEntity, IGravity{
     }
 
     @Override
-    public boolean checkCollision(IEntity entity) {
-        return false;
+    public void checkCollision(IEntity entity) {
     }
-
 
     @Override
     public void setXVel(double xVel) {
@@ -49,7 +49,12 @@ public class Enemy implements IEntity, IGravity{
     }
 
     @Override
-    public boolean isGrounded() {
-        return false;
+    public boolean getGrounded() {
+        return grounded;
+    }
+
+    @Override
+    public void setGrounded(boolean grounded) {
+        this.grounded = grounded;
     }
 }

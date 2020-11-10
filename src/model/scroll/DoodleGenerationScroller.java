@@ -38,8 +38,8 @@ public class DoodleGenerationScroller extends ManualScroller{
    */
   private void checkForGeneration(List<IEntity> entityList) {
     if (flagY >= GENERATE_MAX_BOUND) {
-      helper.generateForEntityList(entityList, GENERATE_MAX_BOUND, 0);
-      flagY-= helper.getAddedNumRows();
+      helper.generateForEntityList(entityList, flagY, 0);
+      flagY-=helper.getAddedNumRows();
     }
   }
 }

@@ -28,7 +28,7 @@ public class EntityFactory {
     }
   }
 
-  public IEntity createEntity(String entityString, int rowIndex, int colIndex) {
+  public IEntity createEntity(String entityString, double rowIndex, double colIndex) {
       IEntity decodedEntity;
       String decodedEntityString = levelDecoder.get(entityString);
       if(decodedEntityString == null) return null;
@@ -39,7 +39,7 @@ public class EntityFactory {
   }
 
   @Nullable
-  private IEntity reflectEntity(String decodedEntityString, int rowIndex, int colIndex) {
+  private IEntity reflectEntity(String decodedEntityString, double rowIndex, double colIndex) {
     IEntity decodedEntity;
     try {
       Class entityClass = Class.forName(ENTITY_PACKAGE_PATH + decodedEntityString);
