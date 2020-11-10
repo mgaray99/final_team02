@@ -14,7 +14,7 @@ import model.collision.CollisionDirection;
 public class HitBox {
 
   public static final double MAX_INTERSECT = 0.5;
-  public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.01;
+  public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.0001;
   public static final int X_SIZE = 1;
   public static final int Y_SIZE = 1;
   double xLeft;
@@ -93,7 +93,8 @@ public class HitBox {
         return CollisionDirection.TOP;
     }
 
-    if (yTop >= otherBox.getYTop() + CORNER_GLITCH_AVOIDANCE_OFFSET && yBottom <= otherBox.getYBottom() - CORNER_GLITCH_AVOIDANCE_OFFSET) {
+    if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
+
       if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
         return CollisionDirection.RIGHT;
       }
