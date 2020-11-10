@@ -12,11 +12,11 @@ public interface IEntity {
 
     void setYVel(double yVel);
 
+    double getXVel();
+
     double getYVel();
 
     String getType();
-
-    double getXVel();
 
     default void moveOneStep(){
         this.getHitBox().translateX(this.getXVel());

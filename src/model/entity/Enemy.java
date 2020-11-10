@@ -5,6 +5,8 @@ import model.HitBox;
 public class Enemy implements IEntity, IGravity{
     private HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
+    private double xVel = 0;
+    private double yVel = 0;
     private boolean grounded;
 
 
@@ -23,27 +25,27 @@ public class Enemy implements IEntity, IGravity{
 
     @Override
     public void setXVel(double xVel) {
-
+        this.xVel = xVel;
     }
 
     @Override
     public void setYVel(double yVel) {
+        this.yVel = yVel;
+    }
 
+    @Override
+    public double getXVel() {
+        return xVel;
     }
 
     @Override
     public double getYVel() {
-        return 0;
+        return yVel;
     }
 
     @Override
     public String getType() {
         return type;
-    }
-
-    @Override
-    public double getXVel() {
-        return 0;
     }
 
     @Override
