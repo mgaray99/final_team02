@@ -2,9 +2,14 @@ package model.scroll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
+import model.Level;
+import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
+import model.configuration.LevelLoader;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
@@ -36,19 +41,22 @@ public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
   private Block barrierBlockEntity;
   private Enemy enemyEntity;
 
-  private List<IEntity> entityList;
+  private Level level;
 
   @Override
-  public void start(Stage stage) {
-    entityList = new ArrayList<>();
+  public void start(Stage stage) throws InvalidFileException {
 
     playerEntity = new Player(PLAYERX, PLAYERY);
     barrierBlockEntity = new Block(BARRIERX, BARRIERY);
     enemyEntity = new Enemy(ENEMYX, ENEMYY);
 
-    entityList.add(playerEntity);
-    entityList.add(barrierBlockEntity);
-    entityList.add(enemyEntity);
+    GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
+    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+    level = new Level(levelLoader);
+
+    level.addEntity(playerEntity);
+    level.addEntity(barrierBlockEntity);
+    level.addEntity(enemyEntity);
   }
 
   /**
@@ -58,7 +66,7 @@ public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
   @Test
   public void testSimpleScroll() {
     AutoGenerationScroller scroller = new AutoGenerationScroller(XSCROLL,YSCROLL, PATH);
-    scroller.scroll(entityList, playerEntity);
+    scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());
     assertEquals(BARRIERX + XSCROLL, barrierBlockEntity.getHitBox().getXLeft());

@@ -2,6 +2,7 @@ package model.scroll;
 
 import java.util.List;
 import model.HitBox;
+import model.Level;
 import model.entity.IEntity;
 import model.entity.Player;
 
@@ -16,11 +17,12 @@ public class AutoScroller implements Scroller{
 
   /**
    * Scrolls the list of Entitiies
-   * @param entityList the List of Entities
+   * @param level the level to be scrolled
    * @param player the player of the level
    */
   @Override
-  public void scroll(List<IEntity> entityList, Player player) {
+  public void scroll(Level level, Player player) {
+    List<IEntity> entityList = level.getAllEntities();
     entityList.forEach(entity -> scrollEntity(entity));
   }
 

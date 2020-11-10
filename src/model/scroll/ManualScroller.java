@@ -2,6 +2,7 @@ package model.scroll;
 
 import java.util.List;
 import model.HitBox;
+import model.Level;
 import model.entity.IEntity;
 import model.entity.Player;
 
@@ -41,12 +42,14 @@ public class ManualScroller implements Scroller {
    * checkDownScroll checks to see if the player is below some horizontal line y = bottomBound and
    * moving further down and if so, scrolls the screen down in order to catch up
    *
-   * @param entityList the list of Entity objects
+   * @param level
    * @param player the player whose data we are to use
    */
   @Override
-  public void scroll(List<IEntity> entityList, Player player) {
-      currentXScroll = 0.0;
+  public void scroll(Level level, Player player) {
+    List<IEntity> entityList = level.getAllEntities();
+
+    currentXScroll = 0.0;
       currentYScroll = 0.0;
 
       checkLeftScroll(player);

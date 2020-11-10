@@ -3,7 +3,6 @@ package model;
 import java.util.List;
 import model.configuration.LevelLoader;
 import model.scroll.AutoScroller;
-import model.scroll.DoodleGenerationScroller;
 import model.scroll.Scroller;
 import model.entity.Block;
 import model.entity.Enemy;
@@ -60,7 +59,7 @@ public class Level {
   }
 
 
-  private void addEntity(IEntity entity) {
+  public void addEntity(IEntity entity) {
     if (entity!=null) {
       entityList.add(entity);
     }
@@ -180,10 +179,10 @@ public class Level {
   }
 
   /**
-   * Moves the entities in the level based on data from the List<Entity> and the player
+   * Moves the entities in the level based on data on this level and the player
    */
   private void scroll() {
-    scroller.scroll(entityList, playerList.get(0));
+    scroller.scroll(this, playerList.get(0));
   }
 
   /**

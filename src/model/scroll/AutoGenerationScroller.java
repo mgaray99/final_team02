@@ -1,6 +1,7 @@
 package model.scroll;
 
 import java.util.List;
+import model.Level;
 import model.autogenerator.GenerationException;
 import model.entity.IEntity;
 import model.entity.Player;
@@ -13,6 +14,7 @@ public class AutoGenerationScroller extends AutoScroller {
 
   public AutoGenerationScroller(double xScr, double yScr, String path) {
     super(xScr,yScr);
+
     try {
       helper = new AutoGenerationHelper(path);
 
@@ -26,25 +28,25 @@ public class AutoGenerationScroller extends AutoScroller {
 
   /**
    * Scrolls all of the entities
-   * @param entityList the List of Entities
+   * @param level the level to be scrolled
    * @param player the player of the level
    */
   @Override
-  public void scroll(List<IEntity> entityList, Player player) {
-    checkForGeneration(entityList);
+  public void scroll(Level level, Player player) {
+    checkForGeneration(level);
     flagX+=xScroll;
 
-    super.scroll(entityList, player);
+    super.scroll(level, player);
   }
 
   /**
    * Checks to see if it's necessary to generate a new generation
    */
-  private void checkForGeneration(List<IEntity> entityList) {
+  private void checkForGeneration(Level level) {
     if (flagX <= GENERATE_MAX_BOUND) {
-      helper.generateForEntityList(entityList, 0, flagX);
+      helper.generateForLevel(level, 0, flagX);
       flagX+= helper.getAddedNumColumns();
-      cleanGarbage(entityList);
+      cleanGarbage(level);
     }
   }
 
@@ -52,9 +54,11 @@ public class AutoGenerationScroller extends AutoScroller {
    * Checks the entityList to see if any of the entities have gone off screen forever (i.e. have
    * x < 0), if so, removes them from entityList
    *
-   * @param entityList the list of entities to check
+   * @param level the Level whose garbage we're cleaning
    */
-  private void cleanGarbage(List<IEntity> entityList) {
+  private void cleanGarbage(Level level) {
+    List<IEntity> entityList = level.getAllEntities();
+
     for (int index = entityList.size() - 1; index >= 0; index --) {
       IEntity entity = entityList.get(index);
       if (entity.getHitBox().getXRight() < 0) {
