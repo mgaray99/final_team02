@@ -33,7 +33,7 @@ public interface IMobileEntity extends IEntity {
     }
   }
 
-  default void updateGravity(double levelGravityFactor) {
+  default void applyGravity(double levelGravityFactor) {
     if(!this.getGrounded()){
       if (this.getGracePeriodBeforeFalling()) {
         this.setGracePeriodBeforeFalling(false);

@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import model.configuration.LevelLoader;
 import model.entity.*;
@@ -57,41 +56,43 @@ public class Level {
     this.entityList = levelLoader.getCopyOfEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
-    scroller = new AutoScroller(0,0);
+    this.scroller = new AutoScroller(0,0);
   }
 
   private void addEntity(IEntity entity) {
-    if (entity!=null) {
-      entityList.add(entity);
+    if (entity != null) {
+      this.entityList.add(entity);
     }
 
     if (entity instanceof Block) {
-      blockList.add((Block)entity);
+      this.blockList.add((Block)entity);
     }
     if (entity instanceof Enemy) {
-      enemyList.add((Enemy)entity);
+      this.enemyList.add((Enemy)entity);
     }
     if (entity instanceof Player) {
-      playerList.add((Player)entity);
+      this.playerList.add((Player)entity);
     }
     if (entity instanceof PowerUp) {
-      powerUpList.add((PowerUp)entity);
+      this.powerUpList.add((PowerUp)entity);
     }
   }
 
   private void removeEntity(IEntity entity) {
-    entityList.remove(entity);
+    if(entity != null){
+      this.entityList.remove(entity);
+    }
     if (entity instanceof Block) {
-      blockList.remove(entity);
+      this.blockList.remove(entity);
     }
     if (entity instanceof Enemy) {
-      enemyList.remove(entity);
+      this.enemyList.remove(entity);
     }
     if (entity instanceof Player) {
-      playerList.remove(entity);
+      this.playerList.remove(entity);
     }
     if (entity instanceof PowerUp) {
-      powerUpList.remove(entity);
+      this.powerUpList.remove(entity);
     }
   }
 
@@ -107,15 +108,92 @@ public class Level {
 
   public void step() {
     if (!keyPressFunctions.isPaused()) {
-      checkForKeyPresses();
-      updateEntities();
-      moveEntities();
-      checkCollisions();
-      checkWinCondition();
-      scroll();
+      this.updateEntities();
+      this.moveEntities();
+      this.checkCollisions();
+      this.checkWinCondition();
+      this.scroll();
     }
   }
 
+  public void updateEntities() {
+    // a list of entities to remove if necessary
+    List<IEntity> entitiesToRemove = new ArrayList<>();
+
+    if(!this.playerList.isEmpty()){
+      Player player = playerList.get(0);
+      if(player.isDead()){
+        entitiesToRemove.add(player);
+        this.setLevelLost(true);
+      }
+      player.updateModifiers();
+    }
+    for (Enemy enemy : this.enemyList) {
+      if (enemy.isDead()) {
+        entitiesToRemove.add(enemy);
+      }
+    }
+
+    // removes all entities from the level in the removal list
+    // this should be done only if all entity iterations in this method have been completed
+    for(IEntity entity : entitiesToRemove){
+      this.removeEntity(entity);
+    }
+  }
+
+  private void moveEntities(){
+    if(!playerList.isEmpty()) {
+      Player player = playerList.get(0);
+      double gravityModifier = 1;
+      if(player.getModifiers().containsKey(Modifier.ModifierType.GRAVITY)){
+        gravityModifier = player.getModifiers().get(Modifier.ModifierType.GRAVITY).getValue();
+      }
+      this.checkForKeyPresses();
+      player.applyGravity(this.GRAVITY_FACTOR * gravityModifier);
+      player.moveOneStep();
+
+      if(!enemyList.isEmpty()){
+        for(Enemy enemy : enemyList){
+          if(player.getHitBox().getXLeft() < enemy.getHitBox().xLeft){
+            enemy.setXVel(ENEMY_MOVEMENT_SPEED * -1);
+          }
+          else if(player.getHitBox().getXLeft() > enemy.getHitBox().xLeft){
+            enemy.setXVel(ENEMY_MOVEMENT_SPEED);
+          }
+          else{
+            enemy.setXVel(0);
+          }
+          enemy.applyGravity(this.GRAVITY_FACTOR);
+          enemy.moveOneStep();
+        }
+      }
+    }
+  }
+
+  private void checkForKeyPresses() {
+    if(!playerList.isEmpty()){
+      Player playerEntity = playerList.get(0);
+
+      double movementSpeedModifier = 1;
+      if(playerEntity.getModifiers().containsKey(Modifier.ModifierType.MOVEMENT_SPEED)){
+        movementSpeedModifier = playerEntity.getModifiers().get(Modifier.ModifierType.MOVEMENT_SPEED).getValue();
+      }
+      double jumpSpeedModifier = 1;
+      if(playerEntity.getModifiers().containsKey(Modifier.ModifierType.JUMP_SPEED)){
+        jumpSpeedModifier = playerEntity.getModifiers().get(Modifier.ModifierType.JUMP_SPEED).getValue();
+      }
+      if (keyPressFunctions.isPlayerMovingRight()) {
+        playerEntity.setXVel(MOVEMENT_SPEED * movementSpeedModifier);
+      } else if (keyPressFunctions.isPlayerMovingLeft()) {
+        playerEntity.setXVel(MOVEMENT_SPEED * -1 * movementSpeedModifier);
+      } else {
+        playerEntity.setXVel(0);
+      }
+      if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
+        playerEntity.jump(JUMP_SPEED * jumpSpeedModifier);
+      }
+    }
+  }
 
   public void checkCollisions(){
     if(!playerList.isEmpty()){
@@ -135,78 +213,13 @@ public class Level {
     }
   }
 
-
-  private void checkForKeyPresses() {
-    if(!playerList.isEmpty()){
-      Player playerEntity = playerList.get(0);
-      if (keyPressFunctions.isPlayerMovingRight()) {
-        playerEntity.setXVel(MOVEMENT_SPEED);
-      } else if (keyPressFunctions.isPlayerMovingLeft()) {
-        playerEntity.setXVel(MOVEMENT_SPEED * -1);
-      } else {
-        playerEntity.setXVel(0);
-      }
-      if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
-        playerEntity.jump(JUMP_SPEED);
-      }
-    }
-    else{
-      // TODO: Missing player exception?
-    }
-  }
-
-  public void updateEntities() {
-    // a list of entities to remove if necessary
-    List<IEntity> entitiesToRemove = new ArrayList<>();
-
-    if(!this.playerList.isEmpty()){
-      Player player = playerList.get(0);
-      player.updateGravity(this.GRAVITY_FACTOR);
-      if(player.isDead()){
-        //this.removeEntity(player);
-        System.out.println("Player should be dead");
-        this.setLevelLost(true);
-      }
-    }
-    for (Enemy enemy : this.enemyList) {
-      enemy.updateGravity(this.GRAVITY_FACTOR);
-      if (enemy.isDead()) {
-        entitiesToRemove.add(enemy);
-      }
-    }
-
-    // removes all entities from the level in the removal list
-    // this should be done only if all entity iterations in this method have been completed
-    for(IEntity entity : entitiesToRemove){
-      removeEntity(entity);
-    }
-  }
-
-
-
-  private void moveEntities(){
-    if(!playerList.isEmpty()) {
-      Player playerEntity = playerList.get(0);
-      playerEntity.moveOneStep();
-      if(!enemyList.isEmpty()){
-        for(Enemy enemy : enemyList){
-          if(playerEntity.getHitBox().getXLeft() < enemy.getHitBox().xLeft){
-            enemy.setXVel(ENEMY_MOVEMENT_SPEED * -1);
-          }
-          else if(playerEntity.getHitBox().getXLeft() > enemy.getHitBox().xLeft){
-            enemy.setXVel(ENEMY_MOVEMENT_SPEED);
-          }
-          enemy.moveOneStep();
-        }
-      }
-    }
-  }
-
   /**
    * Moves the entities in the level based on data from the List<Entity> and the player
    */
   private void scroll() {
-    scroller.scroll(entityList, playerList.get(0));
+    if(!playerList.isEmpty()){
+      scroller.scroll(entityList, playerList.get(0));
+    }
   }
 
   /**

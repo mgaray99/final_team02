@@ -4,9 +4,11 @@ import model.HitBox;
 import model.collision.CollisionDirection;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Player implements IMobileEntity, IDamageable {
+public class Player implements IMobileEntity, IDamageable, IEmpowerable {
 
     private final String type = this.getClass().getSimpleName();
 
@@ -17,6 +19,7 @@ public class Player implements IMobileEntity, IDamageable {
     private boolean gracePeriodBeforeFalling = true;
     private double health = 0;
     private double damage = 0;
+    private final Map<Modifier.ModifierType, Modifier> modifiers = new HashMap<>();
 
     public Player(double x, double y){
         this.hitBox = new HitBox(x, y);
@@ -38,9 +41,13 @@ public class Player implements IMobileEntity, IDamageable {
         //}
 
         this.checkGravity(entity, collision);
-        if(entity instanceof IDamageable && this.canApplyDamage(collision)){
+        if(entity instanceof IDamageable && collision != CollisionDirection.NONE && this.canApplyDamage(collision)){
             this.attemptApplyDamage((IDamageable) entity,collision);
-            System.out.println("Player is attempting to attack from direction " + collision.toString() + "!");
+        }
+        if(entity instanceof IEmpowering && collision != CollisionDirection.NONE){
+            IEmpowering empowering = (IEmpowering) entity;
+            this.applyModifier(empowering.getModifier());
+            empowering.setHasAppliedModifier(true);
         }
     }
 
@@ -128,5 +135,10 @@ public class Player implements IMobileEntity, IDamageable {
     @Override
     public List<CollisionDirection> getReceivesDamageDirections() {
         return Arrays.asList(CollisionDirection.TOP, CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
+    }
+
+    @Override
+    public Map<Modifier.ModifierType, Modifier> getModifiers() {
+        return this.modifiers;
     }
 }
