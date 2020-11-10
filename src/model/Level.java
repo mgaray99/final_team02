@@ -1,15 +1,12 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import model.configuration.LevelLoader;
+import model.entity.*;
 import model.scroll.AutoScroller;
-import model.scroll.DoodleGenerationScroller;
 import model.scroll.Scroller;
-import model.entity.Block;
-import model.entity.Enemy;
-import model.entity.IEntity;
-import model.entity.Player;
-import model.entity.PowerUp;
 import org.jetbrains.annotations.Nullable;
 
 public class Level {
@@ -19,7 +16,7 @@ public class Level {
   private Scroller scroller;
   private final double MOVEMENT_SPEED = 0.2;
   private final float JUMP_SPEED = -0.4f;
-  private final float gravityFactor = 0.015f;
+  private final float GRAVITY_FACTOR = 0.015f;
   private final double ENEMY_MOVEMENT_SPEED = 0.1;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
@@ -37,19 +34,12 @@ public class Level {
 
   private int levelLength;
   private int levelWidth;
+  private boolean levelLost;
+  private boolean levelWon;
 
   public Level(LevelLoader levelLoader) {
-
-    this.playerList = levelLoader.getPlayerList();
-    this.enemyList = levelLoader.getEnemyList();
-    this.blockList = levelLoader.getBlockList();
-    this.powerUpList = levelLoader.getPowerUpList();
-    this.entityList = levelLoader.getEntityList();
-    this.levelLength = levelLoader.getLevelLength();
-    this.levelWidth = levelLoader.getLevelWidth();
-    scroller = new AutoScroller(0,0);
+    this.setOrResetLevel(levelLoader);
   }
-
 
   public int getLevelLength() {
     return this.levelLength;
@@ -59,6 +49,16 @@ public class Level {
     return this.levelWidth;
   }
 
+  public void setOrResetLevel(LevelLoader levelLoader){
+    this.playerList = levelLoader.getCopyOfPlayerList();
+    this.enemyList = levelLoader.getCopyOfEnemyList();
+    this.blockList = levelLoader.getCopyOfBlockList();
+    this.powerUpList = levelLoader.getCopyOfPowerUpList();
+    this.entityList = levelLoader.getCopyOfEntityList();
+    this.levelLength = levelLoader.getLevelLength();
+    this.levelWidth = levelLoader.getLevelWidth();
+    scroller = new AutoScroller(0,0);
+  }
 
   private void addEntity(IEntity entity) {
     if (entity!=null) {
@@ -108,7 +108,7 @@ public class Level {
   public void step() {
     if (!keyPressFunctions.isPaused()) {
       checkForKeyPresses();
-      applyGravity();
+      updateEntities();
       moveEntities();
       checkCollisions();
       checkWinCondition();
@@ -118,10 +118,18 @@ public class Level {
 
 
   public void checkCollisions(){
-    for(Player player : this.playerList){
+    if(!playerList.isEmpty()){
+      Player player = playerList.get(0);
       for(IEntity otherEntity : this.entityList){
         if(!player.equals(otherEntity)){
           player.checkCollision(otherEntity);
+        }
+      }
+    }
+    for(Enemy enemy : this.enemyList){
+      for(IEntity otherEntity : this.entityList){
+        if (!enemy.equals(otherEntity)) {
+          enemy.checkCollision(otherEntity);
         }
       }
     }
@@ -139,8 +147,7 @@ public class Level {
         playerEntity.setXVel(0);
       }
       if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
-        playerEntity.setYVel(JUMP_SPEED);
-        playerEntity.setGrounded(false);
+        playerEntity.jump(JUMP_SPEED);
       }
     }
     else{
@@ -148,18 +155,34 @@ public class Level {
     }
   }
 
-  public void applyGravity() {
-    //note: add enemies to this later
-    for(Player player : this.playerList){
-      if(!player.getGrounded()){
-        if (player.getGracePeriodBeforeFalling()) {
-          player.setGracePeriodBeforeFalling(false);
-        } else {
-          player.setYVel(player.getYVel() + gravityFactor);
-        }
+  public void updateEntities() {
+    // a list of entities to remove if necessary
+    List<IEntity> entitiesToRemove = new ArrayList<>();
+
+    if(!this.playerList.isEmpty()){
+      Player player = playerList.get(0);
+      player.updateGravity(this.GRAVITY_FACTOR);
+      if(player.isDead()){
+        //this.removeEntity(player);
+        System.out.println("Player should be dead");
+        this.setLevelLost(true);
       }
     }
+    for (Enemy enemy : this.enemyList) {
+      enemy.updateGravity(this.GRAVITY_FACTOR);
+      if (enemy.isDead()) {
+        entitiesToRemove.add(enemy);
+      }
+    }
+
+    // removes all entities from the level in the removal list
+    // this should be done only if all entity iterations in this method have been completed
+    for(IEntity entity : entitiesToRemove){
+      removeEntity(entity);
+    }
   }
+
+
 
   private void moveEntities(){
     if(!playerList.isEmpty()) {
@@ -197,24 +220,20 @@ public class Level {
   private void checkWinCondition(){};
 
 
-  void isLevelWon(boolean isLevelWon) {
-    if (isLevelWon) {
-      return;
-    }
+  void setLevelWon(boolean isLevelWon) {
+    this.levelWon = isLevelWon;
   }
 
-  void isLevelLost(boolean isLevelLost) {
-    if (isLevelLost) {
-      return;
-    }
+  void setLevelLost(boolean isLevelLost) {
+    this.levelLost = isLevelLost;
   }
 
   public KeyPressFunctions getKeyPressFunctions() {
     return keyPressFunctions;
   }
 
-  public List<IEntity> getAllEntities() {
-    return entityList;
+  public List<IEntity> getCopyOfEntityList() {
+    return new ArrayList<IEntity>(entityList);
   }
 
   public List<Player> getPlayerList() {return playerList;}
