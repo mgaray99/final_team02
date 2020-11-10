@@ -17,9 +17,10 @@ public class Level {
 
   //private final List<Entity> allEntities = new ArrayList<>();
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
-  private final int MOVEMENT_SPEED = 1;
+  private final double MOVEMENT_SPEED = 0.2;
+  private final float JUMP_SPEED = -0.4f;
+  private final float gravityFactor = 0.015f;
   private final double ENEMY_MOVEMENT_SPEED = 0.1;
-  private final float JUMP_SPEED = -2f;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
@@ -31,7 +32,6 @@ public class Level {
   private List<Block> blockList;
   private List<IEntity> entityList;
 
-  private float gravityFactor = 0.2f;
   private int levelLength;
   private int levelWidth;
 
@@ -116,7 +116,7 @@ public class Level {
 
   private void updateEntities() {
     checkForKeyPresses();
-    //applyGravity();
+    applyGravity();
   }
 
 
@@ -130,9 +130,9 @@ public class Level {
       } else {
         playerEntity.setXVel(0);
       }
-      if (keyPressFunctions.isPlayerJumping() && playerEntity.isGrounded()) {
+      if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
         playerEntity.setYVel(JUMP_SPEED);
-        //playerEntity.setOnGround(false);
+        playerEntity.setGrounded(false);
       }
     }
     else{
@@ -143,8 +143,8 @@ public class Level {
   public void applyGravity() {
     //note: add enemies to this later
     for(Player player : this.playerList){
-      if(!player.isGrounded()){
-        player.setYVel(player.getYVel() - gravityFactor);
+      if(!player.getGrounded()){
+        player.setYVel(player.getYVel() + gravityFactor);
       }
     }
   }
@@ -189,5 +189,7 @@ public class Level {
   public List<IEntity> getAllEntities() {
     return entityList;
   }
+
+  public List<Player> getPlayerList() {return playerList;}
 
 }
