@@ -76,7 +76,7 @@ public class HitBox {
   }
 
 
-  public CollisionDirection getCollisionDirections(HitBox otherBox) {
+  public CollisionDirection getCollisionDirection(HitBox otherBox) {
 
     double xRight = xLeft + xSize;
     double yBottom = yTop + ySize;
@@ -102,6 +102,7 @@ public class HitBox {
     }
     return CollisionDirection.NONE;
   }
+
 
   private boolean between(double value, double min, double max) {
     if ((value > min) && (value < max)) {

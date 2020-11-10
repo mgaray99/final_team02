@@ -24,7 +24,7 @@ public class Player implements IEntity, IGravity {
 
     @Override
     public void checkCollision(IEntity entity) {
-        CollisionDirection collision = hitBox.getCollisionDirections(entity.getHitBox());
+        CollisionDirection collision = hitBox.getCollisionDirection(entity.getHitBox());
         //this if statement is for testing - will be removed
         //if (!collision.contains(CollisionDirection.NONE)) {
         //    yVel = 0;
