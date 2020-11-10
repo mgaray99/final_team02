@@ -1,16 +1,12 @@
 package model.configuration;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
 
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
 import model.entity.Player;
 import model.entity.PowerUp;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,13 +19,14 @@ import java.util.Scanner;
  */
 
 public class LevelLoader {
-    private static final String ENTITY_PACKAGE_PATH = "model.entity.";
+    //private static final String ENTITY_PACKAGE_PATH = "model.entity.";
     private final List<Player> playerList = new ArrayList<>();
     private final List<Enemy> enemyList = new ArrayList<>();
     private final List<PowerUp> powerUpList = new ArrayList<>();
     private final List<Block> blockList = new ArrayList<>();
     private final List<IEntity> entityList = new ArrayList<>();
-    private final Map<String, String> levelDecoder;
+    //private final Map<String, String> levelDecoder;
+    private final EntityFactory entityFactory = new EntityFactory();
 
     private int levelLength;
     private int levelWidth;
@@ -43,6 +40,7 @@ public class LevelLoader {
     public LevelLoader(File levelFileIn) throws InvalidFileException {
         this.handleConstructionExceptions(levelFileIn);
         //alex start
+        /*
         try {
             LevelDecoder decoderMap = new LevelDecoder();
             levelDecoder = decoderMap.getIdToEntityMap();
@@ -50,6 +48,8 @@ public class LevelLoader {
         catch (Exception e) {
             throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
         }
+
+         */
         //alex end
         this.initializeEntityLists(levelFileIn);
     }
@@ -62,24 +62,24 @@ public class LevelLoader {
         return levelWidth;
     }
 
-    public List<Player> getPlayerList() {
-        return playerList;
+    public List<Player> getCopyOfPlayerList() {
+        return new ArrayList<Player>(playerList);
     }
 
-    public List<Enemy> getEnemyList() {
-        return enemyList;
+    public List<Enemy> getCopyOfEnemyList() {
+        return new ArrayList<Enemy>(enemyList);
     }
 
-    public List<Block> getBlockList() {
-        return blockList;
+    public List<Block> getCopyOfBlockList() {
+        return new ArrayList<Block>(blockList);
     }
 
-    public List<PowerUp> getPowerUpList() {
-        return powerUpList;
+    public List<PowerUp> getCopyOfPowerUpList() {
+        return new ArrayList<PowerUp>(powerUpList);
     }
 
-    public List<IEntity> getEntityList() {
-        return entityList;
+    public List<IEntity> getCopyOfEntityList() {
+        return new ArrayList<IEntity>(entityList);
     }
 
     private void initializeEntityLists(File levelFileIn) throws InvalidFileException {
@@ -91,7 +91,8 @@ public class LevelLoader {
                 String[] currentStringArray = currentLine.split(",");
                 for (int xIndex = 0; xIndex < currentStringArray.length; xIndex++) {
                     String entityString = currentStringArray[xIndex];
-                    this.createAndAddEntity(entityString, xIndex, yCounter);
+                    IEntity entity = this.entityFactory.createEntity(entityString, xIndex, yCounter);
+                    this.addEntityToLists(entity);
                     if(this.levelWidth < xIndex+1){
                         this.levelWidth = xIndex+1;
                     }
@@ -106,43 +107,21 @@ public class LevelLoader {
         }
     }
 
-    private void createAndAddEntity(String entityString, int rowIndex, int colIndex) {
-        IEntity decodedEntity;
-        String decodedEntityString = levelDecoder.get(entityString);
-        if(decodedEntityString == null) return;
-
-        decodedEntity = reflectEntity(decodedEntityString, rowIndex, colIndex);
-        if(decodedEntity != null) {
-            this.entityList.add(decodedEntity);
-            if(decodedEntity instanceof Player){
-                this.playerList.add((Player)decodedEntity);
+    private void addEntityToLists(IEntity entity) {
+        if(entity != null) {
+            this.entityList.add(entity);
+            if(entity instanceof Player){
+                this.playerList.add((Player)entity);
             }
-            else if(decodedEntity instanceof Enemy){
-                this.enemyList.add((Enemy)decodedEntity);
+            else if(entity instanceof Enemy){
+                this.enemyList.add((Enemy)entity);
             }
-            else if(decodedEntity instanceof Block){
-                this.blockList.add((Block)decodedEntity);
+            else if(entity instanceof Block){
+                this.blockList.add((Block)entity);
             }
-            else if(decodedEntity instanceof PowerUp){
-                this.powerUpList.add((PowerUp)decodedEntity);
+            else if(entity instanceof PowerUp){
+                this.powerUpList.add((PowerUp)entity);
             }
-        }
-    }
-
-    @Nullable
-    private IEntity reflectEntity(String decodedEntityString, int rowIndex, int colIndex) {
-        IEntity decodedEntity;
-        try {
-            Class entityClass = Class.forName(ENTITY_PACKAGE_PATH + decodedEntityString);
-            Constructor entityConstructor = entityClass.getConstructor(double.class, double.class);
-            decodedEntity = (IEntity) entityConstructor.newInstance(rowIndex, colIndex);
-            return decodedEntity;
-        } catch (ClassNotFoundException
-                | NoSuchMethodException
-                | InstantiationException
-                | InvocationTargetException
-                | IllegalAccessException e) {
-            return (IEntity) null;
         }
     }
 

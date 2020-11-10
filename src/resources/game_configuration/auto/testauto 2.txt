@@ -1,0 +1,4 @@
+Dimensions 10 15
+Default D
+Constant C 9:9 *:*
+Random R RIGHT:DOWN 7 U(0:12) 2 3
