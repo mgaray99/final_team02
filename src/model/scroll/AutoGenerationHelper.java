@@ -22,6 +22,7 @@ public class AutoGenerationHelper {
       generator = new AutoGenerator(generatorPath);
       LevelDecoder decoder = new LevelDecoder();
       decoderMap = decoder.getIdToEntityMap();
+      currentGeneration = generator.generateNextBlock();
     }
     catch (Exception e) {
       throw new GenerationException("");
