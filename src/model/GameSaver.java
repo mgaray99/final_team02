@@ -92,11 +92,11 @@ public class GameSaver {
     }
 
     /**
-     * Gets a stream of possible keys for a value in a map
+     * Gets a stream of possible keys for a entityType in a map
      * Source: https://www.baeldung.com/java-map-key-from-value
-     * @param map The Map in which to find matching keys for the given value
-     * @param value The value to find matching keys for
-     * @return A Stream of the same type as the Map's keys that should contain any matching keys for the given value
+     * @param map The Map in which to find matching keys for the given entityType
+     * @param value The entityType to find matching keys for
+     * @return A Stream of the same type as the Map's keys that should contain any matching keys for the given entityType
      */
     public <K, V> Stream<K> getMatchingKeysForValue(Map<K, V> map, V value) {
         return map

@@ -1,9 +1,7 @@
 package view.scenes;
 
-import controller.GameController;
 import javafx.scene.Group;
 import view.GameScene;
-import view.GameView.viewName;
 
 public class SelectStyleScene extends GameScene {
   private static final String CSS_FOLDERPATH = "./src/resources/cssstylesheets";

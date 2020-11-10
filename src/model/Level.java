@@ -2,6 +2,10 @@ package model;
 
 import java.util.List;
 import model.configuration.LevelLoader;
+import model.scroll.DoodleGenerationScroller;
+import model.scroll.FlappyGenerationScroller;
+import model.scroll.ManualScroller;
+import model.scroll.Scroller;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
@@ -9,14 +13,11 @@ import model.entity.Player;
 import model.entity.PowerUp;
 import org.jetbrains.annotations.Nullable;
 
-
-// Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
-// stop the player from moving indefinitely when left or right is pressed and I created a method
-// placeEntity which checks to see if an entity is a player and if so makes playerEntity equal it
 public class Level {
 
-  //private final List<Entity> allEntities = new ArrayList<>();
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
+
+  private Scroller scroller;
   private final double MOVEMENT_SPEED = 0.2;
   private final float JUMP_SPEED = -0.4f;
   private final float gravityFactor = 0.015f;
@@ -25,6 +26,9 @@ public class Level {
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
 
+  private static final int NO_SCROLL = -1;
+  private static final int ALWAYS_SCROLL = 0;
+  private static final String GENERATION_PATH = "resources/game_configuration/auto/autodoodle.txt";
 
   private List<Player> playerList;
   private List<Enemy> enemyList;
@@ -36,6 +40,7 @@ public class Level {
   private int levelWidth;
 
   public Level(LevelLoader levelLoader) {
+
     this.playerList = levelLoader.getPlayerList();
     this.enemyList = levelLoader.getEnemyList();
     this.blockList = levelLoader.getBlockList();
@@ -43,6 +48,8 @@ public class Level {
     this.entityList = levelLoader.getEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
+
+    scroller = new DoodleGenerationScroller(NO_SCROLL, NO_SCROLL, 3, NO_SCROLL, -5, GENERATION_PATH);
   }
 
   public int getLevelLength() {
@@ -53,8 +60,12 @@ public class Level {
     return this.levelWidth;
   }
 
+
   private void addEntity(IEntity entity) {
-    entityList.add(entity);
+    if (entity!=null) {
+      entityList.add(entity);
+    }
+
     if (entity instanceof Block) {
       blockList.add((Block)entity);
     }
@@ -101,8 +112,10 @@ public class Level {
       updateEntities();
       checkWinCondition();
       moveEntities();
+      scroll();
     }
   }
+
 
   public void checkCollisions(){
     for(Player player : this.playerList){
@@ -165,6 +178,13 @@ public class Level {
         }
       }
     }
+  }
+
+  /**
+   * Moves the entities in the level based on data from the List<Entity> and the player
+   */
+  private void scroll() {
+    scroller.scroll(entityList, playerList.get(0));
   }
 
   private void checkWinCondition(){};

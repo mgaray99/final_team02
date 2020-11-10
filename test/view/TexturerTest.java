@@ -51,7 +51,7 @@ public class TexturerTest extends DukeApplicationTest{
       assertEquals(1, textureNode.getChildren().size());
 
 
-      ImageView view = (ImageView)textureNode.lookup("#PLAYERx2y3");
+      ImageView view = (ImageView)textureNode.lookup("#Playerx2y3");
       assertEquals(2 * WIDTH/DEFAULT_BLOCKS_WIDE, view.getX());
       assertEquals(3 * HEIGHT/DEFAULT_BLOCKS_HIGH, view.getY());
       assertEquals(WIDTH/DEFAULT_BLOCKS_WIDE, view.getFitWidth());
@@ -71,7 +71,7 @@ public class TexturerTest extends DukeApplicationTest{
         DEFAULT_BLOCKS_HIGH);
     assertEquals(1, textureNode.getChildren().size());
 
-    ImageView view = (ImageView)textureNode.lookup("#BARRIER_BLOCKx5y6");
+    ImageView view = (ImageView)textureNode.lookup("#Blockx5y6");
     assertEquals(5 * WIDTH/DEFAULT_BLOCKS_WIDE, view.getX());
     assertEquals(6 * HEIGHT/DEFAULT_BLOCKS_HIGH, view.getY());
     assertEquals(WIDTH/DEFAULT_BLOCKS_WIDE, view.getFitWidth());

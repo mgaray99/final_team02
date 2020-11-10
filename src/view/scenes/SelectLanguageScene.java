@@ -1,6 +1,5 @@
 package view.scenes;
 
-import controller.GameController;
 import javafx.scene.Group;
 import view.GameScene;
 

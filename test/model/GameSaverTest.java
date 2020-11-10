@@ -13,7 +13,7 @@ public class GameSaverTest {
 
     public static final String TEST_SAVE_PATH = "data/saves/alex_level_test_save.csv";
 
-    @Test
+    //@Test
     public void testSave() throws IOException, InvalidFileException {
         LevelLoader levelLoader = new LevelLoader(TestFiles.ALEX_LEVEL);
         Level level = new Level(levelLoader);

@@ -152,11 +152,8 @@ public class Texturer {
     }
 
     ImageView view  = new ImageView(image);
-
-    if (!currentEntity.getType().equals("EMPTY")) {
-      placeLocationOfView(currentEntity, view);
-      textureGroup.getChildren().add(view);
-    }
+    placeLocationOfView(currentEntity, view);
+    textureGroup.getChildren().add(view);
   }
 
   /**

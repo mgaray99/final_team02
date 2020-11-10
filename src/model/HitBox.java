@@ -76,9 +76,9 @@ public class HitBox {
     if (!((xRight > otherBox.getXLeft() && xLeft < otherBox.getXRight()) &&
         (yBottom > otherBox.getYTop() && yTop < otherBox.getYBottom()))) {
       collisions.add(CollisionDirection.NONE);
-      System.out.print("bbbbbbbbbbb");
+      //System.out.print("bbbbbbbbbbb");
       return collisions;
-    } else {System.out.print("collision");}
+    } else {}//System.out.print("collision");}
     if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
       collisions.add(CollisionDirection.RIGHT);
     }
