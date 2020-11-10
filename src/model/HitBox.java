@@ -2,8 +2,8 @@ package model;
 
 public class HitBox {
 
-  public static final int X_SIZE = 10;
-  public static final int Y_SIZE = 10;
+  public static final int X_SIZE = 1;
+  public static final int Y_SIZE = 1;
   double xLeft;
   double yTop;
   int xSize;

@@ -4,14 +4,19 @@ import java.util.List;
 import model.entity.IEntity;
 import model.entity.Player;
 
-public class HorizontalGenerationScroller extends AutoGenerationScroller {
-  private double flagX;
-  private final int GENERATE_MAX_BOUND;
+public class DoodleGenerationScroller extends ManualScroller{
 
-  public HorizontalGenerationScroller(double xScr, double yScr, int max, String path) {
-    super(xScr,yScr,path);
+  private AutoGenerationHelper helper;
+  private final int GENERATE_MAX_BOUND;
+  private double flagY;
+
+  public DoodleGenerationScroller(double left, double right, double up, double down,
+      int max, String path) {
+    super(left,right,up,down);
+    helper = new AutoGenerationHelper(path);
+
     GENERATE_MAX_BOUND = max;
-    flagX = max;
+    flagY = max;
   }
 
   /**
@@ -22,7 +27,8 @@ public class HorizontalGenerationScroller extends AutoGenerationScroller {
   @Override
   public void scroll(List<IEntity> entityList, Player player) {
     checkForGeneration(entityList);
-    flagX+=xScroll;
+
+    flagY-= player.getYVel();
 
     super.scroll(entityList, player);
   }
@@ -31,9 +37,9 @@ public class HorizontalGenerationScroller extends AutoGenerationScroller {
    * Checks to see if it's necessary to generate a new generation
    */
   private void checkForGeneration(List<IEntity> entityList) {
-    if (flagX <= GENERATE_MAX_BOUND) {
-      generateForEntityList(entityList, 0, GENERATE_MAX_BOUND);
-      flagX+=currentGeneration[0].length;
+    if (flagY >= GENERATE_MAX_BOUND) {
+      helper.generateForEntityList(entityList, GENERATE_MAX_BOUND, 0);
+      flagY-= helper.getAddedNumRows();
     }
   }
 }

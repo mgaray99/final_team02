@@ -14,7 +14,7 @@ public class AutoGeneratorTest extends DukeApplicationTest{
 
   private static final double NUM_ROWS = 10;
   private static final double NUM_COLS = 15;
-  private static final String TEST_FILEPATH = "resources/game_configuration/testauto.txt";
+  private static final String TEST_FILEPATH = "resources/game_configuration/auto/testauto.txt";
 
   private AutoGenerator generator;
   private String[][] generation;

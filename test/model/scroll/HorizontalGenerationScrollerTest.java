@@ -19,7 +19,7 @@ import util.DukeApplicationTest;
 public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
 
   private static final int MAX = 15;
-  private static final String PATH = "resources/game_configuration/autoflappy.txt";
+  private static final String PATH = "resources/game_configuration/auto/autoflappy.txt";
   private static final double XSCROLL = -0.5;
   private static final double YSCROLL = 0.5;
 
@@ -57,7 +57,7 @@ public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
    */
   @Test
   public void testSimpleScroll() {
-    HorizontalGenerationScroller scroller = new HorizontalGenerationScroller(XSCROLL,YSCROLL,
+    FlappyGenerationScroller scroller = new FlappyGenerationScroller(XSCROLL,YSCROLL,
         MAX, PATH);
     scroller.scroll(entityList, playerEntity);
 

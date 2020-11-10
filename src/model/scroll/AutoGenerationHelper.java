@@ -2,24 +2,21 @@ package model.scroll;
 
 import java.util.List;
 import java.util.Map;
-import model.configuration.EntityFactory;
 import model.autogenerator.AutoGenerator;
 import model.autogenerator.GenerationException;
+import model.configuration.EntityFactory;
 import model.configuration.LevelDecoder;
 import model.entity.IEntity;
-import model.entity.Player;
 
-public abstract class AutoGenerationScroller extends AutoScroller {
+public class AutoGenerationHelper {
 
   private AutoGenerator generator;
   private EntityFactory factory;
   private Map<String, String> decoderMap;
-
   protected String[][] currentGeneration;
 
-  public AutoGenerationScroller(double xScr, double yScr, String generatorPath) throws GenerationException {
-    super(xScr,yScr);
 
+  public AutoGenerationHelper(String generatorPath) {
     try {
       factory = new EntityFactory();
       generator = new AutoGenerator(generatorPath);
@@ -27,28 +24,16 @@ public abstract class AutoGenerationScroller extends AutoScroller {
       decoderMap = decoder.getIdToEntityMap();
     }
     catch (Exception e) {
-      e.printStackTrace();
       throw new GenerationException("");
     }
   }
-
-  /**
-   * Scrolls all of the entities
-   * @param entityList the List of Entities
-   * @param player the player of the level
-   */
-  @Override
-  public void scroll(List<IEntity> entityList, Player player) {
-    super.scroll(entityList, player);
-  }
-
 
 
   /**
    * Creates a new part of the level and adds it to the entity list
    * @param entityList the list of entities
    */
-  protected void generateForEntityList(List<IEntity> entityList, int rowOffset, int colOffset) {
+  public void generateForEntityList(List<IEntity> entityList, int rowOffset, int colOffset) {
     currentGeneration = generator.generateNextBlock();
 
     for (int row = 0; row < currentGeneration.length; row+=1) {
@@ -73,4 +58,21 @@ public abstract class AutoGenerationScroller extends AutoScroller {
     }
   }
 
+  /**
+   * Reveals the number of new rows that have been added to the List<IEntity> parameter in
+   * generateForEntityList() as of the last call to that method
+   * @return the number of rows in the "current" currentGeneration array
+   */
+  public int getAddedNumRows() {
+    return currentGeneration.length;
+  }
+
+  /**
+   * Reveals the number of new columns that have been added to the List<IEntity> parameter in
+   * generateForEntityList() as of the last call to that method
+   * @return the number of new columns in the "current" currentGeneration array
+   */
+  public int getAddedNumColumns() {
+    return currentGeneration[0].length;
+  }
 }

@@ -5,6 +5,5 @@ import model.entity.IEntity;
 import model.entity.Player;
 
 public interface Scroller {
-
-    public abstract void scroll(List<IEntity> entityList, Player player);
+    void scroll(List<IEntity> entityList, Player player);
 }

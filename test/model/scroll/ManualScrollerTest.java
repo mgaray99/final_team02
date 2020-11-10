@@ -18,6 +18,9 @@ import util.DukeApplicationTest;
  */
 public class ManualScrollerTest extends DukeApplicationTest {
 
+  private static final int ALWAYSSCROLL = 0;
+  private static final int NOSCROLL = -1;
+
   private static final int PLAYER_XVEL = 1;
   private static final int PLAYER_YVEL = 2;
 
@@ -58,7 +61,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testHorizontalScroller() {
-    ManualScroller scroller = new ManualScroller(true, false);
+    ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,NOSCROLL,NOSCROLL);
 
     playerEntity.moveOneStep();
     scroller.scroll(entityList, playerEntity);
@@ -78,7 +81,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testVerticalScroller() {
-    ManualScroller scroller = new ManualScroller(false, true);
+    ManualScroller scroller = new ManualScroller(NOSCROLL, NOSCROLL, ALWAYSSCROLL, ALWAYSSCROLL);
 
     playerEntity.moveOneStep();
     scroller.scroll(entityList, playerEntity);
@@ -98,7 +101,8 @@ public class ManualScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testEitherScroller() {
-    ManualScroller scroller = new ManualScroller(true, true);
+    ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,
+        ALWAYSSCROLL,ALWAYSSCROLL);
 
     playerEntity.moveOneStep();
     scroller.scroll(entityList, playerEntity);

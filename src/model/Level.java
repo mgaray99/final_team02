@@ -2,8 +2,9 @@ package model;
 
 import java.util.List;
 import model.configuration.LevelLoader;
-import model.entity.*;
-import model.scroll.HorizontalGenerationScroller;
+import model.scroll.DoodleGenerationScroller;
+import model.scroll.FlappyGenerationScroller;
+import model.scroll.ManualScroller;
 import model.scroll.Scroller;
 import model.entity.Block;
 import model.entity.Enemy;
@@ -19,10 +20,10 @@ public class Level {
   private final int MOVEMENT_SPEED = 1;
   private final double ENEMY_MOVEMENT_SPEED = 0.1;
   private final float JUMP_SPEED = -2f;
-  private static final int STARTX = 50;
-  private static final int STARTY = 600;
-  private static final int START_HEALTH = 10;
-  private static final String GENERATION_PATH = "resources/game_configuration/autoflappy.txt";
+
+  private static final int NO_SCROLL = -1;
+  private static final int ALWAYS_SCROLL = 0;
+  private static final String GENERATION_PATH = "resources/game_configuration/auto/automario.txt";
 
   private List<Player> playerList;
   private List<Enemy> enemyList;
@@ -36,8 +37,6 @@ public class Level {
 
   public Level(LevelLoader levelLoader) {
 
-    scroller = new HorizontalGenerationScroller(-0.10, 0, 15, GENERATION_PATH);
-
     this.playerList = levelLoader.getPlayerList();
     this.enemyList = levelLoader.getEnemyList();
     this.blockList = levelLoader.getBlockList();
@@ -45,6 +44,8 @@ public class Level {
     this.entityList = levelLoader.getEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
+
+    scroller = new FlappyGenerationScroller(-0.1, 0, 15, GENERATION_PATH);
   }
 
   public int getLevelLength() {
