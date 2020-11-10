@@ -3,6 +3,10 @@ package model.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import model.Level;
+import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
+import model.configuration.LevelLoader;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 

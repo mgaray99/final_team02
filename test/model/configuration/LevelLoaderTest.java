@@ -12,6 +12,6 @@ public class LevelLoaderTest {
     GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
     LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
     Level level = new Level(levelLoader);
-    assertEquals(level.getAllEntities().size(), 1);
+    assertEquals(level.getCopyOfEntityList().size(), 1);
   }
 }
