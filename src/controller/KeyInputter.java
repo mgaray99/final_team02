@@ -17,7 +17,6 @@ public class KeyInputter {
 
   private KeyInputterMethodCaller methodCaller;
   private Map<String, String> keyToMethodMap;
-  private static final String DEFAULT_KEY_INPUT_PATH = "resources/keyinputs/mariokeyinputs.properties";
   private String lastMethodFromKeyPress;
   private static final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
@@ -26,7 +25,7 @@ public class KeyInputter {
     lastMethodFromKeyPress = "";
     keyToMethodMap = new HashMap<>();
 
-    loadKeyInputsFromFile(DEFAULT_KEY_INPUT_PATH);
+    loadKeyInputsFromFile(model.getKeyInputsPath());
   }
 
   /**
@@ -44,7 +43,6 @@ public class KeyInputter {
 
       keyToMethodMap.clear();
       loadedMap.keySet().forEach(key -> keyToMethodMap.put(key, loadedMap.get(key)));
-
 
     }
     catch (Exception e) {

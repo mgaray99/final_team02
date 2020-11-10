@@ -37,11 +37,11 @@ public class GameView extends Application {
 
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
-  private static final double ANIMATION_SPEED = 1/10.0;
-  private static final String CONFIG_PATH = "configuration.properties";
-  private static final String TEXTURE_PATH = "resources/game_configuration/gametextures.properties";
+  private static final double ANIMATION_SPEED = 1/60.0;
+  private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String TEXTURES = "textures";
 
+  private String configPath = "doodlejump.properties";
   private GameModel model;
   private Stage stage;
   private Timeline animation;
@@ -60,7 +60,11 @@ public class GameView extends Application {
       map.buildMapOfScenes();
       mapOfScenes = map.getMapOfScenes();
 
+      listenOnControllers();
+
+      configPath = "doodlejump.properties";
       buildModel();
+
       prepareAnimation();
       stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
       stage.show();
@@ -71,10 +75,9 @@ public class GameView extends Application {
    */
   private void buildModel() {
     try {
-      listenOnControllers();
-      model = new GameModel(new GameConfiguration(CONFIG_PATH));
+      model = new GameModel(new GameConfiguration(configPath));
       inputter = new KeyInputter(model);
-      texturer = new Texturer(WIDTH, HEIGHT, TEXTURE_PATH,
+      texturer = new Texturer(WIDTH, HEIGHT, model.getTexturesPath(),
           (Group)(mapOfScenes.get(viewName.GAME).lookup("#" + TEXTURES)));
     } catch (InvalidFileException ife) {
       endGame();
@@ -82,13 +85,15 @@ public class GameView extends Application {
   }
 
   /**
-   * Updates the view given that time has passed
+   * Updates the view
    */
   private void update() {
-    model.updateGame();
+    if (currentView.equals(viewName.GAME)) {
+      model.updateGame();
 
-    List<IEntity> entityList = model.getAllEntitiesInLevel();
-    texturer.updateTextures(entityList, 15, 15);
+      List<IEntity> entityList = model.getAllEntitiesInLevel();
+      texturer.updateTextures(entityList, 15, 15);
+    }
   }
 
 
@@ -234,7 +239,10 @@ public class GameView extends Application {
   /**
    * select game type
    */
-  public void createGameTypeButtons(String GameType) { }
+  public void createGameTypeButtons(String type) {
+    configPath = type.toLowerCase().replaceAll(" ", "") + PROPERTIES_EXTENSION;
+    buildModel();
+  }
 
   /**
    * Switches to the controller screen

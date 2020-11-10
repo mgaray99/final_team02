@@ -1,6 +1,5 @@
 package view.scenes;
 
-import controller.GameController;
 import controller.ImageBuilder;
 import javafx.scene.Group;
 import javafx.scene.Node;

@@ -2,27 +2,32 @@ package model;
 
 import java.util.List;
 import model.configuration.LevelLoader;
+import model.scroll.AutoScroller;
+import model.scroll.DoodleGenerationScroller;
+import model.scroll.Scroller;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
 import model.entity.Player;
 import model.entity.PowerUp;
-import org.assertj.core.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
-// Hey guys Alex here -> I changed 2 things (I added an else statement at line 111 to
-// stop the player from moving indefinitely when left or right is pressed and I created a method
-// placeEntity which checks to see if an entity is a player and if so makes playerEntity equal it
 public class Level {
 
-  //private final List<Entity> allEntities = new ArrayList<>();
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
-  private final int MOVEMENT_SPEED = 1;
+
+  private Scroller scroller;
+  private final double MOVEMENT_SPEED = 0.2;
+  private final float JUMP_SPEED = -0.4f;
+  private final float gravityFactor = 0.015f;
   private final double ENEMY_MOVEMENT_SPEED = 0.1;
-  private final float JUMP_SPEED = -2f;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
 
+  private static final int NO_SCROLL = -1;
+  private static final int ALWAYS_SCROLL = 0;
+  private static final String GENERATION_PATH = "resources/game_configuration/auto/autodoodle.txt";
 
   private List<Player> playerList;
   private List<Enemy> enemyList;
@@ -30,11 +35,11 @@ public class Level {
   private List<Block> blockList;
   private List<IEntity> entityList;
 
-  private float gravityFactor = 0.25f;
   private int levelLength;
   private int levelWidth;
 
   public Level(LevelLoader levelLoader) {
+
     this.playerList = levelLoader.getPlayerList();
     this.enemyList = levelLoader.getEnemyList();
     this.blockList = levelLoader.getBlockList();
@@ -42,7 +47,9 @@ public class Level {
     this.entityList = levelLoader.getEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
+    scroller = new AutoScroller(0,0);
   }
+
 
   public int getLevelLength() {
     return this.levelLength;
@@ -52,8 +59,12 @@ public class Level {
     return this.levelWidth;
   }
 
+
   private void addEntity(IEntity entity) {
-    entityList.add(entity);
+    if (entity!=null) {
+      entityList.add(entity);
+    }
+
     if (entity instanceof Block) {
       blockList.add((Block)entity);
     }
@@ -96,12 +107,15 @@ public class Level {
 
   public void step() {
     if (!keyPressFunctions.isPaused()) {
-      checkCollisions();
-      updateEntities();
-      checkWinCondition();
+      checkForKeyPresses();
+      applyGravity();
       moveEntities();
+      checkCollisions();
+      checkWinCondition();
+      scroll();
     }
   }
+
 
   public void checkCollisions(){
     for(Player player : this.playerList){
@@ -111,11 +125,6 @@ public class Level {
         }
       }
     }
-  }
-
-  private void updateEntities() {
-    checkForKeyPresses();
-    applyGravity();
   }
 
 
@@ -143,7 +152,11 @@ public class Level {
     //note: add enemies to this later
     for(Player player : this.playerList){
       if(!player.getGrounded()){
-        player.setYVel(player.getYVel() + gravityFactor);
+        if (player.getGracePeriodBeforeFalling()) {
+          player.setGracePeriodBeforeFalling(false);
+        } else {
+          player.setYVel(player.getYVel() + gravityFactor);
+        }
       }
     }
   }
@@ -164,6 +177,21 @@ public class Level {
         }
       }
     }
+  }
+
+  /**
+   * Moves the entities in the level based on data from the List<Entity> and the player
+   */
+  private void scroll() {
+    scroller.scroll(entityList, playerList.get(0));
+  }
+
+  /**
+   * Sets the scroller of the level equal to the Scroller passed in
+   * @param configScroller the Scroller that will serve as this level's new Scroller
+   */
+  public void setScroller(Scroller configScroller) {
+    scroller = configScroller;
   }
 
   private void checkWinCondition(){};

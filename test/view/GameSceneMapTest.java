@@ -42,7 +42,7 @@ public class GameSceneMapTest extends DukeApplicationTest {
 
   /**
    * Tests that each game scene has a correctly built controller at the time of its insertion into
-   * the map - runs a dummy method on each GameScene value in the map, testing that trying to
+   * the map - runs a dummy method on each GameScene entityType in the map, testing that trying to
    * use its controller doesn't cause a NullPointerException
    */
   @Test

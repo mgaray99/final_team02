@@ -26,7 +26,7 @@ public class TexturerTest extends DukeApplicationTest{
   private static final double DEFAULT_BLOCKS_WIDE = 10;
   private static final double DEFAULT_BLOCKS_HIGH = 10;
   private static final String TEST_ENTITY = "entity";
-  private static final String PATH = "resources/game_configuration/gametextures.properties";
+  private static final String PATH = "resources/images/texturefiles/gametextures.properties";
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
 
@@ -51,7 +51,7 @@ public class TexturerTest extends DukeApplicationTest{
       assertEquals(1, textureNode.getChildren().size());
 
 
-      ImageView view = (ImageView)textureNode.lookup("#PLAYERx2y3");
+      ImageView view = (ImageView)textureNode.lookup("#Playerx2y3");
       assertEquals(2 * WIDTH/DEFAULT_BLOCKS_WIDE, view.getX());
       assertEquals(3 * HEIGHT/DEFAULT_BLOCKS_HIGH, view.getY());
       assertEquals(WIDTH/DEFAULT_BLOCKS_WIDE, view.getFitWidth());
@@ -71,7 +71,7 @@ public class TexturerTest extends DukeApplicationTest{
         DEFAULT_BLOCKS_HIGH);
     assertEquals(1, textureNode.getChildren().size());
 
-    ImageView view = (ImageView)textureNode.lookup("#BARRIER_BLOCKx5y6");
+    ImageView view = (ImageView)textureNode.lookup("#Blockx5y6");
     assertEquals(5 * WIDTH/DEFAULT_BLOCKS_WIDE, view.getX());
     assertEquals(6 * HEIGHT/DEFAULT_BLOCKS_HIGH, view.getY());
     assertEquals(WIDTH/DEFAULT_BLOCKS_WIDE, view.getFitWidth());

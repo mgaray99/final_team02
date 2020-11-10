@@ -49,6 +49,9 @@ public class GameScene extends Scene {
     getStylesheets().add(DEFAULT_CSS_FILEPATH);
   }
 
+  /**
+   * Sets the background Rectangle for the game
+   */
   private void makeBackground() {
     Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
     background.setId(BACKGROUND);

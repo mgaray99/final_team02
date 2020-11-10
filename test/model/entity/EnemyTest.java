@@ -1,15 +1,14 @@
 package model.entity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
 import model.Level;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 
 public class EnemyTest {

@@ -1,8 +1,7 @@
 package model.entity;
 
-import java.util.List;
-import model.CollisionDirection;
 import model.HitBox;
+import model.collision.CollisionDirection;
 
 public class Player implements IEntity, IGravity {
 
@@ -12,6 +11,7 @@ public class Player implements IEntity, IGravity {
     private double yVel = 0;
     private HitBox hitBox;
     private boolean grounded = true;
+    private boolean gracePeriodBeforeFalling = true;
 
     public Player(double x, double y){
         this.hitBox = new HitBox(x, y);
@@ -24,28 +24,36 @@ public class Player implements IEntity, IGravity {
 
     @Override
     public void checkCollision(IEntity entity) {
-        List<CollisionDirection> collision = hitBox.getCollisionDirections(entity.getHitBox());
-        if (collision.contains(CollisionDirection.BOTTOM)) {
+        CollisionDirection collision = hitBox.getCollisionDirection(entity.getHitBox());
+        //this if statement is for testing - will be removed
+        //if (!collision.contains(CollisionDirection.NONE)) {
+        //    yVel = 0;
+        //}
+        if (collision == CollisionDirection.BOTTOM) {
             this.setGrounded(true);
+            this.setGracePeriodBeforeFalling(true);
             if (yVel > 0) {
                 yVel = 0;
             }
+            this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
         }
-        if (collision.contains(CollisionDirection.TOP)) {
+        if (collision == CollisionDirection.TOP) {
             if (yVel < 0) {
                 yVel = 0;
             }
-
+            this.getHitBox().setYTop(entity.getHitBox().getYBottom());
         }
-        if (collision.contains(CollisionDirection.LEFT)) {
+        if (collision == CollisionDirection.LEFT) {
             if (xVel < 0) {
                 xVel = 0;
             }
+            this.getHitBox().setXLeft(entity.getHitBox().getXRight());
         }
-        if (collision.contains(CollisionDirection.RIGHT)) {
+        if (collision == CollisionDirection.RIGHT) {
             if (xVel > 0) {
                 xVel = 0;
             }
+            this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
         }
     }
 
@@ -84,5 +92,23 @@ public class Player implements IEntity, IGravity {
     @Override
     public void setGrounded(boolean grounded) {
         this.grounded = grounded;
+        if (grounded) {
+            this.gracePeriodBeforeFalling = true;
+        }
+    }
+
+    public boolean getGracePeriodBeforeFalling() {
+        return gracePeriodBeforeFalling;
+    }
+
+    public void setGracePeriodBeforeFalling(boolean isActive) {
+        this.gracePeriodBeforeFalling = isActive;
+    }
+
+    @Override
+    public void moveOneStep(){
+        this.getHitBox().translateX(this.getXVel());
+        this.getHitBox().translateY(this.getYVel());
+        this.setGrounded(false);
     }
 }

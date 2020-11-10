@@ -17,20 +17,20 @@ public class CollisionDetectionTest extends DukeApplicationTest {
   @Test
   public void collisionTrueXTest() {
     Player player = new Player(5, 5);
-    Block block = new Block(14.5,5);
+    Block block = new Block(5.9,5);
     player.setXVel(5);
     player.checkCollision(block);
-    assertEquals(player.getXVel(), 0);
+    assertEquals(0, player.getXVel());
   }
 
   @Test
   public void collisionTrueYTest() {
     Player player = new Player(5, 5);
     player.setGrounded(false);
-    Block block = new Block(5,14.5);
+    Block block = new Block(5,5.9);
     player.setXVel(5);
     player.checkCollision(block);
-    assertEquals(player.getYVel(), 0);
+    assertEquals(0, player.getYVel());
     assertTrue(player.getGrounded());
   }
 
@@ -41,29 +41,29 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     player.setYVel(5);
     Block block = new Block(10,10);
     player.checkCollision(block);
-    assertEquals(player.getXVel(), 5);
-    assertEquals(player.getYVel(), 5);
+    assertEquals(5, player.getXVel());
+    assertEquals(5, player.getYVel());
   }
 
   @Test
   public void collisionBorderlineHitTest() {
     Player player = new Player(0, 0);
-    Block block = new Block(9.99,9.99);
+    Block block = new Block(4.9,4.9);
     player.setXVel(5);
     player.setYVel(5);
     player.checkCollision(block);
-    assertEquals(player.getXVel(), 0);
-    assertEquals(player.getYVel(), 0);
+    assertEquals(5, player.getXVel());
+    assertEquals(0, player.getYVel());
   }
 
   @Test
   public void collisionBorderlineMissTest() {
     Player player = new Player(0, 0);
-    Block block = new Block(10,10);
+    Block block = new Block(5,5);
     player.setXVel(5);
     player.setYVel(5);
     player.checkCollision(block);
-    assertEquals(player.getXVel(), 5);
-    assertEquals(player.getYVel(), 5);
+    assertEquals(5, player.getXVel());
+    assertEquals(5, player.getYVel());
   }
 }

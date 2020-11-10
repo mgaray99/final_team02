@@ -5,6 +5,10 @@ import java.util.Properties;
 
 public class GameConfiguration {
     public static final String LEVEL_KEY = "level";
+    private static final String TEXTURES_KEY = "textures";
+    private static final String KEYINPUTS_KEY = "keys";
+    private static final String SCROLLER_KEY = "scroller";
+    private static final String AUTO_KEY = "autofile";
     private static final String DEFAULT_LEVEL_FILEPATH = "./data/";
     private static final String ROOT_SOURCE_INDICATOR = "./";
     private final Properties properties;
@@ -28,6 +32,37 @@ public class GameConfiguration {
         } else {
             this.levelFile = new File(DEFAULT_LEVEL_FILEPATH + levelFileName);
         }
+    }
+
+    /**
+     * Determines the String filepath that holds the textures (i.e. ./.../mariotextures.properties)
+     * @return the filepath to the textures file
+     */
+    public String getTexturesPath() { return properties.getProperty(TEXTURES_KEY); }
+
+    /**
+     * Determines the String filepath that holds the textures (i.e. ./.../mariokeyinputs.properties)
+     * @return the filepath to the key inputs file
+     */
+    public String getKeyInputsPath() { return properties.getProperty(KEYINPUTS_KEY); }
+
+    /**
+     * Returns the String path to the .txt file specifying how to automatically generate new parts
+     * of this level (i.e. ./.../automario.txt)
+     * (will be NA if no such generation is needed)
+     *
+     * @return the filepath to the .txt file specifying automatic generation
+     */
+    public String getAutoGeneratorPath() { return properties.getProperty(AUTO_KEY); }
+
+    /**
+     * Determines the String array containing data necessary to build a Scroller
+     * (i.e. ["Auto", "0.1", "-0.5"])
+     * @return the list of arguments related to a scroller as a String array
+     */
+    public String[] getScrollerArgs() {
+        String scrollerLine = properties.getProperty(SCROLLER_KEY);
+        return scrollerLine.split(",");
     }
 
     public File getLevelFile() {

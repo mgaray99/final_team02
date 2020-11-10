@@ -54,11 +54,12 @@ public class PlayerMovementTest extends DukeApplicationTest {
   @Test
   public void PlayerJumpPlayerGoesBackDownTest() {
     gameModel.getKeyPressFunctions().startPlayerJumping();
-    for(int i=0; i < 5; i++) {
+    for(int i=0; i < 50; i++) {
       gameModel.getLevel().step();
     }
+    gameModel.getKeyPressFunctions().stopPlayerJumping();
     double oldYPos = player.getHitBox().getYTop();
-    for(int i=0; i < 200; i++) {
+    for(int i=0; i < 10000; i++) {
       gameModel.getLevel().step();
     }
     double newYPos = player.getHitBox().getYTop();
@@ -69,7 +70,9 @@ public class PlayerMovementTest extends DukeApplicationTest {
   public void PlayerJumpStopsAtGroundTest() {
     double oldYPos = player.getHitBox().getYTop();
     gameModel.getKeyPressFunctions().startPlayerJumping();
-    for(int i=0; i < 200; i++) {
+    gameModel.getLevel().step();
+    gameModel.getKeyPressFunctions().stopPlayerJumping();
+    for(int i=0; i < 10000; i++) {
       gameModel.getLevel().step();
     }
     double newYPos = player.getHitBox().getYTop();
