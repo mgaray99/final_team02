@@ -49,7 +49,7 @@ public class Level {
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
 
-    scroller = new DoodleGenerationScroller(NO_SCROLL, NO_SCROLL, 3, NO_SCROLL, -5, GENERATION_PATH);
+    scroller = new DoodleGenerationScroller(NO_SCROLL, NO_SCROLL, 3, NO_SCROLL, -7, GENERATION_PATH);
   }
 
   public int getLevelLength() {

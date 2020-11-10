@@ -26,11 +26,12 @@ public class DoodleGenerationScroller extends ManualScroller{
    */
   @Override
   public void scroll(List<IEntity> entityList, Player player) {
-    checkForGeneration(entityList);
-
-    flagY-= player.getYVel();
 
     super.scroll(entityList, player);
+
+    flagY += currentYScroll;
+    checkForGeneration(entityList);
+
   }
 
   /**
