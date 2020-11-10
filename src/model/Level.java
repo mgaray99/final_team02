@@ -16,8 +16,9 @@ public class Level {
 
   //private final List<Entity> allEntities = new ArrayList<>();
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
-  private final int MOVEMENT_SPEED = 1;
-  private final float JUMP_SPEED = -2f;
+  private final double MOVEMENT_SPEED = 0.2;
+  private final float JUMP_SPEED = -0.2f;
+  private final float gravityFactor = 0.001f;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
@@ -29,7 +30,6 @@ public class Level {
   private List<Block> blockList;
   private List<IEntity> entityList;
 
-  private float gravityFactor = 0.25f;
   private int levelLength;
   private int levelWidth;
 

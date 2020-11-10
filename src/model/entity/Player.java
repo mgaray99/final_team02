@@ -25,6 +25,10 @@ public class Player implements IEntity, IGravity {
     @Override
     public void checkCollision(IEntity entity) {
         List<CollisionDirection> collision = hitBox.getCollisionDirections(entity.getHitBox());
+        //this if statement is for testing - will be removed
+        if (!collision.contains(CollisionDirection.NONE)) {
+            yVel = 0;
+        }
         if (collision.contains(CollisionDirection.BOTTOM)) {
             this.setGrounded(true);
             if (yVel > 0) {
@@ -84,5 +88,12 @@ public class Player implements IEntity, IGravity {
     @Override
     public void setGrounded(boolean grounded) {
         this.grounded = grounded;
+    }
+
+    @Override
+    public void moveOneStep(){
+        this.getHitBox().translateX(this.getXVel());
+        this.getHitBox().translateY(this.getYVel());
+        this.setGrounded(false);
     }
 }

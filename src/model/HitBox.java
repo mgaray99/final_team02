@@ -13,9 +13,9 @@ import java.util.List;
 
 public class HitBox {
 
-  public static final double MAX_INTERSECT = 2.01;
-  public static final int X_SIZE = 10;
-  public static final int Y_SIZE = 10;
+  public static final double MAX_INTERSECT = 0.5;
+  public static final int X_SIZE = 1;
+  public static final int Y_SIZE = 1;
   double xLeft;
   double yTop;
   int xSize;
@@ -73,10 +73,12 @@ public class HitBox {
     List<CollisionDirection> collisions = new ArrayList<>();
     double xRight = xLeft + xSize;
     double yBottom = yTop + ySize;
-    if (!((xRight >= otherBox.getXLeft() && xLeft <= otherBox.getXRight()) &&
-        (yBottom >= otherBox.getYTop() && yTop <= otherBox.getYBottom()))) {
+    if (!((xRight > otherBox.getXLeft() && xLeft < otherBox.getXRight()) &&
+        (yBottom > otherBox.getYTop() && yTop < otherBox.getYBottom()))) {
+      collisions.add(CollisionDirection.NONE);
+      System.out.print("bbbbbbbbbbb");
       return collisions;
-    }
+    } else {System.out.print("collision");}
     if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
       collisions.add(CollisionDirection.RIGHT);
     }
