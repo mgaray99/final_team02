@@ -16,7 +16,7 @@ public class AutoGenerationScroller extends AutoScroller {
     try {
       helper = new AutoGenerationHelper(path);
 
-      GENERATE_MAX_BOUND = NUM_BLOCKS + helper.getAddedNumColumns();
+      GENERATE_MAX_BOUND = NUM_BLOCKS;
       flagX = GENERATE_MAX_BOUND;
     }
     catch (Exception e) {
@@ -42,8 +42,24 @@ public class AutoGenerationScroller extends AutoScroller {
    */
   private void checkForGeneration(List<IEntity> entityList) {
     if (flagX <= GENERATE_MAX_BOUND) {
-      helper.generateForEntityList(entityList, 0, GENERATE_MAX_BOUND);
+      helper.generateForEntityList(entityList, 0, flagX);
       flagX+= helper.getAddedNumColumns();
+      cleanGarbage(entityList);
+    }
+  }
+
+  /**
+   * Checks the entityList to see if any of the entities have gone off screen forever (i.e. have
+   * x < 0), if so, removes them from entityList
+   *
+   * @param entityList the list of entities to check
+   */
+  private void cleanGarbage(List<IEntity> entityList) {
+    for (int index = entityList.size() - 1; index >= 0; index --) {
+      IEntity entity = entityList.get(index);
+      if (entity.getHitBox().getXRight() < 0) {
+        entityList.remove(entity);
+      }
     }
   }
 }
