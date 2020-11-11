@@ -236,6 +236,8 @@ public class Level {
     return new ArrayList<IEntity>(entityList);
   }
 
+  public List<IEntity> getAllEntities() { return entityList; }
+
   public List<Player> getPlayerList() {return playerList;}
 
 }

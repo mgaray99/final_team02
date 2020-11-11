@@ -1,9 +1,0 @@
-Dimensions 15 15
-Default 0
-Constant 3 14:14 *:*
-Random 2 RIGHT:DOWN 13 U(0:14) 1 1
-Random 3 RIGHT:UP 13 U(0:14) R(1,2,3;0.5,0.3,0.2) 1
-Random 3 RIGHT:DOWN U(5:7) U(0:12) 1 R(3,4,5,6;0.2,0.3,0.3,0.2)
-Random 3 RIGHT:DOWN U(8:9) U(0:12) 1 R(3,4,5,6;0.2,0.3,0.3,0.2)
-Random 3 RIGHT:DOWN U(10:12) U(0:12) 1 R(3,4,5,6;0.2,0.3,0.3,0.2)
-Random 0 RIGHT:DOWN 14 U(0:13) 1 R(2,3,4;0.3,0.3,0.4)

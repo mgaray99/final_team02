@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<generator>
+  <Dimensions>
+    <rows>10</rows>
+    <columns>15</columns>
+  </Dimensions>
+  <Default>
+    <entity>D</entity>
+  </Default>
+  <Constant>
+    <entity>C</entity>
+    <rows>9:9</rows>
+    <columns>*:*</columns>
+  </Constant>
+  <Random>
+    <entity>R</entity>
+    <direction>RIGHT:DOWN</direction>
+    <originrow>7</originrow>
+    <origincol>U(0:12)</origincol>
+    <numrows>2</numrows>
+    <numcols>3</numcols>
+  </Random>
+</generator>
