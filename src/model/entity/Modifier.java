@@ -30,8 +30,8 @@ public class Modifier {
     public enum ModifierType{
         MOVEMENT_SPEED,
         JUMP_SPEED,
-        COLLISION_DAMAGE,
-        HEALTH,
+        //COLLISION_DAMAGE,
+        //HEALTH,
         GRAVITY
     }
 }

@@ -12,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class Level {
 
+  public static final int FRAMES_PER_SECOND = 60;
+  public static final int MODIFIER_DURATION = 10;
+  public static final double MODIFIER_VALUE = 1.5;
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
 
   private Scroller scroller;
@@ -76,7 +79,9 @@ public class Level {
       this.playerList.add((Player)entity);
     }
     if (entity instanceof PowerUp) {
-      this.powerUpList.add((PowerUp)entity);
+      PowerUp powerUp = (PowerUp) entity;
+      powerUp.setRandomModifier(MODIFIER_VALUE, MODIFIER_DURATION * FRAMES_PER_SECOND);
+      this.powerUpList.add(powerUp);
     }
   }
 

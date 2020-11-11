@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PowerUpBlock extends Block implements ISpawner{
     private final List<IEntity> spawnList = new ArrayList<>();
-    private int maxSpawnCount;
+    private int maxSpawnCount = 1;
 
     public PowerUpBlock(double x, double y) {
         super(x, y);
