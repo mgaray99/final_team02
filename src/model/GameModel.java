@@ -51,7 +51,7 @@ public class GameModel {
      */
     public List<IEntity> getAllEntitiesInLevel() {
         List<IEntity> defensivelyCopiedEntityList = new ArrayList<>();
-        defensivelyCopiedEntityList.addAll(level.getAllEntities());
+        defensivelyCopiedEntityList.addAll(level.getCopyOfEntityList());
         return defensivelyCopiedEntityList;
     }
 

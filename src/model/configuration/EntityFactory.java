@@ -5,33 +5,31 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import model.entity.Block;
-import model.entity.Enemy;
+
 import model.entity.IEntity;
-import model.entity.Player;
-import model.entity.PowerUp;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityFactory {
 
   private LevelDecoder decoder;
-  private Map<String, String> levelDecoder;
+  private Map<String, String> idToEntityMap;
   private static final String ENTITY_PACKAGE_PATH = "model.entity.";
 
   public EntityFactory() {
     try {
       decoder = new LevelDecoder();
-      levelDecoder = new HashMap<>(decoder.getIdToEntityMap());
+      idToEntityMap = new HashMap<>(decoder.getIdToEntityMap());
     }
     catch (IOException e) {
 
     }
   }
 
+  @Nullable
   public IEntity createEntity(String entityString, double rowIndex, double colIndex) {
       IEntity decodedEntity;
-      String decodedEntityString = levelDecoder.get(entityString);
-      if(decodedEntityString == null) return null;
+      String decodedEntityString = idToEntityMap.get(entityString);
+      if(decodedEntityString == null) return (IEntity)null;
 
       decodedEntity = reflectEntity(decodedEntityString, rowIndex, colIndex);
       return decodedEntity;

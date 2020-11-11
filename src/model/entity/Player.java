@@ -3,18 +3,25 @@ package model.entity;
 import model.HitBox;
 import model.collision.CollisionDirection;
 
-public class Player implements IEntity, IGravity {
+import java.util.Arrays;
+import java.util.List;
+
+public class Player implements IMobileEntity, IDamageable {
 
     private final String type = this.getClass().getSimpleName();
 
     private double xVel = 0;
     private double yVel = 0;
-    private HitBox hitBox;
+    private final HitBox hitBox;
     private boolean grounded = true;
     private boolean gracePeriodBeforeFalling = true;
+    private double health = 0;
+    private double damage = 0;
 
     public Player(double x, double y){
         this.hitBox = new HitBox(x, y);
+        this.setHealth(100);
+        this.setCollisionDamage(100);
     }
 
     @Override
@@ -29,31 +36,11 @@ public class Player implements IEntity, IGravity {
         //if (!collision.contains(CollisionDirection.NONE)) {
         //    yVel = 0;
         //}
-        if (collision == CollisionDirection.BOTTOM) {
-            this.setGrounded(true);
-            this.setGracePeriodBeforeFalling(true);
-            if (yVel > 0) {
-                yVel = 0;
-            }
-            this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
-        }
-        if (collision == CollisionDirection.TOP) {
-            if (yVel < 0) {
-                yVel = 0;
-            }
-            this.getHitBox().setYTop(entity.getHitBox().getYBottom());
-        }
-        if (collision == CollisionDirection.LEFT) {
-            if (xVel < 0) {
-                xVel = 0;
-            }
-            this.getHitBox().setXLeft(entity.getHitBox().getXRight());
-        }
-        if (collision == CollisionDirection.RIGHT) {
-            if (xVel > 0) {
-                xVel = 0;
-            }
-            this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
+
+        this.checkGravity(entity, collision);
+        if(entity instanceof IDamageable && this.canApplyDamage(collision)){
+            this.attemptApplyDamage((IDamageable) entity,collision);
+            System.out.println("Player is attempting to attack from direction " + collision.toString() + "!");
         }
     }
 
@@ -97,10 +84,11 @@ public class Player implements IEntity, IGravity {
         }
     }
 
+    @Override
     public boolean getGracePeriodBeforeFalling() {
         return gracePeriodBeforeFalling;
     }
-
+    @Override
     public void setGracePeriodBeforeFalling(boolean isActive) {
         this.gracePeriodBeforeFalling = isActive;
     }
@@ -110,5 +98,35 @@ public class Player implements IEntity, IGravity {
         this.getHitBox().translateX(this.getXVel());
         this.getHitBox().translateY(this.getYVel());
         this.setGrounded(false);
+    }
+
+    @Override
+    public double getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(double health) {
+        this.health = health;
+    }
+
+    @Override
+    public double getCollisionDamage() {
+        return this.damage;
+    }
+
+    @Override
+    public void setCollisionDamage(double collisionDamage) {
+        this.damage = collisionDamage;
+    }
+
+    @Override
+    public List<CollisionDirection> getAppliesDamageDirections() {
+        return Arrays.asList(CollisionDirection.BOTTOM);
+    }
+
+    @Override
+    public List<CollisionDirection> getReceivesDamageDirections() {
+        return Arrays.asList(CollisionDirection.TOP, CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
     }
 }
