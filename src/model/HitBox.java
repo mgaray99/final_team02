@@ -81,10 +81,11 @@ public class HitBox {
 
     double xRight = xLeft + xSize;
     double yBottom = yTop + ySize;
-    if (!((xRight >= otherBox.getXLeft() && xLeft <= otherBox.getXRight()) &&
-        (yBottom >= otherBox.getYTop() && yTop <= otherBox.getYBottom()))) {
+    if (!((xRight > otherBox.getXLeft() && xLeft < otherBox.getXRight()) &&
+        (yBottom > otherBox.getYTop() && yTop < otherBox.getYBottom()))) {
       return CollisionDirection.NONE;
     }
+
 
     if (between(yBottom - otherBox.getYTop(), 0, MAX_INTERSECT))  {
       return CollisionDirection.BOTTOM;
@@ -93,7 +94,7 @@ public class HitBox {
         return CollisionDirection.TOP;
     }
 
-    if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
+    //if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
 
       if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
         return CollisionDirection.RIGHT;
@@ -101,7 +102,7 @@ public class HitBox {
       if (between(otherBox.getXRight() - xLeft, 0, MAX_INTERSECT))  {
         return CollisionDirection.LEFT;
       }
-    }
+    //}
     return CollisionDirection.NONE;
   }
 
