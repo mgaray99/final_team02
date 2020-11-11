@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import model.configuration.LevelLoader;
 import model.entity.*;
 import model.scroll.AutoScroller;
@@ -133,6 +135,18 @@ public class Level {
         entitiesToRemove.add(enemy);
       }
     }
+    for(Block block : this.blockList){
+      if(block instanceof ISpawner){
+        ISpawner spawner = (ISpawner)block;
+        Optional<IEntity> optionalIEntity = spawner.attemptSpawnEntity();
+        optionalIEntity.ifPresent(this::addEntity);
+      }
+    }
+    for(PowerUp powerUp : this.powerUpList){
+      if(powerUp.hasAppliedModifier()){
+        entitiesToRemove.add(powerUp);
+      }
+    }
 
     // removes all entities from the level in the removal list
     // this should be done only if all entity iterations in this method have been completed
@@ -155,10 +169,10 @@ public class Level {
       if(!enemyList.isEmpty()){
         for(Enemy enemy : enemyList){
           if(player.getHitBox().getXLeft() < enemy.getHitBox().xLeft){
-            enemy.setXVel(ENEMY_MOVEMENT_SPEED * -1);
+            enemy.setXVel(this.ENEMY_MOVEMENT_SPEED * -1);
           }
           else if(player.getHitBox().getXLeft() > enemy.getHitBox().xLeft){
-            enemy.setXVel(ENEMY_MOVEMENT_SPEED);
+            enemy.setXVel(this.ENEMY_MOVEMENT_SPEED);
           }
           else{
             enemy.setXVel(0);
@@ -183,14 +197,14 @@ public class Level {
         jumpSpeedModifier = playerEntity.getModifiers().get(Modifier.ModifierType.JUMP_SPEED).getValue();
       }
       if (keyPressFunctions.isPlayerMovingRight()) {
-        playerEntity.setXVel(MOVEMENT_SPEED * movementSpeedModifier);
+        playerEntity.setXVel(this.MOVEMENT_SPEED * movementSpeedModifier);
       } else if (keyPressFunctions.isPlayerMovingLeft()) {
-        playerEntity.setXVel(MOVEMENT_SPEED * -1 * movementSpeedModifier);
+        playerEntity.setXVel(this.MOVEMENT_SPEED * -1 * movementSpeedModifier);
       } else {
         playerEntity.setXVel(0);
       }
       if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
-        playerEntity.jump(JUMP_SPEED * jumpSpeedModifier);
+        playerEntity.jump(this.JUMP_SPEED * jumpSpeedModifier);
       }
     }
   }

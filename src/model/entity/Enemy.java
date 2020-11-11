@@ -6,7 +6,7 @@ import model.collision.CollisionDirection;
 import java.util.Arrays;
 import java.util.List;
 
-public class Enemy implements IMobileEntity, IDamageable{
+public class Enemy implements IEntity, IGravitate, IDamageable{
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
     private double xVel = 0;

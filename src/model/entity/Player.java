@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Player implements IMobileEntity, IDamageable, IEmpowerable {
+public class Player implements IEntity, IGravitate, IDamageable, IEmpowerable {
 
     private final String type = this.getClass().getSimpleName();
 
@@ -46,8 +46,14 @@ public class Player implements IMobileEntity, IDamageable, IEmpowerable {
         }
         if(entity instanceof IEmpowering && collision != CollisionDirection.NONE){
             IEmpowering empowering = (IEmpowering) entity;
-            this.applyModifier(empowering.getModifier());
-            empowering.setHasAppliedModifier(true);
+            if(!empowering.hasAppliedModifier()){
+                this.applyModifier(empowering.getModifier());
+                empowering.setHasAppliedModifier(true);
+            }
+        }
+        if(entity instanceof ISpawner && collision != CollisionDirection.NONE){
+            ISpawner spawner = (ISpawner)entity;
+            spawner.attemptCreateAndAddSpawn(collision);
         }
     }
 
