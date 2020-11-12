@@ -24,7 +24,7 @@ public class Level {
 
   private static final int NO_SCROLL = -1;
   private static final int ALWAYS_SCROLL = 0;
-  private static final String GENERATION_PATH = "resources/game_configuration/auto/autodoodle.txt";
+  private static final String GENERATION_PATH = "resources/game_configuration/auto/autodoodle.xml";
 
   private List<Player> playerList;
   private List<Enemy> enemyList;

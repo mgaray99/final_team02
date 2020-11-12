@@ -1,6 +1,5 @@
 package model.scroll;
 
-import java.util.List;
 import java.util.Map;
 import model.Level;
 import model.autogenerator.AutoGenerator;
@@ -26,6 +25,7 @@ public class AutoGenerationHelper {
       currentGeneration = generator.generateNextBlock();
     }
     catch (Exception e) {
+      e.printStackTrace();
       throw new GenerationException("");
     }
   }

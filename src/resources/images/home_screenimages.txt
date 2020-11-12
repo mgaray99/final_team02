@@ -1,4 +1,0 @@
-HOME_SCREEN
-mario 0.50 0.16 1.00 0.33 src/resources/images/homeImage/mario.jpg
-doodle 0.50 0.49 1.00 0.33 src/resources/images/homeImage/doodle.jpg
-flappy 0.50 0.82 1.00 0.33 src/resources/images/homeImage/flappy.jpg

@@ -1,4 +1,0 @@
-GAME
-MenuCommand 0.10 0.05 0.15 0.05 homeScreen
-SaveCommand 0.90 0.12 0.15 0.05 saveGame
-ControlsCommand 0.90 0.05 0.15 0.05 switchToControlScreen

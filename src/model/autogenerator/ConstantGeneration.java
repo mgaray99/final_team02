@@ -2,8 +2,8 @@ package model.autogenerator;
 
 public class ConstantGeneration extends GenerationInstruction {
 
-  public ConstantGeneration(int width, int height, String[] args) {
-    super(width, height);
+  public ConstantGeneration(int rows, int cols, String[] args) {
+    super(rows, cols);
 
     try {
       buildInstruction(args);

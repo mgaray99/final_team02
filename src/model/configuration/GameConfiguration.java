@@ -47,8 +47,8 @@ public class GameConfiguration {
     public String getKeyInputsPath() { return properties.getProperty(KEYINPUTS_KEY); }
 
     /**
-     * Returns the String path to the .txt file specifying how to automatically generate new parts
-     * of this level (i.e. ./.../automario.txt)
+     * Returns the String path to the .xml file specifying how to automatically generate new parts
+     * of this level (i.e. ./.../automario.xml)
      * (will be NA if no such generation is needed)
      *
      * @return the filepath to the .txt file specifying automatic generation
@@ -62,7 +62,14 @@ public class GameConfiguration {
      */
     public String[] getScrollerArgs() {
         String scrollerLine = properties.getProperty(SCROLLER_KEY);
-        return scrollerLine.split(",");
+        //if (scrollerLine.indexOf(",") > 0) {
+            return scrollerLine.split(",");
+        //}
+        /*else {
+            String[] line = new String[1];
+            line[0] = scrollerLine;
+            return line;
+        }*/
     }
 
     public File getLevelFile() {

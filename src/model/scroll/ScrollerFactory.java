@@ -26,6 +26,7 @@ public class ScrollerFactory {
       return scroller;
     }
     catch (IndexOutOfBoundsException | NumberFormatException | GenerationException ex) {
+      ex.printStackTrace();
       System.out.println("No scrolling allowed for this level - bad configuration");
       return new AutoScroller(0,0);
     }
