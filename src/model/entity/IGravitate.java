@@ -1,8 +1,9 @@
 package model.entity;
 
+import model.HitBox;
 import model.collision.CollisionDirection;
 
-public interface IMobileEntity extends IEntity {
+public interface IGravitate {
 
   default void checkGravity(IEntity entity, CollisionDirection collision){
     if (collision == CollisionDirection.BOTTOM) {
@@ -33,7 +34,7 @@ public interface IMobileEntity extends IEntity {
     }
   }
 
-  default void updateGravity(double levelGravityFactor) {
+  default void applyGravity(double levelGravityFactor) {
     if(!this.getGrounded()){
       if (this.getGracePeriodBeforeFalling()) {
         this.setGracePeriodBeforeFalling(false);
@@ -55,4 +56,15 @@ public interface IMobileEntity extends IEntity {
   boolean getGracePeriodBeforeFalling();
 
   void setGracePeriodBeforeFalling(boolean isActive);
+
+  // Expected velocity methods that can be implemented by IEntity
+  void setXVel(double xVel);
+
+  double getXVel();
+
+  HitBox getHitBox();
+
+  void setYVel(double yVel);
+
+  double getYVel();
 }

@@ -6,7 +6,7 @@ import model.collision.CollisionDirection;
 import java.util.Arrays;
 import java.util.List;
 
-public class Enemy implements IMobileEntity, IDamageable{
+public class Enemy implements IEntity, IGravitate, IDamageable{
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
     private double xVel = 0;
@@ -37,9 +37,8 @@ public class Enemy implements IMobileEntity, IDamageable{
         //}
 
         this.checkGravity(entity, collision);
-        if(entity instanceof IDamageable && this.canApplyDamage(collision)){
+        if(entity instanceof IDamageable && collision != CollisionDirection.NONE && this.canApplyDamage(collision)){
             this.attemptApplyDamage((IDamageable) entity,collision);
-            System.out.println("Enemy is attempting to attack from direction " + collision.toString() + "!");
         }
     }
 
