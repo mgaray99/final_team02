@@ -9,7 +9,7 @@ public interface IGravitate {
     if (collision == CollisionDirection.BOTTOM) {
       System.out.print("Bottom");
       this.setGrounded(true);
-      this.setGracePeriodBeforeFalling(true);
+      this.resetGracePeriodBeforeFalling();
       if (this.getYVel() > 0) {
         this.setYVel(0);
       }
@@ -40,8 +40,8 @@ public interface IGravitate {
 
   default void applyGravity(double levelGravityFactor) {
     if(!this.getGrounded()){
-      if (this.getGracePeriodBeforeFalling()) {
-        this.setGracePeriodBeforeFalling(false);
+      if (this.getGracePeriodBeforeFalling() > 0) {
+        this.subtractFromGracePeriodBeforeFalling();
       } else {
         this.setYVel(this.getYVel() + levelGravityFactor);
       }
@@ -57,9 +57,11 @@ public interface IGravitate {
 
   void setGrounded(boolean grounded);
 
-  boolean getGracePeriodBeforeFalling();
+  int getGracePeriodBeforeFalling();
 
-  void setGracePeriodBeforeFalling(boolean isActive);
+  void resetGracePeriodBeforeFalling();
+
+  void subtractFromGracePeriodBeforeFalling();
 
   // Expected velocity methods that can be implemented by IEntity
   void setXVel(double xVel);

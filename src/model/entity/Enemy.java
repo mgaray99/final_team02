@@ -7,12 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Enemy implements IEntity, IGravitate, IDamageable{
+
+    private static final int GRACE_PERIOD = 2;
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
     private double xVel = 0;
     private double yVel = 0;
     private boolean grounded = true;
-    private boolean gracePeriodBeforeFalling = true;
+    private int gracePeriodBeforeFalling = GRACE_PERIOD;
     private double health = 0;
     private double damage = 0;
 
@@ -78,11 +80,22 @@ public class Enemy implements IEntity, IGravitate, IDamageable{
     }
 
     @Override
-    public boolean getGracePeriodBeforeFalling() {
+    public int getGracePeriodBeforeFalling() {
         return gracePeriodBeforeFalling;
     }
+
     @Override
-    public void setGracePeriodBeforeFalling(boolean isActive) {
+    public void resetGracePeriodBeforeFalling() {
+
+    }
+
+    @Override
+    public void subtractFromGracePeriodBeforeFalling() {
+
+    }
+
+    //@Override
+    public void setGracePeriodBeforeFalling(int isActive) {
         this.gracePeriodBeforeFalling = isActive;
     }
 

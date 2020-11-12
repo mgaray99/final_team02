@@ -1,5 +1,6 @@
 package model.entity;
 
+import java.util.Collections;
 import model.HitBox;
 import model.collision.CollisionDirection;
 
@@ -11,12 +12,14 @@ import java.util.Map;
 public class Player implements IEntity, IGravitate, IDamageable, IEmpowerable {
 
     private final String type = this.getClass().getSimpleName();
+    public static final int GRACE_PERIOD = 1;
 
     private double xVel = 0;
     private double yVel = 0;
     private final HitBox hitBox;
     private boolean grounded = true;
-    private boolean gracePeriodBeforeFalling = true;
+    private int gracePeriodBeforeFalling = GRACE_PERIOD;
+    private int gracePeriodBeforeSidewaysMovement = GRACE_PERIOD;
     private double health = 0;
     private double damage = 0;
     private final Map<Modifier.ModifierType, Modifier> modifiers = new HashMap<>();
@@ -38,6 +41,10 @@ public class Player implements IEntity, IGravitate, IDamageable, IEmpowerable {
         CollisionDirection collision = hitBox.getCollisionDirection(entity.getHitBox());
         if (collision != CollisionDirection.NONE) {
             this.setCurrentCollision(collision);
+        }
+
+        if (collision == CollisionDirection.LEFT || collision == CollisionDirection.RIGHT ) {
+            this.resetGracePeriodBeforeSidewaysMovement();
         }
         //this if statement is for testing - will be removed
         //if (!collision.contains(CollisionDirection.NONE)) {
@@ -96,30 +103,62 @@ public class Player implements IEntity, IGravitate, IDamageable, IEmpowerable {
     public void setGrounded(boolean grounded) {
         this.grounded = grounded;
         if (grounded) {
-            this.gracePeriodBeforeFalling = true;
+            this.resetGracePeriodBeforeFalling();
         }
     }
 
     @Override
-    public boolean getGracePeriodBeforeFalling() {
+    public int getGracePeriodBeforeFalling() {
         return gracePeriodBeforeFalling;
     }
-    @Override
-    public void setGracePeriodBeforeFalling(boolean isActive) {
+    //@Override
+    public void setGracePeriodBeforeFalling(int isActive) {
         this.gracePeriodBeforeFalling = isActive;
     }
 
     @Override
-    public void moveOneStep() {
-        if (!((this.getCurrentCollision() == CollisionDirection.LEFT && this.getXVel() < 0) || (
-            this.getCurrentCollision() == CollisionDirection.RIGHT && this.getXVel() > 0))) {
+    public void subtractFromGracePeriodBeforeFalling() {
+        gracePeriodBeforeFalling -= 1;
+    }
 
+
+    public int getGracePeriodBeforeSidewaysMovement() {
+        return gracePeriodBeforeSidewaysMovement;
+    }
+
+    public void setGracePeriodBeforeSidewaysMovement(int isActive) {
+        this.gracePeriodBeforeSidewaysMovement = isActive;
+    }
+
+    public void resetGracePeriodBeforeSidewaysMovement() {
+        this.gracePeriodBeforeSidewaysMovement = GRACE_PERIOD;
+    }
+
+    public void resetGracePeriodBeforeFalling() {
+        this.gracePeriodBeforeFalling = GRACE_PERIOD;
+    }
+
+    @Override
+    public void moveOneStep() {
+        //if (!((this.getCurrentCollision() == CollisionDirection.LEFT && this.getXVel() < 0) || (
+        //   this.getCurrentCollision() == CollisionDirection.RIGHT && this.getXVel() > 0))) {
+
+        if (this.getGracePeriodBeforeSidewaysMovement() > 0) {
+            this.subtractFromGracePeriodBeforeSidewaysMovement();
+            this.setXVel(0);
+        } else {
             this.getHitBox().translateX(this.getXVel());
         }
+
+        //}
         this.getHitBox().translateY(this.getYVel());
         this.setGrounded(false);
-
     }
+
+    public void subtractFromGracePeriodBeforeSidewaysMovement() {
+        gracePeriodBeforeSidewaysMovement -= 1;
+    }
+
 
     @Override
     public double getHealth() {
@@ -143,7 +182,7 @@ public class Player implements IEntity, IGravitate, IDamageable, IEmpowerable {
 
     @Override
     public List<CollisionDirection> getAppliesDamageDirections() {
-        return Arrays.asList(CollisionDirection.BOTTOM);
+        return Collections.singletonList(CollisionDirection.BOTTOM);
     }
 
     @Override
