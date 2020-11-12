@@ -17,6 +17,7 @@ public class Player implements IMobileEntity, IDamageable {
     private boolean gracePeriodBeforeFalling = true;
     private double health = 0;
     private double damage = 0;
+    private CollisionDirection currentCollision;
 
     public Player(double x, double y){
         this.hitBox = new HitBox(x, y);
@@ -32,11 +33,13 @@ public class Player implements IMobileEntity, IDamageable {
     @Override
     public void checkCollision(IEntity entity) {
         CollisionDirection collision = hitBox.getCollisionDirection(entity.getHitBox());
+        if (collision != CollisionDirection.NONE) {
+            this.setCurrentCollision(collision);
+        }
         //this if statement is for testing - will be removed
         //if (!collision.contains(CollisionDirection.NONE)) {
         //    yVel = 0;
         //}
-
         this.checkGravity(entity, collision);
         if(entity instanceof IDamageable && this.canApplyDamage(collision)){
             this.attemptApplyDamage((IDamageable) entity,collision);
@@ -94,10 +97,15 @@ public class Player implements IMobileEntity, IDamageable {
     }
 
     @Override
-    public void moveOneStep(){
-        this.getHitBox().translateX(this.getXVel());
+    public void moveOneStep() {
+        if (!((this.getCurrentCollision() == CollisionDirection.LEFT && this.getXVel() < 0) || (
+            this.getCurrentCollision() == CollisionDirection.RIGHT && this.getXVel() > 0))) {
+
+            this.getHitBox().translateX(this.getXVel());
+        }
         this.getHitBox().translateY(this.getYVel());
         this.setGrounded(false);
+
     }
 
     @Override
@@ -129,4 +137,13 @@ public class Player implements IMobileEntity, IDamageable {
     public List<CollisionDirection> getReceivesDamageDirections() {
         return Arrays.asList(CollisionDirection.TOP, CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
     }
+
+    public void setCurrentCollision(CollisionDirection direction) {
+        this.currentCollision = direction;
+    }
+
+    private CollisionDirection getCurrentCollision() {
+        return this.currentCollision;
+    }
+
 }

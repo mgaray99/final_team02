@@ -88,6 +88,11 @@ public class Enemy implements IMobileEntity, IDamageable{
     }
 
     @Override
+    public void setCurrentCollision(CollisionDirection collision) {
+
+    }
+
+    @Override
     public double getHealth() {
         return this.health;
     }

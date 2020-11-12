@@ -1,10 +1,14 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import model.collision.CollisionDirection;
 import model.configuration.LevelLoader;
-import model.entity.*;
+import model.entity.Block;
+import model.entity.Enemy;
+import model.entity.IEntity;
+import model.entity.Player;
+import model.entity.PowerUp;
 import model.scroll.AutoScroller;
 import model.scroll.Scroller;
 import org.jetbrains.annotations.Nullable;
@@ -14,8 +18,8 @@ public class Level {
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
 
   private Scroller scroller;
-  private final double MOVEMENT_SPEED = 0.2;
-  private final float JUMP_SPEED = -0.4f;
+  private final double MOVEMENT_SPEED = 0.175;
+  private final float JUMP_SPEED = -0.35f;
   private final float GRAVITY_FACTOR = 0.015f;
   private final double ENEMY_MOVEMENT_SPEED = 0.1;
   private static final int STARTX = 50;
@@ -120,6 +124,7 @@ public class Level {
   public void checkCollisions(){
     if(!playerList.isEmpty()){
       Player player = playerList.get(0);
+      player.setCurrentCollision(CollisionDirection.NONE);
       for(IEntity otherEntity : this.entityList){
         if(!player.equals(otherEntity)){
           player.checkCollision(otherEntity);
