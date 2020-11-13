@@ -49,7 +49,7 @@ adequately.
 ## TEAMWORK AND COMMUNICATION ANALYSIS:
 
 
-## PLAN FOR SPRINT #2:
+## PLAN FOR COMPLETE:
 - Be able to play at least three types of platformer games: Mario, Flappy Bird, Doodle Jump
 - Switch between different versions of the game
 - Display caught exceptions
