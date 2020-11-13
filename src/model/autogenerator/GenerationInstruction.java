@@ -21,12 +21,12 @@ public abstract class GenerationInstruction {
    * 0,0,0,0,0,0
    * 0,0,0,0,0,0
    *
-   * @param w the number of blocks wide of the new block that we're building the generation for
-   * @param h the number of blocks wide of the new block that we're building the generation for
+   * @param rows the number of blocks wide of the new block that we're building the generation for
+   * @param cols the number of blocks tall of the new block that we're building the generation for
    */
-  public GenerationInstruction(int w, int h) {
-    numRows = w;
-    numCols = h;
+  public GenerationInstruction(int rows, int cols) {
+    numRows = rows;
+    numCols = cols;
   }
 
   /**

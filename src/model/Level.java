@@ -28,7 +28,7 @@ public class Level {
 
   private static final int NO_SCROLL = -1;
   private static final int ALWAYS_SCROLL = 0;
-  private static final String GENERATION_PATH = "resources/game_configuration/auto/autodoodle.txt";
+  private static final String GENERATION_PATH = "resources/game_configuration/auto/autodoodle.xml";
 
   private List<Player> playerList;
   private List<Enemy> enemyList;
@@ -61,11 +61,11 @@ public class Level {
     this.entityList = levelLoader.getCopyOfEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
-    this.scroller = new AutoScroller(0,0);
+    this.scroller = new AutoScroller(0,0, false);
   }
 
-  private void addEntity(IEntity entity) {
-    if (entity != null) {
+  public void addEntity(IEntity entity) {
+    if (entity!=null) {
       this.entityList.add(entity);
     }
 
@@ -233,11 +233,11 @@ public class Level {
   }
 
   /**
-   * Moves the entities in the level based on data from the List<Entity> and the player
+   * Moves the entities in the level based on data on this level and the player
    */
   private void scroll() {
     if(!playerList.isEmpty()){
-      scroller.scroll(entityList, playerList.get(0));
+      scroller.scroll(this, playerList.get(0));
     }
   }
 
@@ -267,6 +267,8 @@ public class Level {
   public List<IEntity> getCopyOfEntityList() {
     return new ArrayList<IEntity>(entityList);
   }
+
+  public List<IEntity> getAllEntities() { return entityList; }
 
   public List<Player> getPlayerList() {return playerList;}
 

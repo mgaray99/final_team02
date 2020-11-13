@@ -9,13 +9,14 @@ import view.GameScene;
 public class MenuScene extends GameScene {
 
     private static final String ID = "HOME_SCREEN";
-    private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
+    private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
+    private static final String HOME_IMAGES_PATH = "./src/resources/images/home_screenimages.xml";
 
     public MenuScene(Group myRoot, double width, double height) {
       super(myRoot, ID, width, height);
 
       addButtonsToControllerFromFile(
-          BUTTON_FOLDERPATH_SLASH + ID.toLowerCase()+ "buttons.txt");
+          BUTTON_FOLDERPATH_SLASH + ID.toLowerCase()+ "buttons.xml");
 
       addImagesToHomeScreen();
     }
@@ -27,7 +28,7 @@ public class MenuScene extends GameScene {
     Node background = lookupElementInRoot("background");
     removeElementFromRoot(background);
     ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
-        "resources/images/home_screenimages.txt");
+        HOME_IMAGES_PATH);
 
     for (ImageView view: image.getFoundImages()) {
       addElementToRoot(view);

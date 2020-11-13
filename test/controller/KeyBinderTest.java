@@ -46,7 +46,7 @@ public class KeyBinderTest extends DukeApplicationTest {
       InvalidFileException {
 
     testInputter = new KeyInputter(
-        new GameModel(new GameConfiguration("configuration.properties")));
+        new GameModel(new GameConfiguration("supermario.properties")));
 
     testBinder = new KeyBinder();
     testBinder.updateKeyInputScreen(testInputter);

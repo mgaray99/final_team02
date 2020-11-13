@@ -32,8 +32,8 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
 
   private static final int NUM_OPTION_BUTTONS = 3;
   private static final String RESOURCES = "resources/";
-  private static final String OPTIONS_SELECTOR_CONFIG_PATH = RESOURCES
-      + "buttons/optionsselectorbuttons.txt";
+  private static final String OPTIONS_SELECTOR_CONFIG_PATH = "./src/" + RESOURCES
+      + "buttons/optionsselectorbuttons.xml";
 
   private ResourceBundle resourceBundle;
   private static final String EXTENSION = ".English";

@@ -9,9 +9,9 @@ public class RandomGeneration extends GenerationInstruction {
   private boolean growsLeft;
   private boolean growsUp;
 
-  public RandomGeneration(int width, int height, String[] args) {
+  public RandomGeneration(int rows, int cols, String[] args) {
 
-    super(width, height);
+    super(rows, cols);
     specifications = args;
 
     try {
