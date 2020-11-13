@@ -1,6 +1,7 @@
 package model;
 
-import model.collision.CollisionDirection;
+import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 /**
  * A HitBox class for the entities.
@@ -77,33 +78,38 @@ public class HitBox {
   }
 
 
-  public CollisionDirection getCollisionDirection(HitBox otherBox) {
-
+  public CollisionDirections getCollisionDirection(HitBox otherBox) {
+    CollisionDirections directions = new CollisionDirections();
     double xRight = xLeft + xSize;
     double yBottom = yTop + ySize;
-    if (!((xRight > otherBox.getXLeft() && xLeft < otherBox.getXRight()) &&
-        (yBottom > otherBox.getYTop() && yTop < otherBox.getYBottom()))) {
-      return CollisionDirection.NONE;
+    if (!((xRight >= otherBox.getXLeft() && xLeft <= otherBox.getXRight()) &&
+        (yBottom >= otherBox.getYTop() && yTop <= otherBox.getYBottom()))) {
+      return directions;
     }
 
 
     if (between(yBottom - otherBox.getYTop(), 0, MAX_INTERSECT))  {
-      return CollisionDirection.BOTTOM;
+      directions.add(Direction.BOTTOM);
     }
     if (between(otherBox.getYBottom() - yTop, 0, MAX_INTERSECT))  {
-        return CollisionDirection.TOP;
+      directions.add(Direction.TOP);
     }
 
     //if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
 
       if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
-        return CollisionDirection.RIGHT;
+        directions.add(Direction.RIGHT);
       }
       if (between(otherBox.getXRight() - xLeft, 0, MAX_INTERSECT))  {
-        return CollisionDirection.LEFT;
+        directions.add(Direction.LEFT);
       }
     //}
-    return CollisionDirection.NONE;
+    return directions;
+  }
+
+  public CollisionDirections getFutureCollisionDirection(HitBox otherBox, double xVel, double yVel) {
+    HitBox futureBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
+    return getCollisionDirection(futureBox);
   }
 
 
@@ -113,5 +119,4 @@ public class HitBox {
     }
     return false;
   }
-
 }

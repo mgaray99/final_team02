@@ -1,7 +1,8 @@
 package model.entity;
 
 import model.HitBox;
-import model.collision.CollisionDirection;
+import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,18 +19,24 @@ public interface ISpawner {
         return Optional.empty();
     }
 
-    default void attemptCreateAndAddSpawn(CollisionDirection direction){
-        CollisionDirection directionOpposite = direction.getOpposite();
+    default void attemptCreateAndAddSpawn(CollisionDirections direction){
+        CollisionDirections directionOpposite = direction.getOpposites();
         if(this.getCollisionsRequiredForSpawn().contains(directionOpposite)){
             double xPos = this.getHitBox().getXLeft();
             double yPos = this.getHitBox().getYTop();
             int height = this.getHitBox().getYSize();
             int width = this.getHitBox().getXSize();
-            switch(directionOpposite){
-                case TOP -> yPos += height;
-                case BOTTOM -> yPos -= height;
-                case LEFT -> xPos += width;
-                case RIGHT -> xPos -= width;
+            if (directionOpposite.contains(Direction.TOP)) {
+                yPos += height;
+            }
+            if (directionOpposite.contains(Direction.BOTTOM)) {
+                yPos -= height;
+            }
+            if (directionOpposite.contains(Direction.LEFT)) {
+                xPos += width;
+            }
+            if (directionOpposite.contains(Direction.RIGHT)) {
+                xPos -= width;
             }
             this.attemptCreateAndAddSpawn(xPos, yPos);
         }
@@ -45,7 +52,7 @@ public interface ISpawner {
 
     List<IEntity> getSpawnList();
 
-    List<CollisionDirection> getCollisionsRequiredForSpawn();
+    List<Direction> getCollisionsRequiredForSpawn();
 
     IEntity createSpawn(double x, double y);
 

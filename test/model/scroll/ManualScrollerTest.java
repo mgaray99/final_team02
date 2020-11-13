@@ -3,9 +3,14 @@ package model.scroll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
+import model.Level;
+import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
+import model.configuration.LevelLoader;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
@@ -39,9 +44,10 @@ public class ManualScrollerTest extends DukeApplicationTest {
   private Enemy enemyEntity;
 
   private List<IEntity> entityList;
+  private Level level;
 
   @Override
-  public void start(Stage stage) {
+  public void start(Stage stage) throws InvalidFileException {
     entityList = new ArrayList<>();
 
     playerEntity = new MarioPlayer(PLAYERX, PLAYERY);
@@ -51,9 +57,13 @@ public class ManualScrollerTest extends DukeApplicationTest {
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
 
-    entityList.add(playerEntity);
-    entityList.add(barrierBlockEntity);
-    entityList.add(enemyEntity);
+    GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
+    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+    level = new Level(levelLoader);
+
+    level.addEntity(playerEntity);
+    level.addEntity(barrierBlockEntity);
+    level.addEntity(enemyEntity);
   }
 
   /**
@@ -65,7 +75,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
     ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,NOSCROLL,NOSCROLL);
 
     playerEntity.moveOneStep();
-    scroller.scroll(entityList, playerEntity);
+    scroller.scroll(level , playerEntity);
 
     assertEquals(PLAYERX, playerEntity.getHitBox().getXLeft());
     assertEquals(BARRIERX - PLAYER_XVEL, barrierBlockEntity.getHitBox().getXLeft());
@@ -85,7 +95,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
     ManualScroller scroller = new ManualScroller(NOSCROLL, NOSCROLL, ALWAYSSCROLL, ALWAYSSCROLL);
 
     playerEntity.moveOneStep();
-    scroller.scroll(entityList, playerEntity);
+    scroller.scroll(level , playerEntity);
 
     assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
     assertEquals(BARRIERX, barrierBlockEntity.getHitBox().getXLeft());
@@ -106,7 +116,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
         ALWAYSSCROLL,ALWAYSSCROLL);
 
     playerEntity.moveOneStep();
-    scroller.scroll(entityList, playerEntity);
+    scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX, playerEntity.getHitBox().getXLeft());
     assertEquals(BARRIERX - PLAYER_XVEL, barrierBlockEntity.getHitBox().getXLeft());

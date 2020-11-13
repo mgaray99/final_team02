@@ -1,6 +1,7 @@
 package model.scroll;
 
 import java.util.List;
+import model.Level;
 import model.entity.IEntity;
 import model.entity.Player;
 
@@ -21,25 +22,25 @@ public class DoodleGenerationScroller extends ManualScroller{
 
   /**
    * Scrolls all of the entities
-   * @param entityList the List of Entities
+   * @param level
    * @param player the player of the level
    */
   @Override
-  public void scroll(List<IEntity> entityList, Player player) {
+  public void scroll(Level level, Player player) {
 
-    super.scroll(entityList, player);
+    super.scroll(level, player);
 
     flagY += currentYScroll;
-    checkForGeneration(entityList);
+    checkForGeneration(level);
 
   }
 
   /**
    * Checks to see if it's necessary to generate a new generation
    */
-  private void checkForGeneration(List<IEntity> entityList) {
+  private void checkForGeneration(Level level) {
     if (flagY >= GENERATE_MAX_BOUND) {
-      helper.generateForEntityList(entityList, flagY, 0);
+      helper.generateForLevel(level, flagY, 0);
       flagY-=helper.getAddedNumRows();
     }
   }

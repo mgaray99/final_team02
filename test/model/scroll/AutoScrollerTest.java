@@ -3,9 +3,15 @@ package model.scroll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
+import model.Level;
+import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
+import model.configuration.LevelLoader;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
@@ -38,19 +44,22 @@ public class AutoScrollerTest extends DukeApplicationTest {
   private Block barrierBlockEntity;
   private Enemy enemyEntity;
 
-  private List<IEntity> entityList;
+  private Level level;
 
   @Override
-  public void start(Stage stage) {
-    entityList = new ArrayList<>();
+  public void start(Stage stage) throws InvalidFileException {
 
     playerEntity = new MarioPlayer(PLAYERX, PLAYERY);
     barrierBlockEntity = new Block(BARRIERX, BARRIERY);
     enemyEntity = new Enemy(ENEMYX, ENEMYY);
 
-    entityList.add(playerEntity);
-    entityList.add(barrierBlockEntity);
-    entityList.add(enemyEntity);
+    GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
+    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+    level = new Level(levelLoader);
+
+    level.addEntity(playerEntity);
+    level.addEntity(barrierBlockEntity);
+    level.addEntity(enemyEntity);
   }
 
   /**
@@ -58,8 +67,8 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testSimpleScroll() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL);
-    scroller.scroll(entityList, playerEntity);
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, false);
+    scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());
     assertEquals(BARRIERX + XSCROLL, barrierBlockEntity.getHitBox().getXLeft());
@@ -76,8 +85,8 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testScrollHorizontal() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,0);
-    scroller.scroll(entityList, playerEntity);
+    AutoScroller scroller = new AutoScroller(XSCROLL,0, false);
+    scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());
     assertEquals(BARRIERX + XSCROLL, barrierBlockEntity.getHitBox().getXLeft());
@@ -94,8 +103,8 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testScrollVertical() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL);
-    scroller.scroll(entityList, playerEntity);
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, false);
+    scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());
     assertEquals(BARRIERX + XSCROLL, barrierBlockEntity.getHitBox().getXLeft());
@@ -111,16 +120,34 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testPlayerScroll() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL);
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, false);
 
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
     playerEntity.moveOneStep();
-    scroller.scroll(entityList, playerEntity);
+    scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
 
     assertEquals(PLAYERY + YSCROLL + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
+  }
+
+  /**
+   * Tests that the Autoscroller correctly positions the player when the pScrolls variable is set to
+   * true (i.e. the autoscroller moves the player
+   */
+  @Test
+  public void testPScrollsTrue() {
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, true);
+
+    playerEntity.setXVel(PLAYER_XVEL);
+    playerEntity.setYVel(PLAYER_YVEL);
+    playerEntity.moveOneStep();
+    scroller.scroll(level, playerEntity);
+
+    assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
+
+    assertEquals(PLAYERY + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
   }
 
 }

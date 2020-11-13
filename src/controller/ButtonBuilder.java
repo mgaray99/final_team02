@@ -1,15 +1,13 @@
 package controller;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Scanner;
 import javafx.scene.control.Button;
-import model.GameModel;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Is responsible for creating Buttons from a config file that takes the form XXXX.txt. The first
@@ -24,17 +22,19 @@ import model.GameModel;
  *
  * @author Alex Lu
  */
-public class ButtonBuilder {
+public class ButtonBuilder extends Builder {
 
-  private final double WIDTH;
-  private final double HEIGHT;
-  private String stateReferenced;
   private final List<Button> foundButtons;
   private final ButtonPushHandler handler;
 
-  private static final String RESOURCES = "resources/resourcebundles";
-  private final ResourceBundle resourceBundle;
-  private static final String EXTENSION = ".English";
+  private static final String BUTTON = "button";
+  private static final String ID = "id";
+  private static final String CENTERX = "centerx";
+  private static final String CENTERY = "centery";
+  private static final String BUTTON_WIDTH = "width";
+  private static final String BUTTON_HEIGHT = "height";
+  private static final String METHOD = "method";
+  private static final String TITLE = "title";
 
   /**
    * Instantiates a new ButtonBuilder object
@@ -47,15 +47,15 @@ public class ButtonBuilder {
    */
   public ButtonBuilder(double w, double h, String path, ButtonPushHandler bph)
       throws ButtonBuilderInstantiationException {
-    WIDTH = w;
-    HEIGHT = h;
+
+    super(w,h);
     foundButtons = new ArrayList<>();
     handler = bph;
 
-    resourceBundle = ResourceBundle.getBundle(RESOURCES + EXTENSION);
     try {
       makeButtons(path);
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       throw new ButtonBuilderInstantiationException("Couldn't load button file indexed by "
           + path);
     }
@@ -64,16 +64,18 @@ public class ButtonBuilder {
   /**
    * Makes each of the buttons as specified in a particular file
    *
-   * @param path the file to be read
+   * @param xmlPath the file to be read
    */
-  private void makeButtons(String path) throws IOException, URISyntaxException {
-    Path file = Paths.get(ButtonBuilder.class.getClassLoader().getResource(
-        path).toURI());
-    Scanner fileScan = new Scanner(file);
-    stateReferenced = getReferencedStateFromFile(fileScan);
+  private void makeButtons(String xmlPath)
+      throws IOException, ParserConfigurationException, SAXException {
+    Element root = buildRoot(xmlPath);
 
-    while (fileScan.hasNextLine()) {
-      Button builtButton = buildButtonFromLine(fileScan.nextLine());
+    NodeList buttons = root.getElementsByTagName(BUTTON);
+    stateReferenced = getTextFromElement(root, TITLE);
+
+    for (int index = 0; index <  buttons.getLength(); index += 1) {
+      Element buttonNode = (Element)buttons.item(index);
+      Button builtButton = buildButtonFromLine(buttonNode);
       foundButtons.add(builtButton);
     }
   }
@@ -82,56 +84,27 @@ public class ButtonBuilder {
    * Sets up new a button's starting x and y coordinates, its text, its width and height, and its
    * action based on a line in a file which specifies this
    *
-   * @param line the line of the file to be parsed for the relevant information
+   * @param buttonNode the node of the file to be parsed for the relevant information
    * @return a fully instantiated Button
    */
-  private Button buildButtonFromLine(String line) {
+  private Button buildButtonFromLine(Element buttonNode) {
 
     Button output = new Button();
-    String[] outputComponents = line.split(" ");
+    String text = getTextFromElement(buttonNode, ID);
 
-    output.setId(outputComponents[0]);
-    output.setText(resourceBundle.getString(outputComponents[0]));
+    output.setId(text);
+    output.setText(resourceBundle.getString(text));
 
-    output.setPrefWidth(WIDTH * Double.parseDouble(outputComponents[3]));
-    output.setPrefHeight(HEIGHT * Double.parseDouble(outputComponents[4]));
+    output.setPrefWidth(WIDTH * Double.parseDouble(getTextFromElement(buttonNode, BUTTON_WIDTH)));
+    output.setPrefHeight(HEIGHT * Double.parseDouble(getTextFromElement(buttonNode, BUTTON_HEIGHT)));
 
-    output.setLayoutX(WIDTH * Double.parseDouble(outputComponents[1]) -
+    output.setLayoutX(WIDTH * Double.parseDouble(getTextFromElement(buttonNode, CENTERX)) -
         output.getPrefWidth() / 2);
-    output.setLayoutY(HEIGHT * Double.parseDouble(outputComponents[2]) -
+    output.setLayoutY(HEIGHT * Double.parseDouble(getTextFromElement(buttonNode, CENTERY)) -
         output.getPrefHeight() / 2);
 
-
-    output.setOnAction(e -> handler.handlePush(outputComponents[5]));
+    output.setOnAction(e -> handler.handlePush(getTextFromElement(buttonNode, METHOD)));
     return output;
-  }
-
-
-
-
-  /**
-   * Determines the state associated with the relevant file when first parsing through the file.
-   * This will be the first line of the file and will be something like MENU or PAUSE and will tell
-   * the program which scene that its contents should be placed into
-   *
-   * @param scan the Scanner with the data in it
-   * @return a String containing the relevant state
-   */
-  private String getReferencedStateFromFile(Scanner scan) {
-    if (scan.hasNextLine()) {
-      return scan.nextLine();
-    }
-    return "";
-  }
-
-  /**
-   * Returns the state that these button files pertain to (i.e. SELECT_SIMULATION, MENU, etc.) so
-   * that the handler knows which scene to place the newly generated buttons into
-   *
-   * @return stateReferenced the state listed at the top of the file
-   */
-  public String getStateReferenced() {
-    return stateReferenced;
   }
 
   /**

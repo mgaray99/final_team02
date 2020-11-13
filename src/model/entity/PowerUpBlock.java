@@ -1,6 +1,6 @@
 package model.entity;
 
-import model.collision.CollisionDirection;
+import model.collision.Direction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +20,8 @@ public class PowerUpBlock extends Block implements ISpawner{
     }
 
     @Override
-    public List<CollisionDirection> getCollisionsRequiredForSpawn() {
-        return Arrays.asList(CollisionDirection.BOTTOM);
+    public List<Direction> getCollisionsRequiredForSpawn() {
+        return Arrays.asList(Direction.BOTTOM);
     }
 
     @Override

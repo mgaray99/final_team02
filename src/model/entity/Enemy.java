@@ -1,12 +1,13 @@
 package model.entity;
 
 import model.HitBox;
-import model.collision.CollisionDirection;
+import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Enemy implements IEntity, IGravitate, IDamageable{
+public class Enemy implements IEntity, IMovable, IDamageable{
 
     private static final int GRACE_PERIOD = 2;
     private final HitBox hitBox;
@@ -31,17 +32,60 @@ public class Enemy implements IEntity, IGravitate, IDamageable{
     }
 
     @Override
-    public void checkCollision(IEntity entity) {
-        CollisionDirection collision = hitBox.getCollisionDirection(entity.getHitBox());
+    public boolean isDead() {
+        return false;
+    }
+
+    public void processCurrentCollision(IEntity entity, CollisionDirections collision){
+        if (collision.contains(Direction.BOTTOM)) {
+            System.out.print("Bottom");
+            this.setGrounded(true);
+            this.resetGracePeriodBeforeFalling();
+            if (this.getYVel() > 0) {
+                this.setYVel(0);
+            }
+            this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
+        }
+        if (collision.contains(Direction.TOP)){
+            System.out.print("Top");
+            if (this.getYVel() < 0) {
+                this.setYVel(0);
+            }
+            this.getHitBox().setYTop(entity.getHitBox().getYBottom());
+        }
+        if (collision.contains(Direction.LEFT)) {
+            System.out.print("Left");
+            if (this.getXVel() < 0) {
+                this.setXVel(0);
+            }
+            this.getHitBox().setXLeft(entity.getHitBox().getXRight());
+        }
+        if (collision.contains(Direction.RIGHT)) {
+            System.out.print("Right");
+            if (this.getXVel() > 0) {
+                this.setXVel(0);
+            }
+            this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
+        }
+    }
+
+    @Override
+    public void checkFutureCollision(IEntity entity) {
+        CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
         //this if statement is for testing - will be removed
         //if (!collision.contains(CollisionDirection.NONE)) {
         //    yVel = 0;
         //}
 
-        this.checkGravity(entity, collision);
-        if(entity instanceof IDamageable && collision != CollisionDirection.NONE && this.canApplyDamage(collision)){
+        this.processCurrentCollision(entity, collision);
+        if(entity instanceof IDamageable && collision.doesCollide() && this.canApplyDamage(collision)){
             this.attemptApplyDamage((IDamageable) entity,collision);
         }
+    }
+
+    @Override
+    public void moveOneStep() {
+
     }
 
     @Override
@@ -100,11 +144,6 @@ public class Enemy implements IEntity, IGravitate, IDamageable{
     }
 
     @Override
-    public void setCurrentCollision(CollisionDirection collision) {
-
-    }
-
-    @Override
     public double getHealth() {
         return this.health;
     }
@@ -125,12 +164,12 @@ public class Enemy implements IEntity, IGravitate, IDamageable{
     }
 
     @Override
-    public List<CollisionDirection> getAppliesDamageDirections() {
-        return Arrays.asList(CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
+    public List<Direction> getAppliesDamageDirections() {
+        return Arrays.asList(Direction.BOTTOM, Direction.LEFT, Direction.RIGHT);
     }
 
     @Override
-    public List<CollisionDirection> getReceivesDamageDirections() {
-        return Arrays.asList(CollisionDirection.TOP, CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
+    public List<Direction> getReceivesDamageDirections() {
+        return Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT);
     }
 }

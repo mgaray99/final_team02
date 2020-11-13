@@ -1,6 +1,7 @@
 package model.entity;
 
-import model.collision.CollisionDirection;
+import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 public class DoodlePlayer extends Player {
 
@@ -11,28 +12,25 @@ public class DoodlePlayer extends Player {
     this.setGrounded(false);
   }
 
-  public void checkCollision(IEntity entity) {
-    CollisionDirection collision = hitBox.getCollisionDirection(entity.getHitBox());
-    if (collision != CollisionDirection.NONE) {
-      this.setCurrentCollision(collision);
-    }
+  public void checkFutureCollision(IEntity entity) {
+    CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
 
     /*if (collision == CollisionDirection.BOTTOM || this.getYVel() < 0) {
       this.jump(DOODLE_JUMP_SPEED);
     }*/
-    this.checkGravity(entity, collision);
-    if (entity instanceof IDamageable && collision != CollisionDirection.NONE && this
+    this.processCurrentCollision(entity, collision);
+    if (entity instanceof IDamageable && !collision.isEmpty() && this
         .canApplyDamage(collision)) {
       this.attemptApplyDamage((IDamageable) entity, collision);
     }
-    if (entity instanceof IEmpowering && collision != CollisionDirection.NONE) {
+    if (entity instanceof IEmpowering && !collision.isEmpty()) {
       IEmpowering empowering = (IEmpowering) entity;
       if (!empowering.hasAppliedModifier()) {
         this.applyModifier(empowering.getModifier());
         empowering.setHasAppliedModifier(true);
       }
     }
-    if (entity instanceof ISpawner && collision != CollisionDirection.NONE) {
+    if (entity instanceof ISpawner && !collision.isEmpty()) {
       ISpawner spawner = (ISpawner) entity;
       spawner.attemptCreateAndAddSpawn(collision);
     }
@@ -40,8 +38,8 @@ public class DoodlePlayer extends Player {
 
 
   @Override
-  public void checkGravity(IEntity entity, CollisionDirection collision){
-    if (collision == CollisionDirection.BOTTOM) {
+  public void processCurrentCollision(IEntity entity, CollisionDirections collision){
+    if (collision.contains(Direction.BOTTOM)) {
       System.out.print("Bottom");
       this.setGrounded(false);
       this.resetGracePeriodBeforeFalling();

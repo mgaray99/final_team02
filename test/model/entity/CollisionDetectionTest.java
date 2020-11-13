@@ -21,7 +21,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     };
     Block block = new Block(5.9,5);
     player.setXVel(5);
-    player.checkCollision(block);
+    player.checkFutureCollision(block);
     assertEquals(0, player.getXVel());
   }
 
@@ -31,7 +31,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     player.setGrounded(false);
     Block block = new Block(5,5.9);
     player.setXVel(5);
-    player.checkCollision(block);
+    player.checkFutureCollision(block);
     assertEquals(0, player.getYVel());
     assertTrue(player.getGrounded());
   }
@@ -42,7 +42,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     player.setXVel(5);
     player.setYVel(5);
     Block block = new Block(10,10);
-    player.checkCollision(block);
+    player.checkFutureCollision(block);
     assertEquals(5, player.getXVel());
     assertEquals(5, player.getYVel());
   }
@@ -53,7 +53,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     Block block = new Block(4.9,4.9);
     player.setXVel(5);
     player.setYVel(5);
-    player.checkCollision(block);
+    player.checkFutureCollision(block);
     assertEquals(5, player.getXVel());
     assertEquals(0, player.getYVel());
   }
@@ -64,7 +64,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     Block block = new Block(5,5);
     player.setXVel(5);
     player.setYVel(5);
-    player.checkCollision(block);
+    player.checkFutureCollision(block);
     assertEquals(5, player.getXVel());
     assertEquals(5, player.getYVel());
   }

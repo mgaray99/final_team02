@@ -6,7 +6,7 @@ public interface IEntity {
 
     HitBox getHitBox();
 
-    void checkCollision(IEntity entity);
+    void checkFutureCollision(IEntity entity);
 
     void setXVel(double xVel);
 

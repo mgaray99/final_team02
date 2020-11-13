@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.HitBox;
-import model.collision.CollisionDirection;
+import model.collision.Direction;
 
-public abstract class Player implements IEntity, IGravitate, IDamageable, IEmpowerable {
+public abstract class Player implements IEntity, IMovable, IDamageable, IEmpowerable {
 
   private final String type = this.getClass().getSimpleName();
   public static final int GRACE_PERIOD = 1;
   protected boolean immobilized = false;
-
+  private boolean canMoveUp = true;
+  private boolean canMoveRight = true;
   private double xVel = 0;
   private double yVel = 0;
   protected HitBox hitBox;
@@ -23,7 +24,7 @@ public abstract class Player implements IEntity, IGravitate, IDamageable, IEmpow
   private double health = 0;
   private double damage = 0;
   private final Map<Modifier.ModifierType, Modifier> modifiers = new HashMap<>();
-  private CollisionDirection currentCollision;
+  private Direction currentCollision;
 
   public Player(double x, double y){
     this.hitBox = new HitBox(x, y);
@@ -38,7 +39,12 @@ public abstract class Player implements IEntity, IGravitate, IDamageable, IEmpow
   }
 
   @Override
-  public abstract void checkCollision(IEntity entity);
+  public boolean isDead() {
+    return false;
+  }
+
+  @Override
+  public abstract void checkFutureCollision(IEntity entity);
 
 
   @Override
@@ -119,20 +125,15 @@ public abstract class Player implements IEntity, IGravitate, IDamageable, IEmpow
     if (immobilized) {
       return;
     }
-    if (this.getGracePeriodBeforeSidewaysMovement() > 0) {
-      this.subtractFromGracePeriodBeforeSidewaysMovement();
-      this.setXVel(0);
-    } else {
+    if (this.canMoveUp) {
       this.getHitBox().translateX(this.getXVel());
     }
-
-    //}
-    this.getHitBox().translateY(this.getYVel());
+    if (this.canMoveRight) {
+      this.getHitBox().translateY(this.getYVel());
+    }
     this.setGrounded(false);
-  }
-
-  public void subtractFromGracePeriodBeforeSidewaysMovement() {
-    gracePeriodBeforeSidewaysMovement -= 1;
+    this.canMoveUp = true;
+    this.canMoveRight = true;
   }
 
 
@@ -157,23 +158,22 @@ public abstract class Player implements IEntity, IGravitate, IDamageable, IEmpow
   }
 
   @Override
-  public List<CollisionDirection> getAppliesDamageDirections() {
-    return Collections.singletonList(CollisionDirection.BOTTOM);
+  public List<Direction> getAppliesDamageDirections() {
+    return Collections.singletonList(Direction.BOTTOM);
   }
 
   @Override
-  public List<CollisionDirection> getReceivesDamageDirections() {
-    return Arrays.asList(CollisionDirection.TOP, CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
+  public List<Direction> getReceivesDamageDirections() {
+    return Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT);
   }
 
-  public void setCurrentCollision(CollisionDirection direction) {
-    this.currentCollision = direction;
+  protected void setCanMoveUp(boolean canMoveUp) {
+    this.canMoveUp = canMoveUp;
   }
 
-  private CollisionDirection getCurrentCollision() {
-    return this.currentCollision;
+  protected void setCanMoveRight(boolean canMoveRight) {
+    this.canMoveRight = canMoveRight;
   }
-
 
   @Override
   public Map<Modifier.ModifierType, Modifier> getModifiers() {

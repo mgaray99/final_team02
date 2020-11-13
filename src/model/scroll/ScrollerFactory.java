@@ -26,8 +26,9 @@ public class ScrollerFactory {
       return scroller;
     }
     catch (IndexOutOfBoundsException | NumberFormatException | GenerationException ex) {
+      ex.printStackTrace();
       System.out.println("No scrolling allowed for this level - bad configuration");
-      return new AutoScroller(0,0);
+      return new AutoScroller(0,0, false);
     }
   }
 
@@ -45,7 +46,7 @@ public class ScrollerFactory {
       case AUTO: return buildAutoScroller(constructorArgs);
       case DOODLE: return buildDoodleGenerationScroller(constructorArgs);
       case AUTO_GENERATION: return buildAutoGenerationScroller(constructorArgs);
-      default: return new AutoScroller(0,0);
+      default: return new AutoScroller(0,0, false);
     }
   }
 
@@ -85,7 +86,8 @@ public class ScrollerFactory {
    * @return a new AutoScroller
    */
   private Scroller buildAutoScroller(String[] args) {
-      return new AutoScroller(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+      return new AutoScroller(Double.parseDouble(args[0]), Double.parseDouble(args[1]),
+          Boolean.parseBoolean(args[2]));
   }
 
   /**
@@ -105,6 +107,6 @@ public class ScrollerFactory {
    */
   private Scroller buildAutoGenerationScroller(String[] args) throws GenerationException {
     return new AutoGenerationScroller(Double.parseDouble(args[0]), Double.parseDouble(args[1]),
-        args[2]);
+        Boolean.parseBoolean(args[2]), args[3]);
   }
 }

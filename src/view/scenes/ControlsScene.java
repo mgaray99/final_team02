@@ -9,13 +9,13 @@ import view.GameView.viewName;
 public class ControlsScene extends GameScene {
 
   private static final String ID = "CONTROLS";
-  private static final String BUTTON_FOLDERPATH_SLASH = "resources/buttons/";
+  private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
 
   public ControlsScene(Group myRoot, double width, double height) {
     super(myRoot, ID, width, height);
 
     addButtonsToControllerFromFile(
-        BUTTON_FOLDERPATH_SLASH + ID.toLowerCase()+ "buttons.txt");
+        BUTTON_FOLDERPATH_SLASH + ID.toLowerCase()+ "buttons.xml");
 
     addKeyBinders();
   }

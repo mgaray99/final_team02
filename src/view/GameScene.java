@@ -87,6 +87,14 @@ public class GameScene extends Scene {
     errorLabel.setVisible(false);
   }
 
+  /**
+   * Returns the text in the error label
+   * @return the text of errorLabel
+   */
+  public String getErrorText() {
+    return errorLabel.getText();
+  }
+
 
   /**
    * Sets the controller associated with this particular scene

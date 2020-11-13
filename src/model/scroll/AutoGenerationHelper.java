@@ -1,7 +1,7 @@
 package model.scroll;
 
-import java.util.List;
 import java.util.Map;
+import model.Level;
 import model.autogenerator.AutoGenerator;
 import model.autogenerator.GenerationException;
 import model.configuration.EntityFactory;
@@ -25,6 +25,7 @@ public class AutoGenerationHelper {
       currentGeneration = generator.generateNextBlock();
     }
     catch (Exception e) {
+      e.printStackTrace();
       throw new GenerationException("");
     }
   }
@@ -32,36 +33,36 @@ public class AutoGenerationHelper {
 
   /**
    * Creates a new part of the level and adds it to the entity list
-   * @param entityList the list of entities
+   * @param level the Level in which to insert the entities
    */
-  public void generateForEntityList(List<IEntity> entityList, double rowOffset, double colOffset) {
+  public void generateForLevel(Level level, double rowOffset, double colOffset) {
     currentGeneration = generator.generateNextBlock();
 
     for (int row = 0; row < currentGeneration.length; row+=1) {
       for (int column = 0; column < currentGeneration[0].length; column+=1) {
         String entityCode = currentGeneration[row][column];
-        insertIntoEntityList(entityCode, entityList,
+        insertIntoLevel(entityCode, level,
             rowOffset + row, colOffset + column);
       }
     }
   }
 
   /**
-   * Builds an entity from entityCode and inserts it into entityList
+   * Builds an entity from entityCode and inserts it into level
    *
    * @param entityCode the String containing the type of entity
-   * @param entityList the List of Entity to have the new entity inserted into itself
+   * @param level the Level in which to insert the entity
    */
-  private void insertIntoEntityList(String entityCode, List<IEntity> entityList, double row, double col) {
+  private void insertIntoLevel(String entityCode, Level level, double row, double col) {
     IEntity entity = factory.createEntity(entityCode, col, row);
     if (entity!=null) {
-      entityList.add(entity);
+      level.addEntity(entity);
     }
   }
 
   /**
-   * Reveals the number of new rows that have been added to the List<IEntity> parameter in
-   * generateForEntityList() as of the last call to that method
+   * Reveals the number of new rows that have been added to the Level parameter in
+   * generateForLevel() as of the last call to that method
    * @return the number of rows in the "current" currentGeneration array
    */
   public int getAddedNumRows() {
@@ -69,8 +70,8 @@ public class AutoGenerationHelper {
   }
 
   /**
-   * Reveals the number of new columns that have been added to the List<IEntity> parameter in
-   * generateForEntityList() as of the last call to that method
+   * Reveals the number of new columns that have been added to the Level parameter in
+   * generateForLevel() as of the last call to that method
    * @return the number of new columns in the "current" currentGeneration array
    */
   public int getAddedNumColumns() {

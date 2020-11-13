@@ -8,6 +8,7 @@ import java.util.Scanner;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
+import model.entity.IMovable;
 import model.entity.Player;
 import model.entity.PowerUp;
 
@@ -23,6 +24,7 @@ public class LevelLoader {
     private final List<PowerUp> powerUpList = new ArrayList<>();
     private final List<Block> blockList = new ArrayList<>();
     private final List<IEntity> entityList = new ArrayList<>();
+    private final List<IMovable> movableEntityList = new ArrayList<>();
     //private final Map<String, String> levelDecoder;
     private final EntityFactory entityFactory = new EntityFactory();
 
@@ -63,6 +65,8 @@ public class LevelLoader {
     public List<Player> getCopyOfPlayerList() {
         return new ArrayList<Player>(playerList);
     }
+
+    public List<IMovable> getCopyOfMovableEntityList() { return new ArrayList<>(movableEntityList);}
 
     public List<Enemy> getCopyOfEnemyList() {
         return new ArrayList<Enemy>(enemyList);
@@ -108,17 +112,24 @@ public class LevelLoader {
     private void addEntityToLists(IEntity entity) {
         if(entity != null) {
             this.entityList.add(entity);
+            if(entity instanceof IMovable){
+                this.movableEntityList.add((IMovable)entity);
+            }
             if(entity instanceof Player){
                 this.playerList.add((Player)entity);
             }
             else if(entity instanceof Enemy){
                 this.enemyList.add((Enemy)entity);
             }
+
             else if(entity instanceof Block){
                 this.blockList.add((Block)entity);
             }
             else if(entity instanceof PowerUp){
                 this.powerUpList.add((PowerUp)entity);
+            }
+            else if (IMovable.class.isAssignableFrom(entity.getClass())){
+                this.movableEntityList.add((IMovable)entity);
             }
         }
     }

@@ -1,6 +1,7 @@
 package model.entity;
 
-import model.collision.CollisionDirection;
+import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 import java.util.List;
 
@@ -34,32 +35,32 @@ public interface IDamageable {
      * Returns a list of CollisionDirections that this damageable can apply damage from
      * @return The list of CollisionDirections that this damageable can apply damage from
      */
-    List<CollisionDirection> getAppliesDamageDirections();
+    List<Direction> getAppliesDamageDirections();
 
     /**
      * Returns a list of CollisionDirections that this damageable can receive damage from
      * @return The list of CollisionDirections that this damageable can receive damage from
      */
-    List<CollisionDirection> getReceivesDamageDirections();
+    List<Direction> getReceivesDamageDirections();
 
     default boolean isDead(){
         return this.getHealth() <= 0;
     }
 
-    default void attemptApplyDamage(IDamageable damageable, CollisionDirection currentCollidingDirection){
+    default void attemptApplyDamage(IDamageable damageable, CollisionDirections currentCollidingDirection){
         boolean canApplyDamage = this.canApplyDamage(currentCollidingDirection);
-        boolean damageableCanReceiveDamage = damageable.canReceiveDamage(currentCollidingDirection.getOpposite());
+        boolean damageableCanReceiveDamage = damageable.canReceiveDamage(currentCollidingDirection.getOpposites());
         if(canApplyDamage && damageableCanReceiveDamage){
             double currentHealth = damageable.getHealth();
             damageable.setHealth(currentHealth - this.getCollisionDamage());
         }
     }
 
-    default boolean canApplyDamage(CollisionDirection collisionDirection){
-        return this.getAppliesDamageDirections().contains(collisionDirection);
+    default boolean canApplyDamage(CollisionDirections direction){
+        return this.getAppliesDamageDirections().contains(direction);
     }
 
-    default boolean canReceiveDamage(CollisionDirection collisionDirection){
-        return this.getReceivesDamageDirections().contains(collisionDirection);
+    default boolean canReceiveDamage(CollisionDirections direction){
+        return this.getReceivesDamageDirections().contains(direction);
     }
 }

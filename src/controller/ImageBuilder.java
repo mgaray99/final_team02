@@ -6,13 +6,13 @@ import javafx.scene.image.ImageView;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Scanner;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Is responsible for creating Buttons from a config file that takes the form XXXX.txt. The first
@@ -27,17 +27,21 @@ import java.util.Scanner;
  *
  * @author Alex Lu
  */
-public class ImageBuilder {
+public class ImageBuilder extends Builder {
 
-    private final double WIDTH;
-    private final double HEIGHT;
     private String stateReferenced;
     private final List<ImageView> foundImages;
 
 
-    private static final String RESOURCES = "resources/resourcebundles";
-    private final ResourceBundle resourceBundle;
-    private static final String EXTENSION = ".English";
+    private static final String IMAGE = "image";
+    private static final String TITLE = "title";
+
+    private static final String ID = "id";
+    private static final String CENTERX = "centerx";
+    private static final String CENTERY = "centery";
+    private static final String IMAGE_WIDTH = "width";
+    private static final String IMAGE_HEIGHT = "height";
+    private static final String PATH = "path";
 
     /**
      * Instantiates a new ButtonBuilder object
@@ -47,10 +51,8 @@ public class ImageBuilder {
      * @param path the filepath leading to the .txt file containing data on the button
      */
     public ImageBuilder(double w, double h, String path) {
-        WIDTH = w;
-        HEIGHT = h;
-        foundImages = new ArrayList<ImageView>();
-        resourceBundle = ResourceBundle.getBundle(RESOURCES + EXTENSION);
+        super(w,h);
+        foundImages = new ArrayList<>();
         try {
             makeImages(path);
         } catch (Exception e) {
@@ -62,16 +64,18 @@ public class ImageBuilder {
     /**
      * Makes each of the buttons as specified in a particular file
      *
-     * @param path the file to be read
+     * @param xmlPath the file to be read
      */
-    private void makeImages(String path) throws IOException, URISyntaxException {
-        Path file = Paths.get(ImageBuilder.class.getClassLoader().getResource(
-                path).toURI());
-        Scanner fileScan = new Scanner(file);
-        stateReferenced = getReferencedStateFromFile(fileScan);
+    private void makeImages(String xmlPath)
+        throws IOException, ParserConfigurationException, SAXException {
+        Element root = buildRoot(xmlPath);
 
-        while (fileScan.hasNextLine()) {
-            ImageView builtImage = buildImageFromLine(fileScan.nextLine());
+        NodeList imageviews = root.getElementsByTagName(IMAGE);
+        stateReferenced = getTextFromElement(root, TITLE);
+
+        for (int index = 0; index <  imageviews.getLength(); index += 1) {
+            Element imageNode = (Element)imageviews.item(index);
+            ImageView builtImage = buildImageFromLine(imageNode);
             foundImages.add(builtImage);
         }
     }
@@ -80,45 +84,28 @@ public class ImageBuilder {
      * Sets up new a button's starting x and y coordinates, its text, its width and height, and its
      * action based on a line in a file which specifies this
      *
-     * @param line the line of the file to be parsed for the relevant information
+     * @param imageNode the line of the file to be parsed for the relevant information
      * @return a fully instantiated Button
      */
-    private ImageView buildImageFromLine(String line) throws FileNotFoundException {
+    private ImageView buildImageFromLine(Element imageNode) throws FileNotFoundException {
 
-        String[] outputComponents = line.split(" ");
-        Image image = new Image(new FileInputStream(outputComponents[5]));
+        Image image = new Image(new FileInputStream(
+            getTextFromElement(imageNode, PATH)));
 
         ImageView output = new ImageView(image);
+        output.setId(getTextFromElement(imageNode, ID));
 
-        output.setId(outputComponents[0]);
+        output.setFitWidth(WIDTH * Double.parseDouble(
+            getTextFromElement(imageNode, IMAGE_WIDTH)));
+        output.setFitHeight(HEIGHT * Double.parseDouble(
+            getTextFromElement(imageNode, IMAGE_HEIGHT)));
 
-        output.setFitWidth(WIDTH * Double.parseDouble(outputComponents[3]));
-        output.setFitHeight(HEIGHT * Double.parseDouble(outputComponents[4]));
-
-        output.setX(WIDTH * Double.parseDouble(outputComponents[1]) -
+        output.setX(WIDTH * Double.parseDouble(getTextFromElement(imageNode, CENTERX)) -
                 output.getFitWidth() / 2);
-        output.setY(HEIGHT * Double.parseDouble(outputComponents[2]) -
+        output.setY(HEIGHT * Double.parseDouble(getTextFromElement(imageNode, CENTERY)) -
                 output.getFitHeight() / 2);
 
         return output;
-    }
-
-
-
-
-    /**
-     * Determines the state associated with the relevant file when first parsing through the file.
-     * This will be the first line of the file and will be something like MENU or PAUSE and will tell
-     * the program which scene that its contents should be placed into
-     *
-     * @param scan the Scanner with the data in it
-     * @return a String containing the relevant state
-     */
-    private String getReferencedStateFromFile(Scanner scan) {
-        if (scan.hasNextLine()) {
-            return scan.nextLine();
-        }
-        return "";
     }
 
     /**
