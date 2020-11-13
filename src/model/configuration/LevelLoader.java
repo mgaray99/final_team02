@@ -146,6 +146,10 @@ public class LevelLoader {
         return copyList;
     }
 
+    /**
+     * Reinitializes the level loader (i.e. resets all lists to have their contents when the
+     * LevelLoader was first instantiated
+     */
     public void reinitialize() {
         this.playerList.clear();
         this.blockList.clear();

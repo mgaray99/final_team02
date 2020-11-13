@@ -280,11 +280,18 @@ public class Level {
     if (playerList.size() > 0) {
       Player player = playerList.get(0);
       if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
-        loader.reinitialize();
-        setOrResetLevel(loader);
-        scroller.reset();
+        playerFall();
       }
     }
+  }
+
+  /**
+   * Handles the situation where the player has fallen off of the screen
+   */
+  private void playerFall() {
+    loader.reinitialize();
+    setOrResetLevel(loader);
+    scroller.reset();
   }
 
   void setLevelWon(boolean isLevelWon) {
