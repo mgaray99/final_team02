@@ -255,6 +255,18 @@ public class GameView extends Application {
   }
 
   /**
+   * Resets the current level in the model by calling model.resetLevel()
+   */
+  public void resetLevel() {
+    try {
+      model.resetLevel();
+    }
+    catch (InvalidFileException ife) {
+      System.out.println("invalid file");
+    }
+  }
+
+  /**
    * Switches back to the last view
    */
   public void back() { setScene(lastView); }
@@ -268,6 +280,14 @@ public class GameView extends Application {
    * Returns to the home screen
    */
   public void homeScreen() { setScene(viewName.HOME_SCREEN); }
+
+  /**
+   * For testing - return the GameModel
+   * @return mdoel
+   */
+  GameModel getModel() {
+    return model;
+  }
 
   /**
    * Launches the application
