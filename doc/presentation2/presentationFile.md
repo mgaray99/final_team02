@@ -45,7 +45,7 @@ certain features and incorporating that into our schedules in general.
 A significant event that occurred during this sprint was the inclusion of a way to save
 the game, which was not originally a part of our plan. As Alex created a decoder
 map for CSV file keys to their corresponding entity type values, it became obvious
-that we could use it to convert the current level state into a save file, like one of the tasks
+we could use it to convert the current level state into a save file, like one of the tasks
 for Simulation. We learned that the inclusion of additional features can be made easy
 simply by how certain team members decided to accomplish implementing planned features.
 
