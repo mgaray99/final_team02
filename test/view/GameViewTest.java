@@ -1,10 +1,16 @@
 package view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import model.GameModel;
+import model.Level;
+import model.entity.IEntity;
+import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 import view.GameView.viewName;
@@ -171,5 +177,32 @@ class GameViewTest extends DukeApplicationTest {
     assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
   }
 
+  /**
+   * Tests that the resetLevel() method actually resets the player's location in the level - first
+   * captures that location prior to any action, then moves the player and checks to make sure that
+   * the player's location is now different. Then, resets the level and makes sure that the
+   * player's location has reset to that original position
+   */
+  @Test
+  public void testResetLevel() {
+    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    javafxRun(() -> view.start());
+
+    GameModel model = view.getModel();
+    Level level = model.getLevel();
+    Player player = level.getPlayerList().get(0);
+
+    double xLeft = player.getHitBox().getXLeft();
+    double yTop = player.getHitBox().getYTop();
+
+    level.translateAllEntities(1,1);
+    assertNotEquals(xLeft, player.getHitBox().getXLeft());
+    assertNotEquals(yTop, player.getHitBox().getYTop());
+
+    javafxRun(() -> view.resetLevel());
+    player = level.getPlayerList().get(0);
+    assertEquals(xLeft, player.getHitBox().getXLeft());
+    assertEquals(yTop, player.getHitBox().getYTop());
+  }
 
 }

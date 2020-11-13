@@ -242,6 +242,27 @@ public class Level {
   }
 
   /**
+   * Moves all entities in the list by <xChange, yChange>
+   * @param xChange the amount to scroll the entity in the x direction
+   * @param yChange the amount to scroll the entity in the y direction
+   */
+  public void translateAllEntities(double xChange, double yChange) {
+    entityList.forEach(entity -> translateEntity(entity, xChange, yChange));
+  }
+
+  /**
+   * Moves the Entity
+   * @param entity the Entity to be scrolled
+   * @param xChange the amount to scroll the entity in the x direction
+   * @param yChange the amount to scroll the entity in the y direction
+   */
+  private void translateEntity(IEntity entity, double xChange, double yChange) {
+    HitBox hitBox = entity.getHitBox();
+    hitBox.translateX(xChange);
+    hitBox.translateY(yChange);
+  }
+
+  /**
    * Sets the scroller of the level equal to the Scroller passed in
    * @param configScroller the Scroller that will serve as this level's new Scroller
    */
