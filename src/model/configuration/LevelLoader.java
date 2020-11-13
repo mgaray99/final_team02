@@ -24,7 +24,8 @@ public class LevelLoader {
     private final List<Enemy> enemyList = new ArrayList<>();
     private final List<PowerUp> powerUpList = new ArrayList<>();
     private final List<Block> blockList = new ArrayList<>();
-    private final List<IEntity> entityList = new ArrayList<>();
+    private List<IEntity> entityList = new ArrayList<>();
+    private List<IEntity> entityCopy = new ArrayList<>();
     //private final Map<String, String> levelDecoder;
     private final EntityFactory entityFactory = new EntityFactory();
 
@@ -52,6 +53,7 @@ public class LevelLoader {
          */
         //alex end
         this.initializeEntityLists(levelFileIn);
+        entityCopy = defensivelyCopyList(entityList);
     }
 
     public int getLevelLength() {
@@ -63,7 +65,7 @@ public class LevelLoader {
     }
 
     public List<Player> getCopyOfPlayerList() {
-        return new ArrayList<Player>(playerList);
+        return new ArrayList<>(playerList);
     }
 
     public List<Enemy> getCopyOfEnemyList() {
@@ -123,6 +125,37 @@ public class LevelLoader {
                 this.powerUpList.add((PowerUp)entity);
             }
         }
+    }
+
+    /**
+     * Copies a list of IEntity into another list and returns this other list. This copying
+     * generates new IEntity objects for the other list to avoid aliasing issues.
+     *
+     * @param originalCopy the original list to be copied from
+     * @return a new list with absolutely no dependencies
+     */
+    private List<IEntity> defensivelyCopyList(List<IEntity> originalCopy) {
+        List<IEntity> copyList = new ArrayList<>();
+
+        originalCopy.forEach(entity -> copyList.add(
+            entityFactory.reflectEntity(
+                entity.getClass().getSimpleName(),
+                entity.getHitBox().getXLeft(),
+                entity.getHitBox().getYTop())));
+
+        return copyList;
+    }
+
+    public void reinitialize() {
+        this.playerList.clear();
+        this.blockList.clear();
+        this.enemyList.clear();
+        this.powerUpList.clear();
+        this.entityList.clear();
+
+        List<IEntity> concurrentEntityCopy = defensivelyCopyList(entityCopy);
+        concurrentEntityCopy.forEach(entity -> addEntityToLists(entity));
+
     }
 
     private void handleConstructionExceptions(File levelFileIn) throws InvalidFileException {

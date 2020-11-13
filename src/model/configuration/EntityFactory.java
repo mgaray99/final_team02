@@ -37,7 +37,7 @@ public class EntityFactory {
   }
 
   @Nullable
-  private IEntity reflectEntity(String decodedEntityString, double rowIndex, double colIndex) {
+  public IEntity reflectEntity(String decodedEntityString, double rowIndex, double colIndex) {
     IEntity decodedEntity;
     try {
       Class entityClass = Class.forName(ENTITY_PACKAGE_PATH + decodedEntityString);

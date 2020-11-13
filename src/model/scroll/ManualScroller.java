@@ -58,6 +58,14 @@ public class ManualScroller implements Scroller {
       level.translateAllEntities(currentXScroll, currentYScroll);
   }
 
+  /**
+   * Resets the scroller
+   */
+  @Override
+  public void reset() {
+    //DO NOTHING
+  }
+
 
   /**
    * Checks to see if the screen should scroll left

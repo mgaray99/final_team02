@@ -62,4 +62,13 @@ public class DoodleGenerationScroller extends ManualScroller{
       }
     }
   }
+
+  /**
+   * Resets the scroller - i.e. return flagY to its starting position so that automatic level
+   * generation can proceed as if this object has just been instantiated
+   */
+  @Override
+  public void reset() {
+    flagY = GENERATE_MAX_BOUND;
+  }
 }
