@@ -1,17 +1,15 @@
 package model.configuration;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Scanner;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
 import model.entity.Player;
 import model.entity.PowerUp;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * A class responsible for creating the initial state of a game

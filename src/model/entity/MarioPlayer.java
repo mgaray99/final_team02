@@ -1,16 +1,11 @@
-package model.entity.player;
+package model.entity;
 
 import model.collision.CollisionDirection;
-import model.entity.IDamageable;
-import model.entity.IEmpowering;
-import model.entity.IEntity;
-import model.entity.ISpawner;
 
-public class DoodlePlayer extends Player2 {
+public class MarioPlayer extends Player {
 
-  private static final double DOODLE_JUMP_SPEED = 6;
 
-  public DoodlePlayer(double x, double y) {
+  public MarioPlayer(double x, double y) {
     super(x, y);
   }
 
@@ -20,9 +15,13 @@ public class DoodlePlayer extends Player2 {
       this.setCurrentCollision(collision);
     }
 
-    if (collision == CollisionDirection.TOP || this.getYVel() > 0) {
-      this.jump(DOODLE_JUMP_SPEED);
+    if (collision == CollisionDirection.LEFT || collision == CollisionDirection.RIGHT) {
+      this.resetGracePeriodBeforeSidewaysMovement();
     }
+    //this if statement is for testing - will be removed
+    //if (!collision.contains(CollisionDirection.NONE)) {
+    //    yVel = 0;
+    //}
     this.checkGravity(entity, collision);
     if (entity instanceof IDamageable && collision != CollisionDirection.NONE && this
         .canApplyDamage(collision)) {

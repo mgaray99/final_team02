@@ -1,15 +1,10 @@
-package model.entity.player;
+package model.entity;
 
 import model.collision.CollisionDirection;
-import model.entity.IDamageable;
-import model.entity.IEmpowering;
-import model.entity.IEntity;
-import model.entity.ISpawner;
 
-public class MarioPlayer extends Player2 {
+public class FlappyPlayer extends Player {
 
-
-  public MarioPlayer(double x, double y) {
+  public FlappyPlayer(double x, double y) {
     super(x, y);
   }
 

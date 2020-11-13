@@ -3,10 +3,6 @@ package model.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import model.Level;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -20,7 +16,9 @@ public class CollisionDetectionTest extends DukeApplicationTest {
 
   @Test
   public void collisionTrueXTest() {
-    Player player = new Player(5, 5);
+    Player player = new MarioPlayer(5, 5) {
+
+    };
     Block block = new Block(5.9,5);
     player.setXVel(5);
     player.checkCollision(block);
@@ -29,7 +27,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
 
   @Test
   public void collisionTrueYTest() {
-    Player player = new Player(5, 5);
+    Player player = new MarioPlayer(5, 5);
     player.setGrounded(false);
     Block block = new Block(5,5.9);
     player.setXVel(5);
@@ -40,7 +38,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
 
   @Test
   public void collisionFalseTest() {
-    Player player = new Player(25, 25);
+    Player player = new MarioPlayer(25, 25);
     player.setXVel(5);
     player.setYVel(5);
     Block block = new Block(10,10);
@@ -51,7 +49,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
 
   @Test
   public void collisionBorderlineHitTest() {
-    Player player = new Player(0, 0);
+    Player player = new MarioPlayer(0, 0);
     Block block = new Block(4.9,4.9);
     player.setXVel(5);
     player.setYVel(5);
@@ -62,7 +60,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
 
   @Test
   public void collisionBorderlineMissTest() {
-    Player player = new Player(0, 0);
+    Player player = new MarioPlayer(0, 0);
     Block block = new Block(5,5);
     player.setXVel(5);
     player.setYVel(5);

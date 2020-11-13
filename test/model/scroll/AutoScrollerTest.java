@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
+import model.entity.MarioPlayer;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -43,7 +44,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
   public void start(Stage stage) {
     entityList = new ArrayList<>();
 
-    playerEntity = new Player(PLAYERX, PLAYERY);
+    playerEntity = new MarioPlayer(PLAYERX, PLAYERY);
     barrierBlockEntity = new Block(BARRIERX, BARRIERY);
     enemyEntity = new Enemy(ENEMYX, ENEMYY);
 
