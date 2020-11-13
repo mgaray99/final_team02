@@ -47,9 +47,7 @@ public class ManualScroller implements Scroller {
    */
   @Override
   public void scroll(Level level, Player player) {
-    List<IEntity> entityList = level.getAllEntities();
-
-    currentXScroll = 0.0;
+      currentXScroll = 0.0;
       currentYScroll = 0.0;
 
       checkLeftScroll(player);
@@ -57,10 +55,7 @@ public class ManualScroller implements Scroller {
       checkUpScroll(player);
       checkDownScroll(player);
 
-
-    for (IEntity entity : entityList) {
-      scrollEntity(entity, currentXScroll, currentYScroll);
-    }
+      level.translateAllEntities(currentXScroll, currentYScroll);
   }
 
 
@@ -120,15 +115,5 @@ public class ManualScroller implements Scroller {
     }
   }
 
-  /**
-   * Moves the Entity
-   * @param entity the Entity to be scrolled
-   * @param xScroll the amount to scroll the entity in the x direction
-   * @param yScroll the amount to scroll the entity in the y direction
-   */
-  private void scrollEntity(IEntity entity, double xScroll, double yScroll) {
-    HitBox hitBox = entity.getHitBox();
-    hitBox.translateX(xScroll);
-    hitBox.translateY(yScroll);
-  }
+
 }
