@@ -69,7 +69,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         }
     }
 
-    @Override
+    //@Override
     public void checkFutureCollision(IEntity entity) {
         CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
         //this if statement is for testing - will be removed
@@ -82,6 +82,8 @@ public class Enemy implements IEntity, IMovable, IDamageable{
             this.attemptApplyDamage((IDamageable) entity,collision);
         }
     }
+
+    public void checkCollision(IEntity entity) {}
 
     @Override
     public void moveOneStep() {

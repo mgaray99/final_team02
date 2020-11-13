@@ -68,4 +68,6 @@ public class MarioPlayer extends Player {
     }
     processCurrentCollision(entity, collision);
   }
+
+  public void checkCollision(IEntity entity) {}
 }

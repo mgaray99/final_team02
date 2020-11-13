@@ -95,7 +95,7 @@ public class HitBox {
       directions.add(Direction.TOP);
     }
 
-    //if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
+    if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
 
       if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
         directions.add(Direction.RIGHT);
@@ -103,13 +103,21 @@ public class HitBox {
       if (between(otherBox.getXRight() - xLeft, 0, MAX_INTERSECT))  {
         directions.add(Direction.LEFT);
       }
-    //}
+    }
     return directions;
   }
 
   public CollisionDirections getFutureCollisionDirection(HitBox otherBox, double xVel, double yVel) {
-    HitBox futureBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
-    return getCollisionDirection(futureBox);
+    CollisionDirections futureDirections = new CollisionDirections();
+    HitBox futureXBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
+    CollisionDirections xDirections = getCollisionDirection(futureXBox);
+    HitBox futureYBox = new HitBox(otherBox.getXLeft(), otherBox.getYTop()+yVel);
+    CollisionDirections yDirections = getCollisionDirection(futureYBox);
+    if (xDirections.contains(Direction.LEFT)) {futureDirections.add(Direction.LEFT);}
+    if (xDirections.contains(Direction.RIGHT)) {futureDirections.add(Direction.RIGHT);}
+    if (yDirections.contains(Direction.TOP)) {futureDirections.add(Direction.TOP);}
+    if (yDirections.contains(Direction.BOTTOM)) {futureDirections.add(Direction.BOTTOM);}
+    return futureDirections;
   }
 
 

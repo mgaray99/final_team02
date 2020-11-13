@@ -53,8 +53,8 @@ public class Level {
       this.removeEntitiesAsNeeded();
       this.spawnEntitiesAsNeeded();
       this.updateModifiers();
-      this.checkForKeyPresses();
       this.applyGravity();
+      this.checkForKeyPresses();
       this.checkIfEnemiesMove();
       this.checkCollisions();
       this.moveEntities();

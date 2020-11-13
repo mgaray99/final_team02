@@ -71,4 +71,6 @@ public class DoodlePlayer extends Player {
     }*/
   }
 
+  public void checkCollision(IEntity entity){};
+
 }

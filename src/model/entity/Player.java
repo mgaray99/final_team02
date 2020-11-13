@@ -126,10 +126,10 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IEmpower
       return;
     }
     if (this.canMoveUp) {
-      this.getHitBox().translateX(this.getXVel());
+      this.getHitBox().translateY(this.getYVel());
     }
     if (this.canMoveRight) {
-      this.getHitBox().translateY(this.getYVel());
+      this.getHitBox().translateX(this.getXVel());
     }
     this.setGrounded(false);
     this.canMoveUp = true;

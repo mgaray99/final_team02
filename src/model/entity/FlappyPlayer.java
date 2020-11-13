@@ -34,4 +34,6 @@ public class FlappyPlayer extends Player {
       spawner.attemptCreateAndAddSpawn(collision);
     }
   }
+
+  public void checkCollision(IEntity entity){}
 }
