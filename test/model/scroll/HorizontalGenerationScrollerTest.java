@@ -65,7 +65,8 @@ public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
    */
   @Test
   public void testSimpleScroll() {
-    AutoGenerationScroller scroller = new AutoGenerationScroller(XSCROLL,YSCROLL, PATH);
+    AutoGenerationScroller scroller = new AutoGenerationScroller(XSCROLL,YSCROLL,
+        false, PATH);
     scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());

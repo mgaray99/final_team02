@@ -9,10 +9,12 @@ import model.entity.Player;
 public class AutoScroller implements Scroller{
     protected double xScroll;
     protected double yScroll;
+    protected boolean playerScrolls;
 
-    public AutoScroller(double x, double y) {
+    public AutoScroller(double x, double y, boolean lockPlayerInPlace) {
       xScroll = x;
       yScroll = y;
+      playerScrolls = lockPlayerInPlace;
     }
 
   /**
@@ -24,6 +26,10 @@ public class AutoScroller implements Scroller{
   public void scroll(Level level, Player player) {
     List<IEntity> entityList = level.getAllEntities();
     entityList.forEach(entity -> scrollEntity(entity));
+
+    if (playerScrolls) {
+      scrollPlayer(player);
+    }
   }
 
   /**
@@ -34,5 +40,16 @@ public class AutoScroller implements Scroller{
     HitBox hitBox = entity.getHitBox();
     hitBox.translateX(xScroll);
     hitBox.translateY(yScroll);
+  }
+
+  /**
+   * Moves the Player in the reverse direction as the level is moving to simulate locking them
+   * in place
+   * @param player the Player to be scrolled
+   */
+  private void scrollPlayer(Player player) {
+    HitBox hitBox = player.getHitBox();
+    hitBox.translateX(-1 * xScroll);
+    hitBox.translateY(-1 * yScroll);
   }
 }

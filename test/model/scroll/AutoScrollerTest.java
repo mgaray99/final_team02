@@ -66,7 +66,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testSimpleScroll() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL);
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, false);
     scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());
@@ -84,7 +84,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testScrollHorizontal() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,0);
+    AutoScroller scroller = new AutoScroller(XSCROLL,0, false);
     scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());
@@ -102,7 +102,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testScrollVertical() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL);
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, false);
     scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL, playerEntity.getHitBox().getXLeft());
@@ -119,7 +119,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
    */
   @Test
   public void testPlayerScroll() {
-    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL);
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, false);
 
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
@@ -129,6 +129,24 @@ public class AutoScrollerTest extends DukeApplicationTest {
     assertEquals(PLAYERX + XSCROLL + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
 
     assertEquals(PLAYERY + YSCROLL + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
+  }
+
+  /**
+   * Tests that the Autoscroller correctly positions the player when the pScrolls variable is set to
+   * true (i.e. the autoscroller moves the player
+   */
+  @Test
+  public void testPScrollsTrue() {
+    AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, true);
+
+    playerEntity.setXVel(PLAYER_XVEL);
+    playerEntity.setYVel(PLAYER_YVEL);
+    playerEntity.moveOneStep();
+    scroller.scroll(level, playerEntity);
+
+    assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
+
+    assertEquals(PLAYERY + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
   }
 
 }

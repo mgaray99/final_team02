@@ -45,7 +45,6 @@ public class AutoGenerator {
   private void setDimensions(XMLHelper helper) {
     numCols = helper.getNumCols();
     numRows = helper.getNumRows();
-
   }
 
   /**

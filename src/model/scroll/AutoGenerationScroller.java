@@ -12,8 +12,8 @@ public class AutoGenerationScroller extends AutoScroller {
   private final int GENERATE_MAX_BOUND;
   private static final String EXCEPTION_MESSAGE = "Failed to build auto-generation";
 
-  public AutoGenerationScroller(double xScr, double yScr, String path) {
-    super(xScr,yScr);
+  public AutoGenerationScroller(double xScr, double yScr, boolean pScrolls, String path) {
+    super(xScr,yScr, pScrolls);
 
     try {
       helper = new AutoGenerationHelper(path);

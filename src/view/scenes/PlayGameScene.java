@@ -1,5 +1,7 @@
 package view.scenes;
 
+import java.util.Arrays;
+import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -10,6 +12,7 @@ import view.GameScene;
 
 public class PlayGameScene extends GameScene {
   private static final String ID = "GAME";
+  private static final String TEXTFIELD_ID = "TEXTFIELD";
   private static final String TEXTURES = "textures";
   private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
 
@@ -18,8 +21,10 @@ public class PlayGameScene extends GameScene {
 
   private static final String CSV_EXTENSION = ".csv";
   private static final String SAVE_FILEPATH = "data/saves/";
-  private Level currentLevel;
 
+  private static final String[] bannedCharacters = {"/", ".", "\\"};
+
+  private Level currentLevel;
   private TextField saveField;
 
   public PlayGameScene(Group myRoot, double width, double height) {
@@ -52,6 +57,7 @@ public class PlayGameScene extends GameScene {
     saveField.setLayoutX(WIDTH/2 - saveField.getMinWidth());
     saveField.setLayoutY(HEIGHT/2 - saveField.getMinHeight());
     saveField.setVisible(false);
+    saveField.setId(TEXTFIELD_ID);
     saveField.setOnKeyPressed(event -> handleTextFieldPress(event));
 
     addElementToRoot(saveField);
@@ -68,7 +74,7 @@ public class PlayGameScene extends GameScene {
 
   /**
    * Handles the event that a key was pressed in the textfield
-   * @param event
+   * @param event the key event that has occurred
    */
   private void handleTextFieldPress(KeyEvent event) {
     if (event.getCode().equals(KeyCode.ENTER)) {
@@ -96,7 +102,16 @@ public class PlayGameScene extends GameScene {
    * @return a boolean revealing whether or not the text is valid
    */
   private boolean checkIsValidText(String text) {
-    return text.length() > 0 && text.charAt(text.length() - 1) != ' ';
+    List<String> bannedList= Arrays.asList(bannedCharacters);
+    boolean containsBannedChar = false;
+
+    for (String bannedChar : bannedList) {
+      if (text.indexOf(bannedChar) >= 0) {
+        containsBannedChar = true;
+      }
+    }
+
+    return text.length() > 0 && text.charAt(text.length() - 1) != ' ' && !containsBannedChar;
   }
 
   /**
@@ -108,6 +123,8 @@ public class PlayGameScene extends GameScene {
 
     saveField.clear();
     saveField.setVisible(false);
+
+    updateErrorText("");
     hideErrorText();
   }
 }
