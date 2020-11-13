@@ -10,7 +10,9 @@
 
 #### SPRINT 2 DIAGRAM
 * This was what we planned to have done by the end of Sprint 2
-![hello](basiclevel.jpg)
+![hello](mario.jpg)
+![hello](flappy.jpg)
+![hello](doodle.jpg)
 
 ### GOALS FOR THIS SPRINT:
 - Add additional levels
