@@ -94,7 +94,14 @@ public class GameView extends Application {
       List<IEntity> entityList = model.getAllEntitiesInLevel();
       texturer.updateTextures(entityList, 15, 15);
     }
+    getScore();
   }
+
+  /**
+   * gets score from model
+   */
+
+  private int getScore() {return 0;}
 
 
   /**

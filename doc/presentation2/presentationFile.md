@@ -11,7 +11,7 @@
 
 #### COMPLETED
 * Be able to load a level of a platform game
-* Move player around using arrow keys and jump with spacebar
+* Move player around using arrow keys and jump with space bar
 * Have Entity collision (i.e. Player doesn't fall thru floor)
 * Use clear model, view, controller
 
