@@ -71,7 +71,7 @@ public class RandomizerTest extends DukeApplicationTest{
 
     // Missing opening parentheses
     assertThrows(IllegalArgumentException.class,
-        () -> new Randomizer("R1,2,3;0.5,0.2,0.2"));
+        () -> new Randomizer("R1,2,3;0.5,0.2,0.2)"));
 
     // Missing both parentheses
     assertThrows(IllegalArgumentException.class,

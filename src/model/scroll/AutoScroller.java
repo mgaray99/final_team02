@@ -41,4 +41,12 @@ public class AutoScroller implements Scroller{
     hitBox.translateX(-1 * xScroll);
     hitBox.translateY(-1 * yScroll);
   }
+
+  /**
+   * Resets the scroller
+   */
+  @Override
+  public void reset() {
+    //DO NOTHING
+  }
 }
