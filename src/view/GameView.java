@@ -20,12 +20,7 @@ import model.GameModel;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.entity.IEntity;
-import view.scenes.ControlsScene;
-import view.scenes.MenuScene;
-import view.scenes.PlayGameScene;
-import view.scenes.SelectGameScene;
-import view.scenes.SelectLanguageScene;
-import view.scenes.SelectStyleScene;
+import view.scenes.*;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
@@ -42,6 +37,7 @@ public class GameView extends Application {
   private ControlsScene controlsScene;
   private SelectGameScene selectGameScene;
   private List<GameScene> gameScenes;
+  private HighScoreScene displayHighScore;
 
 
   private Scene currentScene;
@@ -93,6 +89,7 @@ public class GameView extends Application {
     selectStyleScene = new SelectStyleScene(new Group(), WIDTH, HEIGHT);
     controlsScene = new ControlsScene(new Group(), WIDTH, HEIGHT);
     selectGameScene = new SelectGameScene(new Group(), WIDTH, HEIGHT);
+    displayHighScore = new HighScoreScene(new Group(), WIDTH, HEIGHT);
   }
 
   /**
@@ -106,6 +103,8 @@ public class GameView extends Application {
     gameScenes.add(selectLanguageScene);
     gameScenes.add(selectStyleScene);
     gameScenes.add(selectGameScene);
+    gameScenes.add(displayHighScore);
+
   }
 
   /**
@@ -133,6 +132,8 @@ public class GameView extends Application {
       texturer.updateTextures(entityList, 15, 15);
     }
     getScore();
+    playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
+
   }
 
   /**
