@@ -13,13 +13,19 @@ import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameModel;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.entity.IEntity;
+import view.scenes.ControlsScene;
+import view.scenes.MenuScene;
 import view.scenes.PlayGameScene;
+import view.scenes.SelectGameScene;
+import view.scenes.SelectLanguageScene;
+import view.scenes.SelectStyleScene;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
@@ -29,11 +35,17 @@ import view.scenes.PlayGameScene;
  */
 public class GameView extends Application {
 
-  public enum viewName {HOME_SCREEN, CONTROLS,
-    SELECT_RESOURCE_BUNDLE, SELECT_CSS_STYLESHEET, GAME, GAMEVERSION};
-  viewName lastView;
-  viewName currentView;
-  private Map<viewName, GameScene> mapOfScenes;
+  private PlayGameScene playGameScene;
+  private MenuScene menuScene;
+  private SelectLanguageScene selectLanguageScene;
+  private SelectStyleScene selectStyleScene;
+  private ControlsScene controlsScene;
+  private SelectGameScene selectGameScene;
+  private List<GameScene> gameScenes;
+
+
+  private Scene currentScene;
+  private Scene lastScene;
 
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
@@ -54,20 +66,46 @@ public class GameView extends Application {
    */
   public void start(Stage sta) {
       stage = sta;
-      lastView = viewName.HOME_SCREEN;
-      currentView = viewName.HOME_SCREEN;
-      GameSceneMap map = new GameSceneMap();
-      map.buildMapOfScenes();
-      mapOfScenes = map.getMapOfScenes();
 
+      buildScenes();
+      buildScenesList();
       listenOnControllers();
+
+      lastScene = menuScene;
+      currentScene = menuScene;
 
       configPath = "doodlejump.properties";
       buildModel();
 
       prepareAnimation();
-      stage.setScene(mapOfScenes.get(viewName.HOME_SCREEN));
+      stage.setScene(menuScene);
       stage.show();
+  }
+
+  /**
+   * Builds the scenes
+   */
+  private void buildScenes() {
+    playGameScene = new PlayGameScene(new Group(), WIDTH, HEIGHT);
+    menuScene = new MenuScene(new Group(), WIDTH, HEIGHT);
+    selectLanguageScene =
+        new SelectLanguageScene(new Group(), WIDTH, HEIGHT);
+    selectStyleScene = new SelectStyleScene(new Group(), WIDTH, HEIGHT);
+    controlsScene = new ControlsScene(new Group(), WIDTH, HEIGHT);
+    selectGameScene = new SelectGameScene(new Group(), WIDTH, HEIGHT);
+  }
+
+  /**
+   * Builds the list of game scenes used in this view
+   */
+  private void buildScenesList() {
+    gameScenes = new ArrayList<>();
+    gameScenes.add(menuScene);
+    gameScenes.add(playGameScene);
+    gameScenes.add(controlsScene);
+    gameScenes.add(selectLanguageScene);
+    gameScenes.add(selectStyleScene);
+    gameScenes.add(selectGameScene);
   }
 
   /**
@@ -78,7 +116,7 @@ public class GameView extends Application {
       model = new GameModel(new GameConfiguration(configPath));
       inputter = new KeyInputter(model);
       texturer = new Texturer(WIDTH, HEIGHT, model.getTexturesPath(),
-          (Group)(mapOfScenes.get(viewName.GAME).lookup("#" + TEXTURES)));
+          (Group)playGameScene.lookup("#" + TEXTURES));
     } catch (InvalidFileException ife) {
       endGame();
     }
@@ -88,7 +126,7 @@ public class GameView extends Application {
    * Updates the view
    */
   private void update() {
-    if (currentView.equals(viewName.GAME)) {
+    if (currentScene.equals(playGameScene)) {
       model.updateGame();
 
       List<IEntity> entityList = model.getAllEntitiesInLevel();
@@ -112,8 +150,8 @@ public class GameView extends Application {
    * Builds listeners for all controllers
    */
   private void listenOnControllers() {
-      for (viewName view : viewName.values()) {
-        GameController cont = mapOfScenes.get(view).getGameController();
+      for (GameScene scene : gameScenes) {
+        GameController cont = scene.getGameController();
         cont.addEventHandler(EventType.ROOT, event -> handleControllerEvent(cont, event));
       }
   }
@@ -172,8 +210,8 @@ public class GameView extends Application {
    * @param name the name of the stylesheet (i.e. dark/light)
    */
   public void switchStylesheet(String name) {
-    for (viewName view : viewName.values()) {
-      mapOfScenes.get(view).updateStylesheet(name);
+    for (GameScene scene : gameScenes) {
+      scene.updateStylesheet(name);
     }
   }
 
@@ -182,49 +220,51 @@ public class GameView extends Application {
    * @param name the name of the resourcebundle
    */
   public void switchLanguage(String name) {
-   mapOfScenes.keySet().forEach(key -> mapOfScenes.get(key).updateResources(name));
+    for (GameScene scene : gameScenes) {
+      scene.updateResources(name);
+    }
   }
 
   /**
    * Switches the scene to the viewName indexed by view
-   * @param view the viewName (i.e. HOME_SCREEN, SELECT_CSS_STYLESHEET) to become the new scene
+   * @param scene the scene to become the new scene
    */
-  private void setScene(viewName view) {
-    lastView = currentView;
-    stage.setScene(mapOfScenes.get(view));
-    currentView = view;
+  private void setScene(Scene scene) {
+    lastScene = currentScene;
+    stage.setScene(scene);
+    currentScene = scene;
   }
 
   /**
    * Switches to the menu screen
    */
   public void switchToHomeScreen() {
-    setScene(viewName.HOME_SCREEN);
+    setScene(menuScene);
   }
 
   /**
    * Switches to Css Stylesheet Selection Screen
    */
   public void switchToSelectCssStylesheetScreen() {
-    setScene(viewName.SELECT_CSS_STYLESHEET);
+    setScene(selectStyleScene);
   }
 
   /**
    * Switches to Select Language Screen
    */
-  public void switchToSelectLanguageScreen() {setScene(viewName.SELECT_RESOURCE_BUNDLE);
+  public void switchToSelectLanguageScreen() {setScene(selectLanguageScene);
   }
 
   /**
    * switches to Select Game Type Screen
    */
-  public void selectGameTypeScreen() {setScene(viewName.GAMEVERSION);}
+  public void selectGameTypeScreen() {setScene(selectGameScene);}
 
   /**
    * Launches a save box to save the current state of the level in a csv file
    */
   public void saveGame() {
-    ((PlayGameScene)mapOfScenes.get(viewName.GAME)).launchSave(model.getLevel());
+    playGameScene.launchSave(model.getLevel());
   }
 
   /**
@@ -247,10 +287,10 @@ public class GameView extends Application {
    * Switches to the controller screen
    */
   public void switchToControlScreen() {
-    KeyBinder binder = (KeyBinder)(mapOfScenes.get(viewName.CONTROLS).lookupElementInRoot(
-        "KeyBinder"));
+    KeyBinder binder = (KeyBinder)controlsScene.lookupElementInRoot(
+        "KeyBinder");
     binder.updateKeyInputScreen(inputter);
-    setScene(viewName.CONTROLS);
+    setScene(controlsScene);
   }
 
   /**
@@ -268,17 +308,17 @@ public class GameView extends Application {
   /**
    * Switches back to the last view
    */
-  public void back() { setScene(lastView); }
+  public void back() { setScene(lastScene); }
 
   /**
    * Starts the game
    */
-  public void start() { setScene(viewName.GAME); }
+  public void start() { setScene(playGameScene); }
 
   /**
    * Returns to the home screen
    */
-  public void homeScreen() { setScene(viewName.HOME_SCREEN); }
+  public void homeScreen() { setScene(menuScene); }
 
   /**
    * For testing - return the GameModel
