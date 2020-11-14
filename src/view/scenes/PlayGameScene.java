@@ -44,6 +44,8 @@ public class PlayGameScene extends GameScene {
     Group textures = new Group();
     textures.setId(TEXTURES);
     addElementToRoot(textures);
+    textures.toBack();
+    lookupElementInRoot(BACKGROUND).toBack();
   }
 
   /**

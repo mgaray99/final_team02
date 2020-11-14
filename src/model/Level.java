@@ -27,16 +27,13 @@ public class Level {
   private static final int STARTY = 600;
   private static final int START_HEALTH = 10;
 
-  private static final int NO_SCROLL = -1;
-  private static final int ALWAYS_SCROLL = 0;
-  private static final String GENERATION_PATH = "resources/game_configuration/auto/autodoodle.xml";
-
   private List<Player> playerList;
   private List<Enemy> enemyList;
   private List<IMovable> movableEntityList = new ArrayList<>();
   private List<PowerUp> powerUpList;
   private List<Block> blockList;
   private List<IEntity> entityList;
+  private LevelLoader loader;
 
   private int levelLength;
   private int levelWidth;
@@ -44,6 +41,7 @@ public class Level {
   private boolean levelWon;
 
   public Level(LevelLoader levelLoader) {
+    this.scroller = new AutoScroller(0,0, false);
     this.setOrResetLevel(levelLoader);
   }
 
@@ -59,6 +57,7 @@ public class Level {
       this.checkCollisions();
       this.moveEntities();
       this.checkWinCondition();
+      this.checkLoseCondition();
       this.scroll();
     }
   }
@@ -191,6 +190,27 @@ public class Level {
   }
 
   /**
+   * Moves all entities in the list by <xChange, yChange>
+   * @param xChange the amount to scroll the entity in the x direction
+   * @param yChange the amount to scroll the entity in the y direction
+   */
+  public void translateAllEntities(double xChange, double yChange) {
+    entityList.forEach(entity -> translateEntity(entity, xChange, yChange));
+  }
+
+  /**
+   * Moves the Entity
+   * @param entity the Entity to be scrolled
+   * @param xChange the amount to scroll the entity in the x direction
+   * @param yChange the amount to scroll the entity in the y direction
+   */
+  private void translateEntity(IEntity entity, double xChange, double yChange) {
+    HitBox hitBox = entity.getHitBox();
+    hitBox.translateX(xChange);
+    hitBox.translateY(yChange);
+  }
+
+  /**
    * Sets the scroller of the level equal to the Scroller passed in
    * @param configScroller the Scroller that will serve as this level's new Scroller
    */
@@ -208,6 +228,7 @@ public class Level {
   }
 
   public void setOrResetLevel(LevelLoader levelLoader){
+    loader = levelLoader;
     this.playerList = levelLoader.getCopyOfPlayerList();
     this.enemyList = levelLoader.getCopyOfEnemyList();
     this.movableEntityList = levelLoader.getCopyOfMovableEntityList();
@@ -280,6 +301,28 @@ public class Level {
     }
   };
 
+
+  /**
+   * Checks to see if the player has lost the level (i.e. fell through
+   * bottom of screen) and if so resets the level
+   */
+  private void checkLoseCondition() {
+    if (playerList.size() > 0) {
+      Player player = playerList.get(0);
+      if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
+        playerFall();
+      }
+    }
+  }
+
+  /**
+   * Handles the situation where the player has fallen off of the screen
+   */
+  private void playerFall() {
+    loader.reinitialize();
+    setOrResetLevel(loader);
+    scroller.reset();
+  }
 
   void setLevelWon(boolean isLevelWon) {
     this.levelWon = isLevelWon;

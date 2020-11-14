@@ -24,22 +24,11 @@ public class AutoScroller implements Scroller{
    */
   @Override
   public void scroll(Level level, Player player) {
-    List<IEntity> entityList = level.getAllEntities();
-    entityList.forEach(entity -> scrollEntity(entity));
+    level.translateAllEntities(xScroll, yScroll);
 
     if (playerScrolls) {
       scrollPlayer(player);
     }
-  }
-
-  /**
-   * Moves the Entity
-   * @param entity the Entity to be scrolled
-   */
-  private void scrollEntity(IEntity entity) {
-    HitBox hitBox = entity.getHitBox();
-    hitBox.translateX(xScroll);
-    hitBox.translateY(yScroll);
   }
 
   /**
@@ -51,5 +40,13 @@ public class AutoScroller implements Scroller{
     HitBox hitBox = player.getHitBox();
     hitBox.translateX(-1 * xScroll);
     hitBox.translateY(-1 * yScroll);
+  }
+
+  /**
+   * Resets the scroller
+   */
+  @Override
+  public void reset() {
+    //DO NOTHING
   }
 }

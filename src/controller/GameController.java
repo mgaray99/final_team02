@@ -24,6 +24,10 @@ public class GameController extends Group implements ButtonPushHandler {
 
   public GameController() {
     buffer = new ArrayList<>();
+    setOnKeyPressed(event -> handleKeyPress(event));
+    setOnKeyReleased(event -> handleKeyRelease(event));
+    setFocusTraversable(true);
+    setFocused(true);
   }
 
   /**
@@ -77,9 +81,7 @@ public class GameController extends Group implements ButtonPushHandler {
         ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT, file, this);
         List<Button> foundButtons = builder.getFoundButtons();
 
-        foundButtons.forEach(button -> button.setOnKeyPressed(event -> handleKeyPress(event)));
-        foundButtons.forEach(button -> button.setOnKeyReleased(event -> handleKeyRelease(event)));
-
+        foundButtons.forEach(button -> button.setFocusTraversable(false));
         getChildren().addAll(foundButtons);
       }
       catch (ButtonBuilderInstantiationException bbie) {

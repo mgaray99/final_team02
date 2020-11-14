@@ -66,4 +66,13 @@ public class AutoGenerationScroller extends AutoScroller {
       }
     }
   }
+
+  /**
+   * Resets the scroller - i.e. return flagX to its starting position so that automatic level
+   * generation can proceed as if this object has just been instantiated
+   */
+  @Override
+  public void reset() {
+    flagX = GENERATE_MAX_BOUND;
+  }
 }

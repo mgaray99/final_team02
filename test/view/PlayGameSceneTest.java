@@ -4,11 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -16,9 +13,6 @@ import model.Level;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
-import model.entity.Block;
-import model.entity.IEntity;
-import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 import view.scenes.PlayGameScene;
@@ -29,8 +23,8 @@ import view.scenes.PlayGameScene;
  */
 public class PlayGameSceneTest extends DukeApplicationTest {
 
-  private final double WIDTH = 800;
-  private final double HEIGHT = 800;
+  private static final double WIDTH = 800;
+  private static final double HEIGHT = 800;
 
   private static final String SAVE_INSTRUCTIONS = "Please input a filename and press ENTER";
   private static final String SAVE_ERROR = "Please input a valid filename!";

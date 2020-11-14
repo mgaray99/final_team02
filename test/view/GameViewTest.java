@@ -1,13 +1,18 @@
 package view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import model.GameModel;
+import model.Level;
+import model.entity.IEntity;
+import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
-import view.GameView.viewName;
 
 /**
  * Tests the GameView class for its ability to switch between scenes and perform various functions
@@ -83,11 +88,11 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
     public void testStartGame() {
-        assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+        assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
         javafxRun(() -> view.start());
 
         currentScene = stage.getScene();
-        assertEquals(((GameScene)currentScene).getSceneId(), viewName.GAME.toString());
+        assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
     }
 
   /**
@@ -95,11 +100,11 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testGameVersion() {
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.selectGameTypeScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.GAMEVERSION.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAMEVERSION");
   }
 
   /**
@@ -107,11 +112,11 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testSetControls() {
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(),"HOME_SCREEN");
     javafxRun(() -> view.switchToControlScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.CONTROLS.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(),"CONTROLS");
   }
 
   /**
@@ -119,15 +124,15 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testBackToMenu() {
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.start());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.GAME.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(),"GAME");
     javafxRun(() -> view.homeScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
   }
 
   /**
@@ -135,11 +140,11 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testAppearanceScreen() {
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.switchToSelectCssStylesheetScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.SELECT_CSS_STYLESHEET.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "SELECT_CSS_STYLESHEET");
   }
 
   /**
@@ -147,12 +152,12 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testLanguageScreen() {
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.switchToSelectLanguageScreen());
 
     currentScene = stage.getScene();
     assertEquals(((GameScene)currentScene).getSceneId(),
-        viewName.SELECT_RESOURCE_BUNDLE.toString());
+        "SELECT_RESOURCE_BUNDLE");
   }
 
   /**
@@ -160,16 +165,43 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testBack() {
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.selectGameTypeScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.GAMEVERSION.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAMEVERSION");
     javafxRun(() -> view.back());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), viewName.HOME_SCREEN.toString());
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
   }
 
+  /**
+   * Tests that the resetLevel() method actually resets the player's location in the level - first
+   * captures that location prior to any action, then moves the player and checks to make sure that
+   * the player's location is now different. Then, resets the level and makes sure that the
+   * player's location has reset to that original position
+   */
+  @Test
+  public void testResetLevel() {
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    javafxRun(() -> view.start());
+
+    GameModel model = view.getModel();
+    Level level = model.getLevel();
+    Player player = level.getPlayerList().get(0);
+
+    double xLeft = player.getHitBox().getXLeft();
+    double yTop = player.getHitBox().getYTop();
+
+    level.translateAllEntities(1,1);
+    assertNotEquals(xLeft, player.getHitBox().getXLeft());
+    assertNotEquals(yTop, player.getHitBox().getYTop());
+
+    javafxRun(() -> view.resetLevel());
+    player = level.getPlayerList().get(0);
+    assertEquals(xLeft, player.getHitBox().getXLeft());
+    assertEquals(yTop, player.getHitBox().getYTop());
+  }
 
 }

@@ -25,7 +25,7 @@ public class GameScene extends Scene {
   private GameController controller;
   private Text errorLabel;
   private static final String CONTROLLER = "controller";
-  private static final String BACKGROUND = "background";
+  protected static final String BACKGROUND = "background";
   private static final String DEFAULT_CSS_FILEPATH = "resources/cssstylesheets/default.css";
   private static final String STYLESHEET_PATH = "resources/cssstylesheets/";
   private static final String LANGUAGE_FOLDERPATH_LONG = "./src/resources/resourcebundles";
@@ -76,6 +76,10 @@ public class GameScene extends Scene {
    */
   public void updateErrorText(String newText) {
     errorLabel.setText(newText);
+    errorLabel.setId("scoreStyle");
+    errorLabel.getStyleClass().add("scoreStyle");
+
+
     errorLabel.setVisible(true);
     errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
   }

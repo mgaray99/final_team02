@@ -13,6 +13,7 @@ import model.scroll.ScrollerFactory;
 public class GameModel {
 
     private GameConfiguration gameConfiguration;
+    private File levelFile;
     private Level level;
     private ScrollerFactory scrollerFactory;
 
@@ -20,7 +21,7 @@ public class GameModel {
 
     public GameModel(GameConfiguration gameConfiguration) throws InvalidFileException {
         this.gameConfiguration = gameConfiguration;
-        File levelFile = gameConfiguration.getLevelFile();
+        levelFile = gameConfiguration.getLevelFile();
         LevelLoader levelLoader = new LevelLoader(levelFile);
         this.level = new Level(levelLoader);
         setLevelScroller();
@@ -76,5 +77,14 @@ public class GameModel {
      * @return level
      */
     public Level getLevel() { return this.level; }
+
+    /**
+     * Resets the level to the characteristics in levelLoader
+     */
+    public void resetLevel() throws InvalidFileException {
+        LevelLoader levelLoader = new LevelLoader(levelFile);
+        level.setOrResetLevel(levelLoader);
+        setLevelScroller();
+    }
 
 }

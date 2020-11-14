@@ -21,3 +21,8 @@
 #background {
   -fx-fill: #FFFFFF;
 }
+
+#scoreStyle {
+  -fx-font-size: 16pt;
+  -fx-font-family: Verdana;
+}

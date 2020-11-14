@@ -25,7 +25,7 @@ import util.DukeApplicationTest;
 public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
 
   private static final int MAX = 15;
-  private static final String PATH = "resources/game_configuration/auto/autoflappy.xml";
+  private static final String PATH = "./src/resources/game_configuration/auto/autoflappy.xml";
   private static final double XSCROLL = -0.5;
   private static final double YSCROLL = 0.5;
 
