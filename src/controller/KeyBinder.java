@@ -31,7 +31,6 @@ public class KeyBinder extends Group {
     public KeyBinder() {
         isUpdatingKey = false;
         currentKeyBeingUpdated = "";
-        setOnKeyPressed(e -> handleKey(e));
         setFocusTraversable(true);
         setFocused(true);
 
@@ -100,7 +99,7 @@ public class KeyBinder extends Group {
         Button keyButton = new Button(pair.getKey());
         keyButton.setId(pair.getKey());
         keyButton.setOnAction(e -> enableUpdate(keyButton.getId()));
-        keyButton.setFocusTraversable(false);
+        keyButton.setOnKeyPressed(e -> handleKey(e));
         keyButton.setLayoutX(COLUMN2X);
         keyButton.setLayoutY(START_VISIBLE_Y + VISIBLE_Y * offset);
 

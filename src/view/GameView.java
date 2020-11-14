@@ -52,6 +52,7 @@ public class GameView extends Application {
   private static final double ANIMATION_SPEED = 1/60.0;
   private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String TEXTURES = "textures";
+  private static final String SECRET_CONFIG_PATH = "/secret/masteregg.properties";
 
   private String configPath = "doodlejump.properties";
   private GameModel model;
@@ -173,15 +174,19 @@ public class GameView extends Application {
    * Handles the event of a key press
    * @param key the key that has been pressed
    */
-  private void keyPressed(String key) {
+  void keyPressed(String key) {
     inputter.keyPressed(key);
+    if (currentScene.equals(menuScene) && key.equals("T")) {
+      configPath = SECRET_CONFIG_PATH;
+      buildModel();
+    }
   }
 
   /**
    * Handles the event of a key release
    * @param key the key that has been pressed
    */
-  private void keyReleased(String key) {
+  void keyReleased(String key) {
     inputter.keyReleased(key);
   }
 
@@ -322,11 +327,17 @@ public class GameView extends Application {
 
   /**
    * For testing - return the GameModel
-   * @return mdoel
+   * @return model
    */
   GameModel getModel() {
     return model;
   }
+
+  /**
+   * For testing - return the config path
+   * @return configPath
+   */
+  String getConfigPath() { return configPath; }
 
   /**
    * Launches the application

@@ -2,7 +2,7 @@
 <generator>
   <dimensions>
     <rows>15</rows>
-    <columns>7</columns>
+    <columns>15</columns>
   </dimensions>
   <base>
     <entity>0</entity>
@@ -16,7 +16,7 @@
     <entity>2</entity>
     <direction>RIGHT:DOWN</direction>
     <originrow>13</originrow>
-    <origincol>U(0:6)</origincol>
+    <origincol>0</origincol>
     <numrows>1</numrows>
     <numcols>1</numcols>
   </random>
@@ -24,7 +24,7 @@
     <entity>3</entity>
     <direction>RIGHT:UP</direction>
     <originrow>13</originrow>
-    <origincol>U(0:6)</origincol>
+    <origincol>U(1:4)</origincol>
     <numrows>R(1,2,3;0.25,0.50,0.25)</numrows>
     <numcols>1</numcols>
   </random>
@@ -32,7 +32,15 @@
     <entity>5</entity>
     <direction>RIGHT:DOWN</direction>
     <originrow>U(7:8)</originrow>
-    <origincol>U(0:6)</origincol>
+    <origincol>U(5:14)</origincol>
+    <numrows>1</numrows>
+    <numcols>1</numcols>
+  </random>
+  <random>
+    <entity>5</entity>
+    <direction>RIGHT:DOWN</direction>
+    <originrow>U(7:8)</originrow>
+    <origincol>U(5:14)</origincol>
     <numrows>1</numrows>
     <numcols>1</numcols>
   </random>

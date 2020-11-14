@@ -26,7 +26,11 @@ class GameViewTest extends DukeApplicationTest {
     private static final String DARK_STYLESHEET = "resources/cssstylesheets/dark.css";
     private static final String START_BUTTON_ID = "StartCommand";
 
-    @Override
+    private static final String SECRET_CONFIG_PATH = "/secret/masteregg.properties";
+    private static final String DEFAULT_CONFIG_PATH = "doodlejump.properties";
+
+
+  @Override
     public void start(Stage st) {
       view = new GameView();
       stage = st;
@@ -202,6 +206,35 @@ class GameViewTest extends DukeApplicationTest {
     player = level.getPlayerList().get(0);
     assertEquals(xLeft, player.getHitBox().getXLeft());
     assertEquals(yTop, player.getHitBox().getYTop());
+  }
+
+  /**
+   * Tests that when a secret key is pressed in the home screen, a secret change happens
+   */
+  @Test
+  public void testSecretConfigSwitch() {
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
+
+    javafxRun(() ->view.keyPressed("T"));
+    assertEquals(SECRET_CONFIG_PATH, view.getConfigPath());
+  }
+
+  /**
+   * Tests that when a secret key is pressed in a scene other than the home screen, a secret change
+   * does not happen
+   */
+  @Test
+  public void testSecretConfigSwitchFails() {
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
+
+    javafxRun(() -> view.switchToSelectCssStylesheetScreen());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "SELECT_CSS_STYLESHEET");
+
+    javafxRun(() ->view.keyPressed("T"));
+    assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
   }
 
 }

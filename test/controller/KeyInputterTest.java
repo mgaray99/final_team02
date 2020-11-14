@@ -3,6 +3,8 @@ package controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import javafx.stage.Stage;
@@ -12,6 +14,7 @@ import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
+import view.GameView;
 
 
 public class KeyInputterTest extends DukeApplicationTest {
