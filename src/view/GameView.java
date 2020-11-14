@@ -164,7 +164,6 @@ public class GameView extends Application {
       }
       catch (Exception e) {
         System.out.println("bad reflection");
-        e.printStackTrace();
       }
   }
 
