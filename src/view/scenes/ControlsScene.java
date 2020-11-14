@@ -4,7 +4,6 @@ import controller.GameController;
 import controller.KeyBinder;
 import javafx.scene.Group;
 import view.GameScene;
-import view.GameView.viewName;
 
 public class ControlsScene extends GameScene {
 
