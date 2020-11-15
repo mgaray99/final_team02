@@ -117,10 +117,9 @@ public class HitBox {
   }
 
   public CollisionDirections getFutureCollisionDirection(HitBox otherBox, double xVel, double yVel) {
-    //CollisionDirections futureDirections = getCollisionD
-    //return getCollisionDirection(otherBox);
-    HitBox futureBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
-    return getCollisionDirection(futureBox);
+    //HitBox futureBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
+    //return getCollisionDirection(futureBox);
+    return getCollisionDirection(otherBox);
   }
 
 

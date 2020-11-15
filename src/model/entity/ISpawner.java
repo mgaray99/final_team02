@@ -21,7 +21,7 @@ public interface ISpawner {
 
     default void attemptCreateAndAddSpawn(CollisionDirections direction){
         CollisionDirections directionOpposite = direction.getOpposites();
-        if(this.getCollisionsRequiredForSpawn().contains(directionOpposite)){
+        if(this.getCollisionsRequiredForSpawn().oneIsContainedIn(directionOpposite)){
             double xPos = this.getHitBox().getXLeft();
             double yPos = this.getHitBox().getYTop();
             int height = this.getHitBox().getYSize();
@@ -52,7 +52,7 @@ public interface ISpawner {
 
     List<IEntity> getSpawnList();
 
-    List<Direction> getCollisionsRequiredForSpawn();
+    CollisionDirections getCollisionsRequiredForSpawn();
 
     IEntity createSpawn(double x, double y);
 

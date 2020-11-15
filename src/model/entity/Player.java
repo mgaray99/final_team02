@@ -3,7 +3,6 @@ package model.entity;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import model.HitBox;
 import model.collision.CollisionDirections;
@@ -165,13 +164,13 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   }
 
   @Override
-  public List<Direction> getAppliesDamageDirections() {
-    return Collections.singletonList(Direction.BOTTOM);
+  public CollisionDirections getAppliesDamageDirections() {
+    return new CollisionDirections(Collections.singletonList(Direction.BOTTOM));
   }
 
   @Override
-  public List<Direction> getReceivesDamageDirections() {
-    return Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT);
+  public CollisionDirections getReceivesDamageDirections() {
+    return new CollisionDirections(Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
   }
 
   protected CollisionDirections getCurrentCollision() {

@@ -1,9 +1,6 @@
 package model.entity;
 
 import model.collision.CollisionDirections;
-import model.collision.Direction;
-
-import java.util.List;
 
 public interface IDamageable {
 
@@ -35,13 +32,13 @@ public interface IDamageable {
      * Returns a list of CollisionDirections that this damageable can apply damage from
      * @return The list of CollisionDirections that this damageable can apply damage from
      */
-    List<Direction> getAppliesDamageDirections();
+    CollisionDirections getAppliesDamageDirections();
 
     /**
      * Returns a list of CollisionDirections that this damageable can receive damage from
      * @return The list of CollisionDirections that this damageable can receive damage from
      */
-    List<Direction> getReceivesDamageDirections();
+    CollisionDirections getReceivesDamageDirections();
 
     default boolean isDead(){
         return this.getHealth() <= 0;
@@ -57,10 +54,10 @@ public interface IDamageable {
     }
 
     default boolean canApplyDamage(CollisionDirections direction){
-        return this.getAppliesDamageDirections().contains(direction);
+        return this.getAppliesDamageDirections().oneIsContainedIn(direction);
     }
 
     default boolean canReceiveDamage(CollisionDirections direction){
-        return this.getReceivesDamageDirections().contains(direction);
+        return this.getReceivesDamageDirections().oneIsContainedIn(direction);
     }
 }

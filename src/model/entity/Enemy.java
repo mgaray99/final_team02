@@ -5,11 +5,11 @@ import model.collision.CollisionDirections;
 import model.collision.Direction;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class Enemy implements IEntity, IMovable, IDamageable{
 
     private static final int GRACE_PERIOD = 2;
+    private static final double MIN_DISTANCE_TO_PLAYER = 0.4;
     private static final double ENEMY_MOVEMENT_SPEED = 0.1;
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
@@ -70,6 +70,9 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     }
 
     public void updateVelocity(Player player) {
+        if (Math.abs(player.getHitBox().getXLeft() - this.getHitBox().getXLeft()) <= MIN_DISTANCE_TO_PLAYER) {
+            this.setXVel(0);
+        }
         if(player.getHitBox().getXLeft() < this.getHitBox().getXLeft()){
             this.setXVel(ENEMY_MOVEMENT_SPEED * -1);
         }
@@ -160,12 +163,12 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     }
 
     @Override
-    public List<Direction> getAppliesDamageDirections() {
-        return Arrays.asList(Direction.BOTTOM, Direction.LEFT, Direction.RIGHT);
+    public CollisionDirections getAppliesDamageDirections() {
+        return new CollisionDirections(Arrays.asList(Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
     }
 
     @Override
-    public List<Direction> getReceivesDamageDirections() {
-        return Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT);
+    public CollisionDirections getReceivesDamageDirections() {
+        return new CollisionDirections(Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
     }
 }
