@@ -1,6 +1,8 @@
 package model.entity;
 
 import model.HitBox;
+import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 public interface IMovable extends IEntity {
 
@@ -54,4 +56,41 @@ public interface IMovable extends IEntity {
 
   @Override
   String getType();
+
+  default void processCurrentCollision(IEntity entity, CollisionDirections collision){
+    if (collision.contains(Direction.BOTTOM) && !collision.containsHorizontalCollision()) {
+      //System.out.print("Bottom");
+      this.setGrounded(true);
+
+      this.getHitBox().setYBottom(entity.getHitBox().getYTop());
+      if (this.getYVel() > 0) {
+        this.setYVel(0);
+      }
+      //this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
+    }
+    if (collision.contains(Direction.TOP) && !collision.containsHorizontalCollision()){
+      //System.out.print("Top");
+      this.getHitBox().setYTop(entity.getHitBox().getYBottom());
+      if (this.getYVel() < 0) {
+        this.setYVel(0);
+      }
+      //this.getHitBox().setYTop(entity.getHitBox().getYBottom());
+    }
+    if (collision.contains(Direction.RIGHT) && !collision.containsVerticalCollision()) {
+      //System.out.print("Right");
+      this.getHitBox().setXRight(entity.getHitBox().getXLeft());
+      if (this.getXVel() > 0) {
+        this.setXVel(0);
+      }
+      //this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
+    }
+    if (collision.contains(Direction.LEFT) && !collision.containsVerticalCollision()) {
+      //System.out.print("Left");
+      this.getHitBox().setXLeft(entity.getHitBox().getXRight());
+      if (this.getXVel() < 0) {
+        this.setXVel(0);
+      }
+      //this.getHitBox().setXLeft(entity.getHitBox().getXRight());
+    }
+  }
 }

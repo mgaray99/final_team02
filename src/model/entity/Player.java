@@ -35,15 +35,14 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
 
   public abstract void updatePosition();
 
-  public abstract void processCurrentCollision(IEntity entity, CollisionDirections directions);
+  //public abstract void processCurrentCollision(IEntity entity, CollisionDirections directions);
 
 
   public void checkFutureCollision(IEntity entity) {
     CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
     currentCollision.add(collision);
     this.processCurrentCollision(entity, collision);
-    if (entity instanceof IDamageable && !collision.isEmpty() && this
-        .canApplyDamage(collision)) {
+    if (entity instanceof IDamageable) {
       this.attemptApplyDamage((IDamageable) entity, collision);
     }
     if (entity instanceof IEmpowering && !collision.isEmpty()) {
@@ -66,7 +65,7 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
 
   @Override
   public boolean isDead() {
-    return false;
+    return this.health <= 0;
   }
 
   @Override
@@ -183,4 +182,8 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
     return this.modifiers;
   }
 
+  @Override
+  public Teams getTeam() {
+    return Teams.PLAYER;
+  }
 }

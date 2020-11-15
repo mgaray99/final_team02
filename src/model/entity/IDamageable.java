@@ -47,7 +47,10 @@ public interface IDamageable {
     default void attemptApplyDamage(IDamageable damageable, CollisionDirections currentCollidingDirection){
         boolean canApplyDamage = this.canApplyDamage(currentCollidingDirection);
         boolean damageableCanReceiveDamage = damageable.canReceiveDamage(currentCollidingDirection.getOpposites());
-        if(canApplyDamage && damageableCanReceiveDamage){
+        boolean isOnSameTeam = this.isOnSameTeam(damageable);
+        boolean isEmpty =  currentCollidingDirection.isEmpty();
+        if(!isEmpty && damageable.getTeam() == Teams.PLAYER) System.out.println("Damaging player!");
+        if(canApplyDamage && damageableCanReceiveDamage && !isOnSameTeam && !isEmpty){
             double currentHealth = damageable.getHealth();
             damageable.setHealth(currentHealth - this.getCollisionDamage());
         }
@@ -60,4 +63,10 @@ public interface IDamageable {
     default boolean canReceiveDamage(CollisionDirections direction){
         return this.getReceivesDamageDirections().oneIsContainedIn(direction);
     }
+
+    default boolean isOnSameTeam(IDamageable damageable){
+        return this.getTeam() == damageable.getTeam();
+    }
+
+    Teams getTeam();
 }

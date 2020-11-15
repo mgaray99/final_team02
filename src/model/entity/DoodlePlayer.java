@@ -13,6 +13,7 @@ public class DoodlePlayer extends Player {
     this.setGrounded(false);
   }
 
+  @Override
   public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
     if (directions.contains(Direction.BOTTOM) && this.getYVel() > 0) {
       this.getHitBox().setYBottom(otherEntity.getHitBox().getYTop());

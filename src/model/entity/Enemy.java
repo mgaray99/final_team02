@@ -34,45 +34,16 @@ public class Enemy implements IEntity, IMovable, IDamageable{
 
     @Override
     public boolean isDead() {
-        return false;
-    }
-
-    public void processCurrentCollision(IEntity entity, CollisionDirections collision){
-        if (collision.contains(Direction.BOTTOM)) {
-            //System.out.print("Bottom");
-            this.setGrounded(true);
-            if (this.getYVel() > 0) {
-                this.setYVel(0);
-            }
-            this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
-        }
-        if (collision.contains(Direction.TOP)){
-            //System.out.print("Top");
-            if (this.getYVel() < 0) {
-                this.setYVel(0);
-            }
-            this.getHitBox().setYTop(entity.getHitBox().getYBottom());
-        }
-        if (collision.contains(Direction.LEFT)) {
-            //System.out.print("Left");
-            if (this.getXVel() < 0) {
-                this.setXVel(0);
-            }
-            this.getHitBox().setXLeft(entity.getHitBox().getXRight());
-        }
-        if (collision.contains(Direction.RIGHT)) {
-            //System.out.print("Right");
-            if (this.getXVel() > 0) {
-                this.setXVel(0);
-            }
-            this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
-        }
+        return this.health <= 0;
     }
 
     public void updateVelocity(Player player) {
+        /*
         if (Math.abs(player.getHitBox().getXLeft() - this.getHitBox().getXLeft()) <= MIN_DISTANCE_TO_PLAYER) {
             this.setXVel(0);
         }
+
+         */
         if(player.getHitBox().getXLeft() < this.getHitBox().getXLeft()){
             this.setXVel(ENEMY_MOVEMENT_SPEED * -1);
         }
@@ -93,12 +64,10 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         //}
 
         this.processCurrentCollision(entity, collision);
-        if(entity instanceof IDamageable && collision.doesCollide() && this.canApplyDamage(collision)){
+        if(entity instanceof IDamageable){
             this.attemptApplyDamage((IDamageable) entity,collision);
         }
     }
-
-    public void checkCollision(IEntity entity) {}
 
     @Override
     public void updatePosition() {
@@ -170,5 +139,9 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     @Override
     public CollisionDirections getReceivesDamageDirections() {
         return new CollisionDirections(Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
+    }
+    @Override
+    public Teams getTeam() {
+        return Teams.ENEMY;
     }
 }
