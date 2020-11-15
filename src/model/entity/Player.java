@@ -10,7 +10,8 @@ import model.collision.Direction;
 
 public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer {
 
-  private final String type = this.getClass().getSimpleName();
+  //private final String type = this.getClass().getSimpleName();
+  private final String type = "Player";
   public static final int GRACE_PERIOD = 1;
   public static final double GRAVITY_FACTOR = 0.015f;
   private double xVel = 0;
@@ -181,4 +182,5 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   public Map<Modifier.ModifierType, Modifier> getModifiers() {
     return this.modifiers;
   }
+
 }

@@ -49,6 +49,20 @@ public class CollisionDirections {
     return false;
   }
 
+  public boolean containsVerticalCollision() {
+    if (this.contains(Direction.TOP) || this.contains(Direction.BOTTOM)) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean containsHorizontalCollision() {
+    if (this.contains(Direction.RIGHT) || this.contains(Direction.LEFT)) {
+      return true;
+    }
+    return false;
+  }
+
   public boolean isEmpty() {
     return directionsList.size() == 0;
   }

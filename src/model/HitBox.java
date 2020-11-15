@@ -14,7 +14,7 @@ import model.collision.Direction;
 
 public class HitBox {
 
-  public static final double MAX_INTERSECT = 0.5;
+  public static final double MAX_INTERSECT = 0.499;
   public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.0001;
   public static final int X_SIZE = 1;
   public static final int Y_SIZE = 1;
@@ -90,29 +90,29 @@ public class HitBox {
     CollisionDirections directions = new CollisionDirections();
     double xRight = xLeft + xSize;
     double yBottom = yTop + ySize;
-    if (!((xRight >= otherBox.getXLeft() && xLeft <= otherBox.getXRight()) &&
-        (yBottom >= otherBox.getYTop() && yTop <= otherBox.getYBottom()))) {
+    if (!((xRight > otherBox.getXLeft() && xLeft < otherBox.getXRight()) &&
+        (yBottom > otherBox.getYTop() && yTop < otherBox.getYBottom()))) {
       return directions;
     }
 
     //if (xRight <= otherBox.getXRight() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
-      if (between(yBottom - otherBox.getYTop(), 0, MAX_INTERSECT)) {
+      if (between(yBottom - otherBox.getYTop(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
         directions.add(Direction.BOTTOM);
       }
-      if (between(otherBox.getYBottom() - yTop, 0, MAX_INTERSECT)) {
+      if (between(otherBox.getYBottom() - yTop, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
         directions.add(Direction.TOP);
       }
     //}
 
-    if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
+    //if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
 
-      if (between(xRight - otherBox.getXLeft(), 0, MAX_INTERSECT)) {
+      if (between(xRight - otherBox.getXLeft(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
         directions.add(Direction.RIGHT);
       }
-      if (between(otherBox.getXRight() - xLeft, 0, MAX_INTERSECT))  {
+      if (between(otherBox.getXRight() - xLeft, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT))  {
         directions.add(Direction.LEFT);
       }
-    }
+    //}
     return directions;
   }
 

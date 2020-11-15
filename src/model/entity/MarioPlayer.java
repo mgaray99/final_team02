@@ -5,8 +5,8 @@ import model.collision.Direction;
 
 public class MarioPlayer extends Player {
 
-  private static final double MARIO_JUMP_SPEED = -0.4;
-  private static final double MARIO_MOVE_SPEED = 0.2;
+  private static final double MARIO_JUMP_SPEED = -0.35;
+  private static final double MARIO_MOVE_SPEED = 0.15;
   private boolean leftKey = false;
   private boolean rightKey = false;
 
@@ -31,23 +31,27 @@ public class MarioPlayer extends Player {
   }
 
   public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
-    if (directions.contains(Direction.BOTTOM)) {
+    if (directions.contains(Direction.BOTTOM) ){ //&& !directions.containsHorizontalCollision()) {
+      System.out.print("Bottom. ");
       this.setGrounded(true);
       this.getHitBox().setYBottom(otherEntity.getHitBox().getYTop());
       if (this.getYVel() > 0) {this.setYVel(0);}
     }
 
-    if (directions.contains(Direction.TOP)) {
+    if (directions.contains(Direction.TOP) && !directions.containsHorizontalCollision()) {
+      System.out.print("Top. ");
       this.getHitBox().setYTop(otherEntity.getHitBox().getYBottom());
       if (this.getYVel() < 0) {this.setYVel(0);}
     }
 
-    if (directions.contains(Direction.RIGHT)) {
+    if (directions.contains(Direction.RIGHT) && !directions.containsVerticalCollision()) {
+      System.out.print("Right. ");
       this.getHitBox().setXRight(otherEntity.getHitBox().getXLeft());
       if (this.getXVel() > 0) {this.setXVel(0);}
     }
 
-    if (directions.contains(Direction.LEFT)) {
+    if (directions.contains(Direction.LEFT) && !directions.containsVerticalCollision()) {
+      System.out.print("Left. ");
       this.getHitBox().setXLeft(otherEntity.getHitBox().getXRight());
       if (this.getXVel() < 0) {this.setXVel(0);}
     }
