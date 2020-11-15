@@ -1,9 +1,8 @@
 package model.entity;
 
-import java.util.List;
 import java.util.Map;
 
-public interface IEmpowerable {
+public interface IPlayer {
 
     Map<Modifier.ModifierType, Modifier> getModifiers();
 

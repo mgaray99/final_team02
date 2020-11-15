@@ -1,15 +1,11 @@
 package model.entity;
 
-import model.GameSaver;
 import model.Level;
-import model.collision.CollisionDirection;
+import model.collision.Direction;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,7 +43,7 @@ public class PowerUpTest {
             double width = powerUpBlock.getHitBox().getXSize();
             player.getHitBox().setXLeft(xPosition + width * 0.5);
             player.getHitBox().setYTop((yPosition + (height)) - (MAX_INTERSECT * 0.9));
-            assertEquals(CollisionDirection.TOP, player.getHitBox().getCollisionDirection(powerUpBlock.getHitBox()));
+            assertEquals(Direction.TOP, player.getHitBox().getCollisionDirection(powerUpBlock.getHitBox()));
             level.step();
             assertEquals(0, powerUpBlock.getMaxSpawnCount());
             PowerUp powerUp = null;
@@ -64,7 +60,7 @@ public class PowerUpTest {
                 yPosition = powerUp.getHitBox().getYTop();
                 player.getHitBox().setXLeft(xPosition);
                 player.getHitBox().setYTop(yPosition);
-                assertNotEquals(CollisionDirection.NONE, player.getHitBox().getCollisionDirection(powerUpBlock.getHitBox()));
+                assertNotEquals(Direction.NONE, player.getHitBox().getCollisionDirection(powerUpBlock.getHitBox()));
                 level.step();
                 assertFalse(level.getCopyOfEntityList().contains(powerUp));
                 assertFalse(player.getModifiers().keySet().isEmpty());

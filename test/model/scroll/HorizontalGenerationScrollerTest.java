@@ -13,6 +13,7 @@ import model.configuration.LevelLoader;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
+import model.entity.MarioPlayer;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -46,7 +47,7 @@ public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
   @Override
   public void start(Stage stage) throws InvalidFileException {
 
-    playerEntity = new Player(PLAYERX, PLAYERY);
+    playerEntity = new MarioPlayer(PLAYERX, PLAYERY);
     barrierBlockEntity = new Block(BARRIERX, BARRIERY);
     enemyEntity = new Enemy(ENEMYX, ENEMYY);
 

@@ -15,6 +15,7 @@ public class Level {
   public static final int FRAMES_PER_SECOND = 60;
   public static final int MODIFIER_DURATION = 10;
   public static final double MODIFIER_VALUE = 1.5;
+  public static final double DEFAULT_GRAVITY_MODIFIER = 1;
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
 
   private Scroller scroller;
@@ -28,6 +29,7 @@ public class Level {
 
   private List<Player> playerList;
   private List<Enemy> enemyList;
+  private List<IMovable> movableEntityList = new ArrayList<>();
   private List<PowerUp> powerUpList;
   private List<Block> blockList;
   private List<IEntity> entityList;
@@ -43,109 +45,37 @@ public class Level {
     this.setOrResetLevel(levelLoader);
   }
 
-  public int getLevelLength() {
-    return this.levelLength;
-  }
-
-  public int getLevelWidth() {
-    return this.levelWidth;
-  }
-
-  public void setOrResetLevel(LevelLoader levelLoader){
-    loader = levelLoader;
-    this.playerList = levelLoader.getCopyOfPlayerList();
-    this.enemyList = levelLoader.getCopyOfEnemyList();
-    this.blockList = levelLoader.getCopyOfBlockList();
-    this.powerUpList = levelLoader.getCopyOfPowerUpList();
-    this.entityList = levelLoader.getCopyOfEntityList();
-    this.levelLength = levelLoader.getLevelLength();
-    this.levelWidth = levelLoader.getLevelWidth();
-  }
-
-  public void addEntity(IEntity entity) {
-    if (entity!=null) {
-      this.entityList.add(entity);
-    }
-
-    if (entity instanceof Block) {
-      this.blockList.add((Block)entity);
-    }
-    if (entity instanceof Enemy) {
-      this.enemyList.add((Enemy)entity);
-    }
-    if (entity instanceof Player) {
-      this.playerList.add((Player)entity);
-    }
-    if (entity instanceof PowerUp) {
-      PowerUp powerUp = (PowerUp) entity;
-      powerUp.setRandomModifier(MODIFIER_VALUE, MODIFIER_DURATION * FRAMES_PER_SECOND);
-      this.powerUpList.add(powerUp);
-    }
-  }
-
-  private void removeEntity(IEntity entity) {
-    if(entity != null){
-      this.entityList.remove(entity);
-    }
-    if (entity instanceof Block) {
-      this.blockList.remove(entity);
-    }
-    if (entity instanceof Enemy) {
-      this.enemyList.remove(entity);
-    }
-    if (entity instanceof Player) {
-      this.playerList.remove(entity);
-    }
-    if (entity instanceof PowerUp) {
-      this.powerUpList.remove(entity);
-    }
-  }
-
-  @Nullable
-  public IEntity getEntityAt(int xCoordinate, int yCoordinate) {
-    for(IEntity entity : entityList){
-      if((int)entity.getHitBox().getXLeft() == xCoordinate && (int)entity.getHitBox().getYTop() == yCoordinate){
-        return entity;
-      }
-    }
-    return null;
-  }
 
   public void step() {
     if (!keyPressFunctions.isPaused()) {
-      this.updateEntities();
-      this.moveEntities();
+      this.removeEntitiesAsNeeded();
+      this.spawnEntitiesAsNeeded();
+      this.updateModifiers();
+      this.updateVelocities();
       this.checkCollisions();
+      this.updatePositions();
       this.checkWinCondition();
       this.checkLoseCondition();
       this.scroll();
     }
   }
 
-  public void updateEntities() {
-    // a list of entities to remove if necessary
+  public void removeEntitiesAsNeeded() {
     List<IEntity> entitiesToRemove = new ArrayList<>();
 
-    if(!this.playerList.isEmpty()){
-      Player player = playerList.get(0);
-      if(player.isDead()){
+    for (Player player : playerList) {
+      if (player.isDead()) {
         entitiesToRemove.add(player);
         this.setLevelLost(true);
       }
-      player.updateModifiers();
     }
-    for (Enemy enemy : this.enemyList) {
-      if (enemy.isDead()) {
-        entitiesToRemove.add(enemy);
+
+    for (IMovable movable : this.movableEntityList) {
+      if (movable.isDead()) {
+        entitiesToRemove.add(movable);
       }
     }
-    for(Block block : this.blockList){
-      if(block instanceof ISpawner){
-        ISpawner spawner = (ISpawner)block;
-        Optional<IEntity> optionalIEntity = spawner.attemptSpawnEntity();
-        optionalIEntity.ifPresent(this::addEntity);
-      }
-    }
+
     for(PowerUp powerUp : this.powerUpList){
       if(powerUp.hasAppliedModifier()){
         entitiesToRemove.add(powerUp);
@@ -159,77 +89,64 @@ public class Level {
     }
   }
 
-  private void moveEntities(){
-    if(!playerList.isEmpty()) {
-      Player player = playerList.get(0);
-      double gravityModifier = 1;
+  public void spawnEntitiesAsNeeded() {
+    for(Block block : this.blockList){
+      if(block instanceof ISpawner){
+        ISpawner spawner = (ISpawner)block;
+        Optional<IEntity> optionalIEntity = spawner.attemptSpawnEntity();
+        optionalIEntity.ifPresent(this::addEntity);
+      }
+    }
+  }
+
+  public void updateModifiers() {
+    for (Player player : playerList) {
+      player.updateModifiers();
+    }
+  }
+
+  private void updateVelocities() {
+    for (Player player : playerList) {
+      player.updateVelocity(keyPressFunctions.isPlayerMovingLeft(), keyPressFunctions.isPlayerMovingRight(), keyPressFunctions.isPlayerJumping());
+    }
+    for (Enemy enemy : enemyList) {
+      enemy.updateVelocity(playerList.get(0));
+    }
+  }
+
+
+  /*private void applyGravity() {
+    for (Player player : playerList) {
+      double gravityModifier = DEFAULT_GRAVITY_MODIFIER;
       if(player.getModifiers().containsKey(Modifier.ModifierType.GRAVITY)){
         gravityModifier = player.getModifiers().get(Modifier.ModifierType.GRAVITY).getValue();
       }
-      this.checkForKeyPresses();
       player.applyGravity(this.GRAVITY_FACTOR * gravityModifier);
-      player.moveOneStep();
-
-      if(!enemyList.isEmpty()){
-        for(Enemy enemy : enemyList){
-          if(player.getHitBox().getXLeft() < enemy.getHitBox().xLeft){
-            enemy.setXVel(this.ENEMY_MOVEMENT_SPEED * -1);
-          }
-          else if(player.getHitBox().getXLeft() > enemy.getHitBox().xLeft){
-            enemy.setXVel(this.ENEMY_MOVEMENT_SPEED);
-          }
-          else{
-            enemy.setXVel(0);
-          }
-          enemy.applyGravity(this.GRAVITY_FACTOR);
-          enemy.moveOneStep();
-        }
-      }
     }
-  }
-
-  private void checkForKeyPresses() {
-    if(!playerList.isEmpty()){
-      Player playerEntity = playerList.get(0);
-
-      double movementSpeedModifier = 1;
-      if(playerEntity.getModifiers().containsKey(Modifier.ModifierType.MOVEMENT_SPEED)){
-        movementSpeedModifier = playerEntity.getModifiers().get(Modifier.ModifierType.MOVEMENT_SPEED).getValue();
-      }
-      double jumpSpeedModifier = 1;
-      if(playerEntity.getModifiers().containsKey(Modifier.ModifierType.JUMP_SPEED)){
-        jumpSpeedModifier = playerEntity.getModifiers().get(Modifier.ModifierType.JUMP_SPEED).getValue();
-      }
-      if (keyPressFunctions.isPlayerMovingRight()) {
-        playerEntity.setXVel(this.MOVEMENT_SPEED * movementSpeedModifier);
-      } else if (keyPressFunctions.isPlayerMovingLeft()) {
-        playerEntity.setXVel(this.MOVEMENT_SPEED * -1 * movementSpeedModifier);
-      } else {
-        playerEntity.setXVel(0);
-      }
-      if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
-        playerEntity.jump(this.JUMP_SPEED * jumpSpeedModifier);
-      }
+    for (Enemy enemy : enemyList) {
+      enemy.applyGravity(this.GRAVITY_FACTOR);
     }
-  }
+  }*/
 
   public void checkCollisions(){
-    if(!playerList.isEmpty()){
-      Player player = playerList.get(0);
+    for (IMovable movable : this.movableEntityList) {
       for(IEntity otherEntity : this.entityList){
-        if(!player.equals(otherEntity)){
-          player.checkCollision(otherEntity);
-        }
-      }
-    }
-    for(Enemy enemy : this.enemyList){
-      for(IEntity otherEntity : this.entityList){
-        if (!enemy.equals(otherEntity)) {
-          enemy.checkCollision(otherEntity);
+        if(!movable.equals(otherEntity)){
+          movable.checkFutureCollision(otherEntity);
         }
       }
     }
   }
+
+  private void updatePositions(){
+    for (Player player : this.playerList) {
+      player.updatePosition();
+    }
+    for (Enemy enemy : this.enemyList) {
+      enemy.updatePosition();
+    }
+  }
+
 
   /**
    * Moves the entities in the level based on data on this level and the player
@@ -269,7 +186,88 @@ public class Level {
     scroller = configScroller;
   }
 
-  private void checkWinCondition(){};
+
+  public int getLevelLength() {
+    return this.levelLength;
+  }
+
+  public int getLevelWidth() {
+    return this.levelWidth;
+  }
+
+  public void setOrResetLevel(LevelLoader levelLoader){
+    loader = levelLoader;
+    this.playerList = levelLoader.getCopyOfPlayerList();
+    this.enemyList = levelLoader.getCopyOfEnemyList();
+    this.movableEntityList = levelLoader.getCopyOfMovableEntityList();
+    this.blockList = levelLoader.getCopyOfBlockList();
+    this.powerUpList = levelLoader.getCopyOfPowerUpList();
+    this.entityList = levelLoader.getCopyOfEntityList();
+    this.levelLength = levelLoader.getLevelLength();
+    this.levelWidth = levelLoader.getLevelWidth();
+    this.scroller = new AutoScroller(0,0, false);
+  }
+
+  public void addEntity(IEntity entity) {
+    if (entity!=null) {
+      this.entityList.add(entity);
+    }
+
+    if (entity instanceof Block) {
+      this.blockList.add((Block)entity);
+    }
+    if (entity instanceof Enemy) {
+      this.enemyList.add((Enemy)entity);
+    }
+    if (entity instanceof IMovable) {
+      this.movableEntityList.add((IMovable)entity);
+    }
+    if (entity instanceof Player) {
+      this.playerList.add((Player)entity);
+    }
+    if (entity instanceof PowerUp) {
+      PowerUp powerUp = (PowerUp) entity;
+      powerUp.setRandomModifier(MODIFIER_VALUE, MODIFIER_DURATION * FRAMES_PER_SECOND);
+      this.powerUpList.add(powerUp);
+    }
+  }
+
+  private void removeEntity(IEntity entity) {
+    if(entity != null){
+      this.entityList.remove(entity);
+    }
+    if (entity instanceof Block) {
+      this.blockList.remove(entity);
+    }
+    if (entity instanceof Enemy) {
+      this.enemyList.remove(entity);
+    }
+    if (entity instanceof Player) {
+      this.playerList.remove(entity);
+    }
+    if (entity instanceof PowerUp) {
+      this.powerUpList.remove(entity);
+    }
+    if (entity instanceof IMovable) {
+      this.movableEntityList.remove(entity);
+    }
+  }
+
+  @Nullable
+  public IEntity getEntityAt(int xCoordinate, int yCoordinate) {
+    for(IEntity entity : entityList){
+      if((int)entity.getHitBox().getXLeft() == xCoordinate && (int)entity.getHitBox().getYTop() == yCoordinate){
+        return entity;
+      }
+    }
+    return null;
+  }
+
+  private void checkWinCondition(){
+    if (playerList.size() == 0) {
+      setLevelLost(true);
+    }
+  };
 
 
   /**
@@ -307,7 +305,7 @@ public class Level {
   }
 
   public List<IEntity> getCopyOfEntityList() {
-    return new ArrayList<IEntity>(entityList);
+    return new ArrayList<>(entityList);
   }
 
   public List<IEntity> getAllEntities() { return entityList; }

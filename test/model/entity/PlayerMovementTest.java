@@ -78,4 +78,5 @@ public class PlayerMovementTest extends DukeApplicationTest {
     double newYPos = player.getHitBox().getYTop();
     assertTrue(Math.abs(newYPos - oldYPos) < 1);
   }
+
 }

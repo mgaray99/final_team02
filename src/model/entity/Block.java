@@ -17,7 +17,7 @@ public class Block implements IEntity {
     }
 
     @Override
-    public void checkCollision(IEntity entity) {
+    public void checkFutureCollision(IEntity entity) {
 
     }
 

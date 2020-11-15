@@ -35,6 +35,7 @@
 
 #### INCOMPLETE
 * Model: More goal types (point-based, time-based)
+* Model: More collision types (will likely come in the form of more types of players)
 
 #### ANALYSIS
 Overall, we did a pretty good job so far this sprint. We tackled a lot of major features and got

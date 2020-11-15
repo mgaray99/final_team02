@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.entity.Block;
 import model.entity.IEntity;
+import model.entity.MarioPlayer;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -43,7 +44,7 @@ public class TexturerTest extends DukeApplicationTest{
    */
   @Test
   public void testSimpleTexture() {
-      Player pe = new Player(2,3);
+      Player pe = new MarioPlayer(2,3);
       entityList.add(pe);
 
       texturer.updateTextures(entityList, DEFAULT_BLOCKS_WIDE,

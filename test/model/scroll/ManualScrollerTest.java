@@ -3,7 +3,6 @@ package model.scroll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
@@ -14,6 +13,7 @@ import model.configuration.LevelLoader;
 import model.entity.Block;
 import model.entity.Enemy;
 import model.entity.IEntity;
+import model.entity.MarioPlayer;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -49,7 +49,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
   public void start(Stage stage) throws InvalidFileException {
     entityList = new ArrayList<>();
 
-    playerEntity = new Player(PLAYERX, PLAYERY);
+    playerEntity = new MarioPlayer(PLAYERX, PLAYERY);
     barrierBlockEntity = new Block(BARRIERX, BARRIERY);
     enemyEntity = new Enemy(ENEMYX, ENEMYY);
 
@@ -73,7 +73,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
   public void testHorizontalScroller() {
     ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,NOSCROLL,NOSCROLL);
 
-    playerEntity.moveOneStep();
+    playerEntity.updatePosition();
     scroller.scroll(level , playerEntity);
 
     assertEquals(PLAYERX, playerEntity.getHitBox().getXLeft());
@@ -93,7 +93,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
   public void testVerticalScroller() {
     ManualScroller scroller = new ManualScroller(NOSCROLL, NOSCROLL, ALWAYSSCROLL, ALWAYSSCROLL);
 
-    playerEntity.moveOneStep();
+    playerEntity.updatePosition();
     scroller.scroll(level , playerEntity);
 
     assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
@@ -114,7 +114,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
     ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,
         ALWAYSSCROLL,ALWAYSSCROLL);
 
-    playerEntity.moveOneStep();
+    playerEntity.updatePosition();
     scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX, playerEntity.getHitBox().getXLeft());
