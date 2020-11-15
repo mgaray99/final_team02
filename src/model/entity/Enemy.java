@@ -39,7 +39,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
 
     public void processCurrentCollision(IEntity entity, CollisionDirections collision){
         if (collision.contains(Direction.BOTTOM)) {
-            System.out.print("Bottom");
+            //System.out.print("Bottom");
             this.setGrounded(true);
             if (this.getYVel() > 0) {
                 this.setYVel(0);
@@ -47,21 +47,21 @@ public class Enemy implements IEntity, IMovable, IDamageable{
             this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
         }
         if (collision.contains(Direction.TOP)){
-            System.out.print("Top");
+            //System.out.print("Top");
             if (this.getYVel() < 0) {
                 this.setYVel(0);
             }
             this.getHitBox().setYTop(entity.getHitBox().getYBottom());
         }
         if (collision.contains(Direction.LEFT)) {
-            System.out.print("Left");
+            //System.out.print("Left");
             if (this.getXVel() < 0) {
                 this.setXVel(0);
             }
             this.getHitBox().setXLeft(entity.getHitBox().getXRight());
         }
         if (collision.contains(Direction.RIGHT)) {
-            System.out.print("Right");
+            //System.out.print("Right");
             if (this.getXVel() > 0) {
                 this.setXVel(0);
             }

@@ -118,17 +118,9 @@ public class HitBox {
 
   public CollisionDirections getFutureCollisionDirection(HitBox otherBox, double xVel, double yVel) {
     //CollisionDirections futureDirections = getCollisionD
-    return getCollisionDirection(otherBox);
-    /*CollisionDirections futureDirections = new CollisionDirections();
-    HitBox futureXBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop());
-    CollisionDirections xDirections = getCollisionDirection(futureXBox);
-    HitBox futureYBox = new HitBox(otherBox.getXLeft(), otherBox.getYTop()+yVel);
-    CollisionDirections yDirections = getCollisionDirection(futureYBox);
-    if (xDirections.contains(Direction.LEFT)) {futureDirections.add(Direction.LEFT);}
-    if (xDirections.contains(Direction.RIGHT)) {futureDirections.add(Direction.RIGHT);}
-    if (yDirections.contains(Direction.TOP)) {futureDirections.add(Direction.TOP);}
-    if (yDirections.contains(Direction.BOTTOM)) {futureDirections.add(Direction.BOTTOM);}
-    return futureDirections;*/
+    //return getCollisionDirection(otherBox);
+    HitBox futureBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
+    return getCollisionDirection(futureBox);
   }
 
 
