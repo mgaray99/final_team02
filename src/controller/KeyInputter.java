@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class KeyInputter {
   private KeyInputterMethodCaller methodCaller;
   private Map<String, String> keyToMethodMap;
   private String lastMethodFromKeyPress;
-  private static final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
+  private final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
   public KeyInputter(GameModel model) {
     methodCaller = new KeyInputterMethodCaller(model);

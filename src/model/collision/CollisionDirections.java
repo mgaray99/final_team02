@@ -3,6 +3,9 @@ package model.collision;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is a list of collision
+ */
 public class CollisionDirections {
   public List<Direction> directionsList = new ArrayList<>();
 
