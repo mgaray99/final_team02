@@ -41,14 +41,14 @@ public class LevelTest extends DukeApplicationTest {
 
       player.setYVel(PLAYER_YVEL);
       player.setXVel(PLAYER_XVEL);
-      player.moveOneStep();
+      player.updatePosition();
       level.step();
 
       assertNotEquals(DEFAULTX, player.getHitBox().getXLeft());
       assertNotEquals(DEFAULTY, player.getHitBox().getYTop());
 
       player.getHitBox().setYTop(NEW_PLAYERY);
-      player.moveOneStep();
+      player.updatePosition();
       level.step();
 
       player = level.getPlayerList().get(0);

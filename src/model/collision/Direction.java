@@ -1,13 +1,13 @@
 package model.collision;
 
-public enum CollisionDirection {
+public enum Direction {
   RIGHT,
   LEFT,
   TOP,
   BOTTOM,
   NONE;
 
-  public CollisionDirection getOpposite(){
+  public Direction getOpposite(){
     switch (this){
       case TOP -> {
         return BOTTOM;

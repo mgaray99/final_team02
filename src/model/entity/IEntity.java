@@ -6,7 +6,7 @@ public interface IEntity {
 
     HitBox getHitBox();
 
-    void checkCollision(IEntity entity);
+    void checkFutureCollision(IEntity entity);
 
     void setXVel(double xVel);
 
@@ -17,10 +17,5 @@ public interface IEntity {
     double getYVel();
 
     String getType();
-
-    default void moveOneStep(){
-        this.getHitBox().translateX(this.getXVel());
-        this.getHitBox().translateY(this.getYVel());
-    }
 
 }

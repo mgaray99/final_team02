@@ -1,18 +1,22 @@
 package model.entity;
 
 import model.HitBox;
-import model.collision.CollisionDirection;
+import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class Enemy implements IEntity, IGravitate, IDamageable{
+public class Enemy implements IEntity, IMovable, IDamageable{
+
+    private static final int GRACE_PERIOD = 2;
+    private static final double MIN_DISTANCE_TO_PLAYER = 0.4;
+    private static final double ENEMY_MOVEMENT_SPEED = 0.1;
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
     private double xVel = 0;
     private double yVel = 0;
     private boolean grounded = true;
-    private boolean gracePeriodBeforeFalling = true;
+    private int gracePeriodBeforeFalling = GRACE_PERIOD;
     private double health = 0;
     private double damage = 0;
 
@@ -29,17 +33,77 @@ public class Enemy implements IEntity, IGravitate, IDamageable{
     }
 
     @Override
-    public void checkCollision(IEntity entity) {
-        CollisionDirection collision = hitBox.getCollisionDirection(entity.getHitBox());
+    public boolean isDead() {
+        return false;
+    }
+
+    public void processCurrentCollision(IEntity entity, CollisionDirections collision){
+        if (collision.contains(Direction.BOTTOM)) {
+            //System.out.print("Bottom");
+            this.setGrounded(true);
+            if (this.getYVel() > 0) {
+                this.setYVel(0);
+            }
+            this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
+        }
+        if (collision.contains(Direction.TOP)){
+            //System.out.print("Top");
+            if (this.getYVel() < 0) {
+                this.setYVel(0);
+            }
+            this.getHitBox().setYTop(entity.getHitBox().getYBottom());
+        }
+        if (collision.contains(Direction.LEFT)) {
+            //System.out.print("Left");
+            if (this.getXVel() < 0) {
+                this.setXVel(0);
+            }
+            this.getHitBox().setXLeft(entity.getHitBox().getXRight());
+        }
+        if (collision.contains(Direction.RIGHT)) {
+            //System.out.print("Right");
+            if (this.getXVel() > 0) {
+                this.setXVel(0);
+            }
+            this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
+        }
+    }
+
+    public void updateVelocity(Player player) {
+        if (Math.abs(player.getHitBox().getXLeft() - this.getHitBox().getXLeft()) <= MIN_DISTANCE_TO_PLAYER) {
+            this.setXVel(0);
+        }
+        if(player.getHitBox().getXLeft() < this.getHitBox().getXLeft()){
+            this.setXVel(ENEMY_MOVEMENT_SPEED * -1);
+        }
+        else if(player.getHitBox().getXLeft() > this.getHitBox().getXLeft()){
+            this.setXVel(ENEMY_MOVEMENT_SPEED);
+        }
+        else{
+            this.setXVel(0);
+        }
+    }
+
+    //@Override
+    public void checkFutureCollision(IEntity entity) {
+        CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
         //this if statement is for testing - will be removed
         //if (!collision.contains(CollisionDirection.NONE)) {
         //    yVel = 0;
         //}
 
-        this.checkGravity(entity, collision);
-        if(entity instanceof IDamageable && collision != CollisionDirection.NONE && this.canApplyDamage(collision)){
+        this.processCurrentCollision(entity, collision);
+        if(entity instanceof IDamageable && collision.doesCollide() && this.canApplyDamage(collision)){
             this.attemptApplyDamage((IDamageable) entity,collision);
         }
+    }
+
+    public void checkCollision(IEntity entity) {}
+
+    @Override
+    public void updatePosition() {
+        hitBox.translateX(xVel);
+        hitBox.translateY(yVel);
     }
 
     @Override
@@ -77,14 +141,6 @@ public class Enemy implements IEntity, IGravitate, IDamageable{
         this.grounded = grounded;
     }
 
-    @Override
-    public boolean getGracePeriodBeforeFalling() {
-        return gracePeriodBeforeFalling;
-    }
-    @Override
-    public void setGracePeriodBeforeFalling(boolean isActive) {
-        this.gracePeriodBeforeFalling = isActive;
-    }
 
     @Override
     public double getHealth() {
@@ -107,12 +163,12 @@ public class Enemy implements IEntity, IGravitate, IDamageable{
     }
 
     @Override
-    public List<CollisionDirection> getAppliesDamageDirections() {
-        return Arrays.asList(CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
+    public CollisionDirections getAppliesDamageDirections() {
+        return new CollisionDirections(Arrays.asList(Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
     }
 
     @Override
-    public List<CollisionDirection> getReceivesDamageDirections() {
-        return Arrays.asList(CollisionDirection.TOP, CollisionDirection.BOTTOM, CollisionDirection.LEFT, CollisionDirection.RIGHT);
+    public CollisionDirections getReceivesDamageDirections() {
+        return new CollisionDirections(Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
     }
 }
