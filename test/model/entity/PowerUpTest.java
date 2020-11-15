@@ -2,6 +2,7 @@ package model.entity;
 
 import model.Level;
 import model.collision.Direction;
+import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
@@ -18,7 +19,7 @@ public class PowerUpTest {
     @Test
     public void playerSpawnsAndConsumesPowerUp() throws InvalidFileException {
         GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
         Level level = new Level(levelLoader);
         PowerUpBlock powerUpBlock = null;
         Player player = null;

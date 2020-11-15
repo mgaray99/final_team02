@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javafx.stage.Stage;
 import model.Level;
+import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
@@ -49,7 +50,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
     enemyEntity = new Enemy(ENEMYX, ENEMYY);
 
     GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
-    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
     level = new Level(levelLoader);
 
     level.addEntity(playerEntity);

@@ -27,7 +27,7 @@ public class LevelLoader {
     private final List<IMovable> movableEntityList = new ArrayList<>();
     private List<IEntity> entityCopy = new ArrayList<>();
     //private final Map<String, String> levelDecoder;
-    private final EntityFactory entityFactory = new EntityFactory();
+    private EntityFactory entityFactory;
 
     private int levelLength;
     private int levelWidth;
@@ -38,20 +38,9 @@ public class LevelLoader {
      * @throws InvalidFileException if the file is a directory,
      * an invalid file, or not a CSV file
      */
-    public LevelLoader(File levelFileIn) throws InvalidFileException {
+    public LevelLoader(File levelFileIn, EntityFactory factory) throws InvalidFileException {
         this.handleConstructionExceptions(levelFileIn);
-        //alex start
-        /*
-        try {
-            LevelDecoder decoderMap = new LevelDecoder();
-            levelDecoder = decoderMap.getIdToEntityMap();
-        }
-        catch (Exception e) {
-            throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, levelFileIn.getPath());
-        }
-
-         */
-        //alex end
+        entityFactory = factory;
         this.initializeEntityLists(levelFileIn);
         entityCopy = defensivelyCopyList(entityList);
     }

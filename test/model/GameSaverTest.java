@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
+import model.configuration.EntityFactory;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ public class GameSaverTest {
 
     //@Test
     public void testSave() throws IOException, InvalidFileException {
-        LevelLoader levelLoader = new LevelLoader(TestFiles.ALEX_LEVEL);
+        LevelLoader levelLoader = new LevelLoader(TestFiles.ALEX_LEVEL, new EntityFactory());
         Level level = new Level(levelLoader);
         GameSaver gameSaver = new GameSaver(level);
         File previousSaveFile = new File(TEST_SAVE_PATH);

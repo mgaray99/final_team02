@@ -9,6 +9,7 @@ public class GameConfiguration {
     private static final String KEYINPUTS_KEY = "keys";
     private static final String SCROLLER_KEY = "scroller";
     private static final String AUTO_KEY = "autofile";
+    private static final String PLAYER_KEY = "player";
     private static final String DEFAULT_LEVEL_FILEPATH = "./data/";
     private static final String ROOT_SOURCE_INDICATOR = "./";
     private final Properties properties;
@@ -54,6 +55,12 @@ public class GameConfiguration {
      * @return the filepath to the .txt file specifying automatic generation
      */
     public String getAutoGeneratorPath() { return properties.getProperty(AUTO_KEY); }
+
+    /**
+     * Returns the class name for the player class that will run
+     * @return the String corresponding to the type of player
+     */
+    public String getPlayerType() { return properties.getProperty(PLAYER_KEY); }
 
     /**
      * Determines the String array containing data necessary to build a Scroller

@@ -15,7 +15,7 @@
   <random>
     <entity>0</entity>
     <direction>RIGHT:DOWN</direction>
-    <originrow>U(0:12)</originrow>
+    <originrow>U(0:11)</originrow>
     <origincol>5</origincol>
     <numrows>4</numrows>
     <numcols>2</numcols>

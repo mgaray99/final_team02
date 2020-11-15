@@ -3,6 +3,7 @@ package model.entity;
 import java.util.ArrayList;
 import java.util.List;
 import model.Level;
+import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
@@ -22,7 +23,7 @@ public class EnemyTest {
     @Test
     public void enemiesMoveByThemselvesTest() throws InvalidFileException {
         GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
         Level level = new Level(levelLoader);
         List<Double> entityXPositions = new ArrayList<>();
         for(IEntity entity : level.getCopyOfEntityList()){
@@ -50,7 +51,7 @@ public class EnemyTest {
     @Test
     public void playerKillsEnemyTest() throws InvalidFileException {
         GameConfiguration gameConfiguration = new GameConfiguration("collision_test.properties");
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
         Level level = new Level(levelLoader);
         Enemy enemy = null;
         Player player = null;
