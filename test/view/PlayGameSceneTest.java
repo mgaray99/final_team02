@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import model.Level;
+import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
@@ -42,7 +43,7 @@ public class PlayGameSceneTest extends DukeApplicationTest {
     scene = new PlayGameScene(new Group(), WIDTH, HEIGHT);
 
     GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
-    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile());
+    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
     level = new Level(levelLoader);
 
     field = (TextField)scene.lookup("#" + TEXTFIELD_ID);
@@ -107,7 +108,7 @@ public class PlayGameSceneTest extends DukeApplicationTest {
     pressTextfield(field, KeyCode.ENTER);
 
     LevelLoader levelLoader = new LevelLoader(
-        new File( SAVE_FILEPATH + "b" + CSV_EXTENSION));
+        new File( SAVE_FILEPATH + "b" + CSV_EXTENSION), new EntityFactory());
     assertDoesNotThrow(() -> new Level(levelLoader));
 
   }

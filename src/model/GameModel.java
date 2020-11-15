@@ -3,6 +3,7 @@ package model;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
@@ -16,13 +17,19 @@ public class GameModel {
     private File levelFile;
     private Level level;
     private ScrollerFactory scrollerFactory;
+    private EntityFactory entityFactory;
 
     public GameModel() {}
 
     public GameModel(GameConfiguration gameConfiguration) throws InvalidFileException {
         this.gameConfiguration = gameConfiguration;
         levelFile = gameConfiguration.getLevelFile();
-        LevelLoader levelLoader = new LevelLoader(levelFile);
+
+        entityFactory = new EntityFactory();
+        String playerType = gameConfiguration.getPlayerType();
+        entityFactory.updatePlayerMapping(playerType);
+
+        LevelLoader levelLoader = new LevelLoader(levelFile, entityFactory);
         this.level = new Level(levelLoader);
         setLevelScroller();
     }
@@ -82,7 +89,7 @@ public class GameModel {
      * Resets the level to the characteristics in levelLoader
      */
     public void resetLevel() throws InvalidFileException {
-        LevelLoader levelLoader = new LevelLoader(levelFile);
+        LevelLoader levelLoader = new LevelLoader(levelFile, entityFactory);
         level.setOrResetLevel(levelLoader);
         setLevelScroller();
     }

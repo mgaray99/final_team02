@@ -3,7 +3,9 @@ package model.configuration;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import model.entity.IEntity;
@@ -14,6 +16,8 @@ public class EntityFactory {
   private LevelDecoder decoder;
   private Map<String, String> idToEntityMap;
   private static final String ENTITY_PACKAGE_PATH = "model.entity.";
+  private static final String PLAYER_KEY = "1";
+  private final String[] validPlayerValues = {"MarioPlayer", "FlappyPlayer", "DoodlePlayer"};
 
   public EntityFactory() {
     try {
@@ -22,6 +26,18 @@ public class EntityFactory {
     }
     catch (IOException e) {
 
+    }
+  }
+
+  /**
+   * Updates the map so that the <PLAYER_KEY, idToEntityMap.get(PLAYER_KEY)> pair becomes
+   * <PLAYER_KEY, newMapping>
+   * @param newMapping the new String value that will be stored at PLAYER_KEY in the mapping
+   */
+  public void updatePlayerMapping(String newMapping) {
+    List<String> validPlayerValueList = Arrays.asList(validPlayerValues);
+    if (validPlayerValueList.contains(newMapping)) {
+      idToEntityMap.put(PLAYER_KEY, newMapping);
     }
   }
 
