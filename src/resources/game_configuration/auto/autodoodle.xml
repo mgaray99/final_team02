@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <generator>
   <dimensions>
-    <rows>7</rows>
+    <rows>8</rows>
     <columns>15</columns>
   </dimensions>
   <base>
@@ -18,15 +18,15 @@
   <random>
     <entity>3</entity>
     <direction>RIGHT:DOWN</direction>
-    <originrow>U(2:4)</originrow>
-    <origincol>U(2:10)</origincol>
+    <originrow>U(2:5)</originrow>
+    <origincol>U(0:12)</origincol>
     <numrows>1</numrows>
-    <numcols>3</numcols>
+    <numcols>2</numcols>
   </random>
   <random>
     <entity>3</entity>
     <direction>RIGHT:DOWN</direction>
-    <originrow>U(5:6)</originrow>
+    <originrow>U(6:7)</originrow>
     <origincol>U(6:12)</origincol>
     <numrows>1</numrows>
     <numcols>2</numcols>

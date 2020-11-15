@@ -205,7 +205,6 @@ public class Level {
     this.entityList = levelLoader.getCopyOfEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
-    this.scroller = new AutoScroller(0,0, false);
   }
 
   public void addEntity(IEntity entity) {
