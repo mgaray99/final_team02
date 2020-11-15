@@ -18,9 +18,4 @@ public interface IEntity {
 
     String getType();
 
-    default void moveOneStep(){
-        this.getHitBox().translateX(this.getXVel());
-        this.getHitBox().translateY(this.getYVel());
-    }
-
 }

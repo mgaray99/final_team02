@@ -10,6 +10,7 @@ import java.util.List;
 public class Enemy implements IEntity, IMovable, IDamageable{
 
     private static final int GRACE_PERIOD = 2;
+    private static final double ENEMY_MOVEMENT_SPEED = 0.1;
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
     private double xVel = 0;
@@ -40,7 +41,6 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         if (collision.contains(Direction.BOTTOM)) {
             System.out.print("Bottom");
             this.setGrounded(true);
-            this.resetGracePeriodBeforeFalling();
             if (this.getYVel() > 0) {
                 this.setYVel(0);
             }
@@ -69,6 +69,18 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         }
     }
 
+    public void updateVelocity(Player player) {
+        if(player.getHitBox().getXLeft() < this.getHitBox().getXLeft()){
+            this.setXVel(ENEMY_MOVEMENT_SPEED * -1);
+        }
+        else if(player.getHitBox().getXLeft() > this.getHitBox().getXLeft()){
+            this.setXVel(ENEMY_MOVEMENT_SPEED);
+        }
+        else{
+            this.setXVel(0);
+        }
+    }
+
     //@Override
     public void checkFutureCollision(IEntity entity) {
         CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
@@ -86,8 +98,9 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     public void checkCollision(IEntity entity) {}
 
     @Override
-    public void moveOneStep() {
-
+    public void updatePosition() {
+        hitBox.translateX(xVel);
+        hitBox.translateY(yVel);
     }
 
     @Override
@@ -125,25 +138,6 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         this.grounded = grounded;
     }
 
-    @Override
-    public int getGracePeriodBeforeFalling() {
-        return gracePeriodBeforeFalling;
-    }
-
-    @Override
-    public void resetGracePeriodBeforeFalling() {
-
-    }
-
-    @Override
-    public void subtractFromGracePeriodBeforeFalling() {
-
-    }
-
-    //@Override
-    public void setGracePeriodBeforeFalling(int isActive) {
-        this.gracePeriodBeforeFalling = isActive;
-    }
 
     @Override
     public double getHealth() {

@@ -3,10 +3,6 @@ package model.scroll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.stage.Stage;
 import model.Level;
 import model.configuration.GameConfiguration;
@@ -14,7 +10,6 @@ import model.configuration.InvalidFileException;
 import model.configuration.LevelLoader;
 import model.entity.Block;
 import model.entity.Enemy;
-import model.entity.IEntity;
 import model.entity.MarioPlayer;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;
@@ -124,7 +119,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
 
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
-    playerEntity.moveOneStep();
+    playerEntity.updatePosition();
     scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + XSCROLL + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
@@ -142,7 +137,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
 
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
-    playerEntity.moveOneStep();
+    playerEntity.updatePosition();
     scroller.scroll(level, playerEntity);
 
     assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());

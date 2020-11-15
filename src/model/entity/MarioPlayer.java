@@ -5,69 +5,61 @@ import model.collision.Direction;
 
 public class MarioPlayer extends Player {
 
+  private static final double MARIO_JUMP_SPEED = -0.4;
+  private static final double MARIO_MOVE_SPEED = 0.2;
+  private boolean leftKey = false;
+  private boolean rightKey = false;
 
 
   public MarioPlayer(double x, double y) {
     super(x, y);
   }
 
-  public void processCurrentCollision(IEntity entity, CollisionDirections collision){
-    if (collision.contains(Direction.BOTTOM)) {
-      System.out.print("Bottom");
+
+
+  @Override
+  public void updateVelocity(boolean leftKey, boolean rightKey, boolean jumpKey) {
+    this.leftKey = leftKey;
+    this.rightKey = rightKey;
+    if (jumpKey && this.getGrounded()) {
+      this.setYVel(MARIO_JUMP_SPEED);
+      this.setGrounded(false);
+    }
+    if (rightKey) {this.setXVel(MARIO_MOVE_SPEED);}
+    if (leftKey) {this.setXVel(-MARIO_MOVE_SPEED);}
+    if (rightKey == leftKey) {this.setXVel(0);}
+  }
+
+  public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
+    if (directions.contains(Direction.BOTTOM)) {
       this.setGrounded(true);
-      this.resetGracePeriodBeforeFalling();
-      if (this.getYVel() > 0) {
-        this.setCanMoveUp(false);
-      }
-      //this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
+      this.getHitBox().setYBottom(otherEntity.getHitBox().getYTop());
+      if (this.getYVel() > 0) {this.setYVel(0);}
     }
-    if (collision.contains(Direction.TOP)) {
-      System.out.print("Top");
-      if (this.getYVel() < 0) {
-        this.setCanMoveUp(false);
-      }
-      //this.getHitBox().setYTop(entity.getHitBox().getYBottom());
+
+    if (directions.contains(Direction.TOP)) {
+      this.getHitBox().setYTop(otherEntity.getHitBox().getYBottom());
+      if (this.getYVel() < 0) {this.setYVel(0);}
     }
-    if (collision.contains(Direction.LEFT)) {
-      System.out.print("Left");
-      if (this.getXVel() != 0) {
-        this.setCanMoveRight(false);
-      }
-      //this.getHitBox().setXLeft(entity.getHitBox().getXRight());
+
+    if (directions.contains(Direction.RIGHT)) {
+      this.getHitBox().setXRight(otherEntity.getHitBox().getXLeft());
+      if (this.getXVel() > 0) {this.setXVel(0);}
     }
-    if (collision.contains(Direction.RIGHT)) {
-      System.out.print("Right");
-      if (this.getXVel() > 0) {
-        this.setCanMoveRight(false);
-      }
-      //this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
+
+    if (directions.contains(Direction.LEFT)) {
+      this.getHitBox().setXLeft(otherEntity.getHitBox().getXRight());
+      if (this.getXVel() < 0) {this.setXVel(0);}
     }
   }
 
-  public void checkFutureCollision(IEntity entity) {
-    CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
-
-    //this if statement is for testing - will be removed
-    //if (!collision.contains(CollisionDirection.NONE)) {
-    //    yVel = 0;
-    //}
-    if (entity instanceof IDamageable && collision.doesCollide() && this
-        .canApplyDamage(collision)) {
-      this.attemptApplyDamage((IDamageable) entity, collision);
+  @Override
+  public void updatePosition() {
+    if (!this.getCurrentCollision().contains(Direction.BOTTOM)) {
+      this.applyGravity();
     }
-    if (entity instanceof IEmpowering && collision.doesCollide()) {
-      IEmpowering empowering = (IEmpowering) entity;
-      if (!empowering.hasAppliedModifier()) {
-        this.applyModifier(empowering.getModifier());
-        empowering.setHasAppliedModifier(true);
-      }
-    }
-    if (entity instanceof ISpawner && collision.doesCollide()) {
-      ISpawner spawner = (ISpawner) entity;
-      spawner.attemptCreateAndAddSpawn(collision);
-    }
-    processCurrentCollision(entity, collision);
+    if (leftKey == rightKey) {this.setXVel(0);}
+    this.translateHitBox();
   }
 
-  public void checkCollision(IEntity entity) {}
 }

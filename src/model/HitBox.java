@@ -61,6 +61,14 @@ public class HitBox {
     this.yTop = yTop;
   }
 
+  public void setYBottom(double yBottom) {
+    this.yTop = yBottom - ySize;
+  }
+
+  public void setXRight(double xRight) {
+    this.xLeft = xRight - xSize;
+  }
+
   public void setXLeft(double xLeft) {
     this.xLeft = xLeft;
   }
@@ -87,13 +95,14 @@ public class HitBox {
       return directions;
     }
 
-
-    if (between(yBottom - otherBox.getYTop(), 0, MAX_INTERSECT))  {
-      directions.add(Direction.BOTTOM);
-    }
-    if (between(otherBox.getYBottom() - yTop, 0, MAX_INTERSECT))  {
-      directions.add(Direction.TOP);
-    }
+    //if (xRight <= otherBox.getXRight() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
+      if (between(yBottom - otherBox.getYTop(), 0, MAX_INTERSECT)) {
+        directions.add(Direction.BOTTOM);
+      }
+      if (between(otherBox.getYBottom() - yTop, 0, MAX_INTERSECT)) {
+        directions.add(Direction.TOP);
+      }
+    //}
 
     if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
 
@@ -108,8 +117,10 @@ public class HitBox {
   }
 
   public CollisionDirections getFutureCollisionDirection(HitBox otherBox, double xVel, double yVel) {
-    CollisionDirections futureDirections = new CollisionDirections();
-    HitBox futureXBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
+    //CollisionDirections futureDirections = getCollisionD
+    return getCollisionDirection(otherBox);
+    /*CollisionDirections futureDirections = new CollisionDirections();
+    HitBox futureXBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop());
     CollisionDirections xDirections = getCollisionDirection(futureXBox);
     HitBox futureYBox = new HitBox(otherBox.getXLeft(), otherBox.getYTop()+yVel);
     CollisionDirections yDirections = getCollisionDirection(futureYBox);
@@ -117,7 +128,7 @@ public class HitBox {
     if (xDirections.contains(Direction.RIGHT)) {futureDirections.add(Direction.RIGHT);}
     if (yDirections.contains(Direction.TOP)) {futureDirections.add(Direction.TOP);}
     if (yDirections.contains(Direction.BOTTOM)) {futureDirections.add(Direction.BOTTOM);}
-    return futureDirections;
+    return futureDirections;*/
   }
 
 

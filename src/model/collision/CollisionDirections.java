@@ -18,6 +18,12 @@ public class CollisionDirections {
     }
   }
 
+  public void add(CollisionDirections directions) {
+    for (Direction direction : directions.getRawList()) {
+      this.add(direction);
+    }
+  }
+
   public void remove(Direction direction) {
     directionsList.remove(direction);
   }
@@ -28,6 +34,10 @@ public class CollisionDirections {
 
   protected List<Direction> getRawList() {
     return directionsList;
+  }
+
+  public void clear() {
+    this.directionsList = new ArrayList<>();
   }
 
   public boolean oneIsContainedIn(CollisionDirections otherDirections) {

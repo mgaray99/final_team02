@@ -51,11 +51,9 @@ public class Level {
       this.removeEntitiesAsNeeded();
       this.spawnEntitiesAsNeeded();
       this.updateModifiers();
-      this.applyGravity();
-      this.checkForKeyPresses();
-      this.checkIfEnemiesMove();
+      this.updateVelocities();
       this.checkCollisions();
-      this.moveEntities();
+      this.updatePositions();
       this.checkWinCondition();
       this.checkLoseCondition();
       this.scroll();
@@ -107,32 +105,17 @@ public class Level {
     }
   }
 
-  private void checkForKeyPresses() {
-    if(!playerList.isEmpty()){
-      Player playerEntity = playerList.get(0);
-
-      double movementSpeedModifier = 1;
-      if(playerEntity.getModifiers().containsKey(Modifier.ModifierType.MOVEMENT_SPEED)){
-        movementSpeedModifier = playerEntity.getModifiers().get(Modifier.ModifierType.MOVEMENT_SPEED).getValue();
-      }
-      double jumpSpeedModifier = 1;
-      if(playerEntity.getModifiers().containsKey(Modifier.ModifierType.JUMP_SPEED)){
-        jumpSpeedModifier = playerEntity.getModifiers().get(Modifier.ModifierType.JUMP_SPEED).getValue();
-      }
-      if (keyPressFunctions.isPlayerMovingRight()) {
-        playerEntity.setXVel(this.MOVEMENT_SPEED * movementSpeedModifier);
-      } else if (keyPressFunctions.isPlayerMovingLeft()) {
-        playerEntity.setXVel(this.MOVEMENT_SPEED * -1 * movementSpeedModifier);
-      } else {
-        playerEntity.setXVel(0);
-      }
-      if (keyPressFunctions.isPlayerJumping() && playerEntity.getGrounded()) {
-        playerEntity.jump(this.JUMP_SPEED * jumpSpeedModifier);
-      }
+  private void updateVelocities() {
+    for (Player player : playerList) {
+      player.updateVelocity(keyPressFunctions.isPlayerMovingLeft(), keyPressFunctions.isPlayerMovingRight(), keyPressFunctions.isPlayerJumping());
+    }
+    for (Enemy enemy : enemyList) {
+      enemy.updateVelocity(playerList.get(0));
     }
   }
 
-  private void applyGravity() {
+
+  /*private void applyGravity() {
     for (Player player : playerList) {
       double gravityModifier = DEFAULT_GRAVITY_MODIFIER;
       if(player.getModifiers().containsKey(Modifier.ModifierType.GRAVITY)){
@@ -143,25 +126,7 @@ public class Level {
     for (Enemy enemy : enemyList) {
       enemy.applyGravity(this.GRAVITY_FACTOR);
     }
-  }
-
-  private void checkIfEnemiesMove() {
-    for (Player player : playerList) {
-      //player.moveOneStep();
-      for(Enemy enemy : enemyList){
-        if(player.getHitBox().getXLeft() < enemy.getHitBox().xLeft){
-          enemy.setXVel(this.ENEMY_MOVEMENT_SPEED * -1);
-        }
-        else if(player.getHitBox().getXLeft() > enemy.getHitBox().xLeft){
-          enemy.setXVel(this.ENEMY_MOVEMENT_SPEED);
-        }
-        else{
-          enemy.setXVel(0);
-        }
-        //enemy.moveOneStep();
-      }
-    }
-  }
+  }*/
 
   public void checkCollisions(){
     for (IMovable movable : this.movableEntityList) {
@@ -173,9 +138,12 @@ public class Level {
     }
   }
 
-  private void moveEntities(){
-    for (IMovable movable : this.movableEntityList) {
-      movable.moveOneStep();
+  private void updatePositions(){
+    for (Player player : this.playerList) {
+      player.updatePosition();
+    }
+    for (Enemy enemy : this.enemyList) {
+      enemy.updatePosition();
     }
   }
 

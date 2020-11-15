@@ -4,36 +4,34 @@ import model.collision.CollisionDirections;
 
 public class FlappyPlayer extends Player {
 
+  private static final double FLAPPY_JUMP_SPEED = -0.25;
+
   public FlappyPlayer(double x, double y) {
     super(x, y);
   }
 
+  private boolean heldDownJumpKey = false;
+  private boolean immobilized = false;
+
+  public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
+    if (directions.doesCollide()) {
+      this.immobilized = true;
+    }
+  }
+
   @Override
-  public void processCurrentCollision(IEntity entity, CollisionDirections collision) {
-
-  }
-
-  public void checkFutureCollision(IEntity entity) {
-    CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
-
-
-    this.processCurrentCollision(entity, collision);
-    if (entity instanceof IDamageable && collision.doesCollide() && this
-        .canApplyDamage(collision)) {
-      this.attemptApplyDamage((IDamageable) entity, collision);
-    }
-    if (entity instanceof IEmpowering && collision.doesCollide()) {
-      IEmpowering empowering = (IEmpowering) entity;
-      if (!empowering.hasAppliedModifier()) {
-        this.applyModifier(empowering.getModifier());
-        empowering.setHasAppliedModifier(true);
-      }
-    }
-    if (entity instanceof ISpawner && collision.doesCollide()) {
-      ISpawner spawner = (ISpawner) entity;
-      spawner.attemptCreateAndAddSpawn(collision);
+  public void updateVelocity(boolean leftKey, boolean rightKey, boolean jumpKey) {
+    if (immobilized) {return;}
+    if (jumpKey && !heldDownJumpKey)  {
+      this.setYVel(FLAPPY_JUMP_SPEED);
+      heldDownJumpKey = true;
+    } else if (!jumpKey){
+      heldDownJumpKey = false;
     }
   }
 
-  public void checkCollision(IEntity entity){}
+  public void updatePosition(){
+    this.applyGravity();
+    this.translateHitBox();
+  }
 }

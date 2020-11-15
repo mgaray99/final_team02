@@ -6,15 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.HitBox;
+import model.collision.CollisionDirections;
 import model.collision.Direction;
 
-public abstract class Player implements IEntity, IMovable, IDamageable, IEmpowerable {
+public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer {
 
   private final String type = this.getClass().getSimpleName();
   public static final int GRACE_PERIOD = 1;
-  protected boolean immobilized = false;
-  private boolean canMoveUp = true;
-  private boolean canMoveRight = true;
+  public static final double GRAVITY_FACTOR = 0.015f;
   private double xVel = 0;
   private double yVel = 0;
   protected HitBox hitBox;
@@ -24,7 +23,7 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IEmpower
   private double health = 0;
   private double damage = 0;
   private final Map<Modifier.ModifierType, Modifier> modifiers = new HashMap<>();
-  private Direction currentCollision;
+  private CollisionDirections currentCollision = new CollisionDirections();
 
   public Player(double x, double y){
     this.hitBox = new HitBox(x, y);
@@ -32,6 +31,33 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IEmpower
     this.setCollisionDamage(100);
   }
 
+  public abstract void updateVelocity(boolean leftKey, boolean rightKey, boolean jumpKey);
+
+  public abstract void updatePosition();
+
+  public abstract void processCurrentCollision(IEntity entity, CollisionDirections directions);
+
+
+  public void checkFutureCollision(IEntity entity) {
+    CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
+    currentCollision.add(collision);
+    this.processCurrentCollision(entity, collision);
+    if (entity instanceof IDamageable && !collision.isEmpty() && this
+        .canApplyDamage(collision)) {
+      this.attemptApplyDamage((IDamageable) entity, collision);
+    }
+    if (entity instanceof IEmpowering && !collision.isEmpty()) {
+      IEmpowering empowering = (IEmpowering) entity;
+      if (!empowering.hasAppliedModifier()) {
+        this.applyModifier(empowering.getModifier());
+        empowering.setHasAppliedModifier(true);
+      }
+    }
+    if (entity instanceof ISpawner && !collision.isEmpty()) {
+      ISpawner spawner = (ISpawner) entity;
+      spawner.attemptCreateAndAddSpawn(collision);
+    }
+  }
 
   @Override
   public HitBox getHitBox() {
@@ -42,10 +68,6 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IEmpower
   public boolean isDead() {
     return false;
   }
-
-  @Override
-  public abstract void checkFutureCollision(IEntity entity);
-
 
   @Override
   public void setXVel(double xVel) {
@@ -81,61 +103,46 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IEmpower
   @Override
   public void setGrounded(boolean grounded) {
     this.grounded = grounded;
-    if (grounded) {
-      this.resetGracePeriodBeforeFalling();
-    }
   }
 
-  @Override
-  public int getGracePeriodBeforeFalling() {
-    return gracePeriodBeforeFalling;
-  }
   //@Override
-  public void setGracePeriodBeforeFalling(int isActive) {
-    this.gracePeriodBeforeFalling = isActive;
-  }
-
-  @Override
-  public void subtractFromGracePeriodBeforeFalling() {
-    gracePeriodBeforeFalling -= 1;
-  }
-
-
-  public int getGracePeriodBeforeSidewaysMovement() {
-    return gracePeriodBeforeSidewaysMovement;
-  }
-
-  public void setGracePeriodBeforeSidewaysMovement(int isActive) {
-    this.gracePeriodBeforeSidewaysMovement = isActive;
-  }
-
-  public void resetGracePeriodBeforeSidewaysMovement() {
-    this.gracePeriodBeforeSidewaysMovement = GRACE_PERIOD;
-  }
-
-  public void resetGracePeriodBeforeFalling() {
-    this.gracePeriodBeforeFalling = GRACE_PERIOD;
-  }
-
-  @Override
-  public void moveOneStep() {
+  public void translateHitBox() {
     //if (!((this.getCurrentCollision() == CollisionDirection.LEFT && this.getXVel() < 0) || (
     //   this.getCurrentCollision() == CollisionDirection.RIGHT && this.getXVel() > 0))) {
 
-    if (immobilized) {
-      return;
-    }
-    if (this.canMoveUp) {
+    //if (immobilized) {
+    //  return;
+    //}
+    //if (gracePeriodBeforeFalling == 0) {
       this.getHitBox().translateY(this.getYVel());
-    }
-    if (this.canMoveRight) {
+    //}
+    //if (gracePeriodBeforeSidewaysMovement == 0) {
       this.getHitBox().translateX(this.getXVel());
-    }
-    this.setGrounded(false);
-    this.canMoveUp = true;
-    this.canMoveRight = true;
+    //}
+    this.currentCollision.clear();
   }
 
+  protected void resetGracePeriodBeforeFalling() {
+    this.gracePeriodBeforeFalling = GRACE_PERIOD;
+  }
+
+  protected void incrementGracePeriodBeforeFalling() {
+    this.gracePeriodBeforeFalling -= 1;
+  }
+
+  protected void incrementGracePeriodBeforeSidewaysMovement() {
+    this.gracePeriodBeforeSidewaysMovement -= 1;
+  }
+
+  protected void applyGravity() {
+    if (this.getModifiers().containsKey(Modifier.ModifierType.GRAVITY)) {
+      this.setYVel(
+          this.getYVel() + GRAVITY_FACTOR * this.getModifiers().get(Modifier.ModifierType.GRAVITY)
+              .getValue());
+    } else {
+      this.setYVel(this.getYVel() + GRAVITY_FACTOR);
+    }
+  }
 
   @Override
   public double getHealth() {
@@ -167,12 +174,8 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IEmpower
     return Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT);
   }
 
-  protected void setCanMoveUp(boolean canMoveUp) {
-    this.canMoveUp = canMoveUp;
-  }
-
-  protected void setCanMoveRight(boolean canMoveRight) {
-    this.canMoveRight = canMoveRight;
+  protected CollisionDirections getCurrentCollision() {
+    return this.currentCollision;
   }
 
   @Override
