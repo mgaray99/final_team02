@@ -58,6 +58,7 @@ public interface IMovable extends IEntity {
   String getType();
 
   default void processCurrentCollision(IEntity entity, CollisionDirections collision){
+
     if (collision.contains(Direction.BOTTOM) && !collision.containsHorizontalCollision()) {
       //System.out.print("Bottom");
       this.setGrounded(true);
@@ -66,7 +67,6 @@ public interface IMovable extends IEntity {
       if (this.getYVel() > 0) {
         this.setYVel(0);
       }
-      //this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
     }
     if (collision.contains(Direction.TOP) && !collision.containsHorizontalCollision()){
       //System.out.print("Top");
@@ -74,7 +74,6 @@ public interface IMovable extends IEntity {
       if (this.getYVel() < 0) {
         this.setYVel(0);
       }
-      //this.getHitBox().setYTop(entity.getHitBox().getYBottom());
     }
     if (collision.contains(Direction.RIGHT) && !collision.containsVerticalCollision()) {
       //System.out.print("Right");
@@ -82,8 +81,7 @@ public interface IMovable extends IEntity {
       if (this.getXVel() > 0) {
         this.setXVel(0);
       }
-      //this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
-    }
+]    }
     if (collision.contains(Direction.LEFT) && !collision.containsVerticalCollision()) {
       //System.out.print("Left");
       this.getHitBox().setXLeft(entity.getHitBox().getXRight() - MIN_COLLISION);
@@ -91,6 +89,12 @@ public interface IMovable extends IEntity {
         this.setXVel(0);
       }
       //this.getHitBox().setXLeft(entity.getHitBox().getXRight());
+    }
+
+    //this allows enemies to be killed from above even if the player is slightly offset from center
+    if (collision.contains(Direction.TOP) && this.getYVel() >= 0) {
+      collision.remove(Direction.RIGHT);
+      collision.remove(Direction.LEFT);
     }
   }
 
