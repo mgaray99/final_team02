@@ -111,7 +111,9 @@ public class Level {
       player.updateVelocity(keyPressFunctions.isPlayerMovingLeft(), keyPressFunctions.isPlayerMovingRight(), keyPressFunctions.isPlayerJumping());
     }
     for (Enemy enemy : enemyList) {
-      enemy.updateVelocity(playerList.get(0));
+      if(!playerList.isEmpty()){
+        enemy.updateVelocity(playerList.get(0));
+      }
     }
   }
 

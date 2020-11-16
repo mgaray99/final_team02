@@ -30,33 +30,6 @@ public class MarioPlayer extends Player {
     if (rightKey == leftKey) {this.setXVel(0);}
   }
 
-  public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
-    if (directions.contains(Direction.BOTTOM) ){ //&& !directions.containsHorizontalCollision()) {
-      System.out.print("Bottom. ");
-      this.setGrounded(true);
-      this.getHitBox().setYBottom(otherEntity.getHitBox().getYTop());
-      if (this.getYVel() > 0) {this.setYVel(0);}
-    }
-
-    if (directions.contains(Direction.TOP) && !directions.containsHorizontalCollision()) {
-      System.out.print("Top. ");
-      this.getHitBox().setYTop(otherEntity.getHitBox().getYBottom());
-      if (this.getYVel() < 0) {this.setYVel(0);}
-    }
-
-    if (directions.contains(Direction.RIGHT) && !directions.containsVerticalCollision()) {
-      System.out.print("Right. ");
-      this.getHitBox().setXRight(otherEntity.getHitBox().getXLeft());
-      if (this.getXVel() > 0) {this.setXVel(0);}
-    }
-
-    if (directions.contains(Direction.LEFT) && !directions.containsVerticalCollision()) {
-      System.out.print("Left. ");
-      this.getHitBox().setXLeft(otherEntity.getHitBox().getXRight());
-      if (this.getXVel() < 0) {this.setXVel(0);}
-    }
-  }
-
   @Override
   public void updatePosition() {
     if (!this.getCurrentCollision().contains(Direction.BOTTOM)) {

@@ -53,17 +53,11 @@ public class CollisionDirections {
   }
 
   public boolean containsVerticalCollision() {
-    if (this.contains(Direction.TOP) || this.contains(Direction.BOTTOM)) {
-      return true;
-    }
-    return false;
+    return this.contains(Direction.TOP) ^ this.contains(Direction.BOTTOM); // ^ is XOR
   }
 
   public boolean containsHorizontalCollision() {
-    if (this.contains(Direction.RIGHT) || this.contains(Direction.LEFT)) {
-      return true;
-    }
-    return false;
+    return this.contains(Direction.RIGHT) ^ this.contains(Direction.LEFT);
   }
 
   public boolean isEmpty() {
