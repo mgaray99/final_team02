@@ -63,10 +63,6 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
     return hitBox;
   }
 
-  @Override
-  public boolean isDead() {
-    return this.health <= 0;
-  }
 
   @Override
   public void setXVel(double xVel) {
@@ -185,5 +181,10 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   @Override
   public Teams getTeam() {
     return Teams.PLAYER;
+  }
+
+  @Override
+  public boolean isDead() {
+    return this.health <= 0;
   }
 }

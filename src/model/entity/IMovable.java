@@ -24,8 +24,6 @@ public interface IMovable extends IEntity {
     this.getHitBox().translateY(this.getYVel());
   }
 
-  boolean isDead();
-
   void checkFutureCollision(IEntity entity);
 
   //void moveOneStep();
@@ -58,7 +56,7 @@ public interface IMovable extends IEntity {
   String getType();
 
   default void processCurrentCollision(IEntity entity, CollisionDirections collision){
-    if (collision.contains(Direction.BOTTOM) && !collision.containsHorizontalCollision()) {
+    if (collision.contains(Direction.BOTTOM)) {
       //System.out.print("Bottom");
       this.setGrounded(true);
 
@@ -68,7 +66,7 @@ public interface IMovable extends IEntity {
       }
       //this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
     }
-    if (collision.contains(Direction.TOP) && !collision.containsHorizontalCollision()){
+    if (collision.contains(Direction.TOP)){
       //System.out.print("Top");
       this.getHitBox().setYTop(entity.getHitBox().getYBottom());
       if (this.getYVel() < 0) {
@@ -76,7 +74,7 @@ public interface IMovable extends IEntity {
       }
       //this.getHitBox().setYTop(entity.getHitBox().getYBottom());
     }
-    if (collision.contains(Direction.RIGHT) && !collision.containsVerticalCollision()) {
+    if (collision.contains(Direction.RIGHT)) {
       //System.out.print("Right");
       this.getHitBox().setXRight(entity.getHitBox().getXLeft());
       if (this.getXVel() > 0) {
@@ -84,7 +82,7 @@ public interface IMovable extends IEntity {
       }
       //this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
     }
-    if (collision.contains(Direction.LEFT) && !collision.containsVerticalCollision()) {
+    if (collision.contains(Direction.LEFT)) {
       //System.out.print("Left");
       this.getHitBox().setXLeft(entity.getHitBox().getXRight());
       if (this.getXVel() < 0) {
@@ -93,4 +91,6 @@ public interface IMovable extends IEntity {
       //this.getHitBox().setXLeft(entity.getHitBox().getXRight());
     }
   }
+
+  boolean isDead();
 }

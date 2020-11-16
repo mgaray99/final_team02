@@ -108,9 +108,11 @@ public class HitBox {
 
       if (between(xRight - otherBox.getXLeft(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
         directions.add(Direction.RIGHT);
+        System.out.println("adding right!");
       }
       if (between(otherBox.getXRight() - xLeft, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT))  {
         directions.add(Direction.LEFT);
+        System.out.println("adding left!");
       }
     //}
     return directions;

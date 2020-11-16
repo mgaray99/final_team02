@@ -32,11 +32,6 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         return hitBox;
     }
 
-    @Override
-    public boolean isDead() {
-        return this.health <= 0;
-    }
-
     public void updateVelocity(Player player) {
         /*
         if (Math.abs(player.getHitBox().getXLeft() - this.getHitBox().getXLeft()) <= MIN_DISTANCE_TO_PLAYER) {
@@ -98,6 +93,11 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     @Override
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean isDead() {
+        return this.health <= 0;
     }
 
     @Override
