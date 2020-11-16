@@ -1,6 +1,7 @@
 package model.entity;
 
 import model.collision.CollisionDirections;
+import model.collision.Direction;
 
 public interface IDamageable {
 
@@ -44,20 +45,33 @@ public interface IDamageable {
         return this.getHealth() <= 0;
     }
 
-    default void attemptApplyDamage(IDamageable damageable, CollisionDirections currentCollidingDirection){
-        boolean canApplyDamage = this.canApplyDamage(currentCollidingDirection);
-        boolean damageableCanReceiveDamage = damageable.canReceiveDamage(currentCollidingDirection.getOpposites());
-        if(canApplyDamage && damageableCanReceiveDamage){
-            double currentHealth = damageable.getHealth();
-            damageable.setHealth(currentHealth - this.getCollisionDamage());
+    default void attemptApplyDamage(IDamageable damageable, CollisionDirections currentCollidingDirections){
+        boolean isOnSameTeam = this.isOnSameTeam(damageable);
+        boolean isEmpty =  currentCollidingDirections.isEmpty();
+        if(currentCollidingDirections.containsHorizontalCollision() && this.getTeam() == Teams.ENEMY && damageable.getTeam() != Teams.ENEMY) System.out.println("Enemy colliding horizontally!");
+        if(!isEmpty && damageable.getTeam() == Teams.PLAYER) System.out.println("Damaging player!");
+        for(Direction direction : currentCollidingDirections.directionsList){
+            boolean canApplyDamage = this.canApplyDamageToDirection(direction);
+            boolean damageableCanReceiveDamage = damageable.canReceiveDamageFromDirection(direction.getOpposite());
+
+            if(canApplyDamage && damageableCanReceiveDamage && !isOnSameTeam && !isEmpty){
+                double currentHealth = damageable.getHealth();
+                damageable.setHealth(currentHealth - this.getCollisionDamage());
+            }
         }
     }
 
-    default boolean canApplyDamage(CollisionDirections direction){
-        return this.getAppliesDamageDirections().oneIsContainedIn(direction);
+    default boolean canApplyDamageToDirection(Direction direction){
+        return this.getAppliesDamageDirections().contains(direction);
     }
 
-    default boolean canReceiveDamage(CollisionDirections direction){
-        return this.getReceivesDamageDirections().oneIsContainedIn(direction);
+    default boolean canReceiveDamageFromDirection(Direction direction){
+        return this.getReceivesDamageDirections().contains(direction);
     }
+
+    default boolean isOnSameTeam(IDamageable damageable){
+        return this.getTeam() == damageable.getTeam();
+    }
+
+    Teams getTeam();
 }

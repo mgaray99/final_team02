@@ -13,6 +13,7 @@ public class FlappyPlayer extends Player {
   private boolean heldDownJumpKey = false;
   private boolean immobilized = false;
 
+  @Override
   public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
     if (directions.doesCollide()) {
       this.immobilized = true;

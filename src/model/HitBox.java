@@ -15,7 +15,8 @@ import model.collision.Direction;
 public class HitBox {
 
   public static final double MAX_INTERSECT = 0.499;
-  public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.0001;
+  public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.005;
+  //public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0;
   public static final int X_SIZE = 1;
   public static final int Y_SIZE = 1;
   double xLeft;
@@ -108,9 +109,11 @@ public class HitBox {
 
       if (between(xRight - otherBox.getXLeft(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
         directions.add(Direction.RIGHT);
+        System.out.println("adding right!");
       }
       if (between(otherBox.getXRight() - xLeft, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT))  {
         directions.add(Direction.LEFT);
+        System.out.println("adding left!");
       }
     //}
     return directions;
@@ -118,7 +121,7 @@ public class HitBox {
 
   public CollisionDirections getFutureCollisionDirection(HitBox otherBox, double xVel, double yVel) {
     //HitBox futureBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
-    //return getCollisionDirection(futureBox);
+    //return getCollisionDirections(futureBox);
     return getCollisionDirection(otherBox);
   }
 
