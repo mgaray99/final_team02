@@ -37,6 +37,7 @@ public class Level {
 
   private int levelLength;
   private int levelWidth;
+  private int score;
   private boolean levelLost;
   private boolean levelWon;
 
@@ -154,6 +155,7 @@ public class Level {
   private void scroll() {
     if(!playerList.isEmpty()){
       scroller.scroll(this, playerList.get(0));
+      score += scroller.getScoreFromScroll();
     }
   }
 
@@ -197,6 +199,8 @@ public class Level {
 
   public void setOrResetLevel(LevelLoader levelLoader){
     loader = levelLoader;
+    score = 0;
+
     this.playerList = levelLoader.getCopyOfPlayerList();
     this.enemyList = levelLoader.getCopyOfEnemyList();
     this.movableEntityList = levelLoader.getCopyOfMovableEntityList();
@@ -310,5 +314,13 @@ public class Level {
   public List<IEntity> getAllEntities() { return entityList; }
 
   public List<Player> getPlayerList() {return playerList;}
+
+  /**
+   * Reveals the score of the player within the level
+   * @return score
+   */
+  public int getScore() {
+    return score;
+  }
 
 }

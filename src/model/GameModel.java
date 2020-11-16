@@ -86,6 +86,12 @@ public class GameModel {
     public Level getLevel() { return this.level; }
 
     /**
+     * Returns the score associated with the level in use by the model
+     * @return level.getScore()
+     */
+    public int getScore() { return this.level.getScore(); }
+
+    /**
      * Resets the level to the characteristics in levelLoader
      */
     public void resetLevel() throws InvalidFileException {

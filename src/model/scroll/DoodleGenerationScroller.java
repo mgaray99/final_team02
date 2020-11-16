@@ -9,7 +9,9 @@ public class DoodleGenerationScroller extends ManualScroller{
 
   private AutoGenerationHelper helper;
   private final int GENERATE_MAX_BOUND;
+  private static final int NORMALIZE = 100;
   private double flagY;
+  private int scoreFromScroll;
 
   public DoodleGenerationScroller(double left, double right, double up, double down,
       String path) {
@@ -18,6 +20,8 @@ public class DoodleGenerationScroller extends ManualScroller{
 
     GENERATE_MAX_BOUND = -1 * helper.getAddedNumRows();
     flagY = GENERATE_MAX_BOUND;
+
+    scoreFromScroll = 0;
   }
 
   /**
@@ -31,6 +35,7 @@ public class DoodleGenerationScroller extends ManualScroller{
     super.scroll(level, player);
 
     flagY += currentYScroll;
+    scoreFromScroll += (int) (NORMALIZE * currentYScroll);
     checkForGeneration(level);
 
   }
@@ -70,5 +75,17 @@ public class DoodleGenerationScroller extends ManualScroller{
   @Override
   public void reset() {
     flagY = GENERATE_MAX_BOUND;
+  }
+
+  /**
+   * Returns an integer value which should be added to the user's score due to survival of
+   * the last scroll
+   * @return scoreFromScroll
+   */
+  @Override
+  public int getScoreFromScroll() {
+    int tempScore = scoreFromScroll;
+    scoreFromScroll = 0;
+    return tempScore;
   }
 }

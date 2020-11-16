@@ -17,4 +17,11 @@ public interface Scroller {
      * Resets the scroller
      */
     void reset();
+
+    /**
+     * Returns an integer value which should be added to the user's score due to survival of
+     * the last scroll
+     * @return an integer value representing the score gained by the user from the last scroll
+     */
+    int getScoreFromScroll();
 }
