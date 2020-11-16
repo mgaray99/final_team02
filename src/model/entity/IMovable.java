@@ -88,7 +88,6 @@ public interface IMovable extends IEntity {
       if (this.getXVel() < 0) {
         this.setXVel(0);
       }
-      //this.getHitBox().setXLeft(entity.getHitBox().getXRight());
     }
 
     //this allows enemies to be killed from above even if the player is slightly offset from center
