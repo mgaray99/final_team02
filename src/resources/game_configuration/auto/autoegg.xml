@@ -31,7 +31,7 @@
   <random>
     <entity>5</entity>
     <direction>RIGHT:DOWN</direction>
-    <originrow>U(7:8)</originrow>
+    <originrow>U(8:9)</originrow>
     <origincol>U(5:14)</origincol>
     <numrows>1</numrows>
     <numcols>1</numcols>
@@ -39,7 +39,7 @@
   <random>
     <entity>5</entity>
     <direction>RIGHT:DOWN</direction>
-    <originrow>U(7:8)</originrow>
+    <originrow>U(8:9)</originrow>
     <origincol>U(5:14)</origincol>
     <numrows>1</numrows>
     <numcols>1</numcols>

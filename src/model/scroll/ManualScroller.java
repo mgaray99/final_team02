@@ -17,6 +17,7 @@ public class ManualScroller implements Scroller {
 
     public static final int NO_SCROLL = -1;
     public static final int ALWAYS_SCROLL = 0;
+    private static final int SCORE_FROM_SCROLL = 0;
 
     public ManualScroller(double l, double r, double u, double d) {
       leftBound = l;
@@ -121,6 +122,16 @@ public class ManualScroller implements Scroller {
         currentYScroll -= player.getYVel();
       }
     }
+  }
+
+  /**
+   * Returns an integer value which should be added to the user's score due to survival of
+   * the last scroll
+   * @return SCORE_FROM_SCROLL
+   */
+  @Override
+  public int getScoreFromScroll() {
+    return SCORE_FROM_SCROLL;
   }
 
 

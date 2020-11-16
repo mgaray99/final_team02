@@ -6,7 +6,6 @@ import controller.KeyInputter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -132,7 +131,7 @@ public class GameView extends Application {
       List<IEntity> entityList = model.getAllEntitiesInLevel();
       texturer.updateTextures(entityList, 15, 15);
     }
-    getScore();
+
     playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
 
   }
@@ -141,7 +140,7 @@ public class GameView extends Application {
    * gets score from model
    */
 
-  private int getScore() {return 0;}
+  private int getScore() {return model.getScore();}
 
 
   /**
@@ -187,6 +186,7 @@ public class GameView extends Application {
     if (currentScene.equals(menuScene) && key.equals("T")) {
       configPath = SECRET_CONFIG_PATH;
       buildModel();
+      start();
     }
   }
 

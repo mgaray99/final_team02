@@ -11,7 +11,10 @@ public class AutoScroller implements Scroller{
     protected double yScroll;
     protected boolean playerScrolls;
 
-    public AutoScroller(double x, double y, boolean lockPlayerInPlace) {
+  private static final int SCORE_FROM_SCROLL = 1;
+
+
+  public AutoScroller(double x, double y, boolean lockPlayerInPlace) {
       xScroll = x;
       yScroll = y;
       playerScrolls = lockPlayerInPlace;
@@ -48,5 +51,16 @@ public class AutoScroller implements Scroller{
   @Override
   public void reset() {
     //DO NOTHING
+  }
+
+
+  /**
+   * Returns an integer value which should be added to the user's score due to survival of
+   * the last scroll
+   * @return SCORE_FROM_SCROLL
+   */
+  @Override
+  public int getScoreFromScroll() {
+    return SCORE_FROM_SCROLL;
   }
 }

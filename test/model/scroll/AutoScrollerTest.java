@@ -24,8 +24,8 @@ public class AutoScrollerTest extends DukeApplicationTest {
 
   private static final double XSCROLL = -0.5;
   private static final double YSCROLL = 0.5;
-  private static final int PLAYER_XVEL = 1;
-  private static final int PLAYER_YVEL = 2;
+  private static final double PLAYER_XVEL = 0.15;
+  private static final double PLAYER_YVEL = 0.35;
 
   private static final int PLAYERX = 4;
   private static final int PLAYERY = 5;
@@ -35,6 +35,7 @@ public class AutoScrollerTest extends DukeApplicationTest {
 
   private static final int ENEMYX = 6;
   private static final int ENEMYY = 7;
+  private static final int SCORE_FROM_SCROLL = 1;
 
   private Player playerEntity;
   private Block barrierBlockEntity;
@@ -120,30 +121,42 @@ public class AutoScrollerTest extends DukeApplicationTest {
 
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
+    playerEntity.updateVelocity(false, true, false);
     playerEntity.updatePosition();
     scroller.scroll(level, playerEntity);
 
-    assertEquals(PLAYERX + XSCROLL + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
+    assertEquals((int)(PLAYERX + XSCROLL + PLAYER_XVEL), (int)playerEntity.getHitBox().getXLeft());
 
-    assertEquals(PLAYERY + YSCROLL + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
+    assertEquals((int)(PLAYERY + YSCROLL + PLAYER_YVEL), (int)(playerEntity.getHitBox().getYTop()));
   }
 
   /**
    * Tests that the Autoscroller correctly positions the player when the pScrolls variable is set to
-   * true (i.e. the autoscroller moves the player
+   * true (i.e. the autoscroller locks the player in place)
    */
   @Test
-  public void testPScrollsTrue() {
+  public void testScrollerLocksPlayer() {
     AutoScroller scroller = new AutoScroller(XSCROLL,YSCROLL, true);
 
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
-    playerEntity.updatePosition();
+
     scroller.scroll(level, playerEntity);
 
-    assertEquals(PLAYERX + PLAYER_XVEL, playerEntity.getHitBox().getXLeft());
+    assertEquals(PLAYERX, playerEntity.getHitBox().getXLeft());
 
-    assertEquals(PLAYERY + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
+    assertEquals(PLAYERY, playerEntity.getHitBox().getYTop());
+  }
+
+  /**
+   * Tests that when the scroller scrolls (i.e. when level.step() is called, the score increases
+   * by one
+   */
+  @Test
+  public void testGetScoreFromScroll() {
+    assertEquals(0, level.getScore());
+    level.step();
+    assertEquals(SCORE_FROM_SCROLL, level.getScore());
   }
 
 }

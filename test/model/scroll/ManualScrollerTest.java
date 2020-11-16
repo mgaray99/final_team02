@@ -27,8 +27,8 @@ public class ManualScrollerTest extends DukeApplicationTest {
   private static final int ALWAYSSCROLL = 0;
   private static final int NOSCROLL = -1;
 
-  private static final int PLAYER_XVEL = 1;
-  private static final int PLAYER_YVEL = 2;
+  private static final double PLAYER_XVEL = 0.15;
+  private static final double PLAYER_YVEL = 0.35;
 
   private static final int PLAYERX = 4;
   private static final int PLAYERY = 5;
@@ -74,6 +74,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
   public void testHorizontalScroller() {
     ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,NOSCROLL,NOSCROLL);
 
+    playerEntity.updateVelocity(false,true,true);
     playerEntity.updatePosition();
     scroller.scroll(level , playerEntity);
 
@@ -81,7 +82,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
     assertEquals(BARRIERX - PLAYER_XVEL, barrierBlockEntity.getHitBox().getXLeft());
     assertEquals(ENEMYX - PLAYER_XVEL, enemyEntity.getHitBox().getXLeft());
 
-    assertEquals(PLAYERY + PLAYER_YVEL, playerEntity.getHitBox().getYTop());
+    assertEquals((int)(PLAYERY - PLAYER_YVEL), (int)(playerEntity.getHitBox().getYTop()));
     assertEquals(BARRIERY, barrierBlockEntity.getHitBox().getYTop());
     assertEquals(ENEMYY, enemyEntity.getHitBox().getYTop());
   }
@@ -94,6 +95,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
   public void testVerticalScroller() {
     ManualScroller scroller = new ManualScroller(NOSCROLL, NOSCROLL, ALWAYSSCROLL, ALWAYSSCROLL);
 
+    playerEntity.updateVelocity(false,true,true);
     playerEntity.updatePosition();
     scroller.scroll(level , playerEntity);
 
@@ -102,8 +104,8 @@ public class ManualScrollerTest extends DukeApplicationTest {
     assertEquals(ENEMYX, enemyEntity.getHitBox().getXLeft());
 
     assertEquals(PLAYERY, playerEntity.getHitBox().getYTop());
-    assertEquals(BARRIERY - PLAYER_YVEL, barrierBlockEntity.getHitBox().getYTop());
-    assertEquals(ENEMYY - PLAYER_YVEL, enemyEntity.getHitBox().getYTop());
+    assertEquals((int)(BARRIERY + PLAYER_YVEL), (int)barrierBlockEntity.getHitBox().getYTop());
+    assertEquals((int)(ENEMYY + PLAYER_YVEL), (int)enemyEntity.getHitBox().getYTop());
   }
 
   /**
@@ -115,6 +117,7 @@ public class ManualScrollerTest extends DukeApplicationTest {
     ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,
         ALWAYSSCROLL,ALWAYSSCROLL);
 
+    playerEntity.updateVelocity(false,true,true);
     playerEntity.updatePosition();
     scroller.scroll(level, playerEntity);
 
@@ -123,7 +126,22 @@ public class ManualScrollerTest extends DukeApplicationTest {
     assertEquals(ENEMYX - PLAYER_XVEL, enemyEntity.getHitBox().getXLeft());
 
     assertEquals(PLAYERY, playerEntity.getHitBox().getYTop());
-    assertEquals(BARRIERY - PLAYER_YVEL, barrierBlockEntity.getHitBox().getYTop());
-    assertEquals(ENEMYY - PLAYER_YVEL, enemyEntity.getHitBox().getYTop());
+    assertEquals((int)(BARRIERY + PLAYER_YVEL), (int)barrierBlockEntity.getHitBox().getYTop());
+    assertEquals((int)(ENEMYY + PLAYER_YVEL), (int)enemyEntity.getHitBox().getYTop());
+  }
+
+  /**
+   * Tests that when the scroller scrolls (i.e. when level.step() is called, the score doesn't
+   * change
+   */
+  @Test
+  public void testGetScoreFromScroll() {
+    ManualScroller scroller = new ManualScroller(ALWAYSSCROLL,ALWAYSSCROLL,
+        ALWAYSSCROLL,ALWAYSSCROLL);
+
+    assertEquals(0, level.getScore());
+    level.setScroller(scroller);
+    level.step();
+    assertEquals(0, level.getScore());
   }
 }

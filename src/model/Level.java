@@ -25,7 +25,7 @@ public class Level {
   private final double ENEMY_MOVEMENT_SPEED = 0.1;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
-  private static final int START_HEALTH = 10;
+  private static final int PLAYER_HEALTH = 100;
 
   private List<Player> playerList;
   private List<Enemy> enemyList;
@@ -37,6 +37,7 @@ public class Level {
 
   private int levelLength;
   private int levelWidth;
+  private int score;
   private boolean levelLost;
   private boolean levelWon;
 
@@ -156,6 +157,7 @@ public class Level {
   private void scroll() {
     if(!playerList.isEmpty()){
       scroller.scroll(this, playerList.get(0));
+      score += scroller.getScoreFromScroll();
     }
   }
 
@@ -199,6 +201,8 @@ public class Level {
 
   public void setOrResetLevel(LevelLoader levelLoader){
     loader = levelLoader;
+    score = 0;
+
     this.playerList = levelLoader.getCopyOfPlayerList();
     this.enemyList = levelLoader.getCopyOfEnemyList();
     this.movableEntityList = levelLoader.getCopyOfMovableEntityList();
@@ -279,7 +283,7 @@ public class Level {
     if (playerList.size() > 0) {
       Player player = playerList.get(0);
       if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
-        playerFall();
+        playerLoss();
       }
     }
   }
@@ -287,7 +291,7 @@ public class Level {
   /**
    * Handles the situation where the player has fallen off of the screen
    */
-  private void playerFall() {
+  private void playerLoss() {
     loader.reinitialize();
     setOrResetLevel(loader);
     scroller.reset();
@@ -312,5 +316,13 @@ public class Level {
   public List<IEntity> getAllEntities() { return entityList; }
 
   public List<Player> getPlayerList() {return playerList;}
+
+  /**
+   * Reveals the score of the player within the level
+   * @return score
+   */
+  public int getScore() {
+    return score;
+  }
 
 }
