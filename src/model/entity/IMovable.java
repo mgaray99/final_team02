@@ -52,39 +52,41 @@ public interface IMovable extends IEntity {
 
   double getYVel();
 
+  public final double MIN_COLLISION = 0.01;
+
   @Override
   String getType();
 
   default void processCurrentCollision(IEntity entity, CollisionDirections collision){
-    if (collision.contains(Direction.BOTTOM)) {
+    if (collision.contains(Direction.BOTTOM) && !collision.containsHorizontalCollision()) {
       //System.out.print("Bottom");
       this.setGrounded(true);
 
-      this.getHitBox().setYBottom(entity.getHitBox().getYTop());
+      this.getHitBox().setYBottom(entity.getHitBox().getYTop() + MIN_COLLISION);
       if (this.getYVel() > 0) {
         this.setYVel(0);
       }
       //this.getHitBox().setYTop(entity.getHitBox().getYTop() - this.getHitBox().getYSize());
     }
-    if (collision.contains(Direction.TOP)){
+    if (collision.contains(Direction.TOP) && !collision.containsHorizontalCollision()){
       //System.out.print("Top");
-      this.getHitBox().setYTop(entity.getHitBox().getYBottom());
+      this.getHitBox().setYTop(entity.getHitBox().getYBottom() - MIN_COLLISION);
       if (this.getYVel() < 0) {
         this.setYVel(0);
       }
       //this.getHitBox().setYTop(entity.getHitBox().getYBottom());
     }
-    if (collision.contains(Direction.RIGHT)) {
+    if (collision.contains(Direction.RIGHT) && !collision.containsVerticalCollision()) {
       //System.out.print("Right");
-      this.getHitBox().setXRight(entity.getHitBox().getXLeft());
+      this.getHitBox().setXRight(entity.getHitBox().getXLeft() + MIN_COLLISION);
       if (this.getXVel() > 0) {
         this.setXVel(0);
       }
       //this.getHitBox().setXLeft(entity.getHitBox().getXLeft() - this.getHitBox().getXSize());
     }
-    if (collision.contains(Direction.LEFT)) {
+    if (collision.contains(Direction.LEFT) && !collision.containsVerticalCollision()) {
       //System.out.print("Left");
-      this.getHitBox().setXLeft(entity.getHitBox().getXRight());
+      this.getHitBox().setXLeft(entity.getHitBox().getXRight() - MIN_COLLISION);
       if (this.getXVel() < 0) {
         this.setXVel(0);
       }
