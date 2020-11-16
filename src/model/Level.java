@@ -25,7 +25,7 @@ public class Level {
   private final double ENEMY_MOVEMENT_SPEED = 0.1;
   private static final int STARTX = 50;
   private static final int STARTY = 600;
-  private static final int START_HEALTH = 10;
+  private static final int PLAYER_HEALTH = 100;
 
   private List<Player> playerList;
   private List<Enemy> enemyList;
@@ -283,7 +283,7 @@ public class Level {
     if (playerList.size() > 0) {
       Player player = playerList.get(0);
       if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
-        playerFall();
+        playerLoss();
       }
     }
   }
@@ -291,7 +291,7 @@ public class Level {
   /**
    * Handles the situation where the player has fallen off of the screen
    */
-  private void playerFall() {
+  private void playerLoss() {
     loader.reinitialize();
     setOrResetLevel(loader);
     scroller.reset();
