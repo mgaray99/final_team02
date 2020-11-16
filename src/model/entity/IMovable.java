@@ -81,7 +81,7 @@ public interface IMovable extends IEntity {
       if (this.getXVel() > 0) {
         this.setXVel(0);
       }
-]    }
+    }
     if (collision.contains(Direction.LEFT) && !collision.containsVerticalCollision()) {
       //System.out.print("Left");
       this.getHitBox().setXLeft(entity.getHitBox().getXRight() - MIN_COLLISION);
