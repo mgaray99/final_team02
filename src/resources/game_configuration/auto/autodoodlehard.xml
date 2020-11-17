@@ -28,7 +28,7 @@
     <direction>RIGHT:DOWN</direction>
     <originrow>U(6:7)</originrow>
     <origincol>U(6:12)</origincol>
-    <numrows>1</numrows>
-    <numcols>2</numcols>
+    <numrows>R(1,2,3;0.8,0.16,0.04)</numrows>
+    <numcols>R(1,2,3;0.8,0.16,0.04)</numcols>
   </random>
 </generator>
