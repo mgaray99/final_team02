@@ -168,6 +168,7 @@ public class GameScene extends Scene {
    * @param id the id to be looked up
    * @return the node if it exists in the GameScene
    */
+
   public Node lookupElementInRoot(String id) {
     Node element = root.lookup("#" + id);
     if (!element.equals(null)) {
@@ -184,6 +185,8 @@ public class GameScene extends Scene {
     FolderParser parser = new FolderParser(LANGUAGE_FOLDERPATH_LONG, PROPERTIES_EXTENSION);
     if (parser.getFilenamesFromFolder().contains(name)) {
       controller.updateResources(name);
+    } else {
+      updateErrorText(getValueFromBundle("UPDATE_RESOURCES_ERROR"));
     }
   }
 
@@ -196,6 +199,8 @@ public class GameScene extends Scene {
       if (parser.getFilenamesFromFolder().contains(name)) {
         getStylesheets().clear();
         getStylesheets().add(STYLESHEET_PATH + name + CSS_EXTENSION);
+      } else {
+        updateErrorText(getValueFromBundle("UPDATE_STYLE_SHEET_ERROR"));
       }
   }
 

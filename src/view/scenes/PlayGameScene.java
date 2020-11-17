@@ -20,12 +20,6 @@ public class PlayGameScene extends GameScene {
   private static final String SCOREFIELD_ID = "SCOREFIELD";
   private static final String TEXTURES = "textures";
   private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
-
-  private static final String SAVE_INSTRUCTIONS = "Please input a filename and press ENTER";
-  private static final String SCORE_INSTRUCTIONS = "Please input a name and press ENTER";
-  private static final String SAVE_ERROR = "Please input a valid filename!";
-  private static final String SCORE_ERROR = "Please input a valid name!";
-
   private static final String CSV_EXTENSION = ".csv";
   private static final String SAVE_FILEPATH = "data/saves/";
 
@@ -126,7 +120,7 @@ public class PlayGameScene extends GameScene {
     }
     else {
       saveField.clear();
-      updateErrorText(SAVE_ERROR);
+      updateErrorText(getValueFromBundle("SAVE_ERROR"));
     }
   }
 
@@ -170,7 +164,7 @@ public class PlayGameScene extends GameScene {
     }
     else if (key.getCode().equals(KeyCode.ENTER)){
       saveField.clear();
-      updateErrorText(SCORE_ERROR);
+      updateErrorText(getValueFromBundle("SCORE_ERROR"));
     }
   }
 
@@ -184,7 +178,7 @@ public class PlayGameScene extends GameScene {
       leaderboard.addScoreTuple(tuple);
     }
     catch (IOException fnfe) {
-       fnfe.printStackTrace();
+      updateErrorText(getValueFromBundle("FINAL_SCORE_ERROR"));
     }
 
     clearFields();
@@ -203,7 +197,7 @@ public class PlayGameScene extends GameScene {
   public void inputScore(String path, Level level) {
     scorePath = path;
     currentLevel = level;
-    updateErrorText(SCORE_INSTRUCTIONS);
+    updateErrorText(getValueFromBundle("SCORE_INSTRUCTIONS"));
     scoreField.setVisible(true);
     currentLevel.setIsSaving(true);
   }
