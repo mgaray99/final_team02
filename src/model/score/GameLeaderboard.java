@@ -118,8 +118,7 @@ public class GameLeaderboard {
 
     FileWriter writer = new FileWriter(PATH_START + path, true);
 
-    writer.write("\n");
-    writer.write(line);
+    writer.write("\n" + line);
     writer.close();
   }
 }

@@ -40,8 +40,8 @@ public class GameView extends Application {
   private TextureSwapScene textureSwapScene;
 
 
-  private Scene currentScene;
-  private Scene lastScene;
+  private GameScene currentScene;
+  private GameScene lastScene;
 
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
@@ -119,7 +119,7 @@ public class GameView extends Application {
       texturer = new Texturer(WIDTH, HEIGHT, model.getTexturesPath(),
           (Group)playGameScene.lookup("#" + TEXTURES));
     } catch (InvalidFileException ife) {
-      endGame();
+      currentScene.updateErrorText(currentScene.getValueFromBundle("BUILD_MODEL_ERROR"));
     }
   }
 
@@ -255,7 +255,7 @@ public class GameView extends Application {
    * Switches the scene to the viewName indexed by view
    * @param scene the scene to become the new scene
    */
-  private void setScene(Scene scene) {
+  private void setScene(GameScene scene) {
     if (!model.getLevel().isSaving()) {
       lastScene = currentScene;
       stage.setScene(scene);
@@ -352,7 +352,7 @@ public class GameView extends Application {
       model.resetLevel();
     }
     catch (InvalidFileException ife) {
-      System.out.println("invalid file");
+      currentScene.updateErrorText(currentScene.getValueFromBundle("RESET_LEVEL_ERROR"));
     }
   }
 
