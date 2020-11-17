@@ -26,3 +26,10 @@
   -fx-font-size: 16pt;
   -fx-font-family: Verdana;
 }
+
+#scoreStyle {
+  -fx-font-size: 16pt;
+  -fx-font-family: Verdana;
+  -fx-font-weight: bold;
+  -fx-fill: #e8f6e7;
+}
