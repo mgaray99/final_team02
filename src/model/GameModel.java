@@ -80,6 +80,14 @@ public class GameModel {
     }
 
     /**
+     * Returns the String path to the .csv file containing data on high scores
+     * @return the String highScoresPath
+     */
+    public String getHighScoresPath() {
+        return gameConfiguration.getHighScoresPath();
+    }
+
+    /**
      * Returns the level of this model
      * @return level
      */

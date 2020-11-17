@@ -125,13 +125,19 @@ public class GameView extends Application {
    * Updates the view
    */
   private void update() {
-    if (currentScene.equals(playGameScene)) {
-      model.updateGame();
-
-      List<IEntity> entityList = model.getAllEntitiesInLevel();
-      texturer.updateTextures(entityList, 15, 15);
+    if (!currentScene.equals(playGameScene)) {
+      return;
     }
 
+    if (model.getLevel().isLevelLost()) {
+        System.out.println("hi");
+        playGameScene.inputScore(configPath, model.getLevel());
+    }
+
+    model.updateGame();
+
+    List<IEntity> entityList = model.getAllEntitiesInLevel();
+    texturer.updateTextures(entityList, 15, 15);
     playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
 
   }
@@ -291,9 +297,17 @@ public class GameView extends Application {
   /**
    * select game type
    */
-  public void createGameTypeButtons(String type) {
+  public void switchGame(String type) {
     configPath = type.toLowerCase().replaceAll(" ", "") + PROPERTIES_EXTENSION;
     buildModel();
+    start();
+  }
+
+  /**
+   * Switches to the leaderboard screen
+   */
+  public void switchToHighScoresScreen() {
+    setScene(displayHighScore);
   }
 
   /**

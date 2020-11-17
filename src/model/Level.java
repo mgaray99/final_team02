@@ -283,7 +283,7 @@ public class Level {
     if (playerList.size() > 0) {
       Player player = playerList.get(0);
       if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
-        playerLoss();
+        setLevelLost(true);
       }
     }
   }
@@ -291,10 +291,11 @@ public class Level {
   /**
    * Handles the situation where the player has fallen off of the screen
    */
-  private void playerLoss() {
+  public void reinitialize() {
     loader.reinitialize();
     setOrResetLevel(loader);
     scroller.reset();
+    levelLost = false;
   }
 
   void setLevelWon(boolean isLevelWon) {
@@ -323,6 +324,14 @@ public class Level {
    */
   public int getScore() {
     return score;
+  }
+
+  /**
+   * Reveals if the level has lost
+   * @return levelLost
+   */
+  public boolean isLevelLost() {
+    return levelLost;
   }
 
 }

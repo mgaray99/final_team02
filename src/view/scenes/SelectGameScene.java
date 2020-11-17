@@ -17,6 +17,6 @@ public class SelectGameScene extends GameScene {
         BUTTON_FOLDERPATH_SLASH + ID.toLowerCase()+ "buttons.xml");
 
     buildOptionsSelectorFromListForController(
-        Arrays.asList(GAME_TYPES), "createGameTypeButtons");
+        Arrays.asList(GAME_TYPES), "switchGame");
   }
 }
