@@ -27,6 +27,7 @@ public class Texturer {
   private final Image MISSING_IMAGE;
   private double numBlocksWide;
   private double numBlocksHigh;
+  private String path;
 
   private static final String FILEPATH_START = "resources/images/texturefiles/";
 
@@ -34,14 +35,15 @@ public class Texturer {
    *
    * @param w the WIDTH of the screen
    * @param h the HEIGHT of the screen
-   * @param path the filepath leading to the file containing the texture data that ImageBuilder
+   * @param filepath the filepath leading to the file containing the texture data that ImageBuilder
    *             will use to create the ImageViews
    * @param tGroup the Group that will contain the textures
    */
-  public Texturer(double w, double h, String path, Group tGroup) {
+  public Texturer(double w, double h, String filepath, Group tGroup) {
     WIDTH = w;
     HEIGHT = h;
     textureGroup = tGroup;
+    path = filepath;
 
     MISSING_IMAGE = buildMissingImage(1,1);
 
@@ -191,5 +193,13 @@ public class Texturer {
     }
 
     return filler;
+  }
+
+  /**
+   * For testing - return the String filepath leading to the file generating the textures
+   * @return path
+   */
+  public String getPath() {
+    return path;
   }
 }

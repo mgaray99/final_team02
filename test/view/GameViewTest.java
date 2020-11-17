@@ -28,6 +28,9 @@ class GameViewTest extends DukeApplicationTest {
     private static final String SECRET_CONFIG_PATH = "/secret/masteregg.properties";
     private static final String DEFAULT_CONFIG_PATH = "doodlejump.properties";
 
+    private static final String DEFAULT_TEXTURE_PATH = "doodletextures.properties";
+    private static final String ALTERNATE_TEXTURE_PATH = "mariotextures.properties";
+
 
   @Override
     public void start(Stage st) {
@@ -164,6 +167,24 @@ class GameViewTest extends DukeApplicationTest {
   }
 
   /**
+   * Tests that the switchToTextureSwapScreen() method actually switches to the
+   * texture swap screen
+   */
+  @Test
+  public void testTextureScreen() {
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+
+    javafxRun(() -> view.start());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+
+    javafxRun(() -> view.switchToTextureSwapScreen());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(),
+        "TEXTURE_SWAP");
+  }
+
+  /**
    * Tests that the switchToSelectLanguageScreen() method opens the SELECT_RESOURCE_BUNDLE scene
    */
   @Test
@@ -247,6 +268,17 @@ class GameViewTest extends DukeApplicationTest {
 
     javafxRun(() ->view.keyPressed("T"));
     assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
+  }
+
+  /**
+   * Tests that the switchTextures() method correctly alters the texture file used to
+   * generate tex
+   */
+  @Test
+  public void testSwitchTextures() {
+    assertEquals(DEFAULT_TEXTURE_PATH, view.getTexturerPath());
+    javafxRun(() -> view.switchTextures("mariotextures"));
+    assertEquals(ALTERNATE_TEXTURE_PATH, view.getTexturerPath());
   }
 
 }
