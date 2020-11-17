@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameModel;
+import model.autogenerator.GenerationException;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
 import model.entity.IEntity;
@@ -49,6 +50,7 @@ public class GameView extends Application {
   private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String TEXTURES = "textures";
   private static final String SECRET_CONFIG_PATH = "/secret/masteregg.properties";
+  private static final String SCORE_LABEL = "ScoreLabel";
 
   private String configPath = "doodlejump.properties";
   private GameModel model;
@@ -68,13 +70,12 @@ public class GameView extends Application {
       buildScenesList();
       listenOnControllers();
 
-      lastScene = menuScene;
-      currentScene = menuScene;
-
+      resetScenes();
       configPath = "doodlejump.properties";
-      buildModel();
-
       prepareAnimation();
+      buildModel();
+      resetScenes();
+
       stage.setScene(menuScene);
       stage.show();
   }
@@ -110,6 +111,14 @@ public class GameView extends Application {
   }
 
   /**
+   * Resets lastScene and currentScene to their defaults
+   */
+  private void resetScenes() {
+    lastScene = menuScene;
+    currentScene = menuScene;
+  }
+
+  /**
    * Prepares the model that the view will update with an animation timer and display
    */
   private void buildModel() {
@@ -118,7 +127,8 @@ public class GameView extends Application {
       inputter = new KeyInputter(model);
       texturer = new Texturer(WIDTH, HEIGHT, model.getTexturesPath(),
           (Group)playGameScene.lookup("#" + TEXTURES));
-    } catch (InvalidFileException ife) {
+      start();
+    } catch (InvalidFileException | NullPointerException | GenerationException ex) {
       currentScene.updateErrorText(currentScene.getValueFromBundle("BUILD_MODEL_ERROR"));
     }
   }
@@ -135,16 +145,13 @@ public class GameView extends Application {
         playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
         model.getLevel().setLevelLost(false);
     }
-    else if (model.getLevel().isSaving()) {
-
-    }
-    else {
-
+    else if (!model.getLevel().isSaving()){
       model.updateGame();
 
       List<IEntity> entityList = model.getAllEntitiesInLevel();
       texturer.updateTextures(entityList, 15, 15);
-      playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
+      playGameScene.updateScoreText(currentScene.getValueFromBundle(SCORE_LABEL)
+          + ": " + (getScore()));
     }
   }
 
@@ -195,10 +202,13 @@ public class GameView extends Application {
    */
   void keyPressed(String key) {
     inputter.keyPressed(key);
+
     if (currentScene.equals(menuScene) && key.equals("T")) {
       configPath = SECRET_CONFIG_PATH;
       buildModel();
-      start();
+    }
+    else if (!model.getLevel().isSaving()) {
+      currentScene.updateErrorText("");
     }
   }
 
@@ -226,8 +236,7 @@ public class GameView extends Application {
         }
       }
       catch (Exception e) {
-        e.printStackTrace();
-        System.out.println("bad reflection");
+        // Do nothing
       }
   }
 
@@ -258,6 +267,8 @@ public class GameView extends Application {
   private void setScene(GameScene scene) {
     if (!model.getLevel().isSaving()) {
       lastScene = currentScene;
+      lastScene.updateErrorText("");
+
       stage.setScene(scene);
       currentScene = scene;
     }
@@ -266,9 +277,7 @@ public class GameView extends Application {
   /**
    * Switches to the menu screen
    */
-  public void switchToHomeScreen() {
-    setScene(menuScene);
-  }
+  public void switchToHomeScreen() { setScene(menuScene); }
 
   /**
    * Switches to Css Stylesheet Selection Screen
@@ -314,7 +323,6 @@ public class GameView extends Application {
   public void switchGame(String type) {
     configPath = type.toLowerCase().replaceAll(" ", "") + PROPERTIES_EXTENSION;
     buildModel();
-    start();
   }
 
   /**

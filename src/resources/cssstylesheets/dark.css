@@ -22,9 +22,12 @@
   -fx-fill: #36393B;
 }
 
-#scoreStyle {
+
+#errorStyle {
   -fx-font-size: 16pt;
   -fx-font-family: Verdana;
+  -fx-font-weight: bold;
+  -fx-fill: #e8f6e7;
 }
 
 #scoreStyle {

@@ -30,10 +30,13 @@ public class EntityFactory {
    * <PLAYER_KEY, newMapping>
    * @param newMapping the new String value that will be stored at PLAYER_KEY in the mapping
    */
-  public void updatePlayerMapping(String newMapping) {
+  public void updatePlayerMapping(String newMapping) throws NullPointerException {
     List<String> validPlayerValueList = Arrays.asList(validPlayerValues);
     if (validPlayerValueList.contains(newMapping)) {
       idToEntityMap.put(PLAYER_KEY, newMapping);
+    }
+    else {
+      throw new NullPointerException("Invalid Player Type");
     }
   }
 

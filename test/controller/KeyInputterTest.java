@@ -161,7 +161,7 @@ public class KeyInputterTest extends DukeApplicationTest {
   }
 
   @Test
-  public void testSwitchKeyInputSourceFile() {
+  public void testSwitchKeyInputSourceFile() throws InvalidFileException {
     testInputter.loadKeyInputsFromFile(DJ_INPUTS);
   }
 
@@ -169,7 +169,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * Tests the situation where the user tries to switch the
    */
   @Test
-  public void testSwitchKeyInputBadSourceFile() {
+  public void testSwitchKeyInputBadSourceFile() throws InvalidFileException {
     testInputter.loadKeyInputsFromFile("hi");
     testRight();
     testLeft();

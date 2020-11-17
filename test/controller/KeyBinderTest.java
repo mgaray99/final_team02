@@ -3,6 +3,7 @@ package controller;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -37,6 +38,8 @@ public class KeyBinderTest extends DukeApplicationTest {
   private static final String WAITING_FOR_UPDATE_TEXT = "Press a button to update controls";
   private static final String UPDATE_ID = "UPDATE";
 
+  private static final String RESOURCE_BUNDLE_PATH = "resources/resourcebundles.English";
+
   private KeyInputter testInputter;
   private KeyBinder testBinder;
   private Text instructionsLabel;
@@ -48,7 +51,7 @@ public class KeyBinderTest extends DukeApplicationTest {
     testInputter = new KeyInputter(
         new GameModel(new GameConfiguration("supermario.properties")));
 
-    testBinder = new KeyBinder();
+    testBinder = new KeyBinder(ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH));
     testBinder.updateKeyInputScreen(testInputter);
     instructionsLabel = (Text)(testBinder.lookup("#" + UPDATE_ID));
   }
