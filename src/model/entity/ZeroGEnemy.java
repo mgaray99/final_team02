@@ -3,7 +3,7 @@ package model.entity;
 public class ZeroGEnemy extends Enemy {
 
   private final String ID = "Enemy";
-  private final double VELOCITY_MULTIPLIER = 0.75;
+  private final double VELOCITY_MULTIPLIER = 0.6;
 
   public ZeroGEnemy(double x, double y) {
     super(x,y);
