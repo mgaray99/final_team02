@@ -272,7 +272,7 @@ class GameViewTest extends DukeApplicationTest {
 
   /**
    * Tests that the switchTextures() method correctly alters the texture file used to
-   * generate tex
+   * generate textures
    */
   @Test
   public void testSwitchTextures() {

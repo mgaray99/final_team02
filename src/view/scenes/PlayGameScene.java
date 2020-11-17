@@ -189,6 +189,7 @@ public class PlayGameScene extends GameScene {
     clearFields();
     currentLevel.setIsSaving(false);
     currentLevel.reinitialize();
+    pauseLevel();
   }
 
   /**
@@ -220,5 +221,12 @@ public class PlayGameScene extends GameScene {
     hideErrorText();
 
     currentLevel.setIsSaving(false);
+  }
+
+  /**
+   * Pauses the level currentLevel
+   */
+  public void pauseLevel() {
+    currentLevel.getKeyPressFunctions().pauseGame();
   }
 }
