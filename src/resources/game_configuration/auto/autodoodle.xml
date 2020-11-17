@@ -31,12 +31,4 @@
     <numrows>1</numrows>
     <numcols>2</numcols>
   </random>
-  <random>
-    <entity>10</entity>
-    <direction>LEFT:UP</direction>
-    <originrow>U(0:7)</originrow>
-    <origincol>U(0:12)</origincol>
-    <numrows>1</numrows>
-    <numcols>1</numcols>
-  </random>
 </generator>

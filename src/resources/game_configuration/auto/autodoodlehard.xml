@@ -12,8 +12,8 @@
     <direction>RIGHT:DOWN</direction>
     <originrow>U(0:1)</originrow>
     <origincol>U(0:6)</origincol>
-    <numrows>1</numrows>
-    <numcols>2</numcols>
+    <numrows>R(1,2;0.8,0.2)</numrows>
+    <numcols>R(1,2;0.8,0.2)</numcols>
   </random>
   <random>
     <entity>3</entity>
@@ -28,7 +28,15 @@
     <direction>RIGHT:DOWN</direction>
     <originrow>U(6:7)</originrow>
     <origincol>U(6:12)</origincol>
-    <numrows>R(1,2,3;0.8,0.16,0.04)</numrows>
-    <numcols>R(1,2,3;0.8,0.16,0.04)</numcols>
+    <numrows>R(1,2;0.8,0.2)</numrows>
+    <numcols>R(1,2;0.8,0.2)</numcols>
+  </random>
+  <random>
+    <entity>10</entity>
+    <direction>RIGHT:DOWN</direction>
+    <originrow>U(0:7)</originrow>
+    <origincol>U(0:12)</origincol>
+    <numrows>R(1,2;0.8,0.2)</numrows>
+    <numcols>R(1,2;0.8,0.2)</numcols>
   </random>
 </generator>
