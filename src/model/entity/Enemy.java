@@ -16,7 +16,6 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     private double xVel = 0;
     private double yVel = 0;
     private boolean grounded = true;
-    private int gracePeriodBeforeFalling = GRACE_PERIOD;
     private double health = 0;
     private double damage = 0;
     private CollisionDirections currentCollision = new CollisionDirections();
@@ -64,7 +63,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         translateHitbox();
     }
 
-    private void translateHitbox() {
+    protected void translateHitbox() {
         hitBox.translateX(xVel);
         hitBox.translateY(yVel);
         this.currentCollision.clear();
