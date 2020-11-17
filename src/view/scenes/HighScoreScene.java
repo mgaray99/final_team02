@@ -13,7 +13,7 @@ public class HighScoreScene extends GameScene {
 
     private static final String ID = "HIGHSCORE";
     private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
-    private static final String MARIO_LEADERBOARD = "supermarioleaderboard.csv";
+    private static final String DOODLE_LEADERBOARD2 = "doodlejump2leaderboard.csv";
     private static final String MARIO_INFINITY_LEADERBOARD = "marioinfinityleaderboard.csv";
     private static final String DOODLE_LEADERBOARD = "doodlejumpleaderboard.csv";
     private static final String FLAPPY_LEADERBOARD = "flappybirdleaderboard.csv";
@@ -39,8 +39,8 @@ public class HighScoreScene extends GameScene {
     private void buildLeaderBoardViews() {
         leaderboardViewList = new ArrayList<>();
         buildLeaderBoardView(MARIO_INFINITY_LEADERBOARD, 25, LEADERBOARDY);
-        buildLeaderBoardView(MARIO_LEADERBOARD, 175, LEADERBOARDY);
-        buildLeaderBoardView(DOODLE_LEADERBOARD, 325, LEADERBOARDY);
+        buildLeaderBoardView(DOODLE_LEADERBOARD, 175, LEADERBOARDY);
+        buildLeaderBoardView(DOODLE_LEADERBOARD2, 325, LEADERBOARDY);
         buildLeaderBoardView(FLAPPY_LEADERBOARD, 475, LEADERBOARDY);
         buildLeaderBoardView(EGG_LEADERBOARD, 625, LEADERBOARDY);
     }

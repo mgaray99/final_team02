@@ -28,6 +28,8 @@ public class Texturer {
   private double numBlocksWide;
   private double numBlocksHigh;
 
+  private static final String FILEPATH_START = "resources/images/texturefiles/";
+
   /**
    *
    * @param w the WIDTH of the screen
@@ -43,7 +45,7 @@ public class Texturer {
 
     MISSING_IMAGE = buildMissingImage(1,1);
 
-    List<ImageView> viewList = buildViewList(path);
+    List<ImageView> viewList = buildViewList(FILEPATH_START + path);
     constructTextureMap(viewList);
   }
 

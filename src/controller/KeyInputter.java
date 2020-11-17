@@ -17,6 +17,7 @@ public class KeyInputter {
   private KeyInputterMethodCaller methodCaller;
   private Map<String, String> keyToMethodMap;
   private String lastMethodFromKeyPress;
+  private static final String FILEPATH_START = "resources/keyinputs/";
   private final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
   public KeyInputter(GameModel model) {
@@ -35,7 +36,7 @@ public class KeyInputter {
   public void loadKeyInputsFromFile(String path) {
     try {
       Properties properties = new Properties();
-      InputStream stream =  getClass().getClassLoader().getResourceAsStream(
+      InputStream stream =  getClass().getClassLoader().getResourceAsStream(FILEPATH_START +
           path);
       properties.load(stream);
       Map<String, String> loadedMap = new TreeMap(properties);

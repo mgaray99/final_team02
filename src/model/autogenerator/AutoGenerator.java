@@ -5,8 +5,8 @@ import java.util.List;
 
 public class AutoGenerator {
 
-  private static final String SET = "set";
   private static final String AUTO_GENERATION_FAILED = "Automatic level generation failed";
+  private static final String FILEPATH_START = "./src/resources/game_configuration/auto/";
   private int numCols;
   private int numRows;
   private String defaultValue;
@@ -17,7 +17,7 @@ public class AutoGenerator {
 
   public AutoGenerator(String path) {
     try {
-      XMLHelper helper = new XMLHelper(path);
+      XMLHelper helper = new XMLHelper(FILEPATH_START + path);
       buildSpecification(helper);
     }
     catch (Exception e) {
