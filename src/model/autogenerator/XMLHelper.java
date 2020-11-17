@@ -31,6 +31,7 @@ public class XMLHelper {
   private static final String ORIGIN_COL = "origincol";
   private static final String NUM_ROWS = "numrows";
   private static final String NUM_COLS = "numcols";
+  private static final String ZERO_STR = "0";
 
   /**
    * Large pieces of this code provided by:
