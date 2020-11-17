@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface ISpawner {
 
-
     default Optional<IEntity> attemptSpawnEntity(){
         if(!this.getSpawnList().isEmpty()){
             IEntity entity = this.getSpawnList().get(0);
@@ -60,6 +59,5 @@ public interface ISpawner {
 
     void setMaxSpawnCount(int maxSpawnCount);
 
-    // Expected hitbox method that can be implemented by IEntity
     HitBox getHitBox();
 }

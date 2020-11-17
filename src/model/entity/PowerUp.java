@@ -19,7 +19,7 @@ public class PowerUp implements IEntity, IEmpowering {
 
 
     @Override
-    public void checkFutureCollision(IEntity entity) {
+    public void checkCollision(IEntity entity) {
     }
 
     @Override

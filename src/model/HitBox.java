@@ -14,7 +14,9 @@ import model.collision.Direction;
 
 public class HitBox {
 
-  public static final double MAX_INTERSECT = 0.499;
+  public static final double MAX_SIDE_INTERSECT = 0.5;
+  public static final double MAX_TOP_INTERSECT = 0.35;
+  public static final double MAX_BOTTOM_INTERSECT = 1 - MAX_TOP_INTERSECT;
   public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.005;
   //public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0;
   public static final int X_SIZE = 1;
@@ -96,33 +98,22 @@ public class HitBox {
       return directions;
     }
 
-    //if (xRight <= otherBox.getXRight() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
-      if (between(yBottom - otherBox.getYTop(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
+      if (between(yBottom - otherBox.getYTop(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_BOTTOM_INTERSECT)) {
         directions.add(Direction.BOTTOM);
       }
-      if (between(otherBox.getYBottom() - yTop, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
+      if (between(otherBox.getYBottom() - yTop, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_TOP_INTERSECT)) {
         directions.add(Direction.TOP);
       }
-    //}
 
-    //if (yBottom >= otherBox.getYBottom() + CORNER_GLITCH_AVOIDANCE_OFFSET) {
 
-      if (between(xRight - otherBox.getXLeft(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT)) {
+      if (between(xRight - otherBox.getXLeft(), CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_SIDE_INTERSECT)) {
         directions.add(Direction.RIGHT);
       }
-      if (between(otherBox.getXRight() - xLeft, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_INTERSECT))  {
+      if (between(otherBox.getXRight() - xLeft, CORNER_GLITCH_AVOIDANCE_OFFSET, MAX_SIDE_INTERSECT))  {
         directions.add(Direction.LEFT);
       }
-    //}
     return directions;
   }
-
-  public CollisionDirections getFutureCollisionDirection(HitBox otherBox, double xVel, double yVel) {
-    //HitBox futureBox = new HitBox(otherBox.getXLeft()+xVel, otherBox.getYTop()+yVel);
-    //return getCollisionDirections(futureBox);
-    return getCollisionDirection(otherBox);
-  }
-
 
   private boolean between(double value, double min, double max) {
     if ((value > min) && (value < max)) {

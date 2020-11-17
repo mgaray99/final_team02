@@ -9,7 +9,6 @@ import java.util.Arrays;
 public class Enemy implements IEntity, IMovable, IDamageable{
 
     private static final int GRACE_PERIOD = 2;
-    private static final double MIN_DISTANCE_TO_PLAYER = 0.4;
     private static final double ENEMY_MOVEMENT_SPEED = 0.1;
     public static final double GRAVITY_FACTOR = 0.015f;
     private final HitBox hitBox;
@@ -35,12 +34,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     }
 
     public void updateVelocity(Player player) {
-        /*
-        if (Math.abs(player.getHitBox().getXLeft() - this.getHitBox().getXLeft()) <= MIN_DISTANCE_TO_PLAYER) {
-            this.setXVel(0);
-        }
 
-         */
         if(player.getHitBox().getXLeft() < this.getHitBox().getXLeft()){
             this.setXVel(ENEMY_MOVEMENT_SPEED * -1);
         }
@@ -52,14 +46,9 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         }
     }
 
-    //@Override
-    public void checkFutureCollision(IEntity entity) {
-        CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
+    public void checkCollision(IEntity entity) {
+        CollisionDirections collision = hitBox.getCollisionDirection(entity.getHitBox());
         currentCollision.add(collision);
-        //this if statement is for testing - will be removed
-        //if (!collision.contains(CollisionDirection.NONE)) {
-        //    yVel = 0;
-        //}
 
         this.processCurrentCollision(entity, collision);
         if(entity instanceof IDamageable){

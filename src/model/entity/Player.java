@@ -18,8 +18,6 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   private double yVel = 0;
   protected HitBox hitBox;
   private boolean grounded = true;
-  private int gracePeriodBeforeFalling = GRACE_PERIOD;
-  private int gracePeriodBeforeSidewaysMovement = GRACE_PERIOD;
   private double health = 0;
   private double damage = 0;
   private final Map<Modifier.ModifierType, Modifier> modifiers = new HashMap<>();
@@ -38,8 +36,8 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   //public abstract void processCurrentCollision(IEntity entity, CollisionDirections directions);
 
 
-  public void checkFutureCollision(IEntity entity) {
-    CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
+  public void checkCollision(IEntity entity) {
+    CollisionDirections collision = hitBox.getCollisionDirection(entity.getHitBox());
     currentCollision.add(collision);
     this.processCurrentCollision(entity, collision);
     if (entity instanceof IDamageable) {
@@ -100,33 +98,10 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
     this.grounded = grounded;
   }
 
-  //@Override
   public void translateHitBox() {
-    //if (!((this.getCurrentCollision() == CollisionDirection.LEFT && this.getXVel() < 0) || (
-    //   this.getCurrentCollision() == CollisionDirection.RIGHT && this.getXVel() > 0))) {
-
-    //if (immobilized) {
-    //  return;
-    //}
-    //if (gracePeriodBeforeFalling == 0) {
       this.getHitBox().translateY(this.getYVel());
-    //}
-    //if (gracePeriodBeforeSidewaysMovement == 0) {
       this.getHitBox().translateX(this.getXVel());
-    //}
     this.currentCollision.clear();
-  }
-
-  protected void resetGracePeriodBeforeFalling() {
-    this.gracePeriodBeforeFalling = GRACE_PERIOD;
-  }
-
-  protected void incrementGracePeriodBeforeFalling() {
-    this.gracePeriodBeforeFalling -= 1;
-  }
-
-  protected void incrementGracePeriodBeforeSidewaysMovement() {
-    this.gracePeriodBeforeSidewaysMovement -= 1;
   }
 
   protected void applyGravity() {
