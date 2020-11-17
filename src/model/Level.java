@@ -14,18 +14,9 @@ public class Level {
   public static final int FRAMES_PER_SECOND = 60;
   public static final int MODIFIER_DURATION = 10;
   public static final double MODIFIER_VALUE = 1.5;
-  public static final double DEFAULT_GRAVITY_MODIFIER = 1;
   public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
 
   private Scroller scroller;
-  private final double MOVEMENT_SPEED = 0.2;
-  private final float JUMP_SPEED = -0.4f;
-  private final float GRAVITY_FACTOR = 0.015f;
-  private final double ENEMY_MOVEMENT_SPEED = 0.1;
-  private static final int STARTX = 50;
-  private static final int STARTY = 600;
-  private static final int PLAYER_HEALTH = 100;
-
   private List<Player> playerList;
   private List<Enemy> enemyList;
   private List<IMovable> movableEntityList = new ArrayList<>();
@@ -83,8 +74,6 @@ public class Level {
       }
     }
 
-    // removes all entities from the level in the removal list
-    // this should be done only if all entity iterations in this method have been completed
     for(IEntity entity : entitiesToRemove){
       this.removeEntity(entity);
     }
@@ -117,25 +106,11 @@ public class Level {
     }
   }
 
-
-  /*private void applyGravity() {
-    for (Player player : playerList) {
-      double gravityModifier = DEFAULT_GRAVITY_MODIFIER;
-      if(player.getModifiers().containsKey(Modifier.ModifierType.GRAVITY)){
-        gravityModifier = player.getModifiers().get(Modifier.ModifierType.GRAVITY).getValue();
-      }
-      player.applyGravity(this.GRAVITY_FACTOR * gravityModifier);
-    }
-    for (Enemy enemy : enemyList) {
-      enemy.applyGravity(this.GRAVITY_FACTOR);
-    }
-  }*/
-
   public void checkCollisions(){
     for (IMovable movable : this.movableEntityList) {
       for(IEntity otherEntity : this.entityList){
         if(!movable.equals(otherEntity)){
-          movable.checkFutureCollision(otherEntity);
+          movable.checkCollision(otherEntity);
         }
       }
     }

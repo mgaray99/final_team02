@@ -17,7 +17,7 @@ public class Goal implements IEntity, IWinnable{
     }
 
     @Override
-    public void checkFutureCollision(IEntity entity) {
+    public void checkCollision(IEntity entity) {
 
     }
 
