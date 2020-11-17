@@ -31,9 +31,11 @@ public class GameScene extends Scene {
   private static final String DEFAULT_CSS_FILEPATH = "resources/cssstylesheets/default.css";
   private static final String STYLESHEET_PATH = "resources/cssstylesheets/";
   private static final String LANGUAGE_FOLDERPATH_LONG = "./src/resources/resourcebundles";
+  private static final String LANGUAGE_FOLDERPATH = "resources/resourcebundles.";
   private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String STYLESHEET_PATH_LONG = "./src/resources/cssstylesheets";
   private static final String CSS_EXTENSION = ".css";
+  private static final String DEFAULT_LANGUAGE = "English";
 
 
   public GameScene(Group myRoot, String id, double width, double height) {
@@ -43,6 +45,7 @@ public class GameScene extends Scene {
     HEIGHT = height;
     sceneId = id;
 
+    bundle = ResourceBundle.getBundle(LANGUAGE_FOLDERPATH + DEFAULT_LANGUAGE);
     setGameController(new GameController());
 
     makeBackground();
@@ -180,7 +183,6 @@ public class GameScene extends Scene {
   public void updateResources(String name) {
     FolderParser parser = new FolderParser(LANGUAGE_FOLDERPATH_LONG, PROPERTIES_EXTENSION);
     if (parser.getFilenamesFromFolder().contains(name)) {
-      bundle = ResourceBundle.getBundle(LANGUAGE_FOLDERPATH_LONG + name + PROPERTIES_EXTENSION);
       controller.updateResources(name);
     }
   }
