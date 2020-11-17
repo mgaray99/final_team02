@@ -20,6 +20,22 @@
     <numrows>1</numrows>
     <numcols>1</numcols>
   </random>
+  <random>
+    <entity>10</entity>
+    <direction>RIGHT:DOWN</direction>
+    <originrow>U(2:9)</originrow>
+    <origincol>U(0:14)</origincol>
+    <numrows>1</numrows>
+    <numcols>1</numcols>
+  </random>
+  <random>
+    <entity>5</entity>
+    <direction>RIGHT:DOWN</direction>
+    <originrow>U(2:8)</originrow>
+    <origincol>U(0:14)</origincol>
+    <numrows>1</numrows>
+    <numcols>1</numcols>
+  </random>
     <entity>3</entity>
     <direction>RIGHT:UP</direction>
     <originrow>13</originrow>

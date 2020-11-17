@@ -22,7 +22,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
 
     };
     Block block = new Block(5.8,5);
-    player.checkFutureCollision(block);
+    player.checkCollision(block);
     assertTrue(player.getCurrentCollision().contains(Direction.RIGHT));
   }
 
@@ -31,7 +31,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     Player player = new MarioPlayer(5, 5);
     player.setGrounded(false);
     Block block = new Block(5,5.9);
-    player.checkFutureCollision(block);
+    player.checkCollision(block);
     assertTrue(player.getCurrentCollision().contains(Direction.BOTTOM));
   }
 
@@ -39,7 +39,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
   public void collisionFalseTest() {
     Player player = new MarioPlayer(25, 25);
     Block block = new Block(10,10);
-    player.checkFutureCollision(block);
+    player.checkCollision(block);
     assertFalse(player.getCurrentCollision().doesCollide());
   }
 
@@ -47,7 +47,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
   public void collisionBorderlineHitTest() {
     Player player = new MarioPlayer(0, 0);
     Block block = new Block(4.9,4.9);
-    player.checkFutureCollision(block);
+    player.checkCollision(block);
     assertTrue(player.getCurrentCollision().contains(Direction.BOTTOM));
     assertTrue(player.getCurrentCollision().contains(Direction.LEFT));
   }
@@ -58,7 +58,7 @@ public class CollisionDetectionTest extends DukeApplicationTest {
     Block block = new Block(5,5);
     player.setXVel(5);
     player.setYVel(5);
-    player.checkFutureCollision(block);
+    player.checkCollision(block);
     assertEquals(5, player.getXVel());
     assertEquals(5, player.getYVel());
   }
