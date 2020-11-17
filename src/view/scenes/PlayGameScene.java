@@ -1,6 +1,5 @@
 package view.scenes;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +20,7 @@ public class PlayGameScene extends GameScene {
   private static final String TEXTURES = "textures";
   private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
 
-  private static final String SAVE_INSTRUCTIONS = "Please input a filename and press ENTER";
+  private static final String SAVE_INSTRUCTIONS = "SaveInstructions";
   private static final String SCORE_INSTRUCTIONS = "Please input a name and press ENTER";
   private static final String SAVE_ERROR = "Please input a valid filename!";
   private static final String SCORE_ERROR = "Please input a valid name!";
@@ -29,7 +28,7 @@ public class PlayGameScene extends GameScene {
   private static final String CSV_EXTENSION = ".csv";
   private static final String SAVE_FILEPATH = "data/saves/";
 
-  private static final String[] bannedCharacters = {"/", ".", "\\"};
+  private static final String[] bannedCharacters = {"\n", "/", ".", ",","\\"};
 
   private Level currentLevel;
   private String scorePath;
@@ -101,7 +100,7 @@ public class PlayGameScene extends GameScene {
    */
   public void launchSave(Level level) {
     currentLevel = level;
-    String saveInstructions = getValueFromBundle("SaveInstructions");
+    String saveInstructions = getValueFromBundle(SAVE_INSTRUCTIONS);
     updateErrorText(saveInstructions);
     saveField.setVisible(true);
     currentLevel.setIsSaving(true);
@@ -169,7 +168,7 @@ public class PlayGameScene extends GameScene {
       finalizeScoreSave();
     }
     else if (key.getCode().equals(KeyCode.ENTER)){
-      saveField.clear();
+      scoreField.clear();
       updateErrorText(SCORE_ERROR);
     }
   }
@@ -183,8 +182,8 @@ public class PlayGameScene extends GameScene {
       ScoreTuple tuple = new ScoreTuple(scoreField.getText(), currentLevel.getScore());
       leaderboard.addScoreTuple(tuple);
     }
-    catch (IOException fnfe) {
-       fnfe.printStackTrace();
+    catch (Exception e) {
+       e.printStackTrace();
     }
 
     clearFields();

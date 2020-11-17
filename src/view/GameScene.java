@@ -25,14 +25,14 @@ public class GameScene extends Scene {
   protected final double HEIGHT;
   private GameController controller;
   private Text errorLabel;
-  private ResourceBundle bundle;
+  protected ResourceBundle bundle;
   private static final String CONTROLLER = "controller";
   protected static final String BACKGROUND = "background";
   private static final String DEFAULT_CSS_FILEPATH = "resources/cssstylesheets/default.css";
   private static final String STYLESHEET_PATH = "resources/cssstylesheets/";
-  private static final String LANGUAGE_FOLDERPATH_LONG = "./src/resources/resourcebundles";
-  private static final String LANGUAGE_FOLDERPATH = "resources/resourcebundles.";
-  private static final String PROPERTIES_EXTENSION = ".properties";
+  protected static final String LANGUAGE_FOLDERPATH_LONG = "./src/resources/resourcebundles";
+  protected static final String LANGUAGE_FOLDERPATH = "resources/resourcebundles.";
+  protected static final String PROPERTIES_EXTENSION = ".properties";
   private static final String STYLESHEET_PATH_LONG = "./src/resources/cssstylesheets";
   private static final String CSS_EXTENSION = ".css";
   private static final String DEFAULT_LANGUAGE = "English";
@@ -184,6 +184,7 @@ public class GameScene extends Scene {
     FolderParser parser = new FolderParser(LANGUAGE_FOLDERPATH_LONG, PROPERTIES_EXTENSION);
     if (parser.getFilenamesFromFolder().contains(name)) {
       controller.updateResources(name);
+      bundle = ResourceBundle.getBundle(LANGUAGE_FOLDERPATH + name);
     }
   }
 

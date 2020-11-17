@@ -40,8 +40,8 @@ public class GameView extends Application {
   private TextureSwapScene textureSwapScene;
 
 
-  private Scene currentScene;
-  private Scene lastScene;
+  private GameScene currentScene;
+  private GameScene lastScene;
 
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
@@ -49,6 +49,7 @@ public class GameView extends Application {
   private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String TEXTURES = "textures";
   private static final String SECRET_CONFIG_PATH = "/secret/masteregg.properties";
+  private static final String SCORE_LABEL = "ScoreLabel";
 
   private String configPath = "doodlejump.properties";
   private GameModel model;
@@ -72,9 +73,9 @@ public class GameView extends Application {
       currentScene = menuScene;
 
       configPath = "doodlejump.properties";
+      prepareAnimation();
       buildModel();
 
-      prepareAnimation();
       stage.setScene(menuScene);
       stage.show();
   }
@@ -135,16 +136,13 @@ public class GameView extends Application {
         playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
         model.getLevel().setLevelLost(false);
     }
-    else if (model.getLevel().isSaving()) {
-
-    }
-    else {
-
+    else if (!model.getLevel().isSaving()){
       model.updateGame();
 
       List<IEntity> entityList = model.getAllEntitiesInLevel();
       texturer.updateTextures(entityList, 15, 15);
-      playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
+      playGameScene.updateErrorText(currentScene.getValueFromBundle(SCORE_LABEL)
+          + ": " + Integer.toString(getScore()));
     }
   }
 
@@ -255,7 +253,7 @@ public class GameView extends Application {
    * Switches the scene to the viewName indexed by view
    * @param scene the scene to become the new scene
    */
-  private void setScene(Scene scene) {
+  private void setScene(GameScene scene) {
     if (!model.getLevel().isSaving()) {
       lastScene = currentScene;
       stage.setScene(scene);
