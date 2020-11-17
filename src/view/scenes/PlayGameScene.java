@@ -101,7 +101,8 @@ public class PlayGameScene extends GameScene {
    */
   public void launchSave(Level level) {
     currentLevel = level;
-    updateErrorText(SAVE_INSTRUCTIONS);
+    String saveInstructions = getValueFromBundle("SaveInstructions");
+    updateErrorText(saveInstructions);
     saveField.setVisible(true);
     currentLevel.setIsSaving(true);
   }
