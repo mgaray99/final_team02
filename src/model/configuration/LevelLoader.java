@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
-import model.entity.Block;
-import model.entity.Enemy;
-import model.entity.IEntity;
-import model.entity.IMovable;
-import model.entity.Player;
-import model.entity.PowerUp;
+
+import model.entity.*;
 
 /**
  * A class responsible for creating the initial state of a game
@@ -25,6 +22,7 @@ public class LevelLoader {
     private final List<Block> blockList = new ArrayList<>();
     private final List<IEntity> entityList = new ArrayList<>();
     private final List<IMovable> movableEntityList = new ArrayList<>();
+    private final List<IWinnable> winnableList = new ArrayList<>();
     private List<IEntity> entityCopy = new ArrayList<>();
     //private final Map<String, String> levelDecoder;
     private EntityFactory entityFactory;
@@ -59,6 +57,8 @@ public class LevelLoader {
 
     public List<IMovable> getCopyOfMovableEntityList() { return new ArrayList<>(movableEntityList);}
 
+    public List<IWinnable> getCopyOfWinnableList() { return new ArrayList<>(winnableList);}
+
     public List<Enemy> getCopyOfEnemyList() {
         return new ArrayList<Enemy>(enemyList);
     }
@@ -84,8 +84,8 @@ public class LevelLoader {
                 String[] currentStringArray = currentLine.split(",");
                 for (int xIndex = 0; xIndex < currentStringArray.length; xIndex++) {
                     String entityString = currentStringArray[xIndex];
-                    IEntity entity = this.entityFactory.createEntity(entityString, xIndex, yCounter);
-                    this.addEntityToLists(entity);
+                    Optional<IEntity> optionalEntity = this.entityFactory.createEntity(entityString, xIndex, yCounter);
+                    optionalEntity.ifPresent(this::addEntityToLists);
                     if(this.levelWidth < xIndex+1){
                         this.levelWidth = xIndex+1;
                     }
@@ -118,6 +118,9 @@ public class LevelLoader {
             else if(entity instanceof PowerUp){
                 this.powerUpList.add((PowerUp)entity);
             }
+            else if(entity instanceof Goal){
+                this.winnableList.add((Goal)entity);
+            }
         }
     }
 
@@ -131,11 +134,13 @@ public class LevelLoader {
     private List<IEntity> defensivelyCopyList(List<IEntity> originalCopy) {
         List<IEntity> copyList = new ArrayList<>();
 
-        originalCopy.forEach(entity -> copyList.add(
-            entityFactory.reflectEntity(
-                entity.getClass().getSimpleName(),
-                entity.getHitBox().getXLeft(),
-                entity.getHitBox().getYTop())));
+        for(IEntity originalEntity : originalCopy){
+            Optional<IEntity> optionalEntity = entityFactory.reflectEntity(
+                    originalEntity.getClass().getSimpleName(),
+                    originalEntity.getHitBox().getXLeft(),
+                    originalEntity.getHitBox().getYTop());
+            optionalEntity.ifPresent(copyList::add);
+        }
 
         return copyList;
     }
