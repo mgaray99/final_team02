@@ -11,6 +11,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     private static final int GRACE_PERIOD = 2;
     private static final double MIN_DISTANCE_TO_PLAYER = 0.4;
     private static final double ENEMY_MOVEMENT_SPEED = 0.1;
+    public static final double GRAVITY_FACTOR = 0.015f;
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
     private double xVel = 0;
@@ -19,6 +20,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     private int gracePeriodBeforeFalling = GRACE_PERIOD;
     private double health = 0;
     private double damage = 0;
+    private CollisionDirections currentCollision = new CollisionDirections();
 
 
     public Enemy(double x, double y){
@@ -53,6 +55,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     //@Override
     public void checkFutureCollision(IEntity entity) {
         CollisionDirections collision = hitBox.getFutureCollisionDirection(entity.getHitBox(), this.getXVel(), this.getYVel());
+        currentCollision.add(collision);
         //this if statement is for testing - will be removed
         //if (!collision.contains(CollisionDirection.NONE)) {
         //    yVel = 0;
@@ -66,8 +69,16 @@ public class Enemy implements IEntity, IMovable, IDamageable{
 
     @Override
     public void updatePosition() {
+        if (!this.getCurrentCollision().contains(Direction.BOTTOM)) {
+            this.applyGravity();
+        }
+        translateHitbox();
+    }
+
+    private void translateHitbox() {
         hitBox.translateX(xVel);
         hitBox.translateY(yVel);
+        this.currentCollision.clear();
     }
 
     @Override
@@ -143,5 +154,13 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     @Override
     public Teams getTeam() {
         return Teams.ENEMY;
+    }
+
+    protected void applyGravity() {
+        this.setYVel(this.getYVel() + GRAVITY_FACTOR);
+    }
+
+    protected CollisionDirections getCurrentCollision() {
+        return this.currentCollision;
     }
 }
