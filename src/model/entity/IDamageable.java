@@ -48,8 +48,6 @@ public interface IDamageable {
     default void attemptApplyDamage(IDamageable damageable, CollisionDirections currentCollidingDirections){
         boolean isOnSameTeam = this.isOnSameTeam(damageable);
         boolean isEmpty =  currentCollidingDirections.isEmpty();
-        if(currentCollidingDirections.containsHorizontalCollision() && this.getTeam() == Teams.ENEMY && damageable.getTeam() != Teams.ENEMY) System.out.println("Enemy colliding horizontally!");
-        if(!isEmpty && damageable.getTeam() == Teams.PLAYER) System.out.println("Damaging player!");
         for(Direction direction : currentCollidingDirections.directionsList){
             boolean canApplyDamage = this.canApplyDamageToDirection(direction);
             boolean damageableCanReceiveDamage = damageable.canReceiveDamageFromDirection(direction.getOpposite());

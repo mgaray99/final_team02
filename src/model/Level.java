@@ -1,14 +1,13 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import model.configuration.LevelLoader;
 import model.entity.*;
 import model.scroll.AutoScroller;
 import model.scroll.Scroller;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class Level {
 
@@ -33,6 +32,7 @@ public class Level {
   private List<PowerUp> powerUpList;
   private List<Block> blockList;
   private List<IEntity> entityList;
+  private List<IWinnable> winnableList;
   private LevelLoader loader;
 
   private int levelLength;
@@ -55,8 +55,8 @@ public class Level {
       this.updateVelocities();
       this.checkCollisions();
       this.updatePositions();
-      this.checkWinCondition();
-      this.checkLoseCondition();
+      this.checkWinLoseConditions();
+      this.checkFellOutOfLevel();
       this.scroll();
     }
   }
@@ -208,6 +208,7 @@ public class Level {
     this.movableEntityList = levelLoader.getCopyOfMovableEntityList();
     this.blockList = levelLoader.getCopyOfBlockList();
     this.powerUpList = levelLoader.getCopyOfPowerUpList();
+    this.winnableList = levelLoader.getCopyOfWinnableList();
     this.entityList = levelLoader.getCopyOfEntityList();
     this.levelLength = levelLoader.getLevelLength();
     this.levelWidth = levelLoader.getLevelWidth();
@@ -235,6 +236,9 @@ public class Level {
       powerUp.setRandomModifier(MODIFIER_VALUE, MODIFIER_DURATION * FRAMES_PER_SECOND);
       this.powerUpList.add(powerUp);
     }
+    if (entity instanceof IWinnable) {
+      this.winnableList.add((IWinnable)entity);
+    }
   }
 
   private void removeEntity(IEntity entity) {
@@ -256,21 +260,36 @@ public class Level {
     if (entity instanceof IMovable) {
       this.movableEntityList.remove(entity);
     }
+    if (entity instanceof IWinnable) {
+      this.winnableList.remove(entity);
+    }
   }
 
-  @Nullable
-  public IEntity getEntityAt(int xCoordinate, int yCoordinate) {
+  public Optional<IEntity> getEntityAt(int xCoordinate, int yCoordinate) {
     for(IEntity entity : entityList){
       if((int)entity.getHitBox().getXLeft() == xCoordinate && (int)entity.getHitBox().getYTop() == yCoordinate){
-        return entity;
+        return Optional.of(entity);
       }
     }
-    return null;
+    return Optional.empty();
   }
 
-  private void checkWinCondition(){
+  private void checkWinLoseConditions(){
     if (playerList.size() == 0) {
       setLevelLost(true);
+    }
+    else{
+      if(!winnableList.isEmpty()){
+        int winCount = 0;
+        for(IWinnable winnable : winnableList){
+          if(winnable.getHasWon()){
+            winCount++;
+          }
+        }
+        if(winCount >= winnableList.size()){
+          setLevelWon(true);
+        }
+      }
     }
   };
 
@@ -279,11 +298,11 @@ public class Level {
    * Checks to see if the player has lost the level (i.e. fell through
    * bottom of screen) and if so resets the level
    */
-  private void checkLoseCondition() {
+  private void checkFellOutOfLevel() {
     if (playerList.size() > 0) {
       Player player = playerList.get(0);
       if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
-        playerLoss();
+        resetLevelAfterFall();
       }
     }
   }
@@ -291,7 +310,7 @@ public class Level {
   /**
    * Handles the situation where the player has fallen off of the screen
    */
-  private void playerLoss() {
+  private void resetLevelAfterFall() {
     loader.reinitialize();
     setOrResetLevel(loader);
     scroller.reset();
@@ -303,6 +322,13 @@ public class Level {
 
   void setLevelLost(boolean isLevelLost) {
     this.levelLost = isLevelLost;
+  }
+
+  public boolean isLevelWon(){
+    return levelWon;
+  }
+  public boolean isLevelLost(){
+    return levelLost;
   }
 
   public KeyPressFunctions getKeyPressFunctions() {

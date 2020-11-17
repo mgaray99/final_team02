@@ -1,6 +1,8 @@
 package model.scroll;
 
 import java.util.Map;
+import java.util.Optional;
+
 import model.Level;
 import model.autogenerator.AutoGenerator;
 import model.autogenerator.GenerationException;
@@ -54,10 +56,8 @@ public class AutoGenerationHelper {
    * @param level the Level in which to insert the entity
    */
   private void insertIntoLevel(String entityCode, Level level, double row, double col) {
-    IEntity entity = factory.createEntity(entityCode, col, row);
-    if (entity!=null) {
-      level.addEntity(entity);
-    }
+    Optional<IEntity> optionalEntity = factory.createEntity(entityCode, col, row);
+    optionalEntity.ifPresent(level::addEntity);
   }
 
   /**

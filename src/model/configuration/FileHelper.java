@@ -4,8 +4,8 @@ package model.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Properties;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A utility class that assists in validating or parsing files in addition to
@@ -85,16 +85,15 @@ public class FileHelper {
      * @param resource A String representing the properties file name
      * @return An InputStream, or null if unable to be created
      */
-    @Nullable
-    public static InputStream tryCreateInputStreamFromPropertiesFileName(Class clazz, String resource) {
+    public static Optional<InputStream> tryCreateInputStreamFromPropertiesFileName(Class clazz, String resource) {
         if (isPropertiesFile(resource)) {
             //if (resource.contains(TEST_INDICATOR)) {
             //    return clazz.getClassLoader().getResourceAsStream(TEST_RESOURCES_PATH + resource);
             //} else {
-                return clazz.getClassLoader().getResourceAsStream(RESOURCES_PATH + resource);
+                return Optional.ofNullable(clazz.getClassLoader().getResourceAsStream(RESOURCES_PATH + resource));
             //}
         }
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -122,7 +121,8 @@ public class FileHelper {
      * @return A Properties instance, which may or may not contain the loaded properties
      */
     public static Properties createPropertiesAndTryLoadFromResource(Class clazz, String resource){
-        return createPropertiesAndTryLoadFromStream(tryCreateInputStreamFromPropertiesFileName(clazz, resource));
+        Optional<InputStream> optionalInputStream = tryCreateInputStreamFromPropertiesFileName(clazz, resource);
+        return optionalInputStream.isPresent() ? createPropertiesAndTryLoadFromStream(optionalInputStream.get()) : new Properties();
     }
 
 }

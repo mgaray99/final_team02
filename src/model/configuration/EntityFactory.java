@@ -1,15 +1,11 @@
 package model.configuration;
 
+import model.entity.IEntity;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import model.entity.IEntity;
-import org.jetbrains.annotations.Nullable;
+import java.util.*;
 
 public class EntityFactory {
 
@@ -41,31 +37,30 @@ public class EntityFactory {
     }
   }
 
-  @Nullable
-  public IEntity createEntity(String entityString, double rowIndex, double colIndex) {
-      IEntity decodedEntity;
+  public Optional<IEntity> createEntity(String entityString, double rowIndex, double colIndex) {
+      Optional<IEntity> optionalDecodedEntity = Optional.empty();
       String decodedEntityString = idToEntityMap.get(entityString);
-      if(decodedEntityString == null) return (IEntity)null;
+      if(decodedEntityString == null) return optionalDecodedEntity;
 
-      decodedEntity = reflectEntity(decodedEntityString, rowIndex, colIndex);
-      return decodedEntity;
+      optionalDecodedEntity = reflectEntity(decodedEntityString, rowIndex, colIndex);
+      return optionalDecodedEntity;
 
   }
 
-  @Nullable
-  public IEntity reflectEntity(String decodedEntityString, double rowIndex, double colIndex) {
+
+  public Optional<IEntity> reflectEntity(String decodedEntityString, double rowIndex, double colIndex) {
     IEntity decodedEntity;
     try {
       Class entityClass = Class.forName(ENTITY_PACKAGE_PATH + decodedEntityString);
       Constructor entityConstructor = entityClass.getConstructor(double.class, double.class);
       decodedEntity = (IEntity) entityConstructor.newInstance(rowIndex, colIndex);
-      return decodedEntity;
+      return Optional.of(decodedEntity);
     } catch (ClassNotFoundException
         | NoSuchMethodException
         | InstantiationException
         | InvocationTargetException
         | IllegalAccessException e) {
-      return (IEntity) null;
+      return Optional.empty();
     }
   }
 }

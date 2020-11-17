@@ -63,10 +63,10 @@ public class GameSaver {
         for(int yIndex = 0; yIndex < currentLevel.getLevelLength(); yIndex++){
             StringBuilder currentRow = new StringBuilder();
             for(int xIndex = 0; xIndex < currentLevel.getLevelWidth(); xIndex++){
-                IEntity entity = currentLevel.getEntityAt(xIndex, yIndex);
+                Optional<IEntity> optionalEntity = currentLevel.getEntityAt(xIndex, yIndex);
                 String entityTypeString = EMPTY;
-                if (entity != null) {
-                    entityTypeString = entity.getType();
+                if (optionalEntity.isPresent()) {
+                    entityTypeString = optionalEntity.get().getType();
                 }
                 Stream<String> matchingKeysForEntity = getMatchingKeysForValue(levelDecoderMap, entityTypeString);
                 // Use the first key found, regardless of if there are multiple
