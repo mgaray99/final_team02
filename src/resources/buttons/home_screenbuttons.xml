@@ -2,17 +2,17 @@
 <buttons>
   <title>HOME_SCREEN</title>
   <button>
-    <id>StartCommand</id>
+    <id>HighScoresCommand</id>
     <centerx>0.50</centerx>
-    <centery>0.30</centery>
+    <centery>0.40</centery>
     <width>0.40</width>
     <height>0.05</height>
-    <method>start</method>
+    <method>switchToHighScoresScreen</method>
   </button>
   <button>
     <id>SelectCssCommand</id>
     <centerx>0.50</centerx>
-    <centery>0.40</centery>
+    <centery>0.50</centery>
     <width>0.40</width>
     <height>0.05</height>
     <method>switchToSelectCssStylesheetScreen</method>
@@ -20,7 +20,7 @@
   <button>
     <id>SelectLanguageCommand</id>
     <centerx>0.50</centerx>
-    <centery>0.50</centery>
+    <centery>0.60</centery>
     <width>0.40</width>
     <height>0.05</height>
     <method>switchToSelectLanguageScreen</method>
@@ -28,7 +28,7 @@
   <button>
     <id>SelectGameTypeCommand</id>
     <centerx>0.50</centerx>
-    <centery>0.60</centery>
+    <centery>0.30</centery>
     <width>0.40</width>
     <height>0.05</height>
     <method>selectGameTypeScreen</method>

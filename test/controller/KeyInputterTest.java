@@ -26,13 +26,13 @@ public class KeyInputterTest extends DukeApplicationTest {
   private static final String DEFAULT_UP = "W";
   private static final String DEFAULT_RIGHT = "D";
   private static final String DEFAULT_LEFT = "A";
-  private static final String DEFAULT_DOWN = "S";
+  private static final String DEFAULT_RESET = "R";
 
   private static final String LEFT = "left";
   private static final String UP = "up";
   private static final String RIGHT = "right";
-  private static final String DOWN = "down";
   private static final String PAUSE = "pause";
+  private static final String RESET = "reset";
 
   @Override
   public void start(Stage stage) throws InvalidFileException {
@@ -68,15 +68,6 @@ public class KeyInputterTest extends DukeApplicationTest {
     testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
   }
-  /**
-   * Tests to make sure that when the user pushes the key corresponding to down (i.e. for the
-   * default key input map, that would be DEFAULT_DOWN or S) the down() method is called
-   */
-  @Test
-  public void testDown() {
-    testInputter.keyPressed(DEFAULT_DOWN);
-    assertEquals(DOWN, testInputter.getLastPush());
-  }
 
   /**
    * Tests to make sure that when the user pushes the key corresponding to left (i.e. for the
@@ -86,6 +77,16 @@ public class KeyInputterTest extends DukeApplicationTest {
   public void testPause() {
     testInputter.keyPressed(DEFAULT_PAUSE);
     assertEquals(PAUSE, testInputter.getLastPush());
+  }
+
+  /**
+   * Tests to make sure that when the user pushes the key corresponding to reset (i.e. for the
+   * default key input map, that would be DEFAULT_RESET or R) the reset() method is called
+   */
+  @Test
+  public void testReset() {
+    testInputter.keyPressed(DEFAULT_RESET);
+    assertEquals(RESET, testInputter.getLastPush());
   }
 
   /**
@@ -134,7 +135,6 @@ public class KeyInputterTest extends DukeApplicationTest {
 
 
     // i.e. make sure that all of the default key inputs still call the default methods
-    testDown();
     testLeft();
     testPause();
     testRight();
@@ -173,7 +173,6 @@ public class KeyInputterTest extends DukeApplicationTest {
     testInputter.loadKeyInputsFromFile("hi");
     testRight();
     testLeft();
-    testDown();
     testUp();
     testPause();
   }
@@ -187,16 +186,16 @@ public class KeyInputterTest extends DukeApplicationTest {
     List<Pair<String, String>> keyMethodPairings = testInputter.getKeyMethodPairings();
 
     assertEquals(5, keyMethodPairings.size());
-    String[] keys = {"A", "S", "D", "W", "P"};
+    String[] keys = {"A", "D", "W", "R", "P"};
     List<String> keysList = Arrays.asList(keys);
 
     for (Pair<String, String> pair : keyMethodPairings) {
       assertTrue(keysList.contains(pair.getKey()));
       switch (pair.getKey()) {
         case "A" -> assertEquals("left", pair.getValue());
-        case "S" -> assertEquals("down", pair.getValue());
         case "D" -> assertEquals("right", pair.getValue());
         case "W" -> assertEquals("up", pair.getValue());
+        case "R" -> assertEquals("reset", pair.getValue());
         case "P" -> assertEquals("pause", pair.getValue());
       }
     }

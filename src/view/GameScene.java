@@ -2,6 +2,7 @@ package view;
 
 import controller.FolderParser;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ public class GameScene extends Scene {
   protected final double HEIGHT;
   private GameController controller;
   private Text errorLabel;
+  private ResourceBundle bundle;
   private static final String CONTROLLER = "controller";
   protected static final String BACKGROUND = "background";
   private static final String DEFAULT_CSS_FILEPATH = "resources/cssstylesheets/default.css";
@@ -178,6 +180,7 @@ public class GameScene extends Scene {
   public void updateResources(String name) {
     FolderParser parser = new FolderParser(LANGUAGE_FOLDERPATH_LONG, PROPERTIES_EXTENSION);
     if (parser.getFilenamesFromFolder().contains(name)) {
+      bundle = ResourceBundle.getBundle(LANGUAGE_FOLDERPATH_LONG + name + PROPERTIES_EXTENSION);
       controller.updateResources(name);
     }
   }
@@ -200,5 +203,18 @@ public class GameScene extends Scene {
    */
   public String getSceneId() {
     return sceneId;
+  }
+
+  /**
+   * Returns the value corresponding to key in the resouce bundle
+   * @param key the key in resourceBundle
+   * @return the value in resourceBundle
+   */
+  public String getValueFromBundle(String key) {
+    String value = bundle.getString(key);
+    if (value!=null) {
+      return value;
+    }
+    return "";
   }
 }

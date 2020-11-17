@@ -37,6 +37,7 @@ public class GameView extends Application {
   private SelectGameScene selectGameScene;
   private List<GameScene> gameScenes;
   private HighScoreScene displayHighScore;
+  private TextureSwapScene textureSwapScene;
 
 
   private Scene currentScene;
@@ -90,6 +91,7 @@ public class GameView extends Application {
     controlsScene = new ControlsScene(new Group(), WIDTH, HEIGHT);
     selectGameScene = new SelectGameScene(new Group(), WIDTH, HEIGHT);
     displayHighScore = new HighScoreScene(new Group(), WIDTH, HEIGHT);
+    textureSwapScene = new TextureSwapScene(new Group(), WIDTH, HEIGHT);
   }
 
   /**
@@ -104,7 +106,7 @@ public class GameView extends Application {
     gameScenes.add(selectStyleScene);
     gameScenes.add(selectGameScene);
     gameScenes.add(displayHighScore);
-
+    gameScenes.add(textureSwapScene);
   }
 
   /**
@@ -125,15 +127,25 @@ public class GameView extends Application {
    * Updates the view
    */
   private void update() {
-    if (currentScene.equals(playGameScene)) {
+    if (!currentScene.equals(playGameScene)) {
+      return;
+    }
+
+    if (model.getLevel().isLevelLost()) {
+        playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
+        model.getLevel().setLevelLost(false);
+    }
+    else if (model.getLevel().isSaving()) {
+
+    }
+    else {
+
       model.updateGame();
 
       List<IEntity> entityList = model.getAllEntitiesInLevel();
       texturer.updateTextures(entityList, 15, 15);
+      playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
     }
-
-    playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
-
   }
 
   /**
@@ -214,6 +226,7 @@ public class GameView extends Application {
         }
       }
       catch (Exception e) {
+        e.printStackTrace();
         System.out.println("bad reflection");
       }
   }
@@ -243,9 +256,11 @@ public class GameView extends Application {
    * @param scene the scene to become the new scene
    */
   private void setScene(Scene scene) {
-    lastScene = currentScene;
-    stage.setScene(scene);
-    currentScene = scene;
+    if (!model.getLevel().isSaving()) {
+      lastScene = currentScene;
+      stage.setScene(scene);
+      currentScene = scene;
+    }
   }
 
   /**
@@ -269,9 +284,14 @@ public class GameView extends Application {
   }
 
   /**
-   * switches to Select Game Type Screen
+   * Switches to Select Game Type Screen
    */
   public void selectGameTypeScreen() {setScene(selectGameScene);}
+
+  /**
+   * Switches to a Texture Selection Screen
+   */
+  public void switchToTextureSwapScreen() { setScene(textureSwapScene); }
 
   /**
    * Launches a save box to save the current state of the level in a csv file
@@ -291,9 +311,27 @@ public class GameView extends Application {
   /**
    * select game type
    */
-  public void createGameTypeButtons(String type) {
+  public void switchGame(String type) {
     configPath = type.toLowerCase().replaceAll(" ", "") + PROPERTIES_EXTENSION;
     buildModel();
+    start();
+  }
+
+  /**
+   * Changes the texture file determining textures to the one indexed by path
+   * @param texturePath the String path leading to the textures
+   */
+   public void switchTextures(String texturePath) {
+    texturer = new Texturer(WIDTH, HEIGHT, (texturePath + PROPERTIES_EXTENSION),
+        (Group)playGameScene.lookup("#" + TEXTURES));
+  }
+
+  /**
+   * Switches to the leaderboard screen
+   */
+  public void switchToHighScoresScreen() {
+    setScene(displayHighScore);
+    displayHighScore.updateLeaderboards();
   }
 
   /**
@@ -326,7 +364,9 @@ public class GameView extends Application {
   /**
    * Starts the game
    */
-  public void start() { setScene(playGameScene); }
+  public void start() {
+    setScene(playGameScene);
+  }
 
   /**
    * Returns to the home screen
@@ -346,6 +386,12 @@ public class GameView extends Application {
    * @return configPath
    */
   String getConfigPath() { return configPath; }
+
+  /**
+   * For testing - return the String filepath that's being used to generate textures
+   * @return texturer.getPath()
+   */
+  String getTexturerPath() { return texturer.getPath(); }
 
   /**
    * Launches the application

@@ -37,7 +37,7 @@ public class KeyInputterMethodCaller {
    * Tells the model to move down (i.e. crouch)
    */
   public void down() {
-    System.out.println("moving down");
+    // DO NOTHING
   }
 
   /**
@@ -77,13 +77,27 @@ public class KeyInputterMethodCaller {
    * Tells the model to move down (i.e. crouch)
    */
   public void downRelease() {
-    System.out.println("releasing down");
+    // DO NOTHING
   }
 
   /**
    * Tells the model to pause
    */
   public void pauseRelease() {
-    System.out.println("releasing pause");
+    // DO NOTHING
+  }
+
+  /**
+   * Resets the game
+   */
+  public void reset() {
+    model.getLevel().reinitialize();
+  }
+
+  /**
+   * Player has released the reset key
+   */
+  public void resetRelease() {
+    // DO NOTHING
   }
 }

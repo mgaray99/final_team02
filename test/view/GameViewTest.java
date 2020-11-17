@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import model.GameModel;
 import model.Level;
-import model.entity.IEntity;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -24,10 +23,13 @@ class GameViewTest extends DukeApplicationTest {
     private Scene currentScene;
     private static final String DEFAULT_STYLESHEET = "resources/cssstylesheets/default.css";
     private static final String DARK_STYLESHEET = "resources/cssstylesheets/dark.css";
-    private static final String START_BUTTON_ID = "StartCommand";
+    private static final String QUIT_BUTTON_ID = "QuitGameCommand";
 
     private static final String SECRET_CONFIG_PATH = "/secret/masteregg.properties";
     private static final String DEFAULT_CONFIG_PATH = "doodlejump.properties";
+
+    private static final String DEFAULT_TEXTURE_PATH = "doodletextures.properties";
+    private static final String ALTERNATE_TEXTURE_PATH = "mariotextures.properties";
 
 
   @Override
@@ -65,12 +67,12 @@ class GameViewTest extends DukeApplicationTest {
    */
   @Test
     public void testChangeLanguage() {
-      Button startButton = (Button)((GameScene)currentScene).getGameController()
-          .lookup("#" + START_BUTTON_ID);
+      Button quitButton = (Button)((GameScene)currentScene).getGameController()
+          .lookup("#" + QUIT_BUTTON_ID);
 
-      assertEquals("Start",  startButton.getText());
+      assertEquals("Quit",  quitButton.getText());
       javafxRun(() -> view.switchLanguage("Espanol"));
-      assertEquals("Empezar", startButton.getText());
+      assertEquals("Dejar", quitButton.getText());
     }
 
   /**
@@ -80,11 +82,11 @@ class GameViewTest extends DukeApplicationTest {
   @Test
     public void testChangeLanguageNotFound() {
       Button startButton = (Button)((GameScene)currentScene).getGameController()
-          .lookup("#" + START_BUTTON_ID);
+          .lookup("#" + QUIT_BUTTON_ID);
 
-      assertEquals("Start",  startButton.getText());
+      assertEquals("Quit",  startButton.getText());
       javafxRun(() -> view.switchLanguage("Klingon"));
-      assertEquals("Start", startButton.getText());
+      assertEquals("Quit", startButton.getText());
     }
 
   /**
@@ -165,6 +167,37 @@ class GameViewTest extends DukeApplicationTest {
   }
 
   /**
+   * Tests that the switchToTextureSwapScreen() method actually switches to the
+   * texture swap screen
+   */
+  @Test
+  public void testTextureScreen() {
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+
+    javafxRun(() -> view.start());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+
+    javafxRun(() -> view.switchToTextureSwapScreen());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(),
+        "TEXTURE_SWAP");
+  }
+
+  /**
+   * Tests that the switchToSelectLanguageScreen() method opens the SELECT_RESOURCE_BUNDLE scene
+   */
+  @Test
+  public void testLeaderboardScreen() {
+    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    javafxRun(() -> view.switchToHighScoresScreen());
+
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(),
+        "HIGHSCORE");
+  }
+
+  /**
    * Tests that the back() button returns the user to the HOME_SCREEN scene
    */
   @Test
@@ -235,6 +268,17 @@ class GameViewTest extends DukeApplicationTest {
 
     javafxRun(() ->view.keyPressed("T"));
     assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
+  }
+
+  /**
+   * Tests that the switchTextures() method correctly alters the texture file used to
+   * generate textures
+   */
+  @Test
+  public void testSwitchTextures() {
+    assertEquals(DEFAULT_TEXTURE_PATH, view.getTexturerPath());
+    javafxRun(() -> view.switchTextures("mariotextures"));
+    assertEquals(ALTERNATE_TEXTURE_PATH, view.getTexturerPath());
   }
 
 }

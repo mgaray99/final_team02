@@ -31,6 +31,7 @@ public class Level {
   private int score;
   private boolean levelLost;
   private boolean levelWon;
+  private boolean isSaving;
 
   public Level(LevelLoader levelLoader) {
     this.scroller = new AutoScroller(0,0, false);
@@ -277,7 +278,7 @@ public class Level {
     if (playerList.size() > 0) {
       Player player = playerList.get(0);
       if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
-        resetLevelAfterFall();
+        setLevelLost(true);
       }
     }
   }
@@ -285,25 +286,24 @@ public class Level {
   /**
    * Handles the situation where the player has fallen off of the screen
    */
-  private void resetLevelAfterFall() {
+  public void reinitialize() {
     loader.reinitialize();
     setOrResetLevel(loader);
+
     scroller.reset();
+    levelLost = false;
   }
 
-  void setLevelWon(boolean isLevelWon) {
+  public void setLevelWon(boolean isLevelWon) {
     this.levelWon = isLevelWon;
   }
 
-  void setLevelLost(boolean isLevelLost) {
+  public void setLevelLost(boolean isLevelLost) {
     this.levelLost = isLevelLost;
   }
 
   public boolean isLevelWon(){
     return levelWon;
-  }
-  public boolean isLevelLost(){
-    return levelLost;
   }
 
   public KeyPressFunctions getKeyPressFunctions() {
@@ -324,6 +324,30 @@ public class Level {
    */
   public int getScore() {
     return score;
+  }
+
+  /**
+   * Reveals if the level has lost
+   * @return levelLost
+   */
+  public boolean isLevelLost() {
+    return levelLost;
+  }
+
+  /**
+   * Reveals if we're saving the game
+   * @return isSaving
+   */
+  public boolean isSaving() {
+    return isSaving;
+  }
+
+  /**
+   * Sets a variable to show if we're saving the game
+   * @param save the indicator for if we're saving
+   */
+  public void setIsSaving(boolean save) {
+    isSaving = save;
   }
 
 }
