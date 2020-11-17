@@ -71,7 +71,7 @@ public class GameScene extends Scene {
     errorLabel = new Text();
     errorLabel.setText("");
     errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
-    errorLabel.setLayoutY(HEIGHT/20);
+    errorLabel.setLayoutY(HEIGHT/10);
     root.getChildren().add(errorLabel);
   }
 
@@ -168,6 +168,7 @@ public class GameScene extends Scene {
    * @param id the id to be looked up
    * @return the node if it exists in the GameScene
    */
+
   public Node lookupElementInRoot(String id) {
     Node element = root.lookup("#" + id);
     if (!element.equals(null)) {
@@ -185,6 +186,8 @@ public class GameScene extends Scene {
     if (parser.getFilenamesFromFolder().contains(name)) {
       controller.updateResources(name);
       bundle = ResourceBundle.getBundle(LANGUAGE_FOLDERPATH + name);
+    } else {
+      updateErrorText(getValueFromBundle("UPDATE_RESOURCES_ERROR"));
     }
   }
 
@@ -197,6 +200,8 @@ public class GameScene extends Scene {
       if (parser.getFilenamesFromFolder().contains(name)) {
         getStylesheets().clear();
         getStylesheets().add(STYLESHEET_PATH + name + CSS_EXTENSION);
+      } else {
+        updateErrorText(getValueFromBundle("UPDATE_STYLE_SHEET_ERROR"));
       }
   }
 

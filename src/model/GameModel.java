@@ -3,6 +3,7 @@ package model;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import model.autogenerator.GenerationException;
 import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
@@ -21,7 +22,8 @@ public class GameModel {
 
     public GameModel() {}
 
-    public GameModel(GameConfiguration gameConfiguration) throws InvalidFileException {
+    public GameModel(GameConfiguration gameConfiguration) throws InvalidFileException,
+        NullPointerException, GenerationException {
         this.gameConfiguration = gameConfiguration;
         levelFile = gameConfiguration.getLevelFile();
 

@@ -11,6 +11,8 @@ import java.util.Properties;
 import java.util.TreeMap;
 import javafx.util.Pair;
 import model.GameModel;
+import model.configuration.InvalidFileException;
+import model.configuration.ModelExceptionReason;
 
 public class KeyInputter {
 
@@ -20,7 +22,7 @@ public class KeyInputter {
   private static final String FILEPATH_START = "resources/keyinputs/";
   private final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
-  public KeyInputter(GameModel model) {
+  public KeyInputter(GameModel model) throws InvalidFileException {
     methodCaller = new KeyInputterMethodCaller(model);
     lastMethodFromKeyPress = "";
     keyToMethodMap = new HashMap<>();
@@ -33,7 +35,7 @@ public class KeyInputter {
    *
    * @param path the filepath of the new .txt file
    */
-  public void loadKeyInputsFromFile(String path) {
+  public void loadKeyInputsFromFile(String path) throws InvalidFileException{
     try {
       Properties properties = new Properties();
       InputStream stream =  getClass().getClassLoader().getResourceAsStream(FILEPATH_START +
@@ -46,7 +48,7 @@ public class KeyInputter {
 
     }
     catch (Exception e) {
-      System.out.println(e.getMessage());
+      throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, "File not found");
     }
   }
 

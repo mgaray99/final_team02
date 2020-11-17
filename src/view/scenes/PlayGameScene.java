@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 import model.GameSaver;
 import model.Level;
 import model.score.GameLeaderboard;
@@ -21,15 +22,12 @@ public class PlayGameScene extends GameScene {
   private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
 
   private static final String SAVE_INSTRUCTIONS = "SaveInstructions";
-  private static final String SCORE_INSTRUCTIONS = "Please input a name and press ENTER";
-  private static final String SAVE_ERROR = "Please input a valid filename!";
-  private static final String SCORE_ERROR = "Please input a valid name!";
-
   private static final String CSV_EXTENSION = ".csv";
   private static final String SAVE_FILEPATH = "data/saves/";
 
   private static final String[] bannedCharacters = {"\n", "/", ".", ",","\\"};
 
+  private Text scoreLabel;
   private Level currentLevel;
   private String scorePath;
   private TextField scoreField;
@@ -44,6 +42,29 @@ public class PlayGameScene extends GameScene {
     addTexturesGroup();
     buildSavingFunctionality();
     buildScoreField();
+    makeScoreText();
+  }
+
+  /**
+   * Builds the text label to display score
+   */
+  private void makeScoreText() {
+    scoreLabel = new Text();
+    scoreLabel.setText("");
+    scoreLabel.setLayoutX(WIDTH / 2 - scoreLabel.getLayoutBounds().getWidth() / 2);
+    scoreLabel.setLayoutY(HEIGHT/20);
+    scoreLabel.setId("errorStyle");
+    addElementToRoot(scoreLabel);
+  }
+
+  /**
+   * Updates and recenters the score text
+   * @param update the new text to be displayed
+   */
+  public void updateScoreText(String update) {
+    scoreLabel.setText(update);
+    scoreLabel.setLayoutX(WIDTH / 2 - scoreLabel.getLayoutBounds().getWidth() / 2);
+
   }
 
   /**
@@ -125,7 +146,7 @@ public class PlayGameScene extends GameScene {
     }
     else {
       saveField.clear();
-      updateErrorText(SAVE_ERROR);
+      updateErrorText(getValueFromBundle("SAVE_ERROR"));
     }
   }
 
@@ -169,7 +190,7 @@ public class PlayGameScene extends GameScene {
     }
     else if (key.getCode().equals(KeyCode.ENTER)){
       scoreField.clear();
-      updateErrorText(SCORE_ERROR);
+      updateErrorText(getValueFromBundle("SCORE_ERROR"));
     }
   }
 
@@ -183,13 +204,14 @@ public class PlayGameScene extends GameScene {
       leaderboard.addScoreTuple(tuple);
     }
     catch (Exception e) {
-       e.printStackTrace();
+      updateErrorText(getValueFromBundle("FINAL_SCORE_ERROR"));
     }
 
     clearFields();
     currentLevel.setIsSaving(false);
     currentLevel.reinitialize();
     pauseLevel();
+    updateErrorText(getValueFromBundle("RestartInstructions"));
   }
 
   /**
@@ -202,7 +224,7 @@ public class PlayGameScene extends GameScene {
   public void inputScore(String path, Level level) {
     scorePath = path;
     currentLevel = level;
-    updateErrorText(SCORE_INSTRUCTIONS);
+    updateErrorText(getValueFromBundle("SCORE_INSTRUCTIONS"));
     scoreField.setVisible(true);
     currentLevel.setIsSaving(true);
   }
