@@ -32,7 +32,6 @@ public class PlayGameScene extends GameScene {
   private static final String[] bannedCharacters = {"/", ".", "\\"};
 
   private Level currentLevel;
-  private Level scoreLevel;
   private String scorePath;
   private TextField scoreField;
   private TextField saveField;
@@ -79,9 +78,10 @@ public class PlayGameScene extends GameScene {
   private void buildTextField(TextField field) {
     field.setMinWidth(WIDTH/8);
     field.setMinHeight(HEIGHT/20);
-    field.setLayoutX(WIDTH/2 - saveField.getMinWidth());
-    field.setLayoutY(HEIGHT/2 - saveField.getMinHeight());
+    field.setLayoutX(WIDTH/2 - field.getMinWidth());
+    field.setLayoutY(HEIGHT/2 - field.getMinHeight());
     field.setVisible(false);
+    field.toFront();
   }
 
   /**
@@ -92,6 +92,8 @@ public class PlayGameScene extends GameScene {
     buildTextField(scoreField);
     scoreField.setId(SCOREFIELD_ID);
     scoreField.setOnKeyPressed(event -> attemptScoreSave(event));
+
+    addElementToRoot(scoreField);
   }
 
   /**
@@ -101,7 +103,7 @@ public class PlayGameScene extends GameScene {
     currentLevel = level;
     updateErrorText(SAVE_INSTRUCTIONS);
     saveField.setVisible(true);
-    level.getKeyPressFunctions().pauseGame();
+    currentLevel.setIsSaving(true);
   }
 
   /**
@@ -153,12 +155,8 @@ public class PlayGameScene extends GameScene {
     GameSaver saver = new GameSaver(currentLevel);
     saver.writeNewLevelCSVFile(SAVE_FILEPATH + saveField.getText() + CSV_EXTENSION);
 
-    saveField.clear();
-    saveField.setVisible(false);
-
-    updateErrorText("");
-    hideErrorText();
-    currentLevel.getKeyPressFunctions().resumeGame();
+    clearFields();
+    currentLevel.setIsSaving(false);
   }
 
   /**
@@ -181,16 +179,16 @@ public class PlayGameScene extends GameScene {
   private void finalizeScoreSave() {
     try {
       GameLeaderboard leaderboard = new GameLeaderboard(scorePath);
-      ScoreTuple tuple = new ScoreTuple(scoreField.getText(), scoreLevel.getScore());
+      ScoreTuple tuple = new ScoreTuple(scoreField.getText(), currentLevel.getScore());
       leaderboard.addScoreTuple(tuple);
-
     }
     catch (IOException fnfe) {
-
+       fnfe.printStackTrace();
     }
-    scoreField.setVisible(false);
-    scoreField.clear();
-    scoreLevel.reinitialize();
+
+    clearFields();
+    currentLevel.setIsSaving(false);
+    currentLevel.reinitialize();
   }
 
   /**
@@ -202,8 +200,25 @@ public class PlayGameScene extends GameScene {
    */
   public void inputScore(String path, Level level) {
     scorePath = path;
-    scoreLevel = level;
+    currentLevel = level;
     updateErrorText(SCORE_INSTRUCTIONS);
     scoreField.setVisible(true);
+    currentLevel.setIsSaving(true);
+  }
+
+  /**
+   * Clears all of the text fields and the error labels and resumes the game
+   */
+  public void clearFields() {
+    scoreField.setVisible(false);
+    scoreField.clear();
+
+    saveField.setVisible(false);
+    saveField.clear();
+
+    updateErrorText("");
+    hideErrorText();
+
+    currentLevel.setIsSaving(false);
   }
 }

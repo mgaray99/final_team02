@@ -40,6 +40,7 @@ public class Level {
   private int score;
   private boolean levelLost;
   private boolean levelWon;
+  private boolean isSaving;
 
   public Level(LevelLoader levelLoader) {
     this.scroller = new AutoScroller(0,0, false);
@@ -313,15 +314,16 @@ public class Level {
   public void reinitialize() {
     loader.reinitialize();
     setOrResetLevel(loader);
+
     scroller.reset();
     levelLost = false;
   }
 
-  void setLevelWon(boolean isLevelWon) {
+  public void setLevelWon(boolean isLevelWon) {
     this.levelWon = isLevelWon;
   }
 
-  void setLevelLost(boolean isLevelLost) {
+  public void setLevelLost(boolean isLevelLost) {
     this.levelLost = isLevelLost;
   }
 
@@ -355,6 +357,22 @@ public class Level {
    */
   public boolean isLevelLost() {
     return levelLost;
+  }
+
+  /**
+   * Reveals if we're saving the game
+   * @return isSaving
+   */
+  public boolean isSaving() {
+    return isSaving;
+  }
+
+  /**
+   * Sets a variable to show if we're saving the game
+   * @param save the indicator for if we're saving
+   */
+  public void setIsSaving(boolean save) {
+    isSaving = save;
   }
 
 }

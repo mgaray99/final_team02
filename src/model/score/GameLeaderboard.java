@@ -72,7 +72,7 @@ public class GameLeaderboard {
   /**
    * Sorts the list of scores so that the highest one is at the top
    */
-  private void sortScoresList() {
+  public void sortScoresList() {
     Collections.sort(scoresList);
   }
 

@@ -130,16 +130,20 @@ public class GameView extends Application {
     }
 
     if (model.getLevel().isLevelLost()) {
-        System.out.println("hi");
-        playGameScene.inputScore(configPath, model.getLevel());
+        playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
+        model.getLevel().setLevelLost(false);
     }
+    else if (model.getLevel().isSaving()) {
 
-    model.updateGame();
+    }
+    else {
 
-    List<IEntity> entityList = model.getAllEntitiesInLevel();
-    texturer.updateTextures(entityList, 15, 15);
-    playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
+      model.updateGame();
 
+      List<IEntity> entityList = model.getAllEntitiesInLevel();
+      texturer.updateTextures(entityList, 15, 15);
+      playGameScene.updateErrorText("Score: " + Integer.toString(getScore()));
+    }
   }
 
   /**
@@ -220,6 +224,7 @@ public class GameView extends Application {
         }
       }
       catch (Exception e) {
+        e.printStackTrace();
         System.out.println("bad reflection");
       }
   }
@@ -249,9 +254,11 @@ public class GameView extends Application {
    * @param scene the scene to become the new scene
    */
   private void setScene(Scene scene) {
-    lastScene = currentScene;
-    stage.setScene(scene);
-    currentScene = scene;
+    if (!model.getLevel().isSaving()) {
+      lastScene = currentScene;
+      stage.setScene(scene);
+      currentScene = scene;
+    }
   }
 
   /**
@@ -308,6 +315,7 @@ public class GameView extends Application {
    */
   public void switchToHighScoresScreen() {
     setScene(displayHighScore);
+    displayHighScore.updateLeaderboards();
   }
 
   /**
@@ -340,7 +348,9 @@ public class GameView extends Application {
   /**
    * Starts the game
    */
-  public void start() { setScene(playGameScene); }
+  public void start() {
+    setScene(playGameScene);
+  }
 
   /**
    * Returns to the home screen
