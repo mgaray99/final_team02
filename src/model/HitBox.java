@@ -18,7 +18,6 @@ public class HitBox {
   public static final double MAX_TOP_INTERSECT = 0.35;
   public static final double MAX_BOTTOM_INTERSECT = 1 - MAX_TOP_INTERSECT;
   public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0.005;
-  //public static final double CORNER_GLITCH_AVOIDANCE_OFFSET = 0;
   public static final int X_SIZE = 1;
   public static final int Y_SIZE = 1;
   double xLeft;

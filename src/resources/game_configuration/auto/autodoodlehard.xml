@@ -39,4 +39,12 @@
     <numrows>R(1,2;0.8,0.2)</numrows>
     <numcols>R(1,2;0.8,0.2)</numcols>
   </random>
+  <random>
+    <entity>4</entity>
+    <direction>RIGHT:DOWN</direction>
+    <originrow>U(0:7)</originrow>
+    <origincol>U(0:12)</origincol>
+    <numrows>1</numrows>
+    <numcols>1</numcols>
+  </random>
 </generator>
