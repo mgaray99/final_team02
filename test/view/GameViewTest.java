@@ -9,6 +9,10 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import model.GameModel;
 import model.Level;
+import model.configuration.EntityFactory;
+import model.configuration.GameConfiguration;
+import model.configuration.InvalidFileException;
+import model.configuration.LevelLoader;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -16,7 +20,7 @@ import util.DukeApplicationTest;
 /**
  * Tests the GameView class for its ability to switch between scenes and perform various functions
  */
-class GameViewTest extends DukeApplicationTest {
+public class GameViewTest extends DukeApplicationTest {
 
     private GameView view;
     private Stage stage;
@@ -279,6 +283,82 @@ class GameViewTest extends DukeApplicationTest {
     assertEquals(DEFAULT_TEXTURE_PATH, view.getTexturerPath());
     javafxRun(() -> view.switchTextures("mariotextures"));
     assertEquals(ALTERNATE_TEXTURE_PATH, view.getTexturerPath());
+  }
+
+  /**
+   * Tests that when the player attains a win condition, the level moves to the next one (i.e.
+   * stays with currentScene.getSceneId() = GAME and switches the configPath to
+   * mariolevel2.properties
+   */
+  @Test
+  public void testSimpleGoal() throws InvalidFileException {
+    javafxRun(() -> view.start());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+
+    GameConfiguration gameConfiguration = new GameConfiguration("supermario.properties");
+    view.setModel(new GameModel(gameConfiguration));
+
+    view.getModel().getLevel().setLevelWon(true);
+    javafxRun(() -> view.update());
+
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals("mariolevel2.properties", view.getConfigPath());
+  }
+
+  /**
+   * Tests that when the player attains a win condition, and the level is the final one in the
+   * chain, the correct thing happens (i.e. view stays with currentScene.getSceneId() = GAME
+   * and keeps the configPath to mariolevel2.properties)
+   */
+  @Test
+  public void testFinishGoal() throws InvalidFileException {
+    javafxRun(() -> view.start());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+
+    GameConfiguration gameConfiguration = new GameConfiguration("supermario.properties");
+    view.setModel(new GameModel(gameConfiguration));
+
+    view.getModel().getLevel().setLevelWon(true);
+    javafxRun(() -> view.update());
+
+    // Win a second time in level 2
+    view.getModel().getLevel().setLevelWon(true);
+    javafxRun(() -> view.update());
+
+    // Win a third time in level 3 - this time don't change levels since it's the last in the chain
+    view.getModel().getLevel().setLevelWon(true);
+    javafxRun(() -> view.update());
+
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals("mariolevel3.properties", view.getConfigPath());
+  }
+
+  /**
+   * Tests that when the player attains a win condition, and the level is the final one in the
+   * chain, the correct thing happens (i.e. view stays with currentScene.getSceneId() = GAME
+   * and keeps the configPath to mariolevel2.properties)
+   */
+  @Test
+  public void testInvalidGoal() throws InvalidFileException {
+    javafxRun(() -> view.start());
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+
+    GameConfiguration gameConfiguration = new GameConfiguration("marioleveltest.properties");
+    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+    view.getModel().getLevel().setOrResetLevel(levelLoader);
+
+    view.getModel().getLevel().setLevelWon(true);
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    javafxRun(() -> view.update());
+
+    currentScene = stage.getScene();
+    assertEquals(((GameScene)currentScene).getSceneId(), "GAMEVERSION");
   }
 
 }

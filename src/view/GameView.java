@@ -135,7 +135,7 @@ public class GameView extends Application {
   /**
    * Updates the view
    */
-  private void update() {
+  public void update() {
     if (!currentScene.equals(playGameScene)) {
       return;
     }
@@ -438,6 +438,14 @@ public class GameView extends Application {
    */
   GameModel getModel() {
     return model;
+  }
+
+  /**
+   * For testing - set model = m
+   * @param m the model to replace GameView's current model
+   */
+  void setModel(GameModel m) {
+    model = m;
   }
 
   /**
