@@ -12,7 +12,6 @@ import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameModel;
@@ -140,25 +139,77 @@ public class GameView extends Application {
     if (!currentScene.equals(playGameScene)) {
       return;
     }
-
-    if (model.getLevel().isLevelLost()) {
-        playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
-        model.getLevel().setLevelLost(false);
+    else if (model.getLevel().isLevelLost()) {
+      levelLost();
+    }
+    else if (model.getLevel().isLevelWon()) {
+      levelWon();
     }
     else if (!model.getLevel().isSaving()){
-      model.updateGame();
+      normalUpdate();
+    }
+  }
 
-      List<IEntity> entityList = model.getAllEntitiesInLevel();
-      texturer.updateTextures(entityList, 15, 15);
-      playGameScene.updateScoreText(currentScene.getValueFromBundle(SCORE_LABEL)
-          + ": " + (getScore()));
+  /**
+   * Updates the game in a situation where normal gameplay is occurring (i.e. the player in the
+   * "play game" screen and has neither lost nor won and is not saving the game or their score)
+   */
+  private void normalUpdate() {
+    model.updateGame();
+    List<IEntity> entityList = model.getAllEntitiesInLevel();
+    texturer.updateTextures(entityList, 15, 15);
+    playGameScene.updateScoreText(currentScene.getValueFromBundle(SCORE_LABEL)
+        + ": " + (getScore()));
+  }
+
+  /**
+   * Handles the situation where the level has been lost
+   */
+  private void levelLost() {
+    playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
+    model.getLevel().setLevelLost(false);
+  }
+
+  /**
+   * Handles the situation where the level has been one
+   */
+  private void levelWon() {
+    String nextLevel = model.getNextConfigFilePath();
+
+    if (nextLevel != null && nextLevel.equals("Goal")) {
+      finishedFinalLevel();
+    }
+    else {
+      loadNextLevel(nextLevel);
+    }
+    model.getLevel().setLevelWon(false);
+  }
+
+  /**
+   * Handles the situation where the user has just completed the final level in a finite
+   * level chain (i.e. finished level 3, 3 is the last level
+   */
+  private void finishedFinalLevel() {
+    playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
+  }
+
+  /**
+   * Attempts to load the next level, and if an error occurs, sends the user back to the menu
+   */
+  private void loadNextLevel(String nextLevel) {
+    configPath = nextLevel;
+    buildModel();
+    String badConfig = currentScene.getValueFromBundle("BUILD_MODEL_ERROR");
+
+    if (currentScene.getErrorText().equals(badConfig)) {
+        setScene(selectGameScene);
+        selectGameScene.updateErrorText(badConfig);
     }
   }
 
   /**
    * gets score from model
    */
-
   private int getScore() {return model.getScore();}
 
 

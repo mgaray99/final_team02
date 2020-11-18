@@ -10,6 +10,7 @@ public class GameConfiguration {
     private static final String SCROLLER_KEY = "scroller";
     private static final String AUTO_KEY = "autofile";
     private static final String PLAYER_KEY = "player";
+    private static final String NEXT_FILE_KEY = "nextfile";
     private static final String HIGH_SCORES_KEY = "leaderboard";
     private static final String DEFAULT_LEVEL_FILEPATH = "./data/";
     private static final String ROOT_SOURCE_INDICATOR = "./";
@@ -68,6 +69,14 @@ public class GameConfiguration {
      * @return the String corresponding to the high score path
      */
     public String getHighScoresPath() { return properties.getProperty(HIGH_SCORES_KEY); }
+
+    /**
+     * Returns the String path pointing to the next .properties file used to build a level
+     * (this may be NA if no such next file exists or Goal if the current file is the last one
+     * one the chain)
+     * @return the String corresponding to the next level's .properties file
+     */
+    public String getNextConfigFilePath() { return properties.getProperty(NEXT_FILE_KEY); }
 
     /**
      * Determines the String array containing data necessary to build a Scroller
