@@ -1,6 +1,8 @@
 package controller;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +23,7 @@ public class KeyInputterTest extends DukeApplicationTest {
 
   private KeyInputter testInputter;
 
-  private static final String DJ_INPUTS = "resources/keyinputs/doodlejumpkeyinputs.properties";
+  private static final String DJ_INPUTS = "doodlejumpkeyinputs.properties";
   private static final String DEFAULT_PAUSE = "P";
   private static final String DEFAULT_UP = "W";
   private static final String DEFAULT_RIGHT = "D";
@@ -161,20 +163,16 @@ public class KeyInputterTest extends DukeApplicationTest {
   }
 
   @Test
-  public void testSwitchKeyInputSourceFile() throws InvalidFileException {
-    testInputter.loadKeyInputsFromFile(DJ_INPUTS);
+  public void testSwitchKeyInputSourceFile() {
+    assertDoesNotThrow(() -> testInputter.loadKeyInputsFromFile(DJ_INPUTS));
   }
 
   /**
    * Tests the situation where the user tries to switch the
    */
   @Test
-  public void testSwitchKeyInputBadSourceFile() throws InvalidFileException {
-    testInputter.loadKeyInputsFromFile("hi");
-    testRight();
-    testLeft();
-    testUp();
-    testPause();
+  public void testSwitchKeyInputBadSourceFile() {
+    assertThrows(InvalidFileException.class, () -> testInputter.loadKeyInputsFromFile("hi"));
   }
 
   /**

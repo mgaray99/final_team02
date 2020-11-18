@@ -155,6 +155,8 @@ public class LevelLoader {
         this.enemyList.clear();
         this.powerUpList.clear();
         this.entityList.clear();
+        this.winnableList.clear();
+        this.movableEntityList.clear();
 
         List<IEntity> concurrentEntityCopy = defensivelyCopyList(entityCopy);
         concurrentEntityCopy.forEach(entity -> addEntityToLists(entity));

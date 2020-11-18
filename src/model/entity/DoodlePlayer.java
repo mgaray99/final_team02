@@ -6,6 +6,7 @@ import model.collision.Direction;
 public class DoodlePlayer extends Player {
 
   private static final double DOODLE_JUMP_SPEED = -0.4;
+  private static final double POWER_JUMP_SPEED = -0.6;
   private final double MOVEMENT_SPEED = 0.2;
 
   public DoodlePlayer(double x, double y) {
@@ -34,5 +35,10 @@ public class DoodlePlayer extends Player {
       this.setYVel(DOODLE_JUMP_SPEED);
     }
     this.translateHitBox();
+  }
+
+  @Override
+  public void applyModifier(Modifier modifier){
+    this.setYVel(POWER_JUMP_SPEED);
   }
 }

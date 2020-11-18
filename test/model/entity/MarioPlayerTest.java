@@ -1,10 +1,15 @@
 package model.entity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import model.GameModel;
+import model.Level;
+import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
+import model.configuration.LevelLoader;
+import model.scroll.Scroller;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -77,6 +82,39 @@ public class MarioPlayerTest extends DukeApplicationTest {
     }
     double newYPos = player.getHitBox().getYTop();
     assertTrue(Math.abs(newYPos - oldYPos) < 1);
+  }
+
+  /**
+   * Checks to make sure that if the player tries to go offscreen to the left, their
+   * xLeft is reverted to be just tangent to the edge of the screen
+   */
+  @Test
+  public void PlayerStaysInBoundsLeftTest() {
+    Level level = gameModel.getLevel();
+
+    Player player = level.getPlayerList().get(0);
+    player.getHitBox().setXLeft(-5);
+    assertEquals(-5, player.getHitBox().getXLeft());
+
+    level.step();
+    assertEquals(0, player.getHitBox().getXLeft());
+
+  }
+
+  /**
+   * Checks to make sure that if the player tries to go offscreen to the right, their
+   * xRight is reverted to be just tangent to the edge of the screen
+   */
+  @Test
+  public void PlayerStaysInBoundsRightTest() {
+    Level level = gameModel.getLevel();
+
+    Player player = level.getPlayerList().get(0);
+    player.getHitBox().setXRight(Scroller.NUM_BLOCKS + 2);
+    assertEquals(Scroller.NUM_BLOCKS + 2, player.getHitBox().getXRight());
+
+    level.step();
+    assertEquals(Scroller.NUM_BLOCKS, player.getHitBox().getXRight());
   }
 
 }
