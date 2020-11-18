@@ -18,6 +18,9 @@ public class HighScoreScene extends GameScene {
     private static final String DOODLE_LEADERBOARD = "doodlejumpleaderboard.csv";
     private static final String FLAPPY_LEADERBOARD = "flappybirdleaderboard.csv";
     private static final String EGG_LEADERBOARD = "eggleaderboard.csv";
+    private static final String LEADERBOARD_LOAD_ERROR = "LEADERBOARD_LOAD_ERROR";
+    private static final String LEADERBOARD_UPDATE_ERROR = "LEADERBOARD_UPDATE_ERROR";
+
 
     private static final double LEADERBOARDY = 300;
     private static final double LEADERBOARD_WIDTH = 100;
@@ -56,9 +59,8 @@ public class HighScoreScene extends GameScene {
             addElementToRoot(view);
             view.toFront();
         }
-        catch(Exception e) {
-            e.printStackTrace();
-            System.out.println("couldn't build leaderboard");
+        catch (Exception e) {
+            updateErrorText(getValueFromBundle(LEADERBOARD_LOAD_ERROR));
         }
     }
 
@@ -71,7 +73,7 @@ public class HighScoreScene extends GameScene {
                 leader.updateLeaderboard();
             }
             catch (FileNotFoundException e) {
-                System.out.println("error in loading leaderboards");
+                updateErrorText(getValueFromBundle(LEADERBOARD_UPDATE_ERROR));
             }
         }
     }

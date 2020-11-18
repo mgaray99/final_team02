@@ -12,14 +12,14 @@ import util.DukeApplicationTest;
 /**
  * Tests whether the PlayerEntity can actually move
  */
-public class PlayerMovementTest extends DukeApplicationTest {
+public class MarioPlayerTest extends DukeApplicationTest {
 
-  private static final String TEST_LEVEL_FILE_PATH = "playerMovementTestLevel.properties";
+  private static final String TEST_LEVEL_FILE_PATH = "marioMovementTestLevel.properties";
 
   GameModel gameModel = new GameModel(new GameConfiguration(TEST_LEVEL_FILE_PATH, this.getClass()));
   Player player = gameModel.getLevel().getPlayerList().get(0);
 
-  public PlayerMovementTest() throws InvalidFileException {
+  public MarioPlayerTest() throws InvalidFileException {
   }
 
 

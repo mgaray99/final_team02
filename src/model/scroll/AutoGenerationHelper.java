@@ -27,7 +27,6 @@ public class AutoGenerationHelper {
       currentGeneration = generator.generateNextBlock();
     }
     catch (Exception e) {
-      e.printStackTrace();
       throw new GenerationException("");
     }
   }

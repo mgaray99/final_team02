@@ -2,10 +2,14 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
 
 public class KeyBinder extends Group {
@@ -20,20 +24,23 @@ public class KeyBinder extends Group {
     private static final double COLUMN2X = 3 * WIDTH /4;
     private static final double CENTERX= WIDTH / 2;
     private static final double UPDATE_LABEL_Y = HEIGHT/16;
-    private static final String UPDATE_LABEL_TEXT = "Press a key to replace ";
-    private static final String BAD_KEY_TEXT = "That key is invalid!";
-    private static final String WAITING_FOR_UPDATE_TEXT = "Press a button to update controls";
+    private static final String UPDATE_LABEL_TEXT = "UpdateLabelText";
+    private static final String BAD_KEY_TEXT = "BadKeyText";
+    private static final String WAITING_FOR_UPDATE_TEXT = "WaitingForUpdateText";
     private static final String UPDATE_ID = "UPDATE";
     private boolean isUpdatingKey;
     private String currentKeyBeingUpdated;
     private Text updateLabel;
+    private ResourceBundle bundle;
 
-    public KeyBinder() {
+    public KeyBinder(ResourceBundle resourceBundle) {
+        this.prefWidth(WIDTH);
+        this.prefHeight(HEIGHT);
+        bundle = resourceBundle;
         isUpdatingKey = false;
         currentKeyBeingUpdated = "";
         setFocusTraversable(true);
         setFocused(true);
-
         buildUpdateLabel();
     }
 
@@ -41,9 +48,10 @@ public class KeyBinder extends Group {
    * Builds the update label, inserts it into this root node and makes it invisible
    */
   private void buildUpdateLabel() {
-      updateLabel = new Text(WAITING_FOR_UPDATE_TEXT);
+      updateLabel = new Text(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
       updateLabel.setId(UPDATE_ID);
-      updateLabel.setLayoutX(CENTERX - updateLabel.getWrappingWidth()/2);
+
+      updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth()/2);
       updateLabel.setLayoutY(UPDATE_LABEL_Y - updateLabel.getLayoutBounds().getHeight());
     }
 
@@ -55,6 +63,7 @@ public class KeyBinder extends Group {
   public void updateKeyInputScreen(KeyInputter in) {
         prepareUpdate(in);
         fillScreenWithKeyMap();
+        refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
   }
 
   /**
@@ -116,7 +125,7 @@ public class KeyBinder extends Group {
   private void enableUpdate(String currentKey) {
         isUpdatingKey = true;
         currentKeyBeingUpdated = currentKey;
-        updateLabel.setText(UPDATE_LABEL_TEXT + currentKey);
+        refactorUpdateLabel(getValueFromBundle(UPDATE_LABEL_TEXT) + currentKey);
     }
 
   /**
@@ -129,7 +138,7 @@ public class KeyBinder extends Group {
    void handleKey(KeyEvent event) {
       if (isUpdatingKey) {
         isUpdatingKey = false;
-        updateLabel.setText(WAITING_FOR_UPDATE_TEXT);
+        refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
         updateKeyBinding(event.getCode().toString());
       }
     }
@@ -149,7 +158,37 @@ public class KeyBinder extends Group {
       inputter.swapKeyInput(currentKeyBeingUpdated, userKey);
     }
     else {
-      updateLabel.setText(BAD_KEY_TEXT);
+      refactorUpdateLabel(getValueFromBundle(BAD_KEY_TEXT));
     }
+  }
+
+  /**
+   * Returns the value corresponding to key in the resouce bundle
+   * @param key the key in resourceBundle
+   * @return the value in resourceBundle
+   */
+  public String getValueFromBundle(String key) {
+    String value = bundle.getString(key);
+    if (value!=null) {
+      return value;
+    }
+    return "";
+  }
+
+  /**
+   * Refactors the text in updateLabel and recenters it
+   * @param newText the new text to be displayed to updateLabel
+   */
+  private void refactorUpdateLabel(String newText) {
+    updateLabel.setText(newText);
+    updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth()/2);
+  }
+
+  /**
+   * Sets the bundle from which labels are translated to resourceBundle
+   * @param resourceBundle the new bundle
+   */
+  public void setBundle(ResourceBundle resourceBundle) {
+    bundle = resourceBundle;
   }
 }
