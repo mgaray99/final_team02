@@ -53,7 +53,7 @@ public class GameLeaderboardTest extends DukeApplicationTest {
     String tupleLine = leaderboard.getScoreTupleAtPlace(0);
     assertEquals("", tupleLine);
 
-    tupleLine = leaderboard.getScoreTupleAtPlace(4);
+    tupleLine = leaderboard.getScoreTupleAtPlace(30);
     assertEquals("", tupleLine);
   }
 

@@ -90,6 +90,14 @@ public class GameModel {
     }
 
     /**
+     * Returns the String path pointing to the next .properties file used to build a level
+     * (this may be NA if no such next file exists or Goal if the current file is the last one
+     * one the chain)
+     * @return the String nextConfigFilePath
+     */
+    public String getNextConfigFilePath() { return gameConfiguration.getNextConfigFilePath(); }
+
+    /**
      * Returns the level of this model
      * @return level
      */

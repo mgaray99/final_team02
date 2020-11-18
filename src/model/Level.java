@@ -120,6 +120,7 @@ public class Level {
   private void updatePositions(){
     for (Player player : this.playerList) {
       player.updatePosition();
+      keepPlayerInBounds(player);
     }
     for (Enemy enemy : this.enemyList) {
       enemy.updatePosition();
@@ -250,6 +251,22 @@ public class Level {
     return Optional.empty();
   }
 
+  /**
+   * Makes sure that the player is within bounds (i.e. xleft > 0 and xright <
+   * scroller.NUM_BLOCKS or the num blocks wide and tall on display) and if
+   * not, places that player within bounds
+   *
+   * @param player the player whose bounds will be checked
+   */
+  private void keepPlayerInBounds(Player player) {
+      if (player.getHitBox().getXLeft() < 0) {
+        player.getHitBox().setXLeft(0);
+      }
+      else if (player.getHitBox().getXRight() > scroller.NUM_BLOCKS) {
+        player.getHitBox().setXRight(scroller.NUM_BLOCKS);
+      }
+  }
+
   private void checkWinLoseConditions(){
     if (playerList.size() == 0) {
       setLevelLost(true);
@@ -292,6 +309,7 @@ public class Level {
 
     scroller.reset();
     levelLost = false;
+    levelWon = false;
   }
 
   public void setLevelWon(boolean isLevelWon) {

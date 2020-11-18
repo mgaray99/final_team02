@@ -54,6 +54,10 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
       ISpawner spawner = (ISpawner) entity;
       spawner.attemptCreateAndAddSpawn(collision);
     }
+    if (entity instanceof IWinnable && !collision.isEmpty()) {
+      IWinnable goal = (IWinnable) entity;
+      goal.setHasWon(true);
+    }
   }
 
   @Override
