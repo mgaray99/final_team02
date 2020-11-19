@@ -19,6 +19,7 @@ public class LevelTest extends DukeApplicationTest {
   private static final int DEFAULTY = 6;
 
   private Level level;
+  private ILevelLoader lev;
 
   @Override
   public void start(Stage stage) throws InvalidFileException {
@@ -26,7 +27,7 @@ public class LevelTest extends DukeApplicationTest {
     IGameConfiguration game = new GameConfiguration("doodlejump.properties");
     EntityFactory factory = new EntityFactory();
     factory.updatePlayerMapping("DoodlePlayer");
-    ILevelLoader lev = new LevelLoader(game.getLevelFile(), factory);
+    lev = new LevelLoader(game.getLevelFile(), factory);
     level = new Level(lev);
   }
 
@@ -51,5 +52,11 @@ public class LevelTest extends DukeApplicationTest {
       level.step();
 
       assertTrue(level.isLevelLost());
+
+      level.reinitialize();
+      player = level.getPlayerList().get(0);
+
+      assertEquals(DEFAULTX, player.getHitBox().getXLeft());
+      assertEquals(DEFAULTY, player.getHitBox().getYTop());
     }
 }
