@@ -20,6 +20,7 @@ public class Level implements ILevel {
   public static final int FRAMES_PER_SECOND = 60;
   public static final int MODIFIER_DURATION = 10;
   public static final double MODIFIER_VALUE = 1.5;
+  private static final int ENEMY_SCORE = 100;
   public api.model.IKeyPressFunctions IKeyPressFunctions = new KeyPressFunctions();
 
   private Scroller scroller;
@@ -249,6 +250,7 @@ public class Level implements ILevel {
     }
     if (entity instanceof Enemy) {
       this.enemyList.remove(entity);
+      score+=ENEMY_SCORE;
     }
     if (entity instanceof Player) {
       this.playerList.remove(entity);
