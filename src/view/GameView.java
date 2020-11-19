@@ -90,6 +90,7 @@ public class GameView extends Application implements IGameView {
       resetScenes();
 
       stage.setScene(menuScene);
+      stage.setResizable(false);
       stage.show();
   }
 
