@@ -20,6 +20,7 @@ public class KeyInputter {
   private Map<String, String> keyToMethodMap;
   private String lastMethodFromKeyPress;
   private static final String FILEPATH_START = "resources/keyinputs/";
+  private static final String KEY_METHOD_ERROR = "KEY_METHOD_ERROR";
   private final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
   public KeyInputter(GameModel model) throws InvalidFileException {
@@ -74,7 +75,7 @@ public class KeyInputter {
    *
    * @param press the String representation of the key that has been pressed
    */
-  public void keyPressed(String press) {
+  public void keyPressed(String press) throws KeyInputterMissingMethodException{
     if (keyToMethodMap.containsKey(press)) {
       String methodPath = keyToMethodMap.get(press);
       invokeMethod(methodPath);
@@ -87,7 +88,7 @@ public class KeyInputter {
    *
    * @param press the String representation of the key that has been pressed
    */
-  public void keyReleased(String press) {
+  public void keyReleased(String press) throws KeyInputterMissingMethodException {
     if (keyToMethodMap.containsKey(press)) {
       String methodPath = keyToMethodMap.get(press) + "Release";
       invokeMethod(methodPath);
@@ -100,14 +101,13 @@ public class KeyInputter {
    *
    * @param methodPath the String representation of the method to be called
    */
-  private void invokeMethod(String methodPath) {
+  private void invokeMethod(String methodPath) throws KeyInputterMissingMethodException {
     try {
       Method method = methodCaller.getClass().getDeclaredMethod(methodPath);
       method.invoke(methodCaller);
       lastMethodFromKeyPress = methodPath;
     } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("the method attached to that key input broke");
+      throw new KeyInputterMissingMethodException(KEY_METHOD_ERROR);
     }
   }
 

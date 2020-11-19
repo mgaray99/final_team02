@@ -1,5 +1,6 @@
 package view.scenes;
 
+import controller.BuilderInstantiationException;
 import controller.ImageBuilder;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -27,12 +28,18 @@ public class MenuScene extends GameScene {
   private void addImagesToHomeScreen() {
     Node background = lookupElementInRoot("background");
     removeElementFromRoot(background);
-    ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
-        HOME_IMAGES_PATH);
 
-    for (ImageView view: image.getFoundImages()) {
-      addElementToRoot(view);
-      view.toBack();
+    try {
+      ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
+          HOME_IMAGES_PATH);
+
+      for (ImageView view : image.getFoundImages()) {
+        addElementToRoot(view);
+        view.toBack();
+      }
+    }
+    catch (BuilderInstantiationException bie) {
+      updateErrorText(getValueFromBundle(bie.getMessage()));
     }
   }
 }

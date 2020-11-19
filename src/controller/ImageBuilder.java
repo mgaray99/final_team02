@@ -42,6 +42,7 @@ public class ImageBuilder extends Builder {
     private static final String IMAGE_WIDTH = "width";
     private static final String IMAGE_HEIGHT = "height";
     private static final String PATH = "path";
+    protected static final String BUILDER_EXCEPTION = "IMAGE_ERROR";
 
     /**
      * Instantiates a new ButtonBuilder object
@@ -50,14 +51,14 @@ public class ImageBuilder extends Builder {
      * @param h    the HEIGHT of the area in which buttons can be placed
      * @param path the filepath leading to the .txt file containing data on the button
      */
-    public ImageBuilder(double w, double h, String path) {
+    public ImageBuilder(double w, double h, String path) throws BuilderInstantiationException{
         super(w,h);
         foundImages = new ArrayList<>();
         try {
             makeImages(path);
         } catch (Exception e) {
-            System.out.println("Couldn't build images at " + path);
-
+            throw new BuilderInstantiationException(
+                BUILDER_EXCEPTION);
         }
     }
 

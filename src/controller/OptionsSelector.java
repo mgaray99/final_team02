@@ -52,7 +52,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    * @param h the height of the visible pane that the OptionsSelector will fill
    * @param c the list of choices that will fill the OptionsSelector
    */
-  public OptionsSelector(double w, double h, List<String> c) {
+  public OptionsSelector(double w, double h, List<String> c) throws BuilderInstantiationException {
     WIDTH = w;
     HEIGHT = h;
     choosableOptionOffset = 0;
@@ -80,16 +80,12 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    * Creates the buttons associated with this OptionsSelector using a ButtonBuilder reading from a
    * config file as specified by OPTIONS_SELECTOR_CONFIG_PATH
    */
-  private void buildButtons() {
-    try {
+  private void buildButtons() throws BuilderInstantiationException {
       ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT,
           OPTIONS_SELECTOR_CONFIG_PATH, this);
       if (builder.getStateReferenced().equals(TITLE)) {
         super.getChildren().addAll(builder.getFoundButtons());
       }
-    } catch (ButtonBuilderInstantiationException bbie) {
-      System.out.println("couldn't build buttons");
-    }
   }
 
   /**
@@ -104,7 +100,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
       getClass().getDeclaredMethod(type).invoke(this);
     }
     catch (Exception e) {
-      System.out.println("that method does not exist");
+      //DO NOTHING
     }
   }
 

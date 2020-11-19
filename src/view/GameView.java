@@ -3,6 +3,7 @@ package view;
 import controller.GameController;
 import controller.KeyBinder;
 import controller.KeyInputter;
+import controller.KeyInputterMissingMethodException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -252,14 +253,19 @@ public class GameView extends Application {
    * @param key the key that has been pressed
    */
   void keyPressed(String key) {
-    inputter.keyPressed(key);
+    try {
+      inputter.keyPressed(key);
 
-    if (currentScene.equals(menuScene) && key.equals("T")) {
-      configPath = SECRET_CONFIG_PATH;
-      buildModel();
+      if (currentScene.equals(menuScene) && key.equals("T")) {
+        configPath = SECRET_CONFIG_PATH;
+        buildModel();
+      } else if (!model.getLevel().isSaving()) {
+        currentScene.updateErrorText("");
+      }
     }
-    else if (!model.getLevel().isSaving()) {
-      currentScene.updateErrorText("");
+    catch (KeyInputterMissingMethodException kimie) {
+      String message = currentScene.getValueFromBundle(kimie.getMessage());
+      currentScene.updateErrorText(message);
     }
   }
 
@@ -268,7 +274,13 @@ public class GameView extends Application {
    * @param key the key that has been pressed
    */
   void keyReleased(String key) {
-    inputter.keyReleased(key);
+    try {
+      inputter.keyReleased(key);
+    }
+    catch (KeyInputterMissingMethodException kimie) {
+      String message = currentScene.getValueFromBundle(kimie.getMessage());
+      currentScene.updateErrorText(message);
+    }
   }
 
   /**

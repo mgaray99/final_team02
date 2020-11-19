@@ -22,7 +22,7 @@ public class ButtonBuilderTest extends DukeApplicationTest{
   private List<Button> foundButtons;
 
   @Override
-  public void start(Stage stage) throws ButtonBuilderInstantiationException {
+  public void start(Stage stage) throws BuilderInstantiationException {
     builder = new ButtonBuilder(WIDTH, HEIGHT, TEST_PATH, type -> {});
     foundButtons = builder.getFoundButtons();
   }

@@ -48,12 +48,16 @@ public class KeyBinder extends Group {
    * Builds the update label, inserts it into this root node and makes it invisible
    */
   private void buildUpdateLabel() {
-      updateLabel = new Text(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
+      updateLabel = new Text();
       updateLabel.setId(UPDATE_ID);
+      getChildren().add(updateLabel);
 
-      updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth()/2);
+      //updateLabel.setText(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
+      //updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth()/2);
+
       updateLabel.setLayoutY(UPDATE_LABEL_Y - updateLabel.getLayoutBounds().getHeight());
-    }
+      refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
+  }
 
   /**
    * Updates the the key input screen
@@ -73,8 +77,6 @@ public class KeyBinder extends Group {
    */
   private void prepareUpdate(KeyInputter in) {
     inputter = in;
-    getChildren().clear();
-    getChildren().add(updateLabel);
   }
 
   /**
@@ -182,6 +184,7 @@ public class KeyBinder extends Group {
   private void refactorUpdateLabel(String newText) {
     updateLabel.setText(newText);
     updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth()/2);
+
   }
 
   /**
