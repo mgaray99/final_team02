@@ -46,3 +46,8 @@ The four elements that configure in this way are: "dimensions", "base", "random"
           set of probabilities corresponding to each of those values
           
 [!hello](./doc/random.png)
+
+The final step in creating an autogeneration file is to include its name as a value for the key
+"autofile" in the .properties file that specifies a game such as below:
+
+[!hello](./doc/propertiesshot.png)
