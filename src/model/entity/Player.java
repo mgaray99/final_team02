@@ -35,9 +35,6 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
 
   public abstract void updatePosition();
 
-  //public abstract void processCurrentCollision(IEntity entity, CollisionDirections directions);
-
-
   public void checkCollision(IEntity entity) {
     CollisionDirections collision = hitBox.getCollisionDirection(entity.getHitBox());
     currentCollision.add(collision);

@@ -1,6 +1,5 @@
 package model.entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,20 +45,22 @@ public class CollisionDetectionTest extends DukeApplicationTest {
   @Test
   public void collisionBorderlineHitTest() {
     Player player = new MarioPlayer(0, 0);
-    Block block = new Block(4.9,4.9);
+    Block block = new Block(0.99,0.99);
     player.checkCollision(block);
+    assertTrue(player.getCurrentCollision().doesCollide());
+    assertTrue(player.getCurrentCollision().contains(Direction.RIGHT));
     assertTrue(player.getCurrentCollision().contains(Direction.BOTTOM));
-    assertTrue(player.getCurrentCollision().contains(Direction.LEFT));
+    assertFalse(player.getCurrentCollision().contains(Direction.LEFT));
+    assertFalse(player.getCurrentCollision().contains(Direction.TOP));
   }
 
   @Test
   public void collisionBorderlineMissTest() {
     Player player = new MarioPlayer(0, 0);
-    Block block = new Block(5,5);
+    Block block = new Block(1,1);
     player.setXVel(5);
     player.setYVel(5);
     player.checkCollision(block);
-    assertEquals(5, player.getXVel());
-    assertEquals(5, player.getYVel());
+    assertFalse(player.getCurrentCollision().doesCollide());
   }
 }
