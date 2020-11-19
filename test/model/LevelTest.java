@@ -3,11 +3,9 @@ package model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javafx.stage.Stage;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
+import model.configuration.*;
 import model.entity.Player;
+import api.model.configuration.IGameConfiguration;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -25,9 +23,9 @@ public class LevelTest extends DukeApplicationTest {
   @Override
   public void start(Stage stage) throws InvalidFileException {
 
-    GameConfiguration gameConfiguration = new GameConfiguration("doodlejump.properties");
-    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-    level = new Level(levelLoader);
+    IGameConfiguration IGameConfiguration = new GameConfiguration("doodlejump.properties");
+    ILevelLoader ILevelLoader = new LevelLoader(IGameConfiguration.getLevelFile(), new EntityFactory());
+    level = new Level(ILevelLoader);
   }
 
   /**

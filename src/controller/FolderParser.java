@@ -15,9 +15,9 @@ import java.util.Set;
  */
 public class FolderParser {
 
-  private List<String> matchingFilenames;
-  private Set<String> acceptableFileExtensions;
-  private File folder;
+  private final List<String> matchingFilenames;
+  private final Set<String> acceptableFileExtensions;
+  private final File folder;
 
   /**
    * @param path - the filepath leading to the folder to be parsed
@@ -69,8 +69,7 @@ public class FolderParser {
    * @return filenamesFound, which contains the contents of matchingFilenames
    */
   public List<String> getFilenamesFromFolder() {
-    List<String> filenamesFound = new ArrayList<>();
-    filenamesFound.addAll(matchingFilenames);
+    List<String> filenamesFound = new ArrayList<>(matchingFilenames);
     return filenamesFound;
   }
 }

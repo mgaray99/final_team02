@@ -1,4 +1,4 @@
-package model.scroll;
+package api.model.scroll;
 
 import model.Level;
 import model.entity.Player;

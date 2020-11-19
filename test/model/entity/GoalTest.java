@@ -1,11 +1,9 @@
 package model.entity;
 
-import model.GameSaver;
 import model.Level;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
+import model.configuration.*;
+import api.model.configuration.IGameConfiguration;
+import api.model.entity.IEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,9 +21,9 @@ public class GoalTest {
 
     @Test
     public void playerFallsOnGoalAndWinsTest() throws InvalidFileException {
-        GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(levelLoader);
+        IGameConfiguration IGameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
+        ILevelLoader ILevelLoader = new LevelLoader(IGameConfiguration.getLevelFile(), new EntityFactory());
+        Level level = new Level(ILevelLoader);
         Goal goal = null;
         Player player = null;
         for(IEntity entity : level.getCopyOfEntityList()){
@@ -57,9 +55,9 @@ public class GoalTest {
 
     @Test
     public void playerLosesLevel() throws InvalidFileException {
-        GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(levelLoader);
+        IGameConfiguration IGameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
+        ILevelLoader ILevelLoader = new LevelLoader(IGameConfiguration.getLevelFile(), new EntityFactory());
+        Level level = new Level(ILevelLoader);
         Player player = null;
         for(IEntity entity : level.getCopyOfEntityList()){
             if(entity instanceof Player && player == null){

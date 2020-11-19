@@ -6,8 +6,9 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import view.GameScene;
+import api.view.scenes.IMenuScene;
 
-public class MenuScene extends GameScene {
+public class MenuScene extends GameScene implements IMenuScene {
 
     private static final String ID = "HOME_SCREEN";
     private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
@@ -25,7 +26,8 @@ public class MenuScene extends GameScene {
   /**
    * Adds images to the home screen
    */
-  private void addImagesToHomeScreen() {
+  @Override
+  public void addImagesToHomeScreen() {
     Node background = lookupElementInRoot("background");
     removeElementFromRoot(background);
 

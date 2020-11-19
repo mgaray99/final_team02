@@ -1,12 +1,15 @@
 package model.collision;
 
-public enum Direction {
+import api.model.collision.IDirection;
+
+public enum Direction implements IDirection {
   RIGHT,
   LEFT,
   TOP,
   BOTTOM,
   NONE;
 
+  @Override
   public Direction getOpposite(){
     switch (this){
       case TOP -> {

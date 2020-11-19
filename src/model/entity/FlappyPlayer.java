@@ -1,6 +1,7 @@
 package model.entity;
 
-import model.collision.CollisionDirections;
+import api.model.collision.ICollisionHandler;
+import api.model.entity.IEntity;
 
 public class FlappyPlayer extends Player {
 
@@ -14,7 +15,7 @@ public class FlappyPlayer extends Player {
   private boolean immobilized = false;
 
   @Override
-  public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
+  public void processCurrentCollision(IEntity otherEntity, ICollisionHandler directions) {
     if (directions.doesCollide()) {
       this.immobilized = true;
     }

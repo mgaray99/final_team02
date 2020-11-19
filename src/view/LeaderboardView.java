@@ -6,21 +6,24 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.text.Text;
 import model.score.GameLeaderboard;
+import api.model.score.IGameLeaderboard;
+import api.view.ILeaderboardView;
 
-public class LeaderboardView extends Group {
+public class LeaderboardView extends Group implements ILeaderboardView {
 
-  private GameLeaderboard leaderboard;
 
-  private String path;
-  private Text title;
+  private final IGameLeaderboard leaderboard;
+
+  private final String path;
   private List<Text> scoreTexts;
+  private Text title;
 
   private static final int NUM_SCORES = 10;
 
-  private double xOffset;
-  private double yOffset;
-  private double width;
-  private double height;
+  private final double xOffset;
+  private final double yOffset;
+  private final double width;
+  private final double height;
 
   public LeaderboardView(String filepath, double x, double y, double w, double h)
       throws FileNotFoundException {
@@ -40,7 +43,8 @@ public class LeaderboardView extends Group {
   /**
    * Initializes this LeaderboardView object
    */
-  private void initialize() {
+  @Override
+  public void initialize() {
     buildTitle();
     scoreTexts = new ArrayList<>();
 
@@ -52,7 +56,8 @@ public class LeaderboardView extends Group {
   /**
    * Builds the title text label
    */
-  private void buildTitle() {
+  @Override
+  public void buildTitle() {
     title = new Text();
     title.setLayoutX(xOffset + width/4);
     title.setLayoutY(yOffset);
@@ -60,7 +65,8 @@ public class LeaderboardView extends Group {
     getChildren().add(title);
   }
 
-  private void buildScoreText(double index) {
+  @Override
+  public void buildScoreText(double index) {
     Text scoreText = new Text();
     scoreText.setLayoutX(xOffset);
     scoreText.setLayoutY(yOffset + index * 1.0 / NUM_SCORES * height);
@@ -71,8 +77,9 @@ public class LeaderboardView extends Group {
   /**
    * Updates the high scores
    */
+  @Override
   public void updateLeaderboard() throws FileNotFoundException {
-    GameLeaderboard tempBoard = new GameLeaderboard(path);
+    IGameLeaderboard tempBoard = new GameLeaderboard(path);
 
     for (int index = 1; index <=10; index+=1) {
       Text currentScoreText = scoreTexts.get(index - 1);

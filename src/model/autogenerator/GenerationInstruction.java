@@ -1,6 +1,8 @@
 package model.autogenerator;
 
-public abstract class GenerationInstruction {
+import api.model.autogenerator.IGenerationInstruction;
+
+public abstract class GenerationInstruction implements IGenerationInstruction {
 
   protected int numRows;
   protected int numCols;
@@ -32,6 +34,7 @@ public abstract class GenerationInstruction {
   /**
    * @return the row from which to start drawing the entity
    */
+  @Override
   public int getStartRow() {
     return startRow;
   }
@@ -39,6 +42,7 @@ public abstract class GenerationInstruction {
   /**
    * @return the column from which to start drawing the entity
    */
+  @Override
   public int getStartCol() {
     return startCol;
   }
@@ -46,6 +50,7 @@ public abstract class GenerationInstruction {
   /**
    * @return the row at which to stop drawing the entity
    */
+  @Override
   public int getEndRow() {
     return endRow;
   }
@@ -53,6 +58,7 @@ public abstract class GenerationInstruction {
   /**
    * @return the column at which to stop drawing the entity
    */
+  @Override
   public int getEndCol() {
     return endCol;
   }
@@ -60,6 +66,7 @@ public abstract class GenerationInstruction {
   /**
    * @return the String entity to fill in between startx and endx and starty and endy
    */
+  @Override
   public String getEntityTypeToInsert() {
     return entityType;
   }
@@ -72,7 +79,8 @@ public abstract class GenerationInstruction {
    * Checks to make sure that startRow, endRow, startCol and endCol all have valid values.
    * If not, throws an exception
    */
-  protected void validate() {
+  @Override
+  public void validate() {
     if (endCol < startCol || endRow < startRow) {
       throwGenerationException();
     }
@@ -87,7 +95,8 @@ public abstract class GenerationInstruction {
   /**
    * Throws an exception to let the user know that the ConstantInstruction failed to build
    */
-  protected void throwGenerationException() {
+  @Override
+  public void throwGenerationException() {
     throw new GenerationException(EXCEPTION_MESSAGE);
   }
 }

@@ -1,8 +1,10 @@
 package model.entity;
 
 import model.HitBox;
+import api.model.entity.IEntity;
+import api.model.entity.IWinnable;
 
-public class Goal implements IEntity, IWinnable{
+public class Goal implements IEntity, IWinnable {
     private boolean hasWon;
     private HitBox hitBox;
     private final String type = this.getClass().getSimpleName();

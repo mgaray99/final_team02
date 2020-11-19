@@ -7,6 +7,8 @@ import java.util.Map;
 import model.HitBox;
 import model.collision.CollisionDirections;
 import model.collision.Direction;
+import api.model.collision.ICollisionHandler;
+import api.model.entity.*;
 
 public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer {
 
@@ -21,7 +23,7 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   private double health = 0;
   private double damage = 0;
   private final Map<Modifier.ModifierType, Modifier> modifiers = new HashMap<>();
-  private CollisionDirections currentCollision = new CollisionDirections();
+  private ICollisionHandler currentCollision = new CollisionDirections();
 
   public Player(double x, double y){
     this.hitBox = new HitBox(x, y);
@@ -145,16 +147,16 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   }
 
   @Override
-  public CollisionDirections getAppliesDamageDirections() {
+  public ICollisionHandler getAppliesDamageDirections() {
     return new CollisionDirections(Collections.singletonList(Direction.BOTTOM));
   }
 
   @Override
-  public CollisionDirections getReceivesDamageDirections() {
+  public ICollisionHandler getReceivesDamageDirections() {
     return new CollisionDirections(Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
   }
 
-  protected CollisionDirections getCurrentCollision() {
+  protected ICollisionHandler getCurrentCollision() {
     return this.currentCollision;
   }
 

@@ -1,4 +1,4 @@
-package controller;
+package api.controller;
 
 /**
  * An interface responsible for handling the event where the user pushes a button -
@@ -8,7 +8,7 @@ package controller;
  *
  * @author Alex Lu
  */
-public interface ButtonPushHandler {
+public interface IButtonPushHandler {
 
   /**
    * Determines what the user should do after a button is pushed

@@ -1,7 +1,9 @@
-package model.entity;
+package api.model.entity;
 
 import model.collision.CollisionDirections;
 import model.collision.Direction;
+import model.entity.Teams;
+import api.model.collision.ICollisionHandler;
 
 public interface IDamageable {
 
@@ -33,13 +35,13 @@ public interface IDamageable {
      * Returns a list of CollisionDirections that this damageable can apply damage from
      * @return The list of CollisionDirections that this damageable can apply damage from
      */
-    CollisionDirections getAppliesDamageDirections();
+    ICollisionHandler getAppliesDamageDirections();
 
     /**
      * Returns a list of CollisionDirections that this damageable can receive damage from
      * @return The list of CollisionDirections that this damageable can receive damage from
      */
-    CollisionDirections getReceivesDamageDirections();
+    ICollisionHandler getReceivesDamageDirections();
 
     default boolean isDead(){
         return this.getHealth() <= 0;

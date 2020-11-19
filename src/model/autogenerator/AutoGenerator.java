@@ -1,9 +1,11 @@
 package model.autogenerator;
 
+import api.model.autogenerator.IAutoGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoGenerator {
+public class AutoGenerator implements IAutoGenerator {
 
   private static final String AUTO_GENERATION_FAILED = "Automatic level generation failed";
   private static final String FILEPATH_START = "./src/resources/game_configuration/auto/";
@@ -29,7 +31,8 @@ public class AutoGenerator {
    * Builds the specification lists that the AutoGenerator uses to generate levels
    * @param helper the XML helper object which will generate what is necessary
    */
-  private void buildSpecification(XMLHelper helper) {
+  @Override
+  public void buildSpecification(XMLHelper helper) {
     setDimensions(helper);
     setDefault(helper);
 
@@ -42,7 +45,8 @@ public class AutoGenerator {
    * Updates the specification of the AutoGenerator such that its default entityType equals something in
    * the lineParts array
    */
-  private void setDimensions(XMLHelper helper) {
+  @Override
+  public void setDimensions(XMLHelper helper) {
     numCols = helper.getNumCols();
     numRows = helper.getNumRows();
   }
@@ -51,7 +55,8 @@ public class AutoGenerator {
    * Updates the specification of the AutoGenerator such that its default entityType equals something in
    * the lineParts array
    */
-  private void setDefault(XMLHelper helper) {
+  @Override
+  public void setDefault(XMLHelper helper) {
     defaultValue = helper.getDefaultEntity();
   }
 
@@ -59,6 +64,7 @@ public class AutoGenerator {
    * Builds the 2D String array that represents the entities who fill the next block
    * @return the 2D String array of new entity representations
    */
+  @Override
   public String[][] generateNextBlock() {
     newBlock = new String[numRows][numCols];
     fillInDefaultValues();
@@ -70,7 +76,8 @@ public class AutoGenerator {
    * Fills the new block with default entity entityType (i.e. what will be present at a location in the
    * game matrix if there aren't any other entity values to overwrite it)
    */
-  private void fillInDefaultValues() {
+  @Override
+  public void fillInDefaultValues() {
     for (int row = 0; row < numRows; row+=1) {
       for (int column = 0; column < numCols; column+=1) {
         newBlock[row][column] = defaultValue;
@@ -82,7 +89,8 @@ public class AutoGenerator {
    * Reads each of the GenerationInstruction objects in the specifications list and then calls
    * executeSpecification on that
    */
-  private void executeAllSpecifications() {
+  @Override
+  public void executeAllSpecifications() {
     constantSpecifications.forEach(genInst -> executeSpecification(genInst));
 
     randomSpecifications.forEach(genInst -> genInst.regenerate());
@@ -93,7 +101,8 @@ public class AutoGenerator {
    * Applies a single GenerationInstruction to the 2D array newBlock
    * @param spec the GenerationInstruction to apply to the newBlock
    */
-  private void executeSpecification(GenerationInstruction spec) {
+  @Override
+  public void executeSpecification(GenerationInstruction spec) {
     for (int row = spec.getStartRow(); row <= spec.getEndRow(); row+=1) {
       for (int column = spec.getStartCol(); column <=spec.getEndCol(); column+=1) {
         newBlock[row][column] = spec.getEntityTypeToInsert();

@@ -3,10 +3,14 @@ package model.entity;
 import model.HitBox;
 import model.collision.CollisionDirections;
 import model.collision.Direction;
+import api.model.collision.ICollisionHandler;
+import api.model.entity.IDamageable;
+import api.model.entity.IEntity;
+import api.model.entity.IMovable;
 
 import java.util.Arrays;
 
-public class Enemy implements IEntity, IMovable, IDamageable{
+public class Enemy implements IEntity, IMovable, IDamageable {
 
     private static final int GRACE_PERIOD = 2;
     private static final double ENEMY_MOVEMENT_SPEED = 0.1;
@@ -18,7 +22,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     private boolean grounded = true;
     private double health = 0;
     private double damage = 0;
-    private CollisionDirections currentCollision = new CollisionDirections();
+    private ICollisionHandler currentCollision = new CollisionDirections();
 
 
     public Enemy(double x, double y){
@@ -131,12 +135,12 @@ public class Enemy implements IEntity, IMovable, IDamageable{
     }
 
     @Override
-    public CollisionDirections getAppliesDamageDirections() {
+    public ICollisionHandler getAppliesDamageDirections() {
         return new CollisionDirections(Arrays.asList(Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
     }
 
     @Override
-    public CollisionDirections getReceivesDamageDirections() {
+    public ICollisionHandler getReceivesDamageDirections() {
         return new CollisionDirections(Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
     }
     @Override
@@ -148,7 +152,7 @@ public class Enemy implements IEntity, IMovable, IDamageable{
         this.setYVel(this.getYVel() + GRAVITY_FACTOR);
     }
 
-    protected CollisionDirections getCurrentCollision() {
+    protected ICollisionHandler getCurrentCollision() {
         return this.currentCollision;
     }
 }
