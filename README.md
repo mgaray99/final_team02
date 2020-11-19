@@ -132,7 +132,7 @@ Assumptions or Simplifications:
 * Every entity is the same size and shape (a square). This assumption made it easier to 
   read/write levels and to make HitBoxes and collision mechanics. 
   The only downside is that it limits our options for resizing entities.
-* The game scene is always the same size
+* The game scene is always the same size.
 
 
 Interesting data files:
@@ -206,4 +206,4 @@ particular project is our strongest of the year. The free rein to take this proj
 direction we wanted to was initially scary, but later proved to be one of the best parts of the
 project because we were able to realize our vision of what the final product would look like, rather
 than being confined to what the project specifications. This served as a remarkable catalyst for
-self motivation and helped us to the achieve results we wanted.
+self motivation and helped us to achieve the results we wanted.
