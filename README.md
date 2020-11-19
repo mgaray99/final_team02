@@ -117,7 +117,7 @@ Features implemented:
   won't be there for that scene though)
 * Our error messages are pulled from language files in ./src/resources/resourcebundles and thus 
   will be displayed in other languages if the user has chosen to run the program in those languages 
-* Our test library was extensive. We finished with 148 tests in the final stretches of our project, 
+* Our test library was extensive. We finished with 151 tests in the final stretches of our project, 
   achieving the 80% line coverage target discussed in class and exceeding it with a final coverage
   of 85%.
 

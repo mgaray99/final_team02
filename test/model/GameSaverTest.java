@@ -25,7 +25,7 @@ public class GameSaverTest {
         if(previousSaveFile.isFile()){
             assertTrue(previousSaveFile.delete());
         }
-        IGameSaver.writeNewLevelCSVFile(TEST_SAVE_PATH);
+        IGameSaver.writeNewLevelCSVFileWithChecks(TEST_SAVE_PATH);
         File file = new File(TEST_SAVE_PATH);
         assertTrue(file.isFile());
     }

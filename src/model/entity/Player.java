@@ -33,10 +33,28 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
 
   public abstract void updateVelocity(boolean leftKey, boolean rightKey, boolean jumpKey);
 
+  @Override
+  public double getMovementSpeedModifierValue(){
+    Modifier movementSpeedModifier = this.getModifiers().get(Modifier.ModifierType.MOVEMENT_SPEED);
+    return movementSpeedModifier != null ? movementSpeedModifier.getValue() : 1;
+  }
+
+  @Override
+  public double getJumpSpeedModifierValue(){
+    Modifier jumpSpeedModifier = this.getModifiers().get(Modifier.ModifierType.JUMP_SPEED);
+    return jumpSpeedModifier != null ? jumpSpeedModifier.getValue() : 1;
+  }
+
+  @Override
+  public double getAntiGravityModifierValue(){
+    Modifier gravityModifier = this.getModifiers().get(Modifier.ModifierType.ANTI_GRAVITY);
+    return gravityModifier != null ? gravityModifier.getValue() : 1;
+  }
+
   public abstract void updatePosition();
 
   public void checkCollision(IEntity entity) {
-    CollisionDirections collision = hitBox.getCollisionDirection(entity.getHitBox());
+    CollisionDirections collision = hitBox.getCollisionDirections(entity.getHitBox());
     currentCollision.add(collision);
     this.processCurrentCollision(entity, collision);
     if (entity instanceof IDamageable) {
@@ -45,7 +63,9 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
     if (entity instanceof IEmpowering && !collision.isEmpty()) {
       IEmpowering empowering = (IEmpowering) entity;
       if (!empowering.hasAppliedModifier()) {
-        this.applyModifier(empowering.getModifier());
+        if(empowering.getModifier() != null){
+          this.applyModifier(empowering.getModifier());
+        }
         empowering.setHasAppliedModifier(true);
       }
     }
@@ -102,25 +122,16 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   }
 
   public void translateHitBox() {
-    Modifier movementSpeedModifier = this.getModifiers().get(Modifier.ModifierType.MOVEMENT_SPEED);
-    double movementSpeedModifierValue = movementSpeedModifier != null ? movementSpeedModifier.getValue() : 1;
-    this.getHitBox().translateX(this.getXVel() * movementSpeedModifierValue);
-
-    Modifier jumpSpeedModifier = this.getModifiers().get(Modifier.ModifierType.JUMP_SPEED);
-    double jumpSpeedModifierValue = jumpSpeedModifier != null ? jumpSpeedModifier.getValue() : 1;
-    this.getHitBox().translateY(this.getYVel() * jumpSpeedModifierValue);
-
+    this.getHitBox().translateX(this.getXVel());
+    this.getHitBox().translateY(this.getYVel());
     this.currentCollision.clear();
   }
 
   protected void applyGravity() {
-    double currentYVelWithAppliedGravityFactor = this.getYVel() + GRAVITY_FACTOR;
-    if (this.getModifiers().containsKey(Modifier.ModifierType.GRAVITY)) {
-      double gravityModifierValue = this.getModifiers().get(Modifier.ModifierType.GRAVITY).getValue();
-      this.setYVel(currentYVelWithAppliedGravityFactor * gravityModifierValue);
-    } else {
-      this.setYVel(currentYVelWithAppliedGravityFactor);
-    }
+    double antiGravityValue = this.getAntiGravityModifierValue();
+    double adjustedAntiGravityValue = 1 - ((antiGravityValue - 1));
+    double yVelWithGravity = this.getYVel() + (GRAVITY_FACTOR * adjustedAntiGravityValue);
+    this.setYVel(yVelWithGravity);
   }
 
   @Override

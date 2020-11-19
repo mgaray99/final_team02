@@ -50,7 +50,7 @@ public class Enemy implements IEntity, IMovable, IDamageable {
     }
 
     public void checkCollision(IEntity entity) {
-        CollisionDirections collision = hitBox.getCollisionDirection(entity.getHitBox());
+        CollisionDirections collision = hitBox.getCollisionDirections(entity.getHitBox());
         currentCollision.add(collision);
 
         this.processCurrentCollision(entity, collision);
