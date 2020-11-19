@@ -1,70 +1,59 @@
 package model.entity;
 
-import model.Level;
-import model.collision.Direction;
-import model.configuration.*;
-import api.model.configuration.IGameConfiguration;
 import api.model.entity.IEntity;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class PowerUpTest {
 
-    private static final float MAX_INTERSECT = 0.5F;
-    private static final String TEST_CONFIGURATION = "powerup_test.properties";
+    @Test
+    public void playerSpawnsPowerUp() {
+        PowerUpBlock powerUpBlock = new PowerUpBlock(5, 5);
+        Player player = new MarioPlayer(5, 5.9);
+
+        player.checkCollision(powerUpBlock);
+
+        Optional<IEntity> optionalSpawnedEntity = powerUpBlock.attemptSpawnEntity();
+        assertTrue(optionalSpawnedEntity.isPresent());
+    }
 
     @Test
-    public void playerSpawnsAndConsumesPowerUp() throws InvalidFileException {
-        IGameConfiguration IGameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        ILevelLoader ILevelLoader = new LevelLoader(IGameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(ILevelLoader);
-        PowerUpBlock powerUpBlock = null;
-        Player player = null;
-        for(IEntity entity : level.getCopyOfEntityList()){
-            if(entity instanceof PowerUpBlock && powerUpBlock == null){
-                powerUpBlock = (PowerUpBlock) entity;
-            }
-            else if(entity instanceof Player && player == null){
-                player = (Player)entity;
-            }
-            if(player != null && powerUpBlock != null){
-                break;
-            }
-        }
-        if(player != null && powerUpBlock != null){
-            assertTrue(player.getModifiers().keySet().isEmpty());
-            assertTrue(level.getCopyOfEntityList().contains(powerUpBlock));
-            assertEquals(1, powerUpBlock.getMaxSpawnCount());
-            double xPosition = powerUpBlock.getHitBox().getXLeft();
-            double yPosition = powerUpBlock.getHitBox().getYTop();
-            double height = powerUpBlock.getHitBox().getYSize();
-            double width = powerUpBlock.getHitBox().getXSize();
-            player.getHitBox().setXLeft(xPosition + width * 0.5);
-            player.getHitBox().setYTop((yPosition + (height)) - (MAX_INTERSECT * 0.9));
-            assertEquals(Direction.TOP, player.getHitBox().getCollisionDirection(powerUpBlock.getHitBox()));
-            level.step();
-            assertEquals(0, powerUpBlock.getMaxSpawnCount());
-            PowerUp powerUp = null;
-            for(IEntity entity : level.getCopyOfEntityList()){
-                if(entity instanceof PowerUp){
-                    powerUp = (PowerUp)entity;
-                    break;
-                }
-            }
-            if(powerUp != null){
-                assertTrue(level.getCopyOfEntityList().contains(powerUp));
+    public void playerConsumesPowerUp() {
+        PowerUp powerUp = new PowerUp(5, 5);
+        assertFalse(powerUp.hasAppliedModifier());
+        Player player = new MarioPlayer(5, 5.9);
+        player.checkCollision(powerUp);
+        assertTrue(powerUp.hasAppliedModifier());
+    }
 
-                xPosition = powerUp.getHitBox().getXLeft();
-                yPosition = powerUp.getHitBox().getYTop();
-                player.getHitBox().setXLeft(xPosition);
-                player.getHitBox().setYTop(yPosition);
-                assertNotEquals(Direction.NONE, player.getHitBox().getCollisionDirection(powerUpBlock.getHitBox()));
-                level.step();
-                assertFalse(level.getCopyOfEntityList().contains(powerUp));
-                assertFalse(player.getModifiers().keySet().isEmpty());
-            }
+    @Test
+    public void playerConsumesPowerUpAndObtainsModifier() {
+        PowerUp powerUp = new PowerUp(5, 5);
+        powerUp.setModifier(new Modifier(Modifier.ModifierType.MOVEMENT_SPEED, 1.5, 10 * 60));
+        assertFalse(powerUp.hasAppliedModifier());
+        Player player = new MarioPlayer(5, 5.9);
+        player.checkCollision(powerUp);
+        assertTrue(powerUp.hasAppliedModifier());
+        assertTrue(player.getModifiers().containsKey(Modifier.ModifierType.MOVEMENT_SPEED));
+    }
+
+    @Test
+    public void playerConsumesPowerUpAndObtainsModifierAndThenLosesIt() {
+        PowerUp powerUp = new PowerUp(5, 5);
+        powerUp.setModifier(new Modifier(Modifier.ModifierType.MOVEMENT_SPEED, 1.5, 10 * 60));
+        assertFalse(powerUp.hasAppliedModifier());
+        Player player = new MarioPlayer(5, 5.9);
+        player.checkCollision(powerUp);
+        assertTrue(powerUp.hasAppliedModifier());
+        assertTrue(player.getModifiers().containsKey(Modifier.ModifierType.MOVEMENT_SPEED));
+        for(int i = 0; i < 10 * 60; i++){
+            player.updateModifiers();
         }
+        assertFalse(player.getModifiers().containsKey(Modifier.ModifierType.MOVEMENT_SPEED));
     }
 }

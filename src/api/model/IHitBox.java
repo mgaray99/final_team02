@@ -28,7 +28,7 @@ public interface IHitBox {
 
     void translateY(double deltaY);
 
-    CollisionDirections getCollisionDirection(HitBox otherBox);
+    CollisionDirections getCollisionDirections(HitBox otherBox);
 
     default boolean between(double value, double min, double max) {
         if ((value > min) && (value < max)) {

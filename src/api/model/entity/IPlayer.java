@@ -6,6 +6,12 @@ import java.util.Map;
 
 public interface IPlayer {
 
+    double getMovementSpeedModifierValue();
+
+    double getJumpSpeedModifierValue();
+
+    double getAntiGravityModifierValue();
+
     Map<Modifier.ModifierType, Modifier> getModifiers();
 
     default void updateModifiers(){

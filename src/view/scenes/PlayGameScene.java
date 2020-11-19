@@ -184,7 +184,7 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
   @Override
   public void finalizeSave() {
     IGameSaver saver = new GameSaver(currentLevel);
-    saver.writeNewLevelCSVFile(SAVE_FILEPATH + saveField.getText() + CSV_EXTENSION);
+    saver.writeNewLevelCSVFileWithChecks(SAVE_FILEPATH + saveField.getText() + CSV_EXTENSION);
 
     clearFields();
     currentLevel.setIsSaving(false);
