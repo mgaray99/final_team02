@@ -98,7 +98,6 @@ Known Bugs:
 *If the player is moving too fast, he may go straight through a block.
 *Sometimes collision mechanics do not work correctly if the player
 approaches a block from a corner (he may appear to go through the block).
-*Enemies appear to vibrate when they are at the same x-coordinate as the player.
 
 Extra credit:
 * Trump textures

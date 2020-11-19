@@ -12,8 +12,8 @@ import java.util.Arrays;
 
 public class Enemy implements IEntity, IMovable, IDamageable {
 
-    private static final int GRACE_PERIOD = 2;
     private static final double ENEMY_MOVEMENT_SPEED = 0.1;
+    private static final double MIN_DISTANCE_TO_PLAYER = 0.06;
     public static final double GRAVITY_FACTOR = 0.015f;
     private final HitBox hitBox;
     private final String type = this.getClass().getSimpleName();
@@ -38,10 +38,10 @@ public class Enemy implements IEntity, IMovable, IDamageable {
 
     public void updateVelocity(Player player) {
 
-        if(player.getHitBox().getXLeft() < this.getHitBox().getXLeft()){
+        if(player.getHitBox().getXLeft() < this.getHitBox().getXLeft() - MIN_DISTANCE_TO_PLAYER){
             this.setXVel(ENEMY_MOVEMENT_SPEED * -1);
         }
-        else if(player.getHitBox().getXLeft() > this.getHitBox().getXLeft()){
+        else if(player.getHitBox().getXLeft() > this.getHitBox().getXLeft() + MIN_DISTANCE_TO_PLAYER){
             this.setXVel(ENEMY_MOVEMENT_SPEED);
         }
         else{
