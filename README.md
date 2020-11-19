@@ -17,7 +17,7 @@ Finish Date: 11/18/2020
 
 Hours Spent:
 
-Alex Lu:
+Alex Lu: ~35
 
 Mike Garey:
 
@@ -28,17 +28,22 @@ Ryan Krakower:
 
 ### Primary Roles
 
-Alex Lu:
-
-Mike Garey:
-
 Edem Ahorlu: 
 My role as a teammate is working on the frontend of the game.
 I worked with Alex Lu, another frontend team member, to implement
 various features including textures, splash screens, display enemies,
 power ups, and scores among others.
 
+Mike Garay:
+
 Ryan Krakower:
+
+Alex Lu: 
+I worked on the front end of the game with Edem Ahorlu. While he primarily
+handled the stylistic elements of the front end (textures, display enemies,
+splash screens and css) I worked more on the integration of front end and back
+end. I also did a lot of work with controller and controller testing, and built 
+the automatic level generation and scroller packages as well as their associated tests
 
 
 ### Resources Used
@@ -75,19 +80,121 @@ Features implemented:
 * Allow the user save progress on game
 * Allow the user set key controls for the game
 
+### Error Handling
+
+* Our program is built to handle a plethora of errors related to bad file input
+* Our entire program is driven by different .properties files that configures the model,
+  (see src/resources/game_configuration/doodlejump.properties for an example)
+  and this is where the user can mess with the file input by changing values in that
+  .properties file
+  
+  ![hello](./doc/propertiesshot.png)
+  
+    * Note: "breaking" means any changing the value to anything other than a valid value (i.e.
+      changing "textures=flappykeyinputs.properties" to "textures=hello")
+    * Breaking the level value, scroller value, player value,
+      or autofile value in a .properties file (if applicable) will 
+      prevent the user from being able to choose the game specified by that .properties file 
+      - instead an error message will pop up "Loading Game Failed - Bad Config File" 
+      but the program won't crash when running
+    * Breaking the keys value (i.e. the .properties file that determines what keys map to what 
+      actions) will result in a message popping up to tell the player the file is broken when they 
+      try to press an invalidly configured key, but the game will not crash
+    * Breaking the leaderboard value prevents the user from being able to save their score,
+      but the game does not crash
+    * Breaking the nextfile value results in the player being sent back to the game select screen
+      when reaching the goal that would activate loading of the .properties file at nextfile
+    * A faulty texture file value will not crash the game, but will display
+      all textures as black boxes to let the user know that something is wrong
+* Messing with a button config file for a particular scene will display at the top
+  of that scene "Failed to load buttons!" but will not crash the program (the buttons won't be there
+  though)
+* Our error messages are pulled from language files (./src/resources/resourcebundles) and thus 
+  will be displayed in other languages if the user has chosen to run the program in those languages 
+* Our test library was extensive for this project too, with all of us wanting to make sure that
+  our code worked. We finished with 148 tests in the final stretches of our project, achieving
+  the 80% line coverage target discussed in class and exceeding it with a final coverage
+  of 85%.
 
 ### Notes/Assumptions
 
 Assumptions or Simplifications:
+* We put a lot of our data files in the "resources" package instead of in "data"
+* We decided to place some of our test files in this package as well in order to circumvent issues
+  related to not being able to locate test files if they weren't in the folder where the classes
+  expected to find its files (i.e. a Texturer looks for textures in the 
+  /src/resources/images/gameTextures folder)
+
 
 Interesting data files:
+* mariolevel2.properties is a strong example of the flexibility of our game
+    * Upon reaching the end of level 1 of our Super Mario game (to accomplish this run Main.java
+      then press Select Game -> Super Mario and then beat the first level by touching the goal 
+      at the far right), the game loads mariolevel2.properties.
+    * The game then switches from using a "manual" scroll mechanic (i.e. the screen scrolls to keep
+      up with the player's movements) to an "automatic" scroll mechanic (i.e. the screen scrolls
+      automatically, ignoring the player's inputs) in response to the loading of this new data file.
+* Our buttons and splash screen textures are configured from xml files in the src/resources/buttons
+  package and in the src/resources/images package respectively.
+    * The button config xml files are made up of "button"
+      elements which hold data on how to build a single button
+        * The id element holds the ID of the button, applied via button.setId(id);
+        * The centerx and centery elements hold the center x and y coordinates at which we will 
+        place the button
+        * The width and height elements hold the width and height to be applied to the button
+        * The method element holds the method to be called when the method is pressed
+    * The splash screen xml file's is made up of of "image" elements which hold data on how 
+          to construct a single image
+        * The id, centerx, centery, width and height elements all function the same way as
+          those discussed for the button files
+        * The path element contains a filepath leading to the image which will be applied
+          within the bounds of (x, y, width, height)
+        
 
 Known Bugs:
+* Error text can be displayed off center when it appears (i.e. if a data file is corrupted)
+* Edge detection can be shaky at times, although it generally works well
 
 Extra credit:
-* Trump textures
+* We built a package called autogenerator which is responsible for in-game automatic level 
+generation. A core class called AutoGenerator creates a 2D array of Strings where the values of 
+those Strings represent specific entity types. Then, Scrollers in the scroller package translate 
+these 2D arrays into entity types using an EntityFactory (i.e. takes "3" and creates "Block" entity) 
+and insert all of the new entities into the current level object during gameplay. 
+This allows us to effectively generate new segments of the level at runtime without stopping the 
+game.
+    * This has allowed us to implement infinite gameplay in the two DoodleJump variants, Flappy
+      Bird and Mario Infinity, where the user can continue exploring new sections of the level
+      indefinitely.
+    * This automatic level generator is extremely flexible, as it reads from a well-formatted xml 
+      file instructions on how to build its new levels. This has allowed it to infinitely generate 
+      chunks for extremely different levels. For example, it can generate the "two pipe" obstacle 
+      for a new Flappy Bird chunk or several separate floating platforms in the sky for a new
+      Doodle Jump chunk.
+    * The automatic level generator reads from xml files placed in the 
+      src/resources/game_configuration/auto package
+    * For details on how to write such a file, refer to AUTOGENERATOR.md
+    * This also allowed us to create our fourth game which we will discuss shortly
+
+* We included a special easter egg, that only we know how to activate
+    * TRIGGER WARNING: if you are not in a good place with the results of the election, do not 
+      continue reading instructions on how to activate this easter egg
+    * The easter egg launches a new game with special textures and different objectives and level
+      style than an ordinary Mario game
+    * This game is not accessible in the list of games available via our "Select Game" button and
+      can only be loaded if the user presses a specific cheat key on the main menu (pressing this
+      cheat key on any other screen will not activate the easter egg by our design)
+    * The cheat key is the final letter of our team name
+
 
 
 
 ### Impressions
 
+    This was definitely the most enjoyable project of the year to work on. In spite of the increased
+team size, we had great team communication and deadline management and most of us believe that this
+particular project is our strongest of the year. The free rein to take this project in whatever 
+direction we wanted to was initially scary, but later proved to be one of the best parts of the
+project because we were able to realize our vision of what the final product would look like, rather
+than being confined to what the project specifications. This served as a remarkable catalyst for
+self motivation and helped us to the achieve results we wanted.
