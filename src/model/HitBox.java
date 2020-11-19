@@ -102,7 +102,7 @@ public class HitBox implements IHitBox {
 
 
   @Override
-  public CollisionDirections getCollisionDirection(HitBox otherBox) {
+  public CollisionDirections getCollisionDirections(HitBox otherBox) {
     CollisionDirections directions = new CollisionDirections();
     double xRight = xLeft + xSize;
     double yBottom = yTop + ySize;

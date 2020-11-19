@@ -46,7 +46,7 @@ public class GameSaver implements IGameSaver {
      * @param fileNameIn The name of the file to be written
      */
     @Override
-    public void writeNewLevelCSVFile(String fileNameIn) {
+    public void writeNewLevelCSVFileWithChecks(String fileNameIn) {
         String fileNameToWrite =
                 FileHelper.isCSVFile(fileNameIn) ?
                         fileNameIn :

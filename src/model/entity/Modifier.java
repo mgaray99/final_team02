@@ -23,6 +23,10 @@ public class Modifier {
         return this.value;
     }
 
+    public void setValue(double valueIn) {
+        this.value = valueIn;
+    }
+
     public double getDuration() {
         return this.duration;
     }
@@ -32,6 +36,6 @@ public class Modifier {
         JUMP_SPEED,
         //COLLISION_DAMAGE,
         //HEALTH,
-        GRAVITY
+        ANTI_GRAVITY
     }
 }

@@ -11,7 +11,7 @@ public interface IGameSaver {
 
     void setCurrentLevel(Level currentLevel);
 
-    void writeNewLevelCSVFile(String fileNameIn);
+    void writeNewLevelCSVFileWithChecks(String fileNameIn);
 
     void writeLevelFile(String fileNameToWrite) throws IOException;
 
