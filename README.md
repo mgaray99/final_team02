@@ -86,20 +86,19 @@ Features implemented:
 
 Assumptions or Simplifications:
 
--Every entity is the same size and shape (a square). This assumption made it easier to 
+*Every entity is the same size and shape (a square). This assumption made it easier to 
 read/write levels and to make HitBoxes and collision mechanics. 
 The only downside is that it limits our options for resizing entities.
-
--The game scene is always the same size (you can technically resize the window, 
+*The game scene is always the same size (you can technically resize the window, 
 but the scene size will not change, so there's no point)
 
 Interesting data files:
 
 Known Bugs:
--If the player is moving too fast, he may go straight through a block.
--Sometimes collision mechanics do not work correctly if the player
+*If the player is moving too fast, he may go straight through a block.
+*Sometimes collision mechanics do not work correctly if the player
 approaches a block from a corner (he may appear to go through the block).
--Enemies appear to vibrate when they are at the same x-coordinate as the player.
+*Enemies appear to vibrate when they are at the same x-coordinate as the player.
 
 Extra credit:
 * Trump textures
