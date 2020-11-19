@@ -89,20 +89,20 @@ Features implemented:
 ### Error Handling
 
 * Our program is built to handle a plethora of errors related to bad file input
-* Our entire program is driven by different .properties files that configures the model,
-  (see src/resources/game_configuration/doodlejump.properties for an example)
+* Our entire program is driven by different .properties files that configure the model,
   and this is where the user can mess with the file input by changing values in that
   .properties file
   
   ![hello](./doc/propertiesshot.png)
   
-    * Note: "breaking" means any changing the value to anything other than a valid value (i.e.
+    * Note: "breaking" means changing the value to anything other than a valid value (i.e.
       changing "textures=flappykeyinputs.properties" to "textures=hello")
     * Breaking the level value, scroller value, player value,
       or autofile value in a .properties file (if applicable) will 
       prevent the user from being able to choose the game specified by that .properties file 
-      - instead an error message will pop up "Loading Game Failed - Bad Config File" 
-      but the program won't crash when running
+      in our "select game" screen
+        * an error message will then pop up "Loading Game Failed - Bad Config File" 
+         but the program won't crash when running
     * Breaking the keys value (i.e. the .properties file that determines what keys map to what 
       actions) will result in a message popping up to tell the player the file is broken when they 
       try to press an invalidly configured key, but the game will not crash
@@ -114,12 +114,11 @@ Features implemented:
       all textures as black boxes to let the user know that something is wrong
 * Deleting a button config file for a particular scene and then running the program will display 
   at the top of that scene "Failed to load buttons!" but will not crash the program (the buttons 
-  won't be there though)
+  won't be there for that scene though)
 * Our error messages are pulled from language files in ./src/resources/resourcebundles and thus 
   will be displayed in other languages if the user has chosen to run the program in those languages 
-* Our test library was extensive for this project too, with all of us wanting to make sure that
-  our code worked. We finished with 148 tests in the final stretches of our project, achieving
-  the 80% line coverage target discussed in class and exceeding it with a final coverage
+* Our test library was extensive. We finished with 148 tests in the final stretches of our project, 
+  achieving the 80% line coverage target discussed in class and exceeding it with a final coverage
   of 85%.
 
 ### Notes/Assumptions
@@ -130,22 +129,21 @@ Assumptions or Simplifications:
   related to not being able to locate test files if they weren't in the folder where the classes
   expected to find its files (i.e. a Texturer looks for textures in the 
   /src/resources/images/gameTextures folder)
+* Every entity is the same size and shape (a square). This assumption made it easier to 
+  read/write levels and to make HitBoxes and collision mechanics. 
+  The only downside is that it limits our options for resizing entities.
+* The game scene is always the same size
 
-
-*Every entity is the same size and shape (a square). This assumption made it easier to 
-read/write levels and to make HitBoxes and collision mechanics. 
-The only downside is that it limits our options for resizing entities.
-*The game scene is always the same size (you can technically resize the window, 
-but the scene size will not change, so there's no point)
 
 Interesting data files:
-* mariolevel2.properties is a strong example of the flexibility of our game
+* mariolevel2.properties is a strong example of the flexibility of our project
     * Upon reaching the end of level 1 of our Super Mario game (to accomplish this run Main.java
       then press Select Game -> Super Mario and then beat the first level by touching the goal 
       at the far right), the game loads mariolevel2.properties.
     * The game then switches from using a "manual" scroll mechanic (i.e. the screen scrolls to keep
       up with the player's movements) to an "automatic" scroll mechanic (i.e. the screen scrolls
-      automatically, ignoring the player's inputs) in response to the loading of this new data file.
+      automatically, ignoring the player's inputs) in response to the loading of this new data file
+      with a new level design displayed as well.
 * Our buttons and splash screen textures are configured from xml files in the src/resources/buttons
   package and in the src/resources/images package respectively.
     * The button config xml files are made up of "button"
@@ -154,8 +152,8 @@ Interesting data files:
         * The centerx and centery elements hold the center x and y coordinates at which we will 
         place the button
         * The width and height elements hold the width and height to be applied to the button
-        * The method element holds the method to be called when the method is pressed
-    * The splash screen xml file's is made up of of "image" elements which hold data on how 
+        * The method element holds the method to be called when the button is pressed
+    * The splash screen xml file's is made up of "image" elements which hold data on how 
           to construct a single image
         * The id, centerx, centery, width and height elements all function the same way as
           those discussed for the button files
@@ -164,30 +162,26 @@ Interesting data files:
         
 
 Known Bugs:
-<<<<<<< HEAD
 * Error text can be displayed off center when it appears (i.e. if a data file is corrupted)
-* Edge detection can be shaky at times, although it generally works well
-=======
-*If the player is moving too fast, he may go straight through a block.
-*Sometimes collision mechanics do not work correctly if the player
-approaches a block from a corner (he may appear to go through the block).
->>>>>>> c60bc5e8bbc493e6c8138e00bc0b11ad56c66c5f
+* If the player is moving too fast, he may go straight through a block.
+* Sometimes collision mechanics do not work correctly if the player
+  approaches a block from a corner (he may appear to go through the block).
 
 Extra credit:
 * We built a package called autogenerator which is responsible for in-game automatic level 
-generation. A core class called AutoGenerator creates a 2D array of Strings where the values of 
-those Strings represent specific entity types. Then, Scrollers in the scroller package translate 
-these 2D arrays into entity types using an EntityFactory (i.e. takes "3" and creates "Block" entity) 
-and insert all of the new entities into the current level object during gameplay. 
-This allows us to effectively generate new segments of the level at runtime without stopping the 
-game.
+  generation. A core class called AutoGenerator creates a 2D array of Strings where the values of 
+  those Strings represent specific entity types. Then, a Scroller in the scroller package translates 
+  the 2D array into a list of entities using an EntityFactory (i.e. it receives "3" and returns 
+  "Block" entity) and inserts all of the new entities into the current level object during gameplay. 
+  This allows us to effectively generate new segments of the level at runtime without stopping the 
+  game.
     * This has allowed us to implement infinite gameplay in the two DoodleJump variants, Flappy
       Bird and Mario Infinity, where the user can continue exploring new sections of the level
       indefinitely.
-    * This automatic level generator is extremely flexible, as it reads from a well-formatted xml 
-      file instructions on how to build its new levels. This has allowed it to infinitely generate 
-      chunks for extremely different levels. For example, it can generate the "two pipe" obstacle 
-      for a new Flappy Bird chunk or several separate floating platforms in the sky for a new
+    * This automatic level generator is extremely flexible, as it reads instructions from a 
+      well-formatted xml file on how to build its new levels. This has allowed it to infinitely 
+      generate chunks for extremely different levels. For example, it can generate the "two pipe" 
+      obstacle for a new Flappy Bird chunk or several separate floating platforms in the sky for a new
       Doodle Jump chunk.
     * The automatic level generator reads from xml files placed in the 
       src/resources/game_configuration/auto package
@@ -203,9 +197,6 @@ game.
       can only be loaded if the user presses a specific cheat key on the main menu (pressing this
       cheat key on any other screen will not activate the easter egg by our design)
     * The cheat key is the final letter of our team name
-
-
-
 
 ### Impressions
 
