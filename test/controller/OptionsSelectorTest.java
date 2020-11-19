@@ -21,7 +21,7 @@ public class OptionsSelectorTest extends DukeApplicationTest{
   private OptionsSelector selector;
 
   @Override
-  public void start(Stage stage) {
+  public void start(Stage stage) throws BuilderInstantiationException {
     List<String> choices = new ArrayList<>();
     choices.add("a");
     choices.add("b");

@@ -3,6 +3,8 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import api.controller.IOptionsSelector;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Group;
@@ -20,10 +22,8 @@ import javafx.scene.control.Button;
  */
 
 
-public class OptionsSelector extends Group implements ButtonPushHandler {
+public class OptionsSelector extends Group implements IOptionsSelector {
 
-  private static final String PREV_COMMAND = "PrevCommand";
-  private static final String NEXT_COMMAND = "NextCommand";
   private static final String OPTION1 = "Option1";
   private static final String OPTION2 = "Option2";
   private static final String OPTION3 = "Option3";
@@ -52,7 +52,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    * @param h the height of the visible pane that the OptionsSelector will fill
    * @param c the list of choices that will fill the OptionsSelector
    */
-  public OptionsSelector(double w, double h, List<String> c) {
+  public OptionsSelector(double w, double h, List<String> c) throws BuilderInstantiationException {
     WIDTH = w;
     HEIGHT = h;
     choosableOptionOffset = 0;
@@ -80,16 +80,12 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    * Creates the buttons associated with this OptionsSelector using a ButtonBuilder reading from a
    * config file as specified by OPTIONS_SELECTOR_CONFIG_PATH
    */
-  private void buildButtons() {
-    try {
+  private void buildButtons() throws BuilderInstantiationException {
       ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT,
           OPTIONS_SELECTOR_CONFIG_PATH, this);
       if (builder.getStateReferenced().equals(TITLE)) {
         super.getChildren().addAll(builder.getFoundButtons());
       }
-    } catch (ButtonBuilderInstantiationException bbie) {
-      System.out.println("couldn't build buttons");
-    }
   }
 
   /**
@@ -99,35 +95,21 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    * @param type the method name to be called which was pushed
    */
 
+  @Override
   public void handlePush(String type) {
     try {
       getClass().getDeclaredMethod(type).invoke(this);
     }
     catch (Exception e) {
-      System.out.println("that method does not exist");
+      //DO NOTHING
     }
-  }
-
-  /**
-   * Displays the 3 previous options
-   */
-  private void prevOptions() {
-    choosableOptionOffset -= 1;
-    regenerateOptions();
-  }
-
-  /**
-   * Displays the 3 next options
-   */
-  private void nextOptions() {
-    choosableOptionOffset += 1;
-    regenerateOptions();
   }
 
   /**
    * Regenerates the text on the buttons that select the simulation so that they reflect the current
    * options that the user is choosing from
    */
+  @Override
   public void regenerateOptions() {
     int offset = determineSelectionOffset(choices);
 
@@ -141,6 +123,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    *
    * @param option the option to be removed
    */
+  @Override
   public void removeOption(String option) {
     choices.remove(option);
     regenerateOptions();
@@ -152,74 +135,12 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    *
    * @param option the option to be removed
    */
+  @Override
   public void addOption(String option) {
     choices.add(option);
     regenerateOptions();
   }
 
-  /**
-   * Determines which page of the options you are currently looking at
-   *
-   * @return the starting point in the list to generate file names for simulations
-   */
-  private int determineSelectionOffset(List<String> options) {
-    int offset = choosableOptionOffset * NUM_OPTION_BUTTONS;
-    if (offset >= options.size()) {
-      choosableOptionOffset = 0;
-      return 0;
-    } else if (offset < 0) {
-      choosableOptionOffset = Math.max((options.size() - 1) / NUM_OPTION_BUTTONS, 0);
-      return choosableOptionOffset * NUM_OPTION_BUTTONS;
-    }
-    return offset;
-  }
-
-  /**
-   * Sets the text on the button referenced by button id (i.e. Simulation1, Simulation2 or
-   * Simulation3 to the choice at index in choices or "" if that index is out of bounds
-   *
-   * @param index the index of the option in the list of choices
-   */
-  private void setOptionText(List<String> choices, Button relevantButton, int index) {
-    try {
-      relevantButton.setText(choices.get(index));
-    } catch (IndexOutOfBoundsException ioobe) {
-      relevantButton.setText("");
-    }
-  }
-
-  /**
-   * Sets the buffer text in this OptionsSelector to the text on the top option button
-   */
-  private void chooseTopChoice() {
-    bufferText = ((Button) lookup("#" + OPTION1)).getText();
-    dispatchEvent();
-  }
-
-
-  /**
-   * Sets the buffer text in this OptionsSelector to the text on the middle option button
-   */
-  private void chooseMiddleChoice() {
-    bufferText = ((Button) lookup("#" + OPTION2)).getText();
-    dispatchEvent();
-  }
-
-  /**
-   * Sets the buffer text in this OptionsSelector to the text on the bottom option button
-   */
-  private void chooseBottomChoice() {
-    bufferText = ((Button) lookup("#" + OPTION3)).getText();
-    dispatchEvent();
-  }
-
-  /**
-   * Creates an event in order to let an ActionListener know that something relevant has happened
-   * within the OptionSelector
-   */
-  private void dispatchEvent() {
-    fireEvent(new Event(EVENT_TYPE));
-  }
 
   /**
    * Returns the relevant text in the buffer - this will let the user know what this OptionsSelector
@@ -227,6 +148,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    *
    * @return bufferText
    */
+  @Override
   public String getTextInBuffer() {
     String tempBuffer = bufferText;
     bufferText = "";
@@ -239,6 +161,7 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
    *
    * @param path the String path leading to the properties file
    */
+  @Override
   public void updateBundle(String path) {
     resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS+ "." + path);
     updateAllButtonBundles();
@@ -246,13 +169,93 @@ public class OptionsSelector extends Group implements ButtonPushHandler {
   }
 
   /**
+   * Displays the 3 previous options
+   */
+  public void prevOptions() {
+    choosableOptionOffset -= 1;
+    regenerateOptions();
+  }
+
+  /**
+   * Displays the 3 next options
+   */
+  public void nextOptions() {
+    choosableOptionOffset += 1;
+    regenerateOptions();
+  }
+
+  /**
+   * Determines which page of the options you are currently looking at
+   *
+   * @return the starting point in the list to generate file names for simulations
+   */
+  public int determineSelectionOffset(List<String> options) {
+    int offset = choosableOptionOffset * OptionsSelector.NUM_OPTION_BUTTONS;
+    if (offset >= options.size()) {
+      choosableOptionOffset = 0;
+      return 0;
+    } else if (offset < 0) {
+      choosableOptionOffset = Math.max((options.size() - 1) / OptionsSelector.NUM_OPTION_BUTTONS, 0);
+      return choosableOptionOffset * OptionsSelector.NUM_OPTION_BUTTONS;
+    }
+    return offset;
+  }
+
+  /**
+   * Sets the text on the button referenced by button id (i.e. Simulation1, Simulation2 or
+   * Simulation3 to the choice at index in choices or "" if that index is out of bounds
+   *
+   * @param index the index of the option in the list of choices
+   */
+  public void setOptionText(List<String> choices, Button relevantButton, int index) {
+    try {
+      relevantButton.setText(choices.get(index));
+    } catch (IndexOutOfBoundsException ioobe) {
+      relevantButton.setText("");
+    }
+  }
+
+  /**
+   * Sets the buffer text in this OptionsSelector to the text on the top option button
+   */
+  public void chooseTopChoice() {
+    bufferText = ((Button) lookup("#" + OptionsSelector.OPTION1)).getText();
+    dispatchEvent();
+  }
+
+  /**
+   * Sets the buffer text in this OptionsSelector to the text on the middle option button
+   */
+  public void chooseMiddleChoice() {
+    bufferText = ((Button) lookup("#" + OptionsSelector.OPTION2)).getText();
+    dispatchEvent();
+  }
+
+  /**
+   * Sets the buffer text in this OptionsSelector to the text on the bottom option button
+   */
+  public void chooseBottomChoice() {
+    bufferText = ((Button) lookup("#" + OptionsSelector.OPTION3)).getText();
+    dispatchEvent();
+  }
+
+  /**
+   * Creates an event in order to let an ActionListener know that something relevant has happened
+   * within the OptionSelector
+   */
+  public void dispatchEvent() {
+    fireEvent(new Event(OptionsSelector.EVENT_TYPE));
+  }
+
+  /**
    * Updates the text on all buttons to reflect the text in the resource bundle
    */
-  private void updateAllButtonBundles() {
-    for (Node n : super.getChildren()) {
+  public void updateAllButtonBundles() {
+    for (Node n : getChildren()) {
       if (n.getClass().getSimpleName().equals("Button")) {
         ((Button) n).setText(resourceBundle.getString(n.getId()));
       }
     }
   }
+
 }

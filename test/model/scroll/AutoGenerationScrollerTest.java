@@ -2,31 +2,25 @@ package model.scroll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.stage.Stage;
 import model.Level;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
+import model.configuration.*;
 import model.entity.Block;
 import model.entity.Enemy;
-import model.entity.IEntity;
 import model.entity.MarioPlayer;
 import model.entity.Player;
+import api.model.configuration.IGameConfiguration;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
 /**
- * Tests the HorizontalGenerationScroller class
+ * Tests the AutoGenerationScroller class
  */
 
-public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
+public class AutoGenerationScrollerTest extends DukeApplicationTest{
 
   private static final int MAX = 15;
-  private static final String PATH = "./src/resources/game_configuration/auto/autoflappy.xml";
+  private static final String PATH = "autoflappy.xml";
   private static final double XSCROLL = -0.5;
   private static final double YSCROLL = 0.5;
 
@@ -52,9 +46,9 @@ public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
     barrierBlockEntity = new Block(BARRIERX, BARRIERY);
     enemyEntity = new Enemy(ENEMYX, ENEMYY);
 
-    GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
-    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-    level = new Level(levelLoader);
+    IGameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
+    ILevelLoader ILevelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+    level = new Level(ILevelLoader);
 
     level.addEntity(playerEntity);
     level.addEntity(barrierBlockEntity);

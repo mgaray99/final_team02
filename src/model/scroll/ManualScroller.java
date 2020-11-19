@@ -1,10 +1,8 @@
 package model.scroll;
 
-import java.util.List;
-import model.HitBox;
 import model.Level;
-import model.entity.IEntity;
 import model.entity.Player;
+import api.model.scroll.Scroller;
 
 public class ManualScroller implements Scroller {
     protected double leftBound;
@@ -43,7 +41,7 @@ public class ManualScroller implements Scroller {
    * checkDownScroll checks to see if the player is below some horizontal line y = bottomBound and
    * moving further down and if so, scrolls the screen down in order to catch up
    *
-   * @param level
+   * @param level the level to be scrolled
    * @param player the player whose data we are to use
    */
   @Override

@@ -1,10 +1,11 @@
 package model.scroll;
 
 import model.autogenerator.GenerationException;
+import api.model.scroll.IScrollerFactory;
+import api.model.scroll.Scroller;
 
-public class ScrollerFactory {
+public class ScrollerFactory implements IScrollerFactory {
 
-  private static final String SCROLLER = "Scroller";
   private static final String MANUAL = "Manual";
   private static final String AUTO = "Auto";
   private static final String DOODLE = "Doodle";
@@ -17,6 +18,7 @@ public class ScrollerFactory {
    *                      automatic level generation
    * @return a new scroller
    */
+  @Override
   public Scroller buildScroller(String[] args, String generatorPath) {
     String identifier = args[0];
     String [] constructorArgs = buildConstructorArgs(args, generatorPath);
@@ -37,15 +39,16 @@ public class ScrollerFactory {
    * @param constructorArgs the arguments to be passed into its constructor
    * @return a Scroller built from identifier and constructorArgs
    */
-  private Scroller buildScrollerFromArgs(String identifier, String[] constructorArgs)
+  @Override
+  public Scroller buildScrollerFromArgs(String identifier, String[] constructorArgs)
   throws GenerationException {
-    switch (identifier) {
-      case MANUAL: return buildManualScroller(constructorArgs);
-      case AUTO: return buildAutoScroller(constructorArgs);
-      case DOODLE: return buildDoodleGenerationScroller(constructorArgs);
-      case AUTO_GENERATION: return buildAutoGenerationScroller(constructorArgs);
-      default: return new AutoScroller(0,0, false);
-    }
+    return switch (identifier) {
+      case MANUAL -> buildManualScroller(constructorArgs);
+      case AUTO -> buildAutoScroller(constructorArgs);
+      case DOODLE -> buildDoodleGenerationScroller(constructorArgs);
+      case AUTO_GENERATION -> buildAutoGenerationScroller(constructorArgs);
+      default -> new AutoScroller(0, 0, false);
+    };
   }
 
   /**
@@ -57,7 +60,8 @@ public class ScrollerFactory {
    * @return a new array containing all elements of args besides args[0] and with the newly appended
    *          generatorFilePath thrown in
    */
-  private String[] buildConstructorArgs(String[] args, String generatorFilePath) {
+  @Override
+  public String[] buildConstructorArgs(String[] args, String generatorFilePath) {
     String[] constructorArgs = new String[args.length];
 
     for (int index = 0; index < args.length - 1; index +=1) {
@@ -73,7 +77,8 @@ public class ScrollerFactory {
    * @param args the arguments used to specify the ManualScroller
    * @return a new ManualScroller
    */
-  private Scroller buildManualScroller(String[] args) {
+  @Override
+  public Scroller buildManualScroller(String[] args) {
     return new ManualScroller(Double.parseDouble(args[0]), Double.parseDouble(args[1]),
         Double.parseDouble(args[2]), Double.parseDouble(args[3]));
   }
@@ -83,7 +88,8 @@ public class ScrollerFactory {
    * @param args the arguments used to specify the AutoScroller
    * @return a new AutoScroller
    */
-  private Scroller buildAutoScroller(String[] args) {
+  @Override
+  public Scroller buildAutoScroller(String[] args) {
       return new AutoScroller(Double.parseDouble(args[0]), Double.parseDouble(args[1]),
           Boolean.parseBoolean(args[2]));
   }
@@ -93,7 +99,8 @@ public class ScrollerFactory {
    * @param args the arguments used to specify the DoodleGenerationScroller
    * @return a new DoodleGenerationScroller
    */
-  private Scroller buildDoodleGenerationScroller(String[] args) throws GenerationException {
+  @Override
+  public Scroller buildDoodleGenerationScroller(String[] args) throws GenerationException {
     return new DoodleGenerationScroller(Double.parseDouble(args[0]), Double.parseDouble(args[1]),
         Double.parseDouble(args[2]), Double.parseDouble(args[3]), args[4]);
   }
@@ -103,7 +110,8 @@ public class ScrollerFactory {
    * @param args the arguments used to specify the AutoGenerationScroller
    * @return a new AutoGenerationScroller
    */
-  private Scroller buildAutoGenerationScroller(String[] args) throws GenerationException {
+  @Override
+  public Scroller buildAutoGenerationScroller(String[] args) throws GenerationException {
     return new AutoGenerationScroller(Double.parseDouble(args[0]), Double.parseDouble(args[1]),
         Boolean.parseBoolean(args[2]), args[3]);
   }

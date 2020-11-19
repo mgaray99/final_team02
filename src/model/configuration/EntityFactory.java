@@ -1,15 +1,17 @@
 package model.configuration;
 
-import model.entity.IEntity;
+import api.model.entity.IEntity;
+import api.model.configuration.IEntityFactory;
+import api.model.configuration.ILevelDecoder;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class EntityFactory {
+public class EntityFactory implements IEntityFactory {
 
-  private LevelDecoder decoder;
+  private ILevelDecoder decoder;
   private Map<String, String> idToEntityMap;
   private static final String ENTITY_PACKAGE_PATH = "model.entity.";
   private static final String PLAYER_KEY = "1";
@@ -30,6 +32,7 @@ public class EntityFactory {
    * <PLAYER_KEY, newMapping>
    * @param newMapping the new String value that will be stored at PLAYER_KEY in the mapping
    */
+  @Override
   public void updatePlayerMapping(String newMapping) throws NullPointerException {
     List<String> validPlayerValueList = Arrays.asList(validPlayerValues);
     if (validPlayerValueList.contains(newMapping)) {
@@ -40,6 +43,7 @@ public class EntityFactory {
     }
   }
 
+  @Override
   public Optional<IEntity> createEntity(String entityString, double rowIndex, double colIndex) {
       Optional<IEntity> optionalDecodedEntity = Optional.empty();
       String decodedEntityString = idToEntityMap.get(entityString);
@@ -51,6 +55,7 @@ public class EntityFactory {
   }
 
 
+  @Override
   public Optional<IEntity> reflectEntity(String decodedEntityString, double rowIndex, double colIndex) {
     IEntity decodedEntity;
     try {

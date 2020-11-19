@@ -4,42 +4,44 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import model.autogenerator.GenerationException;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
-import model.entity.IEntity;
-import model.scroll.Scroller;
+import model.configuration.*;
+import api.model.entity.IEntity;
+import api.model.scroll.Scroller;
 import model.scroll.ScrollerFactory;
+import api.model.IGameModel;
+import api.model.IKeyPressFunctions;
+import api.model.configuration.IGameConfiguration;
 
-public class GameModel {
+public class GameModel implements IGameModel {
 
-    private GameConfiguration gameConfiguration;
+    private IGameConfiguration gameConfiguration;
     private File levelFile;
     private Level level;
     private ScrollerFactory scrollerFactory;
-    private EntityFactory entityFactory;
+    private api.model.configuration.IEntityFactory IEntityFactory;
 
     public GameModel() {}
 
-    public GameModel(GameConfiguration gameConfiguration) throws InvalidFileException,
+    public GameModel(IGameConfiguration gameConfiguration) throws InvalidFileException,
         NullPointerException, GenerationException {
         this.gameConfiguration = gameConfiguration;
         levelFile = gameConfiguration.getLevelFile();
 
-        entityFactory = new EntityFactory();
+        IEntityFactory = new EntityFactory();
         String playerType = gameConfiguration.getPlayerType();
-        entityFactory.updatePlayerMapping(playerType);
+        IEntityFactory.updatePlayerMapping(playerType);
 
-        LevelLoader levelLoader = new LevelLoader(levelFile, entityFactory);
-        this.level = new Level(levelLoader);
+        ILevelLoader ILevelLoader = new LevelLoader(levelFile, IEntityFactory);
+        this.level = new Level(ILevelLoader);
         setLevelScroller();
     }
 
-    public KeyPressFunctions getKeyPressFunctions() {
+    @Override
+    public IKeyPressFunctions getKeyPressFunctions() {
         return this.level.getKeyPressFunctions();
     }
 
+    @Override
     public void updateGame(){
         this.level.step();
     }
@@ -47,7 +49,8 @@ public class GameModel {
     /**
      * Sets the scroller on level to a specific Scroller based on the contents of the level
      */
-    private void setLevelScroller() {
+    @Override
+    public void setLevelScroller() {
         scrollerFactory = new ScrollerFactory();
         String[] scrollerArgs = gameConfiguration.getScrollerArgs();
         String autoGenerationPath = gameConfiguration.getAutoGeneratorPath();
@@ -59,6 +62,7 @@ public class GameModel {
      * Returns a defensively copied list of all of the entities present in level
      * @return defensively copied list of all entities in Level
      */
+    @Override
     public List<IEntity> getAllEntitiesInLevel() {
         List<IEntity> defensivelyCopiedEntityList = new ArrayList<>();
         defensivelyCopiedEntityList.addAll(level.getCopyOfEntityList());
@@ -69,6 +73,7 @@ public class GameModel {
      * Returns the String path to the .properties file containing data on key inputs
      * @return the String keyInputsPath
      */
+    @Override
     public String getKeyInputsPath() {
         return gameConfiguration.getKeyInputsPath();
     }
@@ -77,6 +82,7 @@ public class GameModel {
      * Returns the String path to the .properties file containing data on textures
      * @return the String texturesPath
      */
+    @Override
     public String getTexturesPath() {
         return gameConfiguration.getTexturesPath();
     }
@@ -85,6 +91,7 @@ public class GameModel {
      * Returns the String path to the .csv file containing data on high scores
      * @return the String highScoresPath
      */
+    @Override
     public String getHighScoresPath() {
         return gameConfiguration.getHighScoresPath();
     }
@@ -95,26 +102,30 @@ public class GameModel {
      * one the chain)
      * @return the String nextConfigFilePath
      */
+    @Override
     public String getNextConfigFilePath() { return gameConfiguration.getNextConfigFilePath(); }
 
     /**
      * Returns the level of this model
      * @return level
      */
+    @Override
     public Level getLevel() { return this.level; }
 
     /**
      * Returns the score associated with the level in use by the model
      * @return level.getScore()
      */
+    @Override
     public int getScore() { return this.level.getScore(); }
 
     /**
      * Resets the level to the characteristics in levelLoader
      */
+    @Override
     public void resetLevel() throws InvalidFileException {
-        LevelLoader levelLoader = new LevelLoader(levelFile, entityFactory);
-        level.setOrResetLevel(levelLoader);
+        ILevelLoader ILevelLoader = new LevelLoader(levelFile, IEntityFactory);
+        level.setOrResetLevel(ILevelLoader);
         setLevelScroller();
     }
 

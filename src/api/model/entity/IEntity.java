@@ -1,4 +1,4 @@
-package model.entity;
+package api.model.entity;
 
 import model.HitBox;
 

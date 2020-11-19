@@ -1,5 +1,6 @@
 package controller;
 
+import api.controller.IImageBuilder;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -8,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
  *
  * @author Alex Lu
  */
-public class ImageBuilder extends Builder {
+public class ImageBuilder extends Builder implements IImageBuilder {
 
     private String stateReferenced;
     private final List<ImageView> foundImages;
@@ -42,6 +42,7 @@ public class ImageBuilder extends Builder {
     private static final String IMAGE_WIDTH = "width";
     private static final String IMAGE_HEIGHT = "height";
     private static final String PATH = "path";
+    protected static final String BUILDER_EXCEPTION = "IMAGE_ERROR";
 
     /**
      * Instantiates a new ButtonBuilder object
@@ -50,31 +51,33 @@ public class ImageBuilder extends Builder {
      * @param h    the HEIGHT of the area in which buttons can be placed
      * @param path the filepath leading to the .txt file containing data on the button
      */
-    public ImageBuilder(double w, double h, String path) {
+    public ImageBuilder(double w, double h, String path) throws BuilderInstantiationException{
         super(w,h);
         foundImages = new ArrayList<>();
         try {
             makeImages(path);
         } catch (Exception e) {
-            System.out.println("Couldn't build images at " + path);
-
+            throw new BuilderInstantiationException(
+                BUILDER_EXCEPTION);
         }
     }
+
 
     /**
      * Makes each of the buttons as specified in a particular file
      *
      * @param xmlPath the file to be read
      */
-    private void makeImages(String xmlPath)
-        throws IOException, ParserConfigurationException, SAXException {
+    @Override
+    public void makeImages(String xmlPath)
+            throws IOException, ParserConfigurationException, SAXException {
         Element root = buildRoot(xmlPath);
 
-        NodeList imageviews = root.getElementsByTagName(IMAGE);
-        stateReferenced = getTextFromElement(root, TITLE);
+        NodeList imageviews = root.getElementsByTagName(ImageBuilder.IMAGE);
+        stateReferenced = getTextFromElement(root, ImageBuilder.TITLE);
 
-        for (int index = 0; index <  imageviews.getLength(); index += 1) {
-            Element imageNode = (Element)imageviews.item(index);
+        for (int index = 0; index < imageviews.getLength(); index += 1) {
+            Element imageNode = (Element) imageviews.item(index);
             ImageView builtImage = buildImageFromLine(imageNode);
             foundImages.add(builtImage);
         }
@@ -87,22 +90,23 @@ public class ImageBuilder extends Builder {
      * @param imageNode the line of the file to be parsed for the relevant information
      * @return a fully instantiated Button
      */
-    private ImageView buildImageFromLine(Element imageNode) throws FileNotFoundException {
+    @Override
+    public ImageView buildImageFromLine(Element imageNode) throws FileNotFoundException {
 
         Image image = new Image(new FileInputStream(
-            getTextFromElement(imageNode, PATH)));
+                getTextFromElement(imageNode, ImageBuilder.PATH)));
 
         ImageView output = new ImageView(image);
-        output.setId(getTextFromElement(imageNode, ID));
+        output.setId(getTextFromElement(imageNode, ImageBuilder.ID));
 
         output.setFitWidth(WIDTH * Double.parseDouble(
-            getTextFromElement(imageNode, IMAGE_WIDTH)));
+                getTextFromElement(imageNode, ImageBuilder.IMAGE_WIDTH)));
         output.setFitHeight(HEIGHT * Double.parseDouble(
-            getTextFromElement(imageNode, IMAGE_HEIGHT)));
+                getTextFromElement(imageNode, ImageBuilder.IMAGE_HEIGHT)));
 
-        output.setX(WIDTH * Double.parseDouble(getTextFromElement(imageNode, CENTERX)) -
+        output.setX(WIDTH * Double.parseDouble(getTextFromElement(imageNode, ImageBuilder.CENTERX)) -
                 output.getFitWidth() / 2);
-        output.setY(HEIGHT * Double.parseDouble(getTextFromElement(imageNode, CENTERY)) -
+        output.setY(HEIGHT * Double.parseDouble(getTextFromElement(imageNode, ImageBuilder.CENTERY)) -
                 output.getFitHeight() / 2);
 
         return output;
@@ -114,6 +118,7 @@ public class ImageBuilder extends Builder {
      *
      * @return stateReferenced the state listed at the top of the file
      */
+    @Override
     public String getStateReferenced() {
         return stateReferenced;
     }
@@ -123,6 +128,7 @@ public class ImageBuilder extends Builder {
      *
      * @return a list of buttons
      */
+    @Override
     public List<ImageView> getFoundImages() {
         return foundImages;
     }

@@ -13,11 +13,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XMLHelper {
-  private String xmlPath;
-  private Document sourceDoc;
-  private Element root;
-  private int numCols;
-  private int numRows;
+
+  private final Element root;
+  private final int numCols;
+  private final int numRows;
 
   private static final String DIMENSIONS = "dimensions";
   private static final String DEFAULT = "base";
@@ -31,22 +30,20 @@ public class XMLHelper {
   private static final String ORIGIN_COL = "origincol";
   private static final String NUM_ROWS = "numrows";
   private static final String NUM_COLS = "numcols";
-  private static final String ZERO_STR = "0";
 
   /**
    * Large pieces of this code provided by:
    * https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
    *
    * @param x the String filepath leading to the xml file
-   * @throws ParserConfigurationException
-   * @throws IOException
-   * @throws SAXException
+   * @throws ParserConfigurationException pce
+   * @throws IOException ioe
+   * @throws SAXException se
    */
   public XMLHelper(String x) throws ParserConfigurationException, IOException, SAXException {
-    xmlPath = x;
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = factory.newDocumentBuilder();
-    sourceDoc = builder.parse(new File( xmlPath ));
+    Document sourceDoc = builder.parse(new File(x));
     root = sourceDoc.getDocumentElement();
 
     numCols = getNumCols();

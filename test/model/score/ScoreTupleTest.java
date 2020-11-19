@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javafx.stage.Stage;
+import api.model.score.IScoreTuple;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
 public class ScoreTupleTest extends DukeApplicationTest {
 
-  private ScoreTuple tuple;
+  private IScoreTuple tuple;
 
   private static final int SCORE = 1000;
   private static final String NAME = "Borat";
@@ -54,11 +55,11 @@ public class ScoreTupleTest extends DukeApplicationTest {
    */
   @Test
   public void testCompareTo() {
-    ScoreTuple other = new ScoreTuple(NAME, SCORE + 1);
+    IScoreTuple other = new ScoreTuple(NAME, SCORE + 1);
     int comparison = tuple.compareTo(other);
     assertTrue(comparison > 0);
 
-    List<ScoreTuple> tuples = new ArrayList<>();
+    List<IScoreTuple> tuples = new ArrayList<>();
     tuples.add(tuple);
     tuples.add(other);
     Collections.sort(tuples);

@@ -1,6 +1,8 @@
 package model.entity;
 
 import model.HitBox;
+import api.model.entity.IEmpowering;
+import api.model.entity.IEntity;
 
 public class PowerUp implements IEntity, IEmpowering {
     private HitBox hitBox;

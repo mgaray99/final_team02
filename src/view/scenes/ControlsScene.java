@@ -3,8 +3,9 @@ package view.scenes;
 import controller.KeyBinder;
 import javafx.scene.Group;
 import view.GameScene;
+import api.view.scenes.IControlsScene;
 
-public class ControlsScene extends GameScene {
+public class ControlsScene extends GameScene implements IControlsScene {
 
   private static final String ID = "CONTROLS";
   private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
@@ -22,7 +23,8 @@ public class ControlsScene extends GameScene {
   /**
    * Adds a key binder to this scene
    */
-  private void addKeyBinders() {
+  @Override
+  public void addKeyBinders() {
     key = new KeyBinder(bundle);
     key.setId(key.getClass().getSimpleName());
     addElementToRoot(key);

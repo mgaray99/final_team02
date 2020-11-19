@@ -3,6 +3,9 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import api.controller.IButtonBuilder;
+import api.controller.IButtonPushHandler;
 import javafx.scene.control.Button;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
@@ -22,10 +25,10 @@ import org.xml.sax.SAXException;
  *
  * @author Alex Lu
  */
-public class ButtonBuilder extends Builder {
+public class ButtonBuilder extends Builder implements IButtonBuilder {
 
   private final List<Button> foundButtons;
-  private final ButtonPushHandler handler;
+  private final IButtonPushHandler handler;
 
   private static final String BUTTON = "button";
   private static final String ID = "id";
@@ -35,6 +38,7 @@ public class ButtonBuilder extends Builder {
   private static final String BUTTON_HEIGHT = "height";
   private static final String METHOD = "method";
   private static final String TITLE = "title";
+  private static final String BUILDER_EXCEPTION = "BUTTON_ERROR";
 
   /**
    * Instantiates a new ButtonBuilder object
@@ -43,10 +47,10 @@ public class ButtonBuilder extends Builder {
    * @param h    the HEIGHT of the area in which buttons can be placed
    * @param path the filepath leading to the .txt file containing data on the button
    * @param bph  the handler who will respond when a Button that has been created is pushed
-   * @throws ButtonBuilderInstantiationException if failing to build a button
+   * @throws BuilderInstantiationException if failing to build a button
    */
-  public ButtonBuilder(double w, double h, String path, ButtonPushHandler bph)
-      throws ButtonBuilderInstantiationException {
+  public ButtonBuilder(double w, double h, String path, IButtonPushHandler bph)
+      throws BuilderInstantiationException {
 
     super(w,h);
     foundButtons = new ArrayList<>();
@@ -56,25 +60,25 @@ public class ButtonBuilder extends Builder {
       makeButtons(path);
     }
     catch (Exception e) {
-      throw new ButtonBuilderInstantiationException("Couldn't load button file indexed by "
-          + path);
+      throw new BuilderInstantiationException(BUILDER_EXCEPTION);
     }
   }
+
 
   /**
    * Makes each of the buttons as specified in a particular file
    *
    * @param xmlPath the file to be read
    */
-  private void makeButtons(String xmlPath)
-      throws IOException, ParserConfigurationException, SAXException {
+  public void makeButtons(String xmlPath)
+          throws IOException, ParserConfigurationException, SAXException {
     Element root = buildRoot(xmlPath);
 
-    NodeList buttons = root.getElementsByTagName(BUTTON);
-    stateReferenced = getTextFromElement(root, TITLE);
+    NodeList buttons = root.getElementsByTagName(ButtonBuilder.BUTTON);
+    stateReferenced = getTextFromElement(root, ButtonBuilder.TITLE);
 
-    for (int index = 0; index <  buttons.getLength(); index += 1) {
-      Element buttonNode = (Element)buttons.item(index);
+    for (int index = 0; index < buttons.getLength(); index += 1) {
+      Element buttonNode = (Element) buttons.item(index);
       Button builtButton = buildButtonFromLine(buttonNode);
       foundButtons.add(builtButton);
     }
@@ -87,23 +91,23 @@ public class ButtonBuilder extends Builder {
    * @param buttonNode the node of the file to be parsed for the relevant information
    * @return a fully instantiated Button
    */
-  private Button buildButtonFromLine(Element buttonNode) {
+  public Button buildButtonFromLine(Element buttonNode) {
 
     Button output = new Button();
-    String text = getTextFromElement(buttonNode, ID);
+    String text = getTextFromElement(buttonNode, ButtonBuilder.ID);
 
     output.setId(text);
     output.setText(resourceBundle.getString(text));
 
-    output.setPrefWidth(WIDTH * Double.parseDouble(getTextFromElement(buttonNode, BUTTON_WIDTH)));
-    output.setPrefHeight(HEIGHT * Double.parseDouble(getTextFromElement(buttonNode, BUTTON_HEIGHT)));
+    output.setPrefWidth(WIDTH * Double.parseDouble(getTextFromElement(buttonNode, ButtonBuilder.BUTTON_WIDTH)));
+    output.setPrefHeight(HEIGHT * Double.parseDouble(getTextFromElement(buttonNode, ButtonBuilder.BUTTON_HEIGHT)));
 
-    output.setLayoutX(WIDTH * Double.parseDouble(getTextFromElement(buttonNode, CENTERX)) -
-        output.getPrefWidth() / 2);
-    output.setLayoutY(HEIGHT * Double.parseDouble(getTextFromElement(buttonNode, CENTERY)) -
-        output.getPrefHeight() / 2);
+    output.setLayoutX(WIDTH * Double.parseDouble(getTextFromElement(buttonNode, ButtonBuilder.CENTERX)) -
+            output.getPrefWidth() / 2);
+    output.setLayoutY(HEIGHT * Double.parseDouble(getTextFromElement(buttonNode, ButtonBuilder.CENTERY)) -
+            output.getPrefHeight() / 2);
 
-    output.setOnAction(e -> handler.handlePush(getTextFromElement(buttonNode, METHOD)));
+    output.setOnAction(e -> handler.handlePush(getTextFromElement(buttonNode, ButtonBuilder.METHOD)));
     return output;
   }
 
@@ -112,6 +116,7 @@ public class ButtonBuilder extends Builder {
    *
    * @return a list of buttons
    */
+  @Override
   public List<Button> getFoundButtons() {
     return foundButtons;
   }

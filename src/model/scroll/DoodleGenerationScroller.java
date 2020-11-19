@@ -2,12 +2,12 @@ package model.scroll;
 
 import java.util.List;
 import model.Level;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
 import model.entity.Player;
 
 public class DoodleGenerationScroller extends ManualScroller{
 
-  private AutoGenerationHelper helper;
+  private final AutoGenerationHelper helper;
   private final int GENERATE_MAX_BOUND;
   private static final int NORMALIZE = 100;
   private double flagY;
@@ -26,7 +26,7 @@ public class DoodleGenerationScroller extends ManualScroller{
 
   /**
    * Scrolls all of the entities
-   * @param level
+   * @param level the level to be scrolled
    * @param player the player of the level
    */
   @Override

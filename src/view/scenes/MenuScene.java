@@ -1,12 +1,14 @@
 package view.scenes;
 
+import controller.BuilderInstantiationException;
 import controller.ImageBuilder;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import view.GameScene;
+import api.view.scenes.IMenuScene;
 
-public class MenuScene extends GameScene {
+public class MenuScene extends GameScene implements IMenuScene {
 
     private static final String ID = "HOME_SCREEN";
     private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
@@ -24,15 +26,22 @@ public class MenuScene extends GameScene {
   /**
    * Adds images to the home screen
    */
-  private void addImagesToHomeScreen() {
+  @Override
+  public void addImagesToHomeScreen() {
     Node background = lookupElementInRoot("background");
     removeElementFromRoot(background);
-    ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
-        HOME_IMAGES_PATH);
 
-    for (ImageView view: image.getFoundImages()) {
-      addElementToRoot(view);
-      view.toBack();
+    try {
+      ImageBuilder image = new ImageBuilder(WIDTH, HEIGHT,
+          HOME_IMAGES_PATH);
+
+      for (ImageView view : image.getFoundImages()) {
+        addElementToRoot(view);
+        view.toBack();
+      }
+    }
+    catch (BuilderInstantiationException bie) {
+      updateErrorText(getValueFromBundle(bie.getMessage()));
     }
   }
 }

@@ -10,10 +10,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import model.Level;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
+import model.configuration.*;
+import api.model.configuration.IGameConfiguration;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 import view.scenes.PlayGameScene;
@@ -42,9 +40,9 @@ public class PlayGameSceneTest extends DukeApplicationTest {
   public void start(Stage st) throws InvalidFileException {
     scene = new PlayGameScene(new Group(), WIDTH, HEIGHT);
 
-    GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
-    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-    level = new Level(levelLoader);
+    IGameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
+    ILevelLoader ILevelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+    level = new Level(ILevelLoader);
 
     field = (TextField)scene.lookup("#" + TEXTFIELD_ID);
   }
@@ -107,9 +105,9 @@ public class PlayGameSceneTest extends DukeApplicationTest {
     field.setText("b");
     pressTextfield(field, KeyCode.ENTER);
 
-    LevelLoader levelLoader = new LevelLoader(
+    ILevelLoader ILevelLoader = new LevelLoader(
         new File( SAVE_FILEPATH + "b" + CSV_EXTENSION), new EntityFactory());
-    assertDoesNotThrow(() -> new Level(levelLoader));
+    assertDoesNotThrow(() -> new Level(ILevelLoader));
 
   }
 }

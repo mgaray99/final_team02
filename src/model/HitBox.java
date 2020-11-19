@@ -2,6 +2,7 @@ package model;
 
 import model.collision.CollisionDirections;
 import model.collision.Direction;
+import api.model.IHitBox;
 
 /**
  * A HitBox class for the entities.
@@ -12,7 +13,7 @@ import model.collision.Direction;
  * @author Ryan Krakower
  */
 
-public class HitBox {
+public class HitBox implements IHitBox {
 
   public static final double MAX_SIDE_INTERSECT = 0.5;
   public static final double MAX_TOP_INTERSECT = 0.35;
@@ -39,55 +40,68 @@ public class HitBox {
     this.ySize = ySize;
   };
 
+  @Override
   public double getXLeft() {
     return xLeft;
   }
 
+  @Override
   public int getXSize() {
     return xSize;
   }
 
+  @Override
   public int getYSize() {
     return ySize;
   }
 
+  @Override
   public double getXRight() {
     return xLeft + xSize;
   }
 
+  @Override
   public double getYTop() {
     return yTop;
   }
 
+  @Override
   public void setYTop(double yTop) {
     this.yTop = yTop;
   }
 
+  @Override
   public void setYBottom(double yBottom) {
     this.yTop = yBottom - ySize;
   }
 
+  @Override
   public void setXRight(double xRight) {
     this.xLeft = xRight - xSize;
   }
 
+  @Override
   public void setXLeft(double xLeft) {
     this.xLeft = xLeft;
   }
 
+  @Override
   public double getYBottom() {
     return yTop + ySize;
   }
 
+  @Override
   public void translateX(double deltaX) {
     xLeft += deltaX;
   }
 
+  @Override
   public void translateY(double deltaY) {
     yTop += deltaY;
   }
 
 
+  @Override
   public CollisionDirections getCollisionDirection(HitBox otherBox) {
     CollisionDirections directions = new CollisionDirections();
     double xRight = xLeft + xSize;
@@ -114,10 +128,4 @@ public class HitBox {
     return directions;
   }
 
-  private boolean between(double value, double min, double max) {
-    if ((value > min) && (value < max)) {
-      return true;
-    }
-    return false;
-  }
 }

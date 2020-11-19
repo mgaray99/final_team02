@@ -3,10 +3,9 @@ package model.entity;
 import java.util.ArrayList;
 import java.util.List;
 import model.Level;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
+import model.configuration.*;
+import api.model.configuration.IGameConfiguration;
+import api.model.entity.IEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,9 +21,9 @@ public class EnemyTest {
 
     @Test
     public void enemiesMoveByThemselvesTest() throws InvalidFileException {
-        GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(levelLoader);
+        IGameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
+        ILevelLoader ILevelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+        Level level = new Level(ILevelLoader);
         List<Double> entityXPositions = new ArrayList<>();
         Player player = null;
         for(IEntity entity : level.getCopyOfEntityList()){
@@ -53,9 +52,9 @@ public class EnemyTest {
 
     @Test
     public void enemiesDoNotMoveByThemselvesTest() throws InvalidFileException {
-        GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(levelLoader);
+        IGameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
+        ILevelLoader ILevelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+        Level level = new Level(ILevelLoader);
         List<Double> entityXPositions = new ArrayList<>();
         for(IEntity entity : level.getCopyOfEntityList()){
             if(entity instanceof Enemy){
@@ -83,9 +82,9 @@ public class EnemyTest {
 
     @Test
     public void playerKillsEnemyTest() throws InvalidFileException {
-        GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(levelLoader);
+        IGameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
+        ILevelLoader ILevelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+        Level level = new Level(ILevelLoader);
         Enemy enemy = null;
         Player player = null;
         for(IEntity entity : level.getCopyOfEntityList()){
@@ -116,9 +115,9 @@ public class EnemyTest {
 
     @Test
     public void enemyKillsPlayerTest() throws InvalidFileException {
-        GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(levelLoader);
+        IGameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
+        ILevelLoader ILevelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+        Level level = new Level(ILevelLoader);
         Enemy enemy = null;
         Player player = null;
         for(IEntity entity : level.getCopyOfEntityList()){

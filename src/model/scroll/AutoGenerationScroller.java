@@ -3,12 +3,12 @@ package model.scroll;
 import java.util.List;
 import model.Level;
 import model.autogenerator.GenerationException;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
 import model.entity.Player;
 
 public class AutoGenerationScroller extends AutoScroller {
   private double flagX;
-  private AutoGenerationHelper helper;
+  private final AutoGenerationHelper helper;
   private final int GENERATE_MAX_BOUND;
   private static final String EXCEPTION_MESSAGE = "Failed to build auto-generation";
 

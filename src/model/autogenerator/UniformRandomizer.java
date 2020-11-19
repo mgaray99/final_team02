@@ -1,6 +1,8 @@
 package model.autogenerator;
 
-public class UniformRandomizer {
+import api.model.autogenerator.IUniformRandomizer;
+
+public class UniformRandomizer implements IUniformRandomizer {
 
   private int lowBound;
   private int highBound;
@@ -27,7 +29,8 @@ public class UniformRandomizer {
    * generation
    * @param randomizerPath the String containing config data to set up lowBound/highBound
    */
-  private void initialize(String randomizerPath) {
+  @Override
+  public void initialize(String randomizerPath) {
     randomizerPath = stripParentheses(randomizerPath);
     String[] lowHigh = randomizerPath.split(":");
 
@@ -40,7 +43,8 @@ public class UniformRandomizer {
    * @param path a String containing exactly one instance of "(" and ")"
    * @return the new String
    */
-  private String stripParentheses(String path) {
+  @Override
+  public String stripParentheses(String path) {
     return path.substring(path.indexOf("(") + 1, path.indexOf(")"));
   }
 
@@ -48,6 +52,7 @@ public class UniformRandomizer {
    * Calculates a random value based on the input String
    * @return a random int in the range [lowBound,highBound]
    */
+  @Override
   public int getUniformValue() {
     int value = (int)(Math.random() * (highBound - lowBound + 1)) + lowBound;
     return value;

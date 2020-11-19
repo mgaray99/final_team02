@@ -1,8 +1,10 @@
 package model;
 
 import model.configuration.FileHelper;
+import api.model.configuration.ILevelDecoder;
 import model.configuration.LevelDecoder;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
+import api.model.IGameSaver;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +16,7 @@ import java.util.stream.Stream;
  * A class responsible for writing an existing state of the simulation to a CSV file
  * @author Mike Garay
  */
-public class GameSaver {
+public class GameSaver implements IGameSaver {
 
     private static final String CSV_EXTENSION = ".csv";
     private static final int DEFAULT_ENTITY_KEY = 0;
@@ -29,10 +31,12 @@ public class GameSaver {
         this.currentLevel = currentLevel;
     }
 
+    @Override
     public Level getCurrentLevel() {
         return this.currentLevel;
     }
 
+    @Override
     public void setCurrentLevel(Level currentLevel) {
         this.currentLevel = currentLevel;
     }
@@ -41,6 +45,7 @@ public class GameSaver {
      * Writes a new CSV file given a file name
      * @param fileNameIn The name of the file to be written
      */
+    @Override
     public void writeNewLevelCSVFile(String fileNameIn) {
         String fileNameToWrite =
                 FileHelper.isCSVFile(fileNameIn) ?
@@ -57,9 +62,10 @@ public class GameSaver {
 
     }
 
-    private void writeLevelFile(String fileNameToWrite) throws IOException {
-        LevelDecoder levelDecoder = new LevelDecoder();
-        Map<String, String> levelDecoderMap = levelDecoder.getIdToEntityMap();
+    @Override
+    public void writeLevelFile(String fileNameToWrite) throws IOException {
+        ILevelDecoder ILevelDecoder = new LevelDecoder();
+        Map<String, String> levelDecoderMap = ILevelDecoder.getIdToEntityMap();
         FileWriter levelCSVWriter = new FileWriter(fileNameToWrite);
         for(int yIndex = 0; yIndex < currentLevel.getLevelLength(); yIndex++){
             StringBuilder currentRow = new StringBuilder();
@@ -93,19 +99,5 @@ public class GameSaver {
     }
 
 
-    /**
-     * Gets a stream of possible keys for a value in a map
-     * Source: https://www.baeldung.com/java-map-key-from-value
-     * @param map The Map in which to find matching keys for the given value
-     * @param value The value to find matching keys for
-     * @return A Stream of the same type as the Map's keys that should contain any matching keys for the given value
-     */
-    public <K, V> Stream<K> getMatchingKeysForValue(Map<K, V> map, V value) {
-        return map
-                .entrySet()
-                .stream()
-                .filter(entry -> value.equals(entry.getValue()))
-                .map(Map.Entry::getKey);
-    }
 }
 

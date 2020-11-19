@@ -12,42 +12,42 @@ import util.DukeApplicationTest;
  */
 public class KeyPressFunctionsTest extends DukeApplicationTest {
 
-  KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
+  api.model.IKeyPressFunctions IKeyPressFunctions = new KeyPressFunctions();
 
   @Test
   public void isPausedTest() {
-    assertFalse(keyPressFunctions.isPaused());
-    keyPressFunctions.pauseGame();
-    assertTrue(keyPressFunctions.isPaused());
-    keyPressFunctions.resumeGame();;
-    assertFalse(keyPressFunctions.isPaused());
+    assertFalse(IKeyPressFunctions.isPaused());
+    IKeyPressFunctions.pauseGame();
+    assertTrue(IKeyPressFunctions.isPaused());
+    IKeyPressFunctions.resumeGame();;
+    assertFalse(IKeyPressFunctions.isPaused());
   }
 
   @Test
   public void isPlayerMovingLeftTest() {
-    assertFalse(keyPressFunctions.isPlayerMovingLeft());
-    keyPressFunctions.startMovingPlayerLeft();
-    assertTrue(keyPressFunctions.isPlayerMovingLeft());
-    keyPressFunctions.stopMovingPlayerLeft();
-    assertFalse(keyPressFunctions.isPlayerMovingLeft());
+    assertFalse(IKeyPressFunctions.isPlayerMovingLeft());
+    IKeyPressFunctions.startMovingPlayerLeft();
+    assertTrue(IKeyPressFunctions.isPlayerMovingLeft());
+    IKeyPressFunctions.stopMovingPlayerLeft();
+    assertFalse(IKeyPressFunctions.isPlayerMovingLeft());
   }
 
   @Test
   public void isPlayerMovingRightTest() {
-    assertFalse(keyPressFunctions.isPlayerMovingRight());
-    keyPressFunctions.startMovingPlayerRight();
-    assertTrue(keyPressFunctions.isPlayerMovingRight());
-    keyPressFunctions.stopMovingPlayerRight();
-    assertFalse(keyPressFunctions.isPlayerMovingRight());
+    assertFalse(IKeyPressFunctions.isPlayerMovingRight());
+    IKeyPressFunctions.startMovingPlayerRight();
+    assertTrue(IKeyPressFunctions.isPlayerMovingRight());
+    IKeyPressFunctions.stopMovingPlayerRight();
+    assertFalse(IKeyPressFunctions.isPlayerMovingRight());
   }
 
   @Test
   public void isPlayerJumpingTest() {
-    assertFalse(keyPressFunctions.isPlayerJumping());
-    keyPressFunctions.startPlayerJumping();
-    assertTrue(keyPressFunctions.isPlayerJumping());
-    keyPressFunctions.stopPlayerJumping();
-    assertFalse(keyPressFunctions.isPlayerJumping());
+    assertFalse(IKeyPressFunctions.isPlayerJumping());
+    IKeyPressFunctions.startPlayerJumping();
+    assertTrue(IKeyPressFunctions.isPlayerJumping());
+    IKeyPressFunctions.stopPlayerJumping();
+    assertFalse(IKeyPressFunctions.isPlayerJumping());
   }
 
 

@@ -1,9 +1,11 @@
 package model.configuration;
 
+import api.model.configuration.IGameConfiguration;
+
 import java.io.File;
 import java.util.Properties;
 
-public class GameConfiguration {
+public class GameConfiguration implements IGameConfiguration {
     public static final String LEVEL_KEY = "level";
     private static final String TEXTURES_KEY = "textures";
     private static final String KEYINPUTS_KEY = "keys";
@@ -27,7 +29,8 @@ public class GameConfiguration {
         this.setLevelFile();
     }
 
-    private void setLevelFile() {
+    @Override
+    public void setLevelFile() {
         String levelFileName = this.properties.getProperty(LEVEL_KEY);
         //make exception here for when levelFileName is null
         if (levelFileName.contains(ROOT_SOURCE_INDICATOR)) {
@@ -41,12 +44,14 @@ public class GameConfiguration {
      * Determines the String filepath that holds the textures (i.e. ./.../mariotextures.properties)
      * @return the filepath to the textures file
      */
+    @Override
     public String getTexturesPath() { return properties.getProperty(TEXTURES_KEY); }
 
     /**
      * Determines the String filepath that holds the textures (i.e. ./.../mariokeyinputs.properties)
      * @return the filepath to the key inputs file
      */
+    @Override
     public String getKeyInputsPath() { return properties.getProperty(KEYINPUTS_KEY); }
 
     /**
@@ -56,18 +61,21 @@ public class GameConfiguration {
      *
      * @return the filepath to the .txt file specifying automatic generation
      */
+    @Override
     public String getAutoGeneratorPath() { return properties.getProperty(AUTO_KEY); }
 
     /**
      * Returns the class name for the player class that will run
      * @return the String corresponding to the type of player
      */
+    @Override
     public String getPlayerType() { return properties.getProperty(PLAYER_KEY); }
 
     /**
      * Returns the String filepath that references high scores
      * @return the String corresponding to the high score path
      */
+    @Override
     public String getHighScoresPath() { return properties.getProperty(HIGH_SCORES_KEY); }
 
     /**
@@ -76,6 +84,7 @@ public class GameConfiguration {
      * one the chain)
      * @return the String corresponding to the next level's .properties file
      */
+    @Override
     public String getNextConfigFilePath() { return properties.getProperty(NEXT_FILE_KEY); }
 
     /**
@@ -83,6 +92,7 @@ public class GameConfiguration {
      * (i.e. ["Auto", "0.1", "-0.5"])
      * @return the list of arguments related to a scroller as a String array
      */
+    @Override
     public String[] getScrollerArgs() {
         String scrollerLine = properties.getProperty(SCROLLER_KEY);
         //if (scrollerLine.indexOf(",") > 0) {
@@ -95,6 +105,7 @@ public class GameConfiguration {
         }*/
     }
 
+    @Override
     public File getLevelFile() {
         return this.levelFile;
     }

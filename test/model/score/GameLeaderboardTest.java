@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import javafx.stage.Stage;
+import api.model.score.IGameLeaderboard;
+import api.model.score.IScoreTuple;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -12,7 +14,7 @@ import util.DukeApplicationTest;
  * Tests the GameLeaderboard class
  */
 public class GameLeaderboardTest extends DukeApplicationTest {
-  private GameLeaderboard leaderboard;
+  private IGameLeaderboard leaderboard;
   private static final String PATH = "testleaderboard.csv";
   private static final String TITLE = "TEST";
 
@@ -62,7 +64,7 @@ public class GameLeaderboardTest extends DukeApplicationTest {
    */
   @Test
   public void testAddScoreTuple() throws IOException {
-    ScoreTuple tuple = new ScoreTuple("Ryan", 3);
+    IScoreTuple tuple = new ScoreTuple("Ryan", 3);
     leaderboard.addScoreTuple(tuple);
 
     String tupleLine = leaderboard.getScoreTupleAtPlace(2);
