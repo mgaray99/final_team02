@@ -1,13 +1,14 @@
 package model;
 
+import model.configuration.FileHelper;
+import model.configuration.LevelDecoder;
+import model.entity.IEntity;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import model.configuration.FileHelper;
-import model.configuration.LevelDecoder;
-import model.entity.IEntity;
 
 /**
  * A class responsible for writing an existing state of the simulation to a CSV file
@@ -48,7 +49,7 @@ public class GameSaver {
 
 
         try {
-            writeFile(fileNameToWrite);
+            writeLevelFile(fileNameToWrite);
         } catch (IOException ioException){
             // TODO:
             ioException.printStackTrace();
@@ -56,10 +57,10 @@ public class GameSaver {
 
     }
 
-    private void writeFile(String fileNameToWrite) throws IOException {
+    private void writeLevelFile(String fileNameToWrite) throws IOException {
         LevelDecoder levelDecoder = new LevelDecoder();
         Map<String, String> levelDecoderMap = levelDecoder.getIdToEntityMap();
-        FileWriter seedCSVWriter = new FileWriter(fileNameToWrite);
+        FileWriter levelCSVWriter = new FileWriter(fileNameToWrite);
         for(int yIndex = 0; yIndex < currentLevel.getLevelLength(); yIndex++){
             StringBuilder currentRow = new StringBuilder();
             for(int xIndex = 0; xIndex < currentLevel.getLevelWidth(); xIndex++){
@@ -81,22 +82,23 @@ public class GameSaver {
                     currentRow.append(",");
                 }
             }
-            seedCSVWriter.append(currentRow);
+            levelCSVWriter.append(currentRow);
             if(yIndex < currentLevel.getLevelLength() - 1){
-                seedCSVWriter.append("\n");
+                levelCSVWriter.append("\n");
             }
         }
 
-        seedCSVWriter.flush();
-        seedCSVWriter.close();
+        levelCSVWriter.flush();
+        levelCSVWriter.close();
     }
 
+
     /**
-     * Gets a stream of possible keys for a entityType in a map
+     * Gets a stream of possible keys for a value in a map
      * Source: https://www.baeldung.com/java-map-key-from-value
-     * @param map The Map in which to find matching keys for the given entityType
-     * @param value The entityType to find matching keys for
-     * @return A Stream of the same type as the Map's keys that should contain any matching keys for the given entityType
+     * @param map The Map in which to find matching keys for the given value
+     * @param value The value to find matching keys for
+     * @return A Stream of the same type as the Map's keys that should contain any matching keys for the given value
      */
     public <K, V> Stream<K> getMatchingKeysForValue(Map<K, V> map, V value) {
         return map
