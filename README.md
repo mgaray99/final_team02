@@ -19,7 +19,7 @@ Hours Spent:
 
 Alex Lu: ~35
 
-Mike Garey:
+Mike Garay: ~35
 
 Edem Ahorlu: ~35
 
@@ -35,6 +35,14 @@ various features including textures, splash screens, display enemies,
 power ups, and scores among others.
 
 Mike Garay:
+My role was primarily working on the backend with Ryan.
+Together, we implemented the entity hierarchy (entities are the building blocks
+that make up our levels) and wrote the Level class. 
+I was responsible for making the various interfaces used by the entities,
+including power-up logic. I also worked with Alex to make LevelLoader and EntityFactory
+to load in levels and create entities through reflection. Additionally,
+I wrote basic game configuration and made the api package storing all of our interfaces for
+the project.
 
 Ryan Krakower:
 My role was primarily working on the backend with Mike.
