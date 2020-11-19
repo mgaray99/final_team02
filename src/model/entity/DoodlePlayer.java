@@ -1,7 +1,8 @@
 package model.entity;
 
-import model.collision.CollisionDirections;
 import model.collision.Direction;
+import api.model.collision.ICollisionHandler;
+import api.model.entity.IEntity;
 
 public class DoodlePlayer extends Player {
 
@@ -15,7 +16,7 @@ public class DoodlePlayer extends Player {
   }
 
   @Override
-  public void processCurrentCollision(IEntity otherEntity, CollisionDirections directions) {
+  public void processCurrentCollision(IEntity otherEntity, ICollisionHandler directions) {
     if (directions.contains(Direction.BOTTOM) && this.getYVel() > 0) {
       this.getHitBox().setYBottom(otherEntity.getHitBox().getYTop());
     }

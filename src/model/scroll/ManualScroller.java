@@ -1,10 +1,8 @@
 package model.scroll;
 
-import java.util.List;
-import model.HitBox;
 import model.Level;
-import model.entity.IEntity;
 import model.entity.Player;
+import api.model.scroll.Scroller;
 
 public class ManualScroller implements Scroller {
     protected double leftBound;

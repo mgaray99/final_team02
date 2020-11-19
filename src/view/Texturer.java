@@ -17,9 +17,10 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import model.HitBox;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
+import api.view.ITexturer;
 
-public class Texturer {
+public class Texturer implements ITexturer {
   private Map<String, ImageView> textureMap;
   private Group textureGroup;
   private final double WIDTH;
@@ -55,7 +56,8 @@ public class Texturer {
    * Builds a list of ImageViews from a properties file
    * @param propertiesPath the filepath leading to the .properties file
    */
-  private List<ImageView> buildViewList(String propertiesPath) {
+  @Override
+  public List<ImageView> buildViewList(String propertiesPath) {
     List<ImageView> viewList = new ArrayList<>();
 
     try {
@@ -77,7 +79,8 @@ public class Texturer {
    * @return a new Map of properties
    * @throws IOException
    */
-  private TreeMap buildPropertiesMap(String propertiesPath) throws IOException,
+  @Override
+  public TreeMap buildPropertiesMap(String propertiesPath) throws IOException,
       NullPointerException {
     Properties properties = new Properties();
     InputStream stream =  getClass().getClassLoader().getResourceAsStream(propertiesPath);
@@ -91,7 +94,8 @@ public class Texturer {
    * @param filepath the filepath leading to the correct image
    * @return a new ImageView
    */
-  private ImageView buildImageView(String id, String filepath) {
+  @Override
+  public ImageView buildImageView(String id, String filepath) {
     ImageView view = new ImageView();
     view.setId(id);
 
@@ -110,7 +114,8 @@ public class Texturer {
    * Builds the map String ids -> ImageViews
    * @param viewList the List<ImageView> to build the map on top of
    */
-  private void constructTextureMap(List<ImageView> viewList) {
+  @Override
+  public void constructTextureMap(List<ImageView> viewList) {
     textureMap = new HashMap<>();
     viewList.forEach(view -> textureMap.put(view.getId(), view));
   }
@@ -119,6 +124,7 @@ public class Texturer {
    * Updates the textures
    * @param entityList the list of Entities to be textured
    */
+  @Override
   public void updateTextures(List<IEntity> entityList, double blocksWide, double blocksHigh) {
     numBlocksWide = blocksWide;
     numBlocksHigh = blocksHigh;
@@ -130,7 +136,8 @@ public class Texturer {
   /**
    * Clears the textures out from textureGroup
    */
-  private void clearCurrentTextures() {
+  @Override
+  public void clearCurrentTextures() {
     textureGroup.getChildren().clear();
   }
 
@@ -138,7 +145,8 @@ public class Texturer {
    * Inserts the new textures into textureGroup
    * @param entityList
    */
-  private void insertNewTextures(List<IEntity> entityList) {
+  @Override
+  public void insertNewTextures(List<IEntity> entityList) {
     entityList.forEach(entity -> addNewTexture(entity));
   }
 
@@ -146,7 +154,8 @@ public class Texturer {
    * Adds a single new texture to the group textureGroup
    * @param currentEntity
    */
-  private void addNewTexture(IEntity currentEntity) {
+  @Override
+  public void addNewTexture(IEntity currentEntity) {
     Image image;
     try {
       image = textureMap.get(currentEntity.getType()).getImage();
@@ -166,7 +175,8 @@ public class Texturer {
    * @param currentEntity the Entity whose texture is being placed in (x,y) space
    * @param view the ImageView representing that texture
    */
-  private void placeLocationOfView(IEntity currentEntity, ImageView view) {
+  @Override
+  public void placeLocationOfView(IEntity currentEntity, ImageView view) {
     HitBox hitBox = currentEntity.getHitBox();
 
     view.setX(hitBox.getXLeft() * WIDTH/ numBlocksWide);
@@ -182,7 +192,8 @@ public class Texturer {
    * @param width the width of the image to be drawn
    * @return an image filled in all block
    */
-  private Image buildMissingImage(double width, double height) {
+  @Override
+  public Image buildMissingImage(double width, double height) {
     WritableImage filler = new WritableImage((int) width, (int) height);
     PixelWriter writer = filler.getPixelWriter();
 
@@ -199,6 +210,7 @@ public class Texturer {
    * For testing - return the String filepath leading to the file generating the textures
    * @return path
    */
+  @Override
   public String getPath() {
     return path;
   }

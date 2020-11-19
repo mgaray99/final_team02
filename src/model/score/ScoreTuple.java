@@ -1,8 +1,9 @@
 package model.score;
 
+import api.model.score.IScoreTuple;
 import org.jetbrains.annotations.NotNull;
 
-public class ScoreTuple implements Comparable {
+public class ScoreTuple implements IScoreTuple {
     private int score;
     private String name;
 
@@ -29,6 +30,7 @@ public class ScoreTuple implements Comparable {
    * Returns the name associated with this ScoreTuple
    * @return name
    */
+  @Override
   public String getName() {
     return name;
   }
@@ -37,6 +39,7 @@ public class ScoreTuple implements Comparable {
    * Returns the score associated with this tuple
    * @return score
    */
+  @Override
   public int getScore() {
     return score;
   }
@@ -52,6 +55,6 @@ public class ScoreTuple implements Comparable {
       return 0;
     }
 
-    return ((ScoreTuple)other).getScore() - this.getScore();
+    return ((IScoreTuple)other).getScore() - this.getScore();
   }
 }

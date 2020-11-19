@@ -1,13 +1,14 @@
 package controller;
 
-import model.GameModel;
-import model.KeyPressFunctions;
+import api.controller.IKeyInputterMethodCaller;
+import api.model.IKeyPressFunctions;
+import api.model.IGameModel;
 
-public class KeyInputterMethodCaller {
-  private GameModel model;
-  private KeyPressFunctions functions;
+public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
+  private IGameModel model;
+  private IKeyPressFunctions functions;
 
-  public KeyInputterMethodCaller(GameModel mo) {
+  public KeyInputterMethodCaller(IGameModel mo) {
     model = mo;
     functions = model.getKeyPressFunctions();
   }
@@ -15,6 +16,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move the player left
    */
+  @Override
   public void left() {
     functions.startMovingPlayerLeft();
   }
@@ -22,6 +24,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move right
    */
+  @Override
   public void right() {
     functions.startMovingPlayerRight();
   }
@@ -29,6 +32,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move up (i.e. jump)
    */
+  @Override
   public void up() {
     functions.startPlayerJumping();
   }
@@ -36,6 +40,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move down (i.e. crouch)
    */
+  @Override
   public void down() {
     // DO NOTHING
   }
@@ -43,6 +48,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to pause
    */
+  @Override
   public void pause() {
     if (functions.isPaused()) {
       functions.resumeGame();
@@ -55,6 +61,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move the player left
    */
+  @Override
   public void leftRelease() {
     functions.stopMovingPlayerLeft();
   }
@@ -62,6 +69,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move right
    */
+  @Override
   public void rightRelease() {
     functions.stopMovingPlayerRight();
   }
@@ -69,6 +77,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move up (i.e. jump)
    */
+  @Override
   public void upRelease() {
     functions.stopPlayerJumping();
   }
@@ -76,6 +85,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to move down (i.e. crouch)
    */
+  @Override
   public void downRelease() {
     // DO NOTHING
   }
@@ -83,6 +93,7 @@ public class KeyInputterMethodCaller {
   /**
    * Tells the model to pause
    */
+  @Override
   public void pauseRelease() {
     // DO NOTHING
   }
@@ -90,6 +101,7 @@ public class KeyInputterMethodCaller {
   /**
    * Resets the game
    */
+  @Override
   public void reset() {
     model.getLevel().reinitialize();
   }
@@ -97,6 +109,7 @@ public class KeyInputterMethodCaller {
   /**
    * Player has released the reset key
    */
+  @Override
   public void resetRelease() {
     // DO NOTHING
   }

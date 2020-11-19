@@ -5,8 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import model.collision.CollisionDirections;
 import model.collision.Direction;
+import api.model.collision.ICollisionHandler;
+import api.model.entity.IEntity;
+import api.model.entity.ISpawner;
 
-public class PowerUpBlock extends Block implements ISpawner{
+public class PowerUpBlock extends Block implements ISpawner {
     private final List<IEntity> spawnList = new ArrayList<>();
     private int maxSpawnCount = 1;
 
@@ -20,7 +23,7 @@ public class PowerUpBlock extends Block implements ISpawner{
     }
 
     @Override
-    public CollisionDirections getCollisionsRequiredForSpawn() {
+    public ICollisionHandler getCollisionsRequiredForSpawn() {
         return new CollisionDirections(Collections.singletonList(Direction.BOTTOM));
     }
 

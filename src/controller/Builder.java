@@ -6,11 +6,13 @@ import java.util.ResourceBundle;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import api.controller.IBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-public abstract class Builder {
+public abstract class Builder implements IBuilder {
 
   protected final double WIDTH;
   protected final double HEIGHT;
@@ -32,7 +34,8 @@ public abstract class Builder {
    * @param xmlPath the filepath leading to the xml file
    * @return the root element of an xmlPath
    */
-  protected Element buildRoot(String xmlPath)
+  @Override
+  public Element buildRoot(String xmlPath)
       throws IOException, SAXException, ParserConfigurationException {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();
@@ -46,7 +49,8 @@ public abstract class Builder {
    * @param tagName the String tag name
    * @return the first instance of a node with tagName in parent
    */
-  protected Element getElementByTagName(Element parent, String tagName) {
+  @Override
+  public Element getElementByTagName(Element parent, String tagName) {
     return  (Element)parent.getElementsByTagName(tagName).item(0);
   }
 
@@ -56,7 +60,8 @@ public abstract class Builder {
    * @param tagName the String tag name
    * @return the text on the element
    */
-  protected String getTextFromElement(Element parent, String tagName) {
+  @Override
+  public String getTextFromElement(Element parent, String tagName) {
     return getElementByTagName(parent,tagName).getTextContent();
   }
 
@@ -66,6 +71,7 @@ public abstract class Builder {
    *
    * @return stateReferenced the state listed at the top of the file
    */
+  @Override
   public String getStateReferenced() {
     return stateReferenced;
   }

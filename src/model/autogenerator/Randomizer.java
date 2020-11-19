@@ -1,6 +1,8 @@
 package model.autogenerator;
 
-public class Randomizer {
+import api.model.autogenerator.IRandomizer;
+
+public class Randomizer implements IRandomizer {
   private int[] values;
   private double[] probabilities;
   private static final String EXCEPTION_MESSAGE = "Failed to build Randomizer";
@@ -18,7 +20,8 @@ public class Randomizer {
    * Fills the data structures necessary to initialize the randomizer
    * @param randomizerString the String argument that contains
    */
-  private void initializeRandomizer(String randomizerString) {
+  @Override
+  public void initializeRandomizer(String randomizerString) {
     randomizerString = stripParentheses(randomizerString);
 
     String[] pathPieces = randomizerString.split(";");
@@ -35,7 +38,8 @@ public class Randomizer {
    * Checks to make sure the values array has the same number of elements in it as the probabilities
    * array and if not throws an exception
    */
-  private void checkArrayLengthsAlign() {
+  @Override
+  public void checkArrayLengthsAlign() {
     if (values.length != probabilities.length) {
       throw new IllegalArgumentException();
     }
@@ -46,7 +50,8 @@ public class Randomizer {
    * @param path a String containing exactly one instance of "(" and ")"
    * @return the new String
    */
-  private String stripParentheses(String path) {
+  @Override
+  public String stripParentheses(String path) {
     return path.substring(path.indexOf("(") + 1, path.indexOf(")"));
   }
 
@@ -55,7 +60,8 @@ public class Randomizer {
    * @param values the String array containing the numbers to be pulled
    * @return toBeFilled the int array to be filled with the values
    */
-  private int[] fillIntArrayWithStrings(String[] values) {
+  @Override
+  public int[] fillIntArrayWithStrings(String[] values) {
     int[] toBeFilled = new int[values.length];
 
     for (int index = 0; index < toBeFilled.length; index+=1) {
@@ -69,7 +75,8 @@ public class Randomizer {
    * @param values the String array containing the numbers to be pulled
    * @return toBeFilled the double array to be filled with the values
    */
-  private double[] fillDoubleArrayWithStrings(String[] values) {
+  @Override
+  public double[] fillDoubleArrayWithStrings(String[] values) {
     double[] toBeFilled = new double[values.length];
 
     for (int index = 0; index < toBeFilled.length; index+=1) {
@@ -83,6 +90,7 @@ public class Randomizer {
    * Returns a random entityType in the values array weighted by the probabilties
    * @return a random entityType in the values array
    */
+  @Override
   public int getRandomValue() {
     double aggregatedProbability = 0;
     double randomNumber = Math.random();

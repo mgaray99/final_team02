@@ -7,13 +7,15 @@ import model.Level;
 import model.autogenerator.AutoGenerator;
 import model.autogenerator.GenerationException;
 import model.configuration.EntityFactory;
+import api.model.configuration.ILevelDecoder;
+import api.model.configuration.IEntityFactory;
 import model.configuration.LevelDecoder;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
 
 public class AutoGenerationHelper {
 
   private AutoGenerator generator;
-  private EntityFactory factory;
+  private IEntityFactory factory;
   private Map<String, String> decoderMap;
   protected String[][] currentGeneration;
 
@@ -22,7 +24,7 @@ public class AutoGenerationHelper {
     try {
       factory = new EntityFactory();
       generator = new AutoGenerator(generatorPath);
-      LevelDecoder decoder = new LevelDecoder();
+      ILevelDecoder decoder = new LevelDecoder();
       decoderMap = decoder.getIdToEntityMap();
       currentGeneration = generator.generateNextBlock();
     }

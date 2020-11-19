@@ -1,6 +1,8 @@
 package model.autogenerator;
 
-public class ConstantGeneration extends GenerationInstruction {
+import api.model.autogenerator.IConstantGeneration;
+
+public class ConstantGeneration extends GenerationInstruction implements IConstantGeneration {
 
   public ConstantGeneration(int rows, int cols, String[] args) {
     super(rows, cols);
@@ -24,7 +26,8 @@ public class ConstantGeneration extends GenerationInstruction {
    *
    * @param args the array of arguments
    */
-  private void buildInstruction(String[] args) {
+  @Override
+  public void buildInstruction(String[] args) {
     entityType = args[1];
     buildXSpecification(args[2]);
     buildYSpecification(args[3]);
@@ -36,7 +39,8 @@ public class ConstantGeneration extends GenerationInstruction {
    * Sets up startRow and endRow from the xArgs
    * @param xArgs the String containing the row information (i.e. 4:6)
    */
-  private void buildXSpecification(String xArgs) {
+  @Override
+  public void buildXSpecification(String xArgs) {
     String[] startEnd = xArgs.split(":");
 
     buildStartRow(startEnd[0]);
@@ -47,7 +51,8 @@ public class ConstantGeneration extends GenerationInstruction {
    * Sets up startCol and endCol from the yArgs
    * @param yArgs the String containing the column information (i.e. 3:5)
    */
-  private void buildYSpecification(String yArgs) {
+  @Override
+  public void buildYSpecification(String yArgs) {
     String[] startEnd = yArgs.split(":");
 
     buildStartCol(startEnd[0]);
@@ -58,7 +63,8 @@ public class ConstantGeneration extends GenerationInstruction {
    * Configures the startRow variable based on rowArg
    * @param rowArg the String containing data on the row
    */
-  private void buildStartRow(String rowArg) {
+  @Override
+  public void buildStartRow(String rowArg) {
     startRow = (rowArg.equals("*")) ? 0 : Integer.parseInt(rowArg);
   }
 
@@ -66,7 +72,8 @@ public class ConstantGeneration extends GenerationInstruction {
    * Configures the endRow variable based on rowArg
    * @param rowArg the String containing data on the row
    */
-  private void buildEndRow(String rowArg) {
+  @Override
+  public void buildEndRow(String rowArg) {
     endRow = (rowArg.equals("*")) ? numRows - 1 : Integer.parseInt(rowArg);
 
   }
@@ -75,7 +82,8 @@ public class ConstantGeneration extends GenerationInstruction {
    * Configures the startCol variable based on colArg
    * @param colArg the String containing data on the row
    */
-  private void buildStartCol(String colArg) {
+  @Override
+  public void buildStartCol(String colArg) {
     startCol = (colArg.equals("*")) ? 0 : Integer.parseInt(colArg);
   }
 
@@ -83,7 +91,8 @@ public class ConstantGeneration extends GenerationInstruction {
    * Configures the endCol variable based on colArg
    * @param colArg the String containing data on the row
    */
-  private void buildEndCol(String colArg) {
+  @Override
+  public void buildEndCol(String colArg) {
     endCol = (colArg.equals("*")) ? numCols - 1 : Integer.parseInt(colArg);
   }
 }

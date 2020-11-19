@@ -3,19 +3,18 @@ package view;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import model.GameModel;
+import model.configuration.*;
+import api.model.IGameModel;
 import model.Level;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
 import model.entity.Player;
+import api.model.configuration.IGameConfiguration;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
+import api.view.IGameScene;
 
 /**
  * Tests the GameView class for its ability to switch between scenes and perform various functions
@@ -71,7 +70,7 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
     public void testChangeLanguage() {
-      Button quitButton = (Button)((GameScene)currentScene).getGameController()
+      Button quitButton = (Button)((IGameScene)currentScene).getGameController()
           .lookup("#" + QUIT_BUTTON_ID);
 
       assertEquals("Quit",  quitButton.getText());
@@ -85,7 +84,7 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
     public void testChangeLanguageNotFound() {
-      Button startButton = (Button)((GameScene)currentScene).getGameController()
+      Button startButton = (Button)((IGameScene)currentScene).getGameController()
           .lookup("#" + QUIT_BUTTON_ID);
 
       assertEquals("Quit",  startButton.getText());
@@ -98,11 +97,11 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
     public void testStartGame() {
-        assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+        assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
         javafxRun(() -> view.start());
 
         currentScene = stage.getScene();
-        assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+        assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
     }
 
   /**
@@ -110,11 +109,11 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testGameVersion() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.selectGameTypeScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAMEVERSION");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAMEVERSION");
   }
 
   /**
@@ -122,11 +121,11 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testSetControls() {
-    assertEquals(((GameScene)currentScene).getSceneId(),"HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(),"HOME_SCREEN");
     javafxRun(() -> view.switchToControlScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(),"CONTROLS");
+    assertEquals(((IGameScene)currentScene).getSceneId(),"CONTROLS");
   }
 
   /**
@@ -134,15 +133,15 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testBackToMenu() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.start());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(),"GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(),"GAME");
     javafxRun(() -> view.homeScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
   }
 
   /**
@@ -150,11 +149,11 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testAppearanceScreen() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.switchToSelectCssStylesheetScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "SELECT_CSS_STYLESHEET");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "SELECT_CSS_STYLESHEET");
   }
 
   /**
@@ -162,11 +161,11 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testLanguageScreen() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.switchToSelectLanguageScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(),
+    assertEquals(((IGameScene)currentScene).getSceneId(),
         "SELECT_RESOURCE_BUNDLE");
   }
 
@@ -176,15 +175,15 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testTextureScreen() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
 
     javafxRun(() -> view.start());
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
 
     javafxRun(() -> view.switchToTextureSwapScreen());
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(),
+    assertEquals(((IGameScene)currentScene).getSceneId(),
         "TEXTURE_SWAP");
   }
 
@@ -193,11 +192,11 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testLeaderboardScreen() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.switchToHighScoresScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(),
+    assertEquals(((IGameScene)currentScene).getSceneId(),
         "HIGHSCORE");
   }
 
@@ -206,15 +205,15 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testBack() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.selectGameTypeScreen());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAMEVERSION");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAMEVERSION");
     javafxRun(() -> view.back());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
   }
 
   /**
@@ -225,10 +224,10 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testResetLevel() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     javafxRun(() -> view.start());
 
-    GameModel model = view.getModel();
+    IGameModel model = view.getModel();
     Level level = model.getLevel();
     Player player = level.getPlayerList().get(0);
 
@@ -250,7 +249,7 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testSecretConfigSwitch() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
 
     javafxRun(() ->view.keyPressed("T"));
@@ -263,12 +262,12 @@ public class GameViewTest extends DukeApplicationTest {
    */
   @Test
   public void testSecretConfigSwitchFails() {
-    assertEquals(((GameScene)currentScene).getSceneId(), "HOME_SCREEN");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "HOME_SCREEN");
     assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
 
     javafxRun(() -> view.switchToSelectCssStylesheetScreen());
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "SELECT_CSS_STYLESHEET");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "SELECT_CSS_STYLESHEET");
 
     javafxRun(() ->view.keyPressed("T"));
     assertEquals(DEFAULT_CONFIG_PATH, view.getConfigPath());
@@ -294,16 +293,16 @@ public class GameViewTest extends DukeApplicationTest {
   public void testSimpleGoal() throws InvalidFileException {
     javafxRun(() -> view.start());
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
 
-    GameConfiguration gameConfiguration = new GameConfiguration("supermario.properties");
-    view.setModel(new GameModel(gameConfiguration));
+    IGameConfiguration IGameConfiguration = new GameConfiguration("supermario.properties");
+    view.setModel(new GameModel(IGameConfiguration));
 
     view.getModel().getLevel().setLevelWon(true);
     javafxRun(() -> view.update());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
     assertEquals("mariolevel2.properties", view.getConfigPath());
   }
 
@@ -316,10 +315,10 @@ public class GameViewTest extends DukeApplicationTest {
   public void testFinishGoal() throws InvalidFileException {
     javafxRun(() -> view.start());
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
 
-    GameConfiguration gameConfiguration = new GameConfiguration("supermario.properties");
-    view.setModel(new GameModel(gameConfiguration));
+    IGameConfiguration IGameConfiguration = new GameConfiguration("supermario.properties");
+    view.setModel(new GameModel(IGameConfiguration));
 
     view.getModel().getLevel().setLevelWon(true);
     javafxRun(() -> view.update());
@@ -333,7 +332,7 @@ public class GameViewTest extends DukeApplicationTest {
     javafxRun(() -> view.update());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
     assertEquals("mariolevel3.properties", view.getConfigPath());
   }
 
@@ -346,19 +345,19 @@ public class GameViewTest extends DukeApplicationTest {
   public void testInvalidGoal() throws InvalidFileException {
     javafxRun(() -> view.start());
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
 
-    GameConfiguration gameConfiguration = new GameConfiguration("marioleveltest.properties");
-    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-    view.getModel().getLevel().setOrResetLevel(levelLoader);
+    IGameConfiguration IGameConfiguration = new GameConfiguration("marioleveltest.properties");
+    ILevelLoader ILevelLoader = new LevelLoader(IGameConfiguration.getLevelFile(), new EntityFactory());
+    view.getModel().getLevel().setOrResetLevel(ILevelLoader);
 
     view.getModel().getLevel().setLevelWon(true);
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAME");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAME");
     javafxRun(() -> view.update());
 
     currentScene = stage.getScene();
-    assertEquals(((GameScene)currentScene).getSceneId(), "GAMEVERSION");
+    assertEquals(((IGameScene)currentScene).getSceneId(), "GAMEVERSION");
   }
 
 }

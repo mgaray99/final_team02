@@ -9,20 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+
+import api.controller.IKeyInputter;
+import api.controller.IKeyInputterMethodCaller;
 import javafx.util.Pair;
-import model.GameModel;
+import api.model.IGameModel;
 import model.configuration.InvalidFileException;
 import model.configuration.ModelExceptionReason;
 
-public class KeyInputter {
+public class KeyInputter implements IKeyInputter {
 
-  private KeyInputterMethodCaller methodCaller;
+  private IKeyInputterMethodCaller methodCaller;
   private Map<String, String> keyToMethodMap;
   private String lastMethodFromKeyPress;
   private static final String FILEPATH_START = "resources/keyinputs/";
   private final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
-  public KeyInputter(GameModel model) throws InvalidFileException {
+  public KeyInputter(IGameModel model) throws InvalidFileException {
     methodCaller = new KeyInputterMethodCaller(model);
     lastMethodFromKeyPress = "";
     keyToMethodMap = new HashMap<>();
@@ -35,6 +38,7 @@ public class KeyInputter {
    *
    * @param path the filepath of the new .txt file
    */
+  @Override
   public void loadKeyInputsFromFile(String path) throws InvalidFileException{
     try {
       Properties properties = new Properties();
@@ -60,6 +64,7 @@ public class KeyInputter {
    * @param replacementKey the key that you want to replace currentKey as being associated with that
    *                       method
    */
+  @Override
   public void swapKeyInput(String currentKey, String replacementKey) {
     if (keyToMethodMap.containsKey(currentKey) && !keyToMethodMap.containsKey(replacementKey)) {
       String correspondingMethod = keyToMethodMap.get(currentKey);
@@ -74,6 +79,7 @@ public class KeyInputter {
    *
    * @param press the String representation of the key that has been pressed
    */
+  @Override
   public void keyPressed(String press) {
     if (keyToMethodMap.containsKey(press)) {
       String methodPath = keyToMethodMap.get(press);
@@ -87,6 +93,7 @@ public class KeyInputter {
    *
    * @param press the String representation of the key that has been pressed
    */
+  @Override
   public void keyReleased(String press) {
     if (keyToMethodMap.containsKey(press)) {
       String methodPath = keyToMethodMap.get(press) + "Release";
@@ -100,7 +107,8 @@ public class KeyInputter {
    *
    * @param methodPath the String representation of the method to be called
    */
-  private void invokeMethod(String methodPath) {
+  @Override
+  public void invokeMethod(String methodPath) {
     try {
       Method method = methodCaller.getClass().getDeclaredMethod(methodPath);
       method.invoke(methodCaller);
@@ -110,11 +118,11 @@ public class KeyInputter {
       System.out.println("the method attached to that key input broke");
     }
   }
-
   /**
    * Returns a mapping of keys to methods (defensively create rather than return existing map
    * @return a mapping of String keys to String methods
    */
+  @Override
   public List<Pair<String, String>> getKeyMethodPairings() {
     List<Pair<String, String>> pairings = new ArrayList<>();
     keyToMethodMap.keySet().forEach(key -> pairings.add(new Pair<>(key, keyToMethodMap.get(key))));
@@ -126,6 +134,7 @@ public class KeyInputter {
    * @param key the String key
    * @return a boolean revealing whether or not the key is valid
    */
+  @Override
   public boolean isValidKey(String key) {
     List<String> blockedKeysList = Arrays.asList(bannedKeys);
     return !keyToMethodMap.containsKey(key) && !blockedKeysList.contains(key);
@@ -135,7 +144,8 @@ public class KeyInputter {
    * For testing - return the String representation of the last method to occur out of a key press
    * @return the String representation of the last method to be called
    */
-  String getLastPush() {
+  @Override
+  public String getLastPush() {
     String tempPush = lastMethodFromKeyPress;
     lastMethodFromKeyPress = "";
     return tempPush;

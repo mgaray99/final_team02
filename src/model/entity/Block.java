@@ -1,6 +1,7 @@
 package model.entity;
 
 import model.HitBox;
+import api.model.entity.IEntity;
 
 public class Block implements IEntity {
     private HitBox hitBox;

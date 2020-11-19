@@ -1,4 +1,4 @@
-package model.entity;
+package api.model.entity;
 
 public interface IWinnable {
 

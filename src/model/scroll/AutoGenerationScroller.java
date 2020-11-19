@@ -3,7 +3,7 @@ package model.scroll;
 import java.util.List;
 import model.Level;
 import model.autogenerator.GenerationException;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
 import model.entity.Player;
 
 public class AutoGenerationScroller extends AutoScroller {

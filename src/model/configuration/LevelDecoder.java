@@ -1,13 +1,14 @@
 package model.configuration;
 
-import com.sun.security.auth.NTUserPrincipal;
+import api.model.configuration.ILevelDecoder;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-public class LevelDecoder {
+public class LevelDecoder implements ILevelDecoder {
   private Map<String, String> keyToEntityTypeMap;
   private static final String ID_TO_ENTITY_PATH =
       "resources/game_configuration/entityids.properties";
@@ -20,7 +21,8 @@ public class LevelDecoder {
    * Builds a map, mapping String ids -> String entity types (i.e. "1" -> "PLAYER")
    * @throws IOException
    */
-  private void buildKeyToEntityTypeMap() throws IOException, NullPointerException {
+  @Override
+  public void buildKeyToEntityTypeMap() throws IOException, NullPointerException {
 
     Properties properties = new Properties();
     InputStream stream =  getClass().getClassLoader().getResourceAsStream(
@@ -34,6 +36,7 @@ public class LevelDecoder {
    * Returns the map from keys to entities
    * @return keyToEntityTypeMap
    */
+  @Override
   public Map<String, String> getIdToEntityMap() {
     return keyToEntityTypeMap;
   }

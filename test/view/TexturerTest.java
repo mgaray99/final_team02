@@ -8,7 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.entity.Block;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
 import model.entity.MarioPlayer;
 import model.entity.Player;
 import org.junit.jupiter.api.Test;

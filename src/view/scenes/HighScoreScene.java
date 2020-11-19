@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
 import view.GameScene;
+import api.view.ILeaderboardView;
 import view.LeaderboardView;
+import api.view.scenes.IHighScoreScene;
 
 
-public class HighScoreScene extends GameScene {
+public class HighScoreScene extends GameScene implements IHighScoreScene {
 
 
     private static final String ID = "HIGHSCORE";
@@ -26,7 +28,7 @@ public class HighScoreScene extends GameScene {
     private static final double LEADERBOARD_WIDTH = 100;
     private static final double LEADERBOARD_HEIGHT = 400;
 
-    private List<LeaderboardView> leaderboardViewList;
+    private List<ILeaderboardView> ILeaderboardViewList;
 
     public HighScoreScene(Group myRoot, double width, double height) {
         super(myRoot, ID, width, height);
@@ -39,8 +41,9 @@ public class HighScoreScene extends GameScene {
     /**
      * Builds the leaderboard view
      */
-    private void buildLeaderBoardViews() {
-        leaderboardViewList = new ArrayList<>();
+    @Override
+    public void buildLeaderBoardViews() {
+        ILeaderboardViewList = new ArrayList<>();
         buildLeaderBoardView(MARIO_INFINITY_LEADERBOARD, 25, LEADERBOARDY);
         buildLeaderBoardView(DOODLE_LEADERBOARD, 175, LEADERBOARDY);
         buildLeaderBoardView(DOODLE_LEADERBOARD2, 325, LEADERBOARDY);
@@ -51,11 +54,12 @@ public class HighScoreScene extends GameScene {
     /**
      * Builds a leaderboard view and adds it to root
      */
-    private void buildLeaderBoardView(String path, double x, double y) {
+    @Override
+    public void buildLeaderBoardView(String path, double x, double y) {
         try {
             LeaderboardView view = new LeaderboardView(path, x, y,
                 LEADERBOARD_WIDTH, LEADERBOARD_HEIGHT);
-            leaderboardViewList.add(view);
+            ILeaderboardViewList.add(view);
             addElementToRoot(view);
             view.toFront();
         }
@@ -67,8 +71,9 @@ public class HighScoreScene extends GameScene {
     /**
      * Updates the contents of all leaderboards in the scene
      */
+    @Override
     public void updateLeaderboards() {
-        for (LeaderboardView leader : leaderboardViewList) {
+        for (ILeaderboardView leader : ILeaderboardViewList) {
             try {
                 leader.updateLeaderboard();
             }

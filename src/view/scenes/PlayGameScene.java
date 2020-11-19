@@ -1,6 +1,5 @@
 package view.scenes;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import javafx.scene.Group;
@@ -9,12 +8,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import model.GameSaver;
+import api.model.score.IScoreTuple;
+import api.model.score.IGameLeaderboard;
+import api.model.IGameSaver;
 import model.Level;
 import model.score.GameLeaderboard;
 import model.score.ScoreTuple;
 import view.GameScene;
+import api.view.scenes.IPlayGameScene;
 
-public class PlayGameScene extends GameScene {
+public class PlayGameScene extends GameScene implements IPlayGameScene {
   private static final String ID = "GAME";
   private static final String TEXTFIELD_ID = "TEXTFIELD";
   private static final String SCOREFIELD_ID = "SCOREFIELD";
@@ -48,7 +51,8 @@ public class PlayGameScene extends GameScene {
   /**
    * Builds the text label to display score
    */
-  private void makeScoreText() {
+  @Override
+  public void makeScoreText() {
     scoreLabel = new Text();
     scoreLabel.setText("");
     scoreLabel.setLayoutX(WIDTH / 2 - scoreLabel.getLayoutBounds().getWidth() / 2);
@@ -61,6 +65,7 @@ public class PlayGameScene extends GameScene {
    * Updates and recenters the score text
    * @param update the new text to be displayed
    */
+  @Override
   public void updateScoreText(String update) {
     scoreLabel.setText(update);
     scoreLabel.setLayoutX(WIDTH / 2 - scoreLabel.getLayoutBounds().getWidth() / 2);
@@ -70,7 +75,8 @@ public class PlayGameScene extends GameScene {
   /**
    * Makes the group node that will hold the textures
    */
-  private void addTexturesGroup() {
+  @Override
+  public void addTexturesGroup() {
     Group textures = new Group();
     textures.setId(TEXTURES);
     addElementToRoot(textures);
@@ -81,7 +87,8 @@ public class PlayGameScene extends GameScene {
   /**
    * Enables the TextField that will take in the file name
    */
-  private void buildSavingFunctionality() {
+  @Override
+  public void buildSavingFunctionality() {
     saveField = new TextField();
     buildTextField(saveField);
 
@@ -95,7 +102,8 @@ public class PlayGameScene extends GameScene {
    * Pins a textfield to the center of the screen and makes it invisible
    * @param field the field in question
    */
-  private void buildTextField(TextField field) {
+  @Override
+  public void buildTextField(TextField field) {
     field.setMinWidth(WIDTH/8);
     field.setMinHeight(HEIGHT/20);
     field.setLayoutX(WIDTH/2 - field.getMinWidth());
@@ -107,7 +115,8 @@ public class PlayGameScene extends GameScene {
   /**
    * Builds the scoreField instance variable
    */
-  private void buildScoreField() {
+  @Override
+  public void buildScoreField() {
     scoreField = new TextField();
     buildTextField(scoreField);
     scoreField.setId(SCOREFIELD_ID);
@@ -119,6 +128,7 @@ public class PlayGameScene extends GameScene {
   /**
    * Saves the game
    */
+  @Override
   public void launchSave(Level level) {
     currentLevel = level;
     String saveInstructions = getValueFromBundle(SAVE_INSTRUCTIONS);
@@ -131,7 +141,8 @@ public class PlayGameScene extends GameScene {
    * Handles the event that a key was pressed in the textfield
    * @param event the key event that has occurred
    */
-  private void handleTextFieldPress(KeyEvent event) {
+  @Override
+  public void handleTextFieldPress(KeyEvent event) {
     if (event.getCode().equals(KeyCode.ENTER)) {
         attemptSave();
     }
@@ -140,7 +151,8 @@ public class PlayGameScene extends GameScene {
   /**
    * Tries to save using the file name given
    */
-  private void attemptSave() {
+  @Override
+  public void attemptSave() {
     if(checkIsValidText(saveField.getText())) {
       finalizeSave();
     }
@@ -156,7 +168,8 @@ public class PlayGameScene extends GameScene {
    * @param text the text to be checked
    * @return a boolean revealing whether or not the text is valid
    */
-  private boolean checkIsValidText(String text) {
+  @Override
+  public boolean checkIsValidText(String text) {
     List<String> bannedList= Arrays.asList(bannedCharacters);
     boolean containsBannedChar = false;
 
@@ -172,8 +185,9 @@ public class PlayGameScene extends GameScene {
   /**
    * Finishes the saving
    */
-  private void finalizeSave() {
-    GameSaver saver = new GameSaver(currentLevel);
+  @Override
+  public void finalizeSave() {
+    IGameSaver saver = new GameSaver(currentLevel);
     saver.writeNewLevelCSVFile(SAVE_FILEPATH + saveField.getText() + CSV_EXTENSION);
 
     clearFields();
@@ -184,7 +198,8 @@ public class PlayGameScene extends GameScene {
    * Attempts to save the score
    * @param key the key that was pressed
    */
-  private void attemptScoreSave(KeyEvent key) {
+  @Override
+  public void attemptScoreSave(KeyEvent key) {
     if (key.getCode().equals(KeyCode.ENTER) && checkIsValidText(scoreField.getText())) {
       finalizeScoreSave();
     }
@@ -197,10 +212,11 @@ public class PlayGameScene extends GameScene {
   /**
    * Finishing saving the score
    */
-  private void finalizeScoreSave() {
+  @Override
+  public void finalizeScoreSave() {
     try {
-      GameLeaderboard leaderboard = new GameLeaderboard(scorePath);
-      ScoreTuple tuple = new ScoreTuple(scoreField.getText(), currentLevel.getScore());
+      IGameLeaderboard leaderboard = new GameLeaderboard(scorePath);
+      IScoreTuple tuple = new ScoreTuple(scoreField.getText(), currentLevel.getScore());
       leaderboard.addScoreTuple(tuple);
     }
     catch (Exception e) {
@@ -221,6 +237,7 @@ public class PlayGameScene extends GameScene {
    *             high scores
    * @param level the level that has just been lost
    */
+  @Override
   public void inputScore(String path, Level level) {
     scorePath = path;
     currentLevel = level;
@@ -232,6 +249,7 @@ public class PlayGameScene extends GameScene {
   /**
    * Clears all of the text fields and the error labels and resumes the game
    */
+  @Override
   public void clearFields() {
     scoreField.setVisible(false);
     scoreField.clear();
@@ -248,6 +266,7 @@ public class PlayGameScene extends GameScene {
   /**
    * Pauses the level currentLevel
    */
+  @Override
   public void pauseLevel() {
     currentLevel.getKeyPressFunctions().pauseGame();
   }
