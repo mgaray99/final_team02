@@ -73,10 +73,10 @@ public class GameScene extends Scene {
     errorLabel.setText("");
     errorLabel.setId("scoreStyle");
     errorLabel.getStyleClass().add("scoreStyle");
+    root.getChildren().add(errorLabel);
 
     errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
     errorLabel.setLayoutY(HEIGHT/10);
-    root.getChildren().add(errorLabel);
   }
 
   /**
