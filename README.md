@@ -23,7 +23,7 @@ Mike Garey:
 
 Edem Ahorlu: ~35
 
-Ryan Krakower:
+Ryan Krakower: ~35
 
 
 ### Primary Roles
@@ -37,6 +37,12 @@ power ups, and scores among others.
 Mike Garay:
 
 Ryan Krakower:
+My role was primarily working on the backend with Mike.
+Together, we implemented the entity hierarchy (entities are the building blocks
+that make up our levels) and wrote the Level class. 
+I was responsible for the physics of entities, making the HitBox class and collision mechanics. 
+I also wrote several of the entity classes, such as Player and Enemy. 
+Additionally, I added the Doodle Jump and Flappy Bird texture packs.
 
 Alex Lu: 
 I worked on the front end of the game with Edem Ahorlu. While he primarily
@@ -64,7 +70,7 @@ Data files needed:
 
 Features implemented:
 * Run 3 functionally different working and playable versions of a scrolling platformer game and two mods of the game:
-    - Mario Bros, Mario Infinity(mod)
+    - Mario Bros, Mario Infinity (mod)
     - Doodle Jump, Doodle Jump 2 (mod)
     - Flappy Bird
 * Enable the player easily switch between all versions of the game
@@ -73,12 +79,12 @@ Features implemented:
 * Implemented Splash Screens with images
 * Display scores
 * Keep track of high scores on a leaderboard
-* Apply different textures to features of the game
+* Added different texture packs, which can each be applied to any of the games
 * Display caught exceptions
 * Switch between different languages
-* Switch between different modes (default, dark, light)
-* Allow the user save progress on game
-* Allow the user set key controls for the game
+* Switch between different menu/background appearance modes (default, dark, light)
+* Allow the user to save progress on game
+* Allow the user to set key controls for the game
 
 ### Error Handling
 
@@ -126,6 +132,12 @@ Assumptions or Simplifications:
   /src/resources/images/gameTextures folder)
 
 
+*Every entity is the same size and shape (a square). This assumption made it easier to 
+read/write levels and to make HitBoxes and collision mechanics. 
+The only downside is that it limits our options for resizing entities.
+*The game scene is always the same size (you can technically resize the window, 
+but the scene size will not change, so there's no point)
+
 Interesting data files:
 * mariolevel2.properties is a strong example of the flexibility of our game
     * Upon reaching the end of level 1 of our Super Mario game (to accomplish this run Main.java
@@ -152,8 +164,14 @@ Interesting data files:
         
 
 Known Bugs:
+<<<<<<< HEAD
 * Error text can be displayed off center when it appears (i.e. if a data file is corrupted)
 * Edge detection can be shaky at times, although it generally works well
+=======
+*If the player is moving too fast, he may go straight through a block.
+*Sometimes collision mechanics do not work correctly if the player
+approaches a block from a corner (he may appear to go through the block).
+>>>>>>> c60bc5e8bbc493e6c8138e00bc0b11ad56c66c5f
 
 Extra credit:
 * We built a package called autogenerator which is responsible for in-game automatic level 
@@ -191,7 +209,7 @@ game.
 
 ### Impressions
 
-    This was definitely the most enjoyable project of the year to work on. In spite of the increased
+   This was definitely the most enjoyable project of the year to work on. In spite of the increased
 team size, we had great team communication and deadline management and most of us believe that this
 particular project is our strongest of the year. The free rein to take this project in whatever 
 direction we wanted to was initially scary, but later proved to be one of the best parts of the
