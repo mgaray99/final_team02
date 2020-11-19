@@ -36,12 +36,14 @@ public class GameController extends Group implements ButtonPushHandler {
    * @param extension the allowed extension for each option (i.e. include if ".jpeg")
    * @param method the method to be called by the OptionsSelector
    */
-  public void addOptionsSelectorFromFolder(String folder, String extension, String method) {
+  public void addOptionsSelectorFromFolder(String folder, String extension, String method)
+  throws BuilderInstantiationException {
     FolderParser parser = new FolderParser(folder, extension);
     buildOptionsSelector(parser.getFilenamesFromFolder(), method);
   }
 
-  public void buildOptionsSelector(List<String> choices, String method) {
+  public void buildOptionsSelector(List<String> choices, String method)
+      throws BuilderInstantiationException{
     List<String> defensiveChoices = new ArrayList<>();
     defensiveChoices.addAll(choices);
 
@@ -76,17 +78,12 @@ public class GameController extends Group implements ButtonPushHandler {
    * methodName on the view as specified by "view"
    * @param file the filepath of the button file
    */
-  public void addButtonsFromFile(String file) {
-      try {
+  public void addButtonsFromFile(String file) throws BuilderInstantiationException {
         ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT, file, this);
         List<Button> foundButtons = builder.getFoundButtons();
 
         foundButtons.forEach(button -> button.setFocusTraversable(false));
         getChildren().addAll(foundButtons);
-      }
-      catch (ButtonBuilderInstantiationException bbie) {
-        System.out.println("couldn't build buttons");
-      }
   }
 
   /**

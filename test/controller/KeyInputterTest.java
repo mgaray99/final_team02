@@ -47,7 +47,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * default key input map, that would be DEFAULT_LEFT or A) the left() method is called
    */
   @Test
-  public void testLeft() {
+  public void testLeft() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_LEFT);
     assertEquals(LEFT, testInputter.getLastPush());
   }
@@ -57,7 +57,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * default key input map, that would be DEFAULT_UP or W) the up() method is called
    */
   @Test
-  public void testUp() {
+  public void testUp() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_UP);
     assertEquals(UP, testInputter.getLastPush());
   }
@@ -66,7 +66,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * default key input map, that would be DEFAULT_RIGHT or D) the right() method is called
    */
   @Test
-  public void testRight() {
+  public void testRight() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
   }
@@ -76,7 +76,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * default key input map, that would be DEFAULT_LEFT or A) the left() method is called
    */
   @Test
-  public void testPause() {
+  public void testPause() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_PAUSE);
     assertEquals(PAUSE, testInputter.getLastPush());
   }
@@ -86,7 +86,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * default key input map, that would be DEFAULT_RESET or R) the reset() method is called
    */
   @Test
-  public void testReset() {
+  public void testReset() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_RESET);
     assertEquals(RESET, testInputter.getLastPush());
   }
@@ -96,7 +96,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * default key input map, that would be DEFAULT_PAUSE or P) the pause() method is called
    */
   @Test
-  public void testIrrelevantKeyPush() {
+  public void testIrrelevantKeyPush() throws KeyInputterMissingMethodException {
     testInputter.keyPressed("L");
     assertEquals("", testInputter.getLastPush());
   }
@@ -107,7 +107,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * to a method)
    */
   @Test
-  public void testValidSwap() {
+  public void testValidSwap() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
 
@@ -125,7 +125,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * mapped to a method)
    */
   @Test
-  public void testValidSwapInvalidCurrentKey() {
+  public void testValidSwapInvalidCurrentKey() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
 
@@ -150,7 +150,7 @@ public class KeyInputterTest extends DukeApplicationTest {
    * (i.e. a key that is currently mapped to a method)
    */
   @Test
-  public void testValidSwapInvalidReplacementKey() {
+  public void testValidSwapInvalidReplacementKey() throws KeyInputterMissingMethodException {
     testInputter.keyPressed(DEFAULT_RIGHT);
     assertEquals(RIGHT, testInputter.getLastPush());
 

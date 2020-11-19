@@ -20,13 +20,13 @@ import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
 /**
- * Tests the HorizontalGenerationScroller class
+ * Tests the AutoGenerationScroller class
  */
 
-public class HorizontalGenerationScrollerTest extends DukeApplicationTest{
+public class AutoGenerationScrollerTest extends DukeApplicationTest{
 
   private static final int MAX = 15;
-  private static final String PATH = "./src/resources/game_configuration/auto/autoflappy.xml";
+  private static final String PATH = "autoflappy.xml";
   private static final double XSCROLL = -0.5;
   private static final double YSCROLL = 0.5;
 

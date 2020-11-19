@@ -35,6 +35,7 @@ public class ButtonBuilder extends Builder {
   private static final String BUTTON_HEIGHT = "height";
   private static final String METHOD = "method";
   private static final String TITLE = "title";
+  private static final String BUILDER_EXCEPTION = "BUTTON_ERROR";
 
   /**
    * Instantiates a new ButtonBuilder object
@@ -43,10 +44,10 @@ public class ButtonBuilder extends Builder {
    * @param h    the HEIGHT of the area in which buttons can be placed
    * @param path the filepath leading to the .txt file containing data on the button
    * @param bph  the handler who will respond when a Button that has been created is pushed
-   * @throws ButtonBuilderInstantiationException if failing to build a button
+   * @throws BuilderInstantiationException if failing to build a button
    */
   public ButtonBuilder(double w, double h, String path, ButtonPushHandler bph)
-      throws ButtonBuilderInstantiationException {
+      throws BuilderInstantiationException {
 
     super(w,h);
     foundButtons = new ArrayList<>();
@@ -56,8 +57,7 @@ public class ButtonBuilder extends Builder {
       makeButtons(path);
     }
     catch (Exception e) {
-      throw new ButtonBuilderInstantiationException("Couldn't load button file indexed by "
-          + path);
+      throw new BuilderInstantiationException(BUILDER_EXCEPTION);
     }
   }
 

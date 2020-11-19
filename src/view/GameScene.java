@@ -1,5 +1,6 @@
 package view;
 
+import controller.BuilderInstantiationException;
 import controller.FolderParser;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -70,6 +71,9 @@ public class GameScene extends Scene {
   private void makeErrorText() {
     errorLabel = new Text();
     errorLabel.setText("");
+    errorLabel.setId("scoreStyle");
+    errorLabel.getStyleClass().add("scoreStyle");
+
     errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
     errorLabel.setLayoutY(HEIGHT/10);
     root.getChildren().add(errorLabel);
@@ -79,13 +83,10 @@ public class GameScene extends Scene {
    * Updates the error text label that will appear at the top of the screen
    * @param newText the new text to fill that label
    */
-  public void updateErrorText(String newText) {
-    errorLabel.setText(newText);
-    errorLabel.setId("scoreStyle");
-    errorLabel.getStyleClass().add("scoreStyle");
-
-
+  public void updateErrorText(String newText)  {
     errorLabel.setVisible(true);
+
+    errorLabel.setText(newText);
     errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
   }
 
@@ -120,7 +121,12 @@ public class GameScene extends Scene {
    * @param file the file containing the buttons to be included
    */
   public void addButtonsToControllerFromFile(String file) {
-    controller.addButtonsFromFile(file);
+    try {
+      controller.addButtonsFromFile(file);
+    }
+    catch (BuilderInstantiationException bie) {
+      updateErrorText(getValueFromBundle(bie.getMessage()));
+    }
   }
 
   /**
@@ -131,11 +137,22 @@ public class GameScene extends Scene {
    */
   public void buildOptionsSelectorFromFolderForController(String folder, String extension,
       String method) {
-    controller.addOptionsSelectorFromFolder(folder, extension, method);
+    try {
+      controller.addOptionsSelectorFromFolder(folder, extension, method);
+    }
+    catch (BuilderInstantiationException bie) {
+      updateErrorText(getValueFromBundle(bie.getMessage()));
+    }
   }
 
+
   public void buildOptionsSelectorFromListForController(List<String> choices, String method) {
-    controller.buildOptionsSelector(choices, method);
+    try {
+      controller.buildOptionsSelector(choices, method);
+    }
+    catch (BuilderInstantiationException bie) {
+      updateErrorText(getValueFromBundle(bie.getMessage()));
+    }
   }
 
   /**
