@@ -112,10 +112,10 @@ Features implemented:
       when reaching the goal that would activate loading of the .properties file at nextfile
     * A faulty texture file value will not crash the game, but will display
       all textures as black boxes to let the user know that something is wrong
-* Messing with a button config file for a particular scene will display at the top
-  of that scene "Failed to load buttons!" but will not crash the program (the buttons won't be there
-  though)
-* Our error messages are pulled from language files (./src/resources/resourcebundles) and thus 
+* Deleting a button config file for a particular scene and then running the program will display 
+  at the top of that scene "Failed to load buttons!" but will not crash the program (the buttons 
+  won't be there though)
+* Our error messages are pulled from language files in ./src/resources/resourcebundles and thus 
   will be displayed in other languages if the user has chosen to run the program in those languages 
 * Our test library was extensive for this project too, with all of us wanting to make sure that
   our code worked. We finished with 148 tests in the final stretches of our project, achieving
