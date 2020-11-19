@@ -5,12 +5,13 @@ import model.Level;
 import model.autogenerator.AutoGenerator;
 import model.autogenerator.GenerationException;
 import model.configuration.EntityFactory;
-import model.entity.IEntity;
+import api.model.configuration.IEntityFactory;
+import api.model.entity.IEntity;
 
 public class AutoGenerationHelper {
 
   private final AutoGenerator generator;
-  private final EntityFactory factory;
+  private final IEntityFactory factory;
   protected String[][] currentGeneration;
 
 

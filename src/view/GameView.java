@@ -16,11 +16,14 @@ import javafx.scene.Group;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.GameModel;
+import api.model.IGameModel;
 import model.autogenerator.GenerationException;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
 import view.scenes.*;
+import api.view.IGameScene;
+import api.view.IGameView;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
@@ -28,7 +31,7 @@ import view.scenes.*;
  *
  * @author Alex Lu & Edem Ahorlu
  */
-public class GameView extends Application {
+public class GameView extends Application implements IGameView {
 
   private PlayGameScene playGameScene;
   private MenuScene menuScene;
@@ -36,7 +39,7 @@ public class GameView extends Application {
   private SelectStyleScene selectStyleScene;
   private ControlsScene controlsScene;
   private SelectGameScene selectGameScene;
-  private List<GameScene> gameScenes;
+  private List<IGameScene> IGameScenes;
   private HighScoreScene displayHighScore;
   private TextureSwapScene textureSwapScene;
 
@@ -53,16 +56,26 @@ public class GameView extends Application {
   private static final String SCORE_LABEL = "ScoreLabel";
 
   private String configPath = "doodlejump.properties";
-  private GameModel model;
+  private IGameModel model;
   private Stage stage;
   private Timeline animation;
   private KeyInputter inputter;
   private Texturer texturer;
 
   /**
+   * Launches the application
+   *
+   * @param args any arguments to be passed in
+   */
+  public static void beginOoga(String[] args) {
+    Application.launch(args);
+  }
+
+  /**
    * Begins our view, (i.e. builds the scene and group objects responsible for showing our project)
    * @param sta the main stage of the program
    */
+  @Override
   public void start(Stage sta) {
       stage = sta;
 
@@ -83,7 +96,8 @@ public class GameView extends Application {
   /**
    * Builds the scenes
    */
-  private void buildScenes() {
+  @Override
+  public void buildScenes() {
     playGameScene = new PlayGameScene(new Group(), WIDTH, HEIGHT);
     menuScene = new MenuScene(new Group(), WIDTH, HEIGHT);
     selectLanguageScene =
@@ -98,22 +112,24 @@ public class GameView extends Application {
   /**
    * Builds the list of game scenes used in this view
    */
-  private void buildScenesList() {
-    gameScenes = new ArrayList<>();
-    gameScenes.add(menuScene);
-    gameScenes.add(playGameScene);
-    gameScenes.add(controlsScene);
-    gameScenes.add(selectLanguageScene);
-    gameScenes.add(selectStyleScene);
-    gameScenes.add(selectGameScene);
-    gameScenes.add(displayHighScore);
-    gameScenes.add(textureSwapScene);
+  @Override
+  public void buildScenesList() {
+    IGameScenes = new ArrayList<>();
+    IGameScenes.add(menuScene);
+    IGameScenes.add(playGameScene);
+    IGameScenes.add(controlsScene);
+    IGameScenes.add(selectLanguageScene);
+    IGameScenes.add(selectStyleScene);
+    IGameScenes.add(selectGameScene);
+    IGameScenes.add(displayHighScore);
+    IGameScenes.add(textureSwapScene);
   }
 
   /**
    * Resets lastScene and currentScene to their defaults
    */
-  private void resetScenes() {
+  @Override
+  public void resetScenes() {
     lastScene = menuScene;
     currentScene = menuScene;
   }
@@ -121,7 +137,8 @@ public class GameView extends Application {
   /**
    * Prepares the model that the view will update with an animation timer and display
    */
-  private void buildModel() {
+  @Override
+  public void buildModel() {
     try {
       model = new GameModel(new GameConfiguration(configPath));
       inputter = new KeyInputter(model);
@@ -136,6 +153,7 @@ public class GameView extends Application {
   /**
    * Updates the view
    */
+  @Override
   public void update() {
     if (!currentScene.equals(playGameScene)) {
       return;
@@ -155,7 +173,8 @@ public class GameView extends Application {
    * Updates the game in a situation where normal gameplay is occurring (i.e. the player in the
    * "play game" screen and has neither lost nor won and is not saving the game or their score)
    */
-  private void normalUpdate() {
+  @Override
+  public void normalUpdate() {
     model.updateGame();
     List<IEntity> entityList = model.getAllEntitiesInLevel();
     texturer.updateTextures(entityList, 15, 15);
@@ -166,7 +185,8 @@ public class GameView extends Application {
   /**
    * Handles the situation where the level has been lost
    */
-  private void levelLost() {
+  @Override
+  public void levelLost() {
     playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
     model.getLevel().setLevelLost(false);
   }
@@ -174,7 +194,8 @@ public class GameView extends Application {
   /**
    * Handles the situation where the level has been one
    */
-  private void levelWon() {
+  @Override
+  public void levelWon() {
     String nextLevel = model.getNextConfigFilePath();
 
     if (nextLevel != null && nextLevel.equals("Goal")) {
@@ -190,14 +211,16 @@ public class GameView extends Application {
    * Handles the situation where the user has just completed the final level in a finite
    * level chain (i.e. finished level 3, 3 is the last level
    */
-  private void finishedFinalLevel() {
+  @Override
+  public void finishedFinalLevel() {
     playGameScene.inputScore(model.getHighScoresPath(), model.getLevel());
   }
 
   /**
    * Attempts to load the next level, and if an error occurs, sends the user back to the menu
    */
-  private void loadNextLevel(String nextLevel) {
+  @Override
+  public void loadNextLevel(String nextLevel) {
     configPath = nextLevel;
     buildModel();
     String badConfig = currentScene.getValueFromBundle("BUILD_MODEL_ERROR");
@@ -211,13 +234,15 @@ public class GameView extends Application {
   /**
    * gets score from model
    */
-  private int getScore() {return model.getScore();}
+  @Override
+  public int getScore() {return model.getScore();}
 
 
   /**
    * Builds the animation functionality that will run the program
    */
-  private void prepareAnimation() {
+  @Override
+  public void prepareAnimation() {
     animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
     KeyFrame frame = new KeyFrame(Duration.seconds(ANIMATION_SPEED), e -> update());
@@ -228,8 +253,9 @@ public class GameView extends Application {
   /**
    * Builds listeners for all controllers
    */
-  private void listenOnControllers() {
-      for (GameScene scene : gameScenes) {
+  @Override
+  public void listenOnControllers() {
+      for (IGameScene scene : IGameScenes) {
         GameController cont = scene.getGameController();
         cont.addEventHandler(EventType.ROOT, event -> handleControllerEvent(cont, event));
       }
@@ -240,7 +266,8 @@ public class GameView extends Application {
    * @param cont the GameController that fired the event
    * @param event the Event that has occured
    */
-  private void handleControllerEvent(GameController cont, Event event) {
+  @Override
+  public void handleControllerEvent(GameController cont, Event event) {
     if (event.getEventType().getName().equals("controller")) {
       List<String> reflectionArgs = new ArrayList<>();
       reflectionArgs.addAll(cont.getBuffer());
@@ -252,7 +279,8 @@ public class GameView extends Application {
    * Handles the event of a key press
    * @param key the key that has been pressed
    */
-  void keyPressed(String key) {
+  @Override
+  public void keyPressed(String key) {
     try {
       inputter.keyPressed(key);
 
@@ -273,7 +301,8 @@ public class GameView extends Application {
    * Handles the event of a key release
    * @param key the key that has been pressed
    */
-  void keyReleased(String key) {
+  @Override
+  public void keyReleased(String key) {
     try {
       inputter.keyReleased(key);
     }
@@ -288,7 +317,8 @@ public class GameView extends Application {
    * @param reflectionArgs - either a 1 or 2 String List containing either a method with no
    *                       parameters or a method with one String parameter
    */
-  private void performReflection(List<String> reflectionArgs) {
+  @Override
+  public void performReflection(List<String> reflectionArgs) {
       try {
         if (reflectionArgs.size() == 1) {
           Method method = this.getClass().getDeclaredMethod(reflectionArgs.get(0));
@@ -307,8 +337,9 @@ public class GameView extends Application {
    * Switches the stylesheets of all scenes to the stylesheet referenced by name
    * @param name the name of the stylesheet (i.e. dark/light)
    */
+  @Override
   public void switchStylesheet(String name) {
-    for (GameScene scene : gameScenes) {
+    for (IGameScene scene : IGameScenes) {
       scene.updateStylesheet(name);
     }
   }
@@ -317,8 +348,9 @@ public class GameView extends Application {
    * Updates the language bundles that writes to all of the buttons
    * @param name the name of the resourcebundle
    */
+  @Override
   public void switchLanguage(String name) {
-    for (GameScene scene : gameScenes) {
+    for (IGameScene scene : IGameScenes) {
       scene.updateResources(name);
     }
   }
@@ -327,7 +359,8 @@ public class GameView extends Application {
    * Switches the scene to the viewName indexed by view
    * @param scene the scene to become the new scene
    */
-  private void setScene(GameScene scene) {
+  @Override
+  public void setScene(GameScene scene) {
     if (!model.getLevel().isSaving()) {
       lastScene = currentScene;
       lastScene.updateErrorText("");
@@ -340,11 +373,13 @@ public class GameView extends Application {
   /**
    * Switches to the menu screen
    */
+  @Override
   public void switchToHomeScreen() { setScene(menuScene); }
 
   /**
    * Switches to Css Stylesheet Selection Screen
    */
+  @Override
   public void switchToSelectCssStylesheetScreen() {
     setScene(selectStyleScene);
   }
@@ -352,22 +387,26 @@ public class GameView extends Application {
   /**
    * Switches to Select Language Screen
    */
+  @Override
   public void switchToSelectLanguageScreen() {setScene(selectLanguageScene);
   }
 
   /**
    * Switches to Select Game Type Screen
    */
+  @Override
   public void selectGameTypeScreen() {setScene(selectGameScene);}
 
   /**
    * Switches to a Texture Selection Screen
    */
+  @Override
   public void switchToTextureSwapScreen() { setScene(textureSwapScene); }
 
   /**
    * Launches a save box to save the current state of the level in a csv file
    */
+  @Override
   public void saveGame() {
     playGameScene.launchSave(model.getLevel());
   }
@@ -375,6 +414,7 @@ public class GameView extends Application {
   /**
    * Ends Game
    */
+  @Override
   public void endGame(){
     animation.stop();
     stage.close();
@@ -383,6 +423,7 @@ public class GameView extends Application {
   /**
    * select game type
    */
+  @Override
   public void switchGame(String type) {
     configPath = type.toLowerCase().replaceAll(" ", "") + PROPERTIES_EXTENSION;
     buildModel();
@@ -392,6 +433,7 @@ public class GameView extends Application {
    * Changes the texture file determining textures to the one indexed by path
    * @param texturePath the String path leading to the textures
    */
+   @Override
    public void switchTextures(String texturePath) {
     texturer = new Texturer(WIDTH, HEIGHT, (texturePath + PROPERTIES_EXTENSION),
         (Group)playGameScene.lookup("#" + TEXTURES));
@@ -400,6 +442,7 @@ public class GameView extends Application {
   /**
    * Switches to the leaderboard screen
    */
+  @Override
   public void switchToHighScoresScreen() {
     setScene(displayHighScore);
     displayHighScore.updateLeaderboards();
@@ -408,6 +451,7 @@ public class GameView extends Application {
   /**
    * Switches to the controller screen
    */
+  @Override
   public void switchToControlScreen() {
     KeyBinder binder = (KeyBinder)controlsScene.lookupElementInRoot(
         "KeyBinder");
@@ -418,6 +462,7 @@ public class GameView extends Application {
   /**
    * Resets the current level in the model by calling model.resetLevel()
    */
+  @Override
   public void resetLevel() {
     try {
       model.resetLevel();
@@ -430,11 +475,13 @@ public class GameView extends Application {
   /**
    * Switches back to the last view
    */
+  @Override
   public void back() { setScene(lastScene); }
 
   /**
    * Starts the game
    */
+  @Override
   public void start() {
     setScene(playGameScene);
   }
@@ -442,13 +489,15 @@ public class GameView extends Application {
   /**
    * Returns to the home screen
    */
+  @Override
   public void homeScreen() { setScene(menuScene); }
 
   /**
    * For testing - return the GameModel
    * @return model
    */
-  GameModel getModel() {
+  @Override
+  public IGameModel getModel() {
     return model;
   }
 
@@ -456,7 +505,8 @@ public class GameView extends Application {
    * For testing - set model = m
    * @param m the model to replace GameView's current model
    */
-  void setModel(GameModel m) {
+  @Override
+  public void setModel(IGameModel m) {
     model = m;
   }
 
@@ -464,19 +514,14 @@ public class GameView extends Application {
    * For testing - return the config path
    * @return configPath
    */
-  String getConfigPath() { return configPath; }
+  @Override
+  public String getConfigPath() { return configPath; }
 
   /**
    * For testing - return the String filepath that's being used to generate textures
    * @return texturer.getPath()
    */
-  String getTexturerPath() { return texturer.getPath(); }
+  @Override
+  public String getTexturerPath() { return texturer.getPath(); }
 
-  /**
-   * Launches the application
-   * @param args any arguments to be passed in
-   */
-  public static void beginOoga(String[] args) {
-    launch(args);
-  }
 }

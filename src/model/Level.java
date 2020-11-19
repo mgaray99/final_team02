@@ -1,20 +1,26 @@
 package model;
 
-import model.configuration.LevelLoader;
+import model.configuration.ILevelLoader;
 import model.entity.*;
 import model.scroll.AutoScroller;
-import model.scroll.Scroller;
+import api.model.scroll.Scroller;
+import api.model.IKeyPressFunctions;
+import api.model.ILevel;
+import api.model.entity.IEntity;
+import api.model.entity.IMovable;
+import api.model.entity.ISpawner;
+import api.model.entity.IWinnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Level {
+public class Level implements ILevel {
 
   public static final int FRAMES_PER_SECOND = 60;
   public static final int MODIFIER_DURATION = 10;
   public static final double MODIFIER_VALUE = 1.5;
-  public KeyPressFunctions keyPressFunctions = new KeyPressFunctions();
+  public api.model.IKeyPressFunctions IKeyPressFunctions = new KeyPressFunctions();
 
   private Scroller scroller;
   private List<Player> playerList;
@@ -24,7 +30,7 @@ public class Level {
   private List<Block> blockList;
   private List<IEntity> entityList;
   private List<IWinnable> winnableList;
-  private LevelLoader loader;
+  private ILevelLoader loader;
 
   private int levelLength;
   private int levelWidth;
@@ -33,14 +39,15 @@ public class Level {
   private boolean levelWon;
   private boolean isSaving;
 
-  public Level(LevelLoader levelLoader) {
+  public Level(ILevelLoader ILevelLoader) {
     this.scroller = new AutoScroller(0,0, false);
-    this.setOrResetLevel(levelLoader);
+    this.setOrResetLevel(ILevelLoader);
   }
 
 
+  @Override
   public void step() {
-    if (!keyPressFunctions.isPaused()) {
+    if (!IKeyPressFunctions.isPaused()) {
       this.removeEntitiesAsNeeded();
       this.spawnEntitiesAsNeeded();
       this.updateModifiers();
@@ -53,6 +60,7 @@ public class Level {
     }
   }
 
+  @Override
   public void removeEntitiesAsNeeded() {
     List<IEntity> entitiesToRemove = new ArrayList<>();
 
@@ -80,6 +88,7 @@ public class Level {
     }
   }
 
+  @Override
   public void spawnEntitiesAsNeeded() {
     for(Block block : this.blockList){
       if(block instanceof ISpawner){
@@ -90,15 +99,17 @@ public class Level {
     }
   }
 
+  @Override
   public void updateModifiers() {
     for (Player player : playerList) {
       player.updateModifiers();
     }
   }
 
-  private void updateVelocities() {
+  @Override
+  public void updateVelocities() {
     for (Player player : playerList) {
-      player.updateVelocity(keyPressFunctions.isPlayerMovingLeft(), keyPressFunctions.isPlayerMovingRight(), keyPressFunctions.isPlayerJumping());
+      player.updateVelocity(IKeyPressFunctions.isPlayerMovingLeft(), IKeyPressFunctions.isPlayerMovingRight(), IKeyPressFunctions.isPlayerJumping());
     }
     for (Enemy enemy : enemyList) {
       if(!playerList.isEmpty()){
@@ -107,6 +118,7 @@ public class Level {
     }
   }
 
+  @Override
   public void checkCollisions(){
     for (IMovable movable : this.movableEntityList) {
       for(IEntity otherEntity : this.entityList){
@@ -117,7 +129,8 @@ public class Level {
     }
   }
 
-  private void updatePositions(){
+  @Override
+  public void updatePositions(){
     for (Player player : this.playerList) {
       player.updatePosition();
       keepPlayerInBounds(player);
@@ -131,7 +144,8 @@ public class Level {
   /**
    * Moves the entities in the level based on data on this level and the player
    */
-  private void scroll() {
+  @Override
+  public void scroll() {
     if(!playerList.isEmpty()){
       scroller.scroll(this, playerList.get(0));
       score += scroller.getScoreFromScroll();
@@ -143,6 +157,7 @@ public class Level {
    * @param xChange the amount to scroll the entity in the x direction
    * @param yChange the amount to scroll the entity in the y direction
    */
+  @Override
   public void translateAllEntities(double xChange, double yChange) {
     entityList.forEach(entity -> translateEntity(entity, xChange, yChange));
   }
@@ -153,7 +168,8 @@ public class Level {
    * @param xChange the amount to scroll the entity in the x direction
    * @param yChange the amount to scroll the entity in the y direction
    */
-  private void translateEntity(IEntity entity, double xChange, double yChange) {
+  @Override
+  public void translateEntity(IEntity entity, double xChange, double yChange) {
     HitBox hitBox = entity.getHitBox();
     hitBox.translateX(xChange);
     hitBox.translateY(yChange);
@@ -163,34 +179,39 @@ public class Level {
    * Sets the scroller of the level equal to the Scroller passed in
    * @param configScroller the Scroller that will serve as this level's new Scroller
    */
+  @Override
   public void setScroller(Scroller configScroller) {
     scroller = configScroller;
   }
 
 
+  @Override
   public int getLevelLength() {
     return this.levelLength;
   }
 
+  @Override
   public int getLevelWidth() {
     return this.levelWidth;
   }
 
-  public void setOrResetLevel(LevelLoader levelLoader){
-    loader = levelLoader;
+  @Override
+  public void setOrResetLevel(ILevelLoader ILevelLoader){
+    loader = ILevelLoader;
     score = 0;
 
-    this.playerList = levelLoader.getCopyOfPlayerList();
-    this.enemyList = levelLoader.getCopyOfEnemyList();
-    this.movableEntityList = levelLoader.getCopyOfMovableEntityList();
-    this.blockList = levelLoader.getCopyOfBlockList();
-    this.powerUpList = levelLoader.getCopyOfPowerUpList();
-    this.winnableList = levelLoader.getCopyOfWinnableList();
-    this.entityList = levelLoader.getCopyOfEntityList();
-    this.levelLength = levelLoader.getLevelLength();
-    this.levelWidth = levelLoader.getLevelWidth();
+    this.playerList = ILevelLoader.getCopyOfPlayerList();
+    this.enemyList = ILevelLoader.getCopyOfEnemyList();
+    this.movableEntityList = ILevelLoader.getCopyOfMovableEntityList();
+    this.blockList = ILevelLoader.getCopyOfBlockList();
+    this.powerUpList = ILevelLoader.getCopyOfPowerUpList();
+    this.winnableList = ILevelLoader.getCopyOfWinnableList();
+    this.entityList = ILevelLoader.getCopyOfEntityList();
+    this.levelLength = ILevelLoader.getLevelLength();
+    this.levelWidth = ILevelLoader.getLevelWidth();
   }
 
+  @Override
   public void addEntity(IEntity entity) {
     if (entity!=null) {
       this.entityList.add(entity);
@@ -218,7 +239,8 @@ public class Level {
     }
   }
 
-  private void removeEntity(IEntity entity) {
+  @Override
+  public void removeEntity(IEntity entity) {
     if(entity != null){
       this.entityList.remove(entity);
     }
@@ -242,6 +264,7 @@ public class Level {
     }
   }
 
+  @Override
   public Optional<IEntity> getEntityAt(int xCoordinate, int yCoordinate) {
     for(IEntity entity : entityList){
       if((int)entity.getHitBox().getXLeft() == xCoordinate && (int)entity.getHitBox().getYTop() == yCoordinate){
@@ -258,7 +281,8 @@ public class Level {
    *
    * @param player the player whose bounds will be checked
    */
-  private void keepPlayerInBounds(Player player) {
+  @Override
+  public void keepPlayerInBounds(Player player) {
       if (player.getHitBox().getXLeft() < 0) {
         player.getHitBox().setXLeft(0);
       }
@@ -267,7 +291,8 @@ public class Level {
       }
   }
 
-  private void checkWinLoseConditions(){
+  @Override
+  public void checkWinLoseConditions(){
     if (playerList.size() == 0) {
       setLevelLost(true);
     }
@@ -291,7 +316,8 @@ public class Level {
    * Checks to see if the player has lost the level (i.e. fell through
    * bottom of screen) and if so resets the level
    */
-  private void checkFellOutOfLevel() {
+  @Override
+  public void checkFellOutOfLevel() {
     if (playerList.size() > 0) {
       Player player = playerList.get(0);
       if (player.getHitBox().getYTop() > scroller.NUM_BLOCKS) {
@@ -303,6 +329,7 @@ public class Level {
   /**
    * Handles the situation where the player has fallen off of the screen
    */
+  @Override
   public void reinitialize() {
     loader.reinitialize();
     setOrResetLevel(loader);
@@ -312,34 +339,42 @@ public class Level {
     levelWon = false;
   }
 
+  @Override
   public void setLevelWon(boolean isLevelWon) {
     this.levelWon = isLevelWon;
   }
 
+  @Override
   public void setLevelLost(boolean isLevelLost) {
     this.levelLost = isLevelLost;
   }
 
+  @Override
   public boolean isLevelWon(){
     return levelWon;
   }
 
-  public KeyPressFunctions getKeyPressFunctions() {
-    return keyPressFunctions;
+  @Override
+  public IKeyPressFunctions getKeyPressFunctions() {
+    return IKeyPressFunctions;
   }
 
+  @Override
   public List<IEntity> getCopyOfEntityList() {
     return new ArrayList<>(entityList);
   }
 
+  @Override
   public List<IEntity> getAllEntities() { return entityList; }
 
+  @Override
   public List<Player> getPlayerList() {return playerList;}
 
   /**
    * Reveals the score of the player within the level
    * @return score
    */
+  @Override
   public int getScore() {
     return score;
   }
@@ -348,6 +383,7 @@ public class Level {
    * Reveals if the level has lost
    * @return levelLost
    */
+  @Override
   public boolean isLevelLost() {
     return levelLost;
   }
@@ -356,6 +392,7 @@ public class Level {
    * Reveals if we're saving the game
    * @return isSaving
    */
+  @Override
   public boolean isSaving() {
     return isSaving;
   }
@@ -364,6 +401,7 @@ public class Level {
    * Sets a variable to show if we're saving the game
    * @param save the indicator for if we're saving
    */
+  @Override
   public void setIsSaving(boolean save) {
     isSaving = save;
   }

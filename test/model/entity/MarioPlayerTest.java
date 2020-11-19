@@ -4,12 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import model.GameModel;
+import api.model.IGameModel;
 import model.Level;
-import model.configuration.EntityFactory;
 import model.configuration.GameConfiguration;
 import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
-import model.scroll.Scroller;
+import api.model.scroll.Scroller;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -21,8 +20,8 @@ public class MarioPlayerTest extends DukeApplicationTest {
 
   private static final String TEST_LEVEL_FILE_PATH = "marioMovementTestLevel.properties";
 
-  GameModel gameModel = new GameModel(new GameConfiguration(TEST_LEVEL_FILE_PATH, this.getClass()));
-  Player player = gameModel.getLevel().getPlayerList().get(0);
+  IGameModel IGameModel = new GameModel(new GameConfiguration(TEST_LEVEL_FILE_PATH, this.getClass()));
+  Player player = IGameModel.getLevel().getPlayerList().get(0);
 
   public MarioPlayerTest() throws InvalidFileException {
   }
@@ -31,8 +30,8 @@ public class MarioPlayerTest extends DukeApplicationTest {
   @Test
   public void PlayerMoveLeftTest() {
     double oldXPos = player.getHitBox().getXLeft();
-    gameModel.getKeyPressFunctions().startMovingPlayerLeft();
-    gameModel.getLevel().step();
+    IGameModel.getKeyPressFunctions().startMovingPlayerLeft();
+    IGameModel.getLevel().step();
     double newXPos = player.getHitBox().getXLeft();
     assertTrue(newXPos < oldXPos);
   }
@@ -40,8 +39,8 @@ public class MarioPlayerTest extends DukeApplicationTest {
   @Test
   public void PlayerMoveRightTest() {
     double oldXPos = player.getHitBox().getXLeft();
-    gameModel.getKeyPressFunctions().startMovingPlayerRight();
-    gameModel.getLevel().step();
+    IGameModel.getKeyPressFunctions().startMovingPlayerRight();
+    IGameModel.getLevel().step();
     double newXPos = player.getHitBox().getXLeft();
     assertTrue(newXPos > oldXPos);
   }
@@ -49,23 +48,23 @@ public class MarioPlayerTest extends DukeApplicationTest {
   @Test
   public void PlayerJumpPlayerGoesUpTest() {
     double oldYPos = player.getHitBox().getYTop();
-    gameModel.getKeyPressFunctions().startPlayerJumping();
-    gameModel.getLevel().step();
-    gameModel.getLevel().step();
+    IGameModel.getKeyPressFunctions().startPlayerJumping();
+    IGameModel.getLevel().step();
+    IGameModel.getLevel().step();
     double newYPos = player.getHitBox().getYTop();
     assertTrue(newYPos < oldYPos);
   }
 
   @Test
   public void PlayerJumpPlayerGoesBackDownTest() {
-    gameModel.getKeyPressFunctions().startPlayerJumping();
+    IGameModel.getKeyPressFunctions().startPlayerJumping();
     for(int i=0; i < 50; i++) {
-      gameModel.getLevel().step();
+      IGameModel.getLevel().step();
     }
-    gameModel.getKeyPressFunctions().stopPlayerJumping();
+    IGameModel.getKeyPressFunctions().stopPlayerJumping();
     double oldYPos = player.getHitBox().getYTop();
     for(int i=0; i < 10000; i++) {
-      gameModel.getLevel().step();
+      IGameModel.getLevel().step();
     }
     double newYPos = player.getHitBox().getYTop();
     assertTrue(newYPos > oldYPos);
@@ -74,11 +73,11 @@ public class MarioPlayerTest extends DukeApplicationTest {
   @Test
   public void PlayerJumpStopsAtGroundTest() {
     double oldYPos = player.getHitBox().getYTop();
-    gameModel.getKeyPressFunctions().startPlayerJumping();
-    gameModel.getLevel().step();
-    gameModel.getKeyPressFunctions().stopPlayerJumping();
+    IGameModel.getKeyPressFunctions().startPlayerJumping();
+    IGameModel.getLevel().step();
+    IGameModel.getKeyPressFunctions().stopPlayerJumping();
     for(int i=0; i < 10000; i++) {
-      gameModel.getLevel().step();
+      IGameModel.getLevel().step();
     }
     double newYPos = player.getHitBox().getYTop();
     assertTrue(Math.abs(newYPos - oldYPos) < 1);
@@ -90,7 +89,7 @@ public class MarioPlayerTest extends DukeApplicationTest {
    */
   @Test
   public void PlayerStaysInBoundsLeftTest() {
-    Level level = gameModel.getLevel();
+    Level level = IGameModel.getLevel();
 
     Player player = level.getPlayerList().get(0);
     player.getHitBox().setXLeft(-5);
@@ -107,7 +106,7 @@ public class MarioPlayerTest extends DukeApplicationTest {
    */
   @Test
   public void PlayerStaysInBoundsRightTest() {
-    Level level = gameModel.getLevel();
+    Level level = IGameModel.getLevel();
 
     Player player = level.getPlayerList().get(0);
     player.getHitBox().setXRight(Scroller.NUM_BLOCKS + 2);

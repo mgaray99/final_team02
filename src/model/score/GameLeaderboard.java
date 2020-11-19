@@ -1,5 +1,8 @@
 package model.score;
 
+
+import api.model.score.IGameLeaderboard;
+import api.model.score.IScoreTuple;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -9,9 +12,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class GameLeaderboard {
+public class GameLeaderboard implements IGameLeaderboard {
   private final String path;
-  private List<ScoreTuple> scoresList;
+  private List<IScoreTuple> scoresList;
   private final Scanner leaderboardScanner;
   private String title;
   private static final String PATH_START = "./src/resources/leaderboards/";
@@ -34,7 +37,8 @@ public class GameLeaderboard {
   /**
    * Saves the title of the file
    */
-  private void buildTitle() {
+  @Override
+  public void buildTitle() {
     if (leaderboardScanner.hasNextLine()) {
       title = leaderboardScanner.nextLine();
     }
@@ -43,7 +47,8 @@ public class GameLeaderboard {
   /**
    * Instantiates and builds the scoresList which will hold all of the scores
    */
-  private void buildScoresList() {
+  @Override
+  public void buildScoresList() {
     scoresList = new ArrayList<>();
     while (leaderboardScanner.hasNextLine()) {
       insertIntoScoresList(leaderboardScanner.nextLine());
@@ -55,18 +60,20 @@ public class GameLeaderboard {
    * adds it to scoresList
    * @param line the line whose data will be inserted into scoresList
    */
-  private void insertIntoScoresList(String line) {
+  @Override
+  public void insertIntoScoresList(String line) {
     String[] nameScore = line.split(",");
 
     String name = nameScore[0];
     int score = Integer.parseInt(nameScore[1]);
-    ScoreTuple scoreTuple = new ScoreTuple(name, score);
-    scoresList.add(scoreTuple);
+    ScoreTuple tuple = new ScoreTuple(name, score);
+    scoresList.add(tuple);
   }
 
   /**
    * Sorts the list of scores so that the highest one is at the top
    */
+  @Override
   public void sortScoresList() {
     Collections.sort(scoresList);
   }
@@ -78,6 +85,7 @@ public class GameLeaderboard {
    *
    * @return the String representing the indexth highest placer on the leaderboard
    */
+  @Override
   public String getScoreTupleAtPlace(int index) {
     sortScoresList();
     if (index <= 0 || index > scoresList.size()) {
@@ -90,6 +98,7 @@ public class GameLeaderboard {
    * Returns the title associated with the java file
    * @return title
    */
+  @Override
   public String getTitle() {
     return title;
   }
@@ -98,7 +107,7 @@ public class GameLeaderboard {
    * Adds a ScoreTuple to this game's leaderboard
    * @param toBeAdded the tuple to be added to the leaderboard
    */
-  public void addScoreTuple(ScoreTuple toBeAdded) throws IOException{
+  public void addScoreTuple(IScoreTuple toBeAdded) throws IOException{
     scoresList.add(toBeAdded);
     writeTupleToFile(toBeAdded);
     sortScoresList();
@@ -108,7 +117,7 @@ public class GameLeaderboard {
    * Saves the contents of a ScoreTuple to a file
    * @param toBeWritten the tuple whose data will be saved in a file
    */
-  private void writeTupleToFile(ScoreTuple toBeWritten) throws IOException {
+  public void writeTupleToFile(IScoreTuple toBeWritten) throws IOException {
     String line = toBeWritten.getName() + "," + toBeWritten.getScore();
 
     FileWriter writer = new FileWriter(PATH_START + path, true);

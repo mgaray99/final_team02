@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
+import api.view.IGameScene;
 
 
 /**
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.Test;
  */
 public class GameSceneFullTest extends DukeApplicationTest {
 
-  GameScene testScene;
+  IGameScene testScene;
   private final double WIDTH = 800;
   private final double HEIGHT = 800;
 

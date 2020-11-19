@@ -3,8 +3,9 @@ package model.scroll;
 import model.HitBox;
 import model.Level;
 import model.entity.Player;
+import api.model.scroll.Scroller;
 
-public class AutoScroller implements Scroller{
+public class AutoScroller implements Scroller {
     protected double xScroll;
     protected double yScroll;
     protected boolean playerScrolls;
@@ -33,17 +34,6 @@ public class AutoScroller implements Scroller{
   }
 
   /**
-   * Moves the Player in the reverse direction as the level is moving to simulate locking them
-   * in place
-   * @param player the Player to be scrolled
-   */
-  private void scrollPlayer(Player player) {
-    HitBox hitBox = player.getHitBox();
-    hitBox.translateX(-1 * xScroll);
-    hitBox.translateY(-1 * yScroll);
-  }
-
-  /**
    * Resets the scroller
    */
   @Override
@@ -60,5 +50,17 @@ public class AutoScroller implements Scroller{
   @Override
   public int getScoreFromScroll() {
     return SCORE_FROM_SCROLL;
+  }
+
+  /**
+   * Moves the Player in the reverse direction as the level is moving to simulate locking them
+   * in place
+   *
+   * @param player the Player to be scrolled
+   */
+  public void scrollPlayer(Player player) {
+    HitBox hitBox = player.getHitBox();
+    hitBox.translateX(-1 * xScroll);
+    hitBox.translateY(-1 * yScroll);
   }
 }

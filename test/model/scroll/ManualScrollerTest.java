@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.stage.Stage;
 import model.Level;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
+import model.configuration.*;
 import model.entity.Block;
 import model.entity.Enemy;
-import model.entity.IEntity;
+import api.model.entity.IEntity;
 import model.entity.MarioPlayer;
 import model.entity.Player;
+import api.model.configuration.IGameConfiguration;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -57,9 +55,9 @@ public class ManualScrollerTest extends DukeApplicationTest {
     playerEntity.setXVel(PLAYER_XVEL);
     playerEntity.setYVel(PLAYER_YVEL);
 
-    GameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
-    LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-    level = new Level(levelLoader);
+    IGameConfiguration gameConfiguration = new GameConfiguration("oneBlock.properties");
+    ILevelLoader ILevelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
+    level = new Level(ILevelLoader);
 
     level.addEntity(playerEntity);
     level.addEntity(barrierBlockEntity);

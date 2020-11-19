@@ -1,8 +1,8 @@
-package model.entity;
+package api.model.entity;
 
 import model.HitBox;
-import model.collision.CollisionDirections;
 import model.collision.Direction;
+import api.model.collision.ICollisionHandler;
 
 public interface IMovable extends IEntity {
 
@@ -35,7 +35,7 @@ public interface IMovable extends IEntity {
   @Override
   String getType();
 
-  default void processCurrentCollision(IEntity entity, CollisionDirections collision){
+  default void processCurrentCollision(IEntity entity, ICollisionHandler collision){
 
     if (collision.contains(Direction.BOTTOM) && !collision.containsHorizontalCollision()) {
       //System.out.print("Bottom");

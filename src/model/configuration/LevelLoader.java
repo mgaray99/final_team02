@@ -8,13 +8,17 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import model.entity.*;
+import api.model.configuration.IEntityFactory;
+import api.model.entity.IEntity;
+import api.model.entity.IMovable;
+import api.model.entity.IWinnable;
 
 /**
  * A class responsible for creating the initial state of a game
  * @author Mike Garay
  */
 
-public class LevelLoader {
+public class LevelLoader implements ILevelLoader {
     //private static final String ENTITY_PACKAGE_PATH = "model.entity.";
     private final List<Player> playerList = new ArrayList<>();
     private final List<Enemy> enemyList = new ArrayList<>();
@@ -25,7 +29,7 @@ public class LevelLoader {
     private final List<IWinnable> winnableList = new ArrayList<>();
     private List<IEntity> entityCopy = new ArrayList<>();
     //private final Map<String, String> levelDecoder;
-    private EntityFactory entityFactory;
+    private api.model.configuration.IEntityFactory IEntityFactory;
 
     private int levelLength;
     private int levelWidth;
@@ -36,46 +40,56 @@ public class LevelLoader {
      * @throws InvalidFileException if the file is a directory,
      * an invalid file, or not a CSV file
      */
-    public LevelLoader(File levelFileIn, EntityFactory factory) throws InvalidFileException {
+    public LevelLoader(File levelFileIn, IEntityFactory factory) throws InvalidFileException {
         this.handleConstructionExceptions(levelFileIn);
-        entityFactory = factory;
+        IEntityFactory = factory;
         this.initializeEntityLists(levelFileIn);
         entityCopy = defensivelyCopyList(entityList);
     }
 
+    @Override
     public int getLevelLength() {
         return levelLength;
     }
 
+    @Override
     public int getLevelWidth() {
         return levelWidth;
     }
 
+    @Override
     public List<Player> getCopyOfPlayerList() {
         return new ArrayList<>(playerList);
     }
 
+    @Override
     public List<IMovable> getCopyOfMovableEntityList() { return new ArrayList<>(movableEntityList);}
 
+    @Override
     public List<IWinnable> getCopyOfWinnableList() { return new ArrayList<>(winnableList);}
 
+    @Override
     public List<Enemy> getCopyOfEnemyList() {
         return new ArrayList<Enemy>(enemyList);
     }
 
+    @Override
     public List<Block> getCopyOfBlockList() {
         return new ArrayList<Block>(blockList);
     }
 
+    @Override
     public List<PowerUp> getCopyOfPowerUpList() {
         return new ArrayList<PowerUp>(powerUpList);
     }
 
+    @Override
     public List<IEntity> getCopyOfEntityList() {
         return new ArrayList<IEntity>(entityList);
     }
 
-    private void initializeEntityLists(File levelFileIn) throws InvalidFileException {
+    @Override
+    public void initializeEntityLists(File levelFileIn) throws InvalidFileException {
         try {
             Scanner fileReader = new Scanner(levelFileIn);
             int yCounter = 0;
@@ -84,7 +98,7 @@ public class LevelLoader {
                 String[] currentStringArray = currentLine.split(",");
                 for (int xIndex = 0; xIndex < currentStringArray.length; xIndex++) {
                     String entityString = currentStringArray[xIndex];
-                    Optional<IEntity> optionalEntity = this.entityFactory.createEntity(entityString, xIndex, yCounter);
+                    Optional<IEntity> optionalEntity = this.IEntityFactory.createEntity(entityString, xIndex, yCounter);
                     optionalEntity.ifPresent(this::addEntityToLists);
                     if(this.levelWidth < xIndex+1){
                         this.levelWidth = xIndex+1;
@@ -100,7 +114,8 @@ public class LevelLoader {
         }
     }
 
-    private void addEntityToLists(IEntity entity) {
+    @Override
+    public void addEntityToLists(IEntity entity) {
         if(entity != null) {
             this.entityList.add(entity);
             if(entity instanceof IMovable){
@@ -131,11 +146,12 @@ public class LevelLoader {
      * @param originalCopy the original list to be copied from
      * @return a new list with absolutely no dependencies
      */
-    private List<IEntity> defensivelyCopyList(List<IEntity> originalCopy) {
+    @Override
+    public List<IEntity> defensivelyCopyList(List<IEntity> originalCopy) {
         List<IEntity> copyList = new ArrayList<>();
 
         for(IEntity originalEntity : originalCopy){
-            Optional<IEntity> optionalEntity = entityFactory.reflectEntity(
+            Optional<IEntity> optionalEntity = IEntityFactory.reflectEntity(
                     originalEntity.getClass().getSimpleName(),
                     originalEntity.getHitBox().getXLeft(),
                     originalEntity.getHitBox().getYTop());
@@ -149,6 +165,7 @@ public class LevelLoader {
      * Reinitializes the level loader (i.e. resets all lists to have their contents when the
      * LevelLoader was first instantiated
      */
+    @Override
     public void reinitialize() {
         this.playerList.clear();
         this.blockList.clear();
@@ -163,7 +180,8 @@ public class LevelLoader {
 
     }
 
-    private void handleConstructionExceptions(File levelFileIn) throws InvalidFileException {
+    @Override
+    public void handleConstructionExceptions(File levelFileIn) throws InvalidFileException {
         if(levelFileIn.isDirectory()){
             throw new InvalidFileException(
                     ModelExceptionReason.DIRECTORY,

@@ -1,4 +1,6 @@
-package model.entity;
+package api.model.entity;
+
+import model.entity.Modifier;
 
 import java.util.Random;
 

@@ -4,54 +4,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
 
 public class KeyBinder extends Group {
 
-    private KeyInputter inputter;
-    private static final double WIDTH = 800;
-    private static final double HEIGHT = 800;
-    private static final double START_VISIBLE_Y = HEIGHT / 8;
-    private static final double END_VISIBLE_Y = 7 * HEIGHT / 8;
-    private static final double VISIBLE_Y = END_VISIBLE_Y - START_VISIBLE_Y;
-    private static final double COLUMN1X = WIDTH /4;
-    private static final double COLUMN2X = 3 * WIDTH /4;
-    private static final double CENTERX= WIDTH / 2;
-    private static final double UPDATE_LABEL_Y = HEIGHT/16;
-    private static final String UPDATE_LABEL_TEXT = "UpdateLabelText";
-    private static final String BAD_KEY_TEXT = "BadKeyText";
-    private static final String WAITING_FOR_UPDATE_TEXT = "WaitingForUpdateText";
-    private static final String UPDATE_ID = "UPDATE";
-    private boolean isUpdatingKey;
-    private String currentKeyBeingUpdated;
-    private Text updateLabel;
-    private ResourceBundle bundle;
+  private KeyInputter inputter;
+  private static final double WIDTH = 800;
+  private static final double HEIGHT = 800;
+  private static final double START_VISIBLE_Y = HEIGHT / 8;
+  private static final double END_VISIBLE_Y = 7 * HEIGHT / 8;
+  private static final double VISIBLE_Y = END_VISIBLE_Y - START_VISIBLE_Y;
+  private static final double COLUMN1X = WIDTH /4;
+  private static final double COLUMN2X = 3 * WIDTH /4;
+  private static final double CENTERX= WIDTH / 2;
+  private static final double UPDATE_LABEL_Y = HEIGHT/16;
+  private static final String UPDATE_LABEL_TEXT = "UpdateLabelText";
+  private static final String BAD_KEY_TEXT = "BadKeyText";
+  private static final String WAITING_FOR_UPDATE_TEXT = "WaitingForUpdateText";
+  private static final String UPDATE_ID = "UPDATE";
+  private boolean isUpdatingKey;
+  private String currentKeyBeingUpdated;
+  private Text updateLabel;
+  private ResourceBundle bundle;
 
-    public KeyBinder(ResourceBundle resourceBundle) {
-        bundle = resourceBundle;
-        isUpdatingKey = false;
-        currentKeyBeingUpdated = "";
-        setFocusTraversable(true);
-        setFocused(true);
-        buildUpdateLabel();
-    }
+  public KeyBinder(ResourceBundle resourceBundle) {
+    this.prefWidth(WIDTH);
+    this.prefHeight(HEIGHT);
+    bundle = resourceBundle;
+    isUpdatingKey = false;
+    currentKeyBeingUpdated = "";
+    setFocusTraversable(true);
+    setFocused(true);
+    buildUpdateLabel();
+  }
 
   /**
    * Builds the update label, inserts it into this root node and makes it invisible
    */
   private void buildUpdateLabel() {
-      updateLabel = new Text();
-      updateLabel.setId(UPDATE_ID);
-      getChildren().add(updateLabel);
+    updateLabel = new Text();
+    updateLabel.setId(UPDATE_ID);
+    getChildren().add(updateLabel);
 
-      //updateLabel.setText(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
-      //updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth()/2);
+    //updateLabel.setText(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
+    //updateLabel.setLayoutX(CENTERX - updateLabel.getLayoutBounds().getWidth()/2);
 
-      updateLabel.setLayoutY(UPDATE_LABEL_Y - updateLabel.getLayoutBounds().getHeight());
-      refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
+    updateLabel.setLayoutY(UPDATE_LABEL_Y - updateLabel.getLayoutBounds().getHeight());
+    refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
   }
 
   /**
@@ -60,9 +65,9 @@ public class KeyBinder extends Group {
    * @param in the KeyInputter whose data will fill this KeyInputBinder
    */
   public void updateKeyInputScreen(KeyInputter in) {
-        prepareUpdate(in);
-        fillScreenWithKeyMap();
-        refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
+    prepareUpdate(in);
+    fillScreenWithKeyMap();
+    refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
   }
 
   /**
@@ -78,14 +83,14 @@ public class KeyBinder extends Group {
    * Fills the screen with the key -> method map
    */
   private void fillScreenWithKeyMap() {
-      List<Pair<String, String>> keyMethodPairs = new ArrayList<>();
-      keyMethodPairs.addAll(inputter.getKeyMethodPairings());
+    List<Pair<String, String>> keyMethodPairs = new ArrayList<>();
+    keyMethodPairs.addAll(inputter.getKeyMethodPairings());
 
-      for (int index = 0; index < keyMethodPairs.size(); index+=1) {
-        Pair<String, String> pair = keyMethodPairs.get(index);
-        showKeyMethodPair(pair, 1.0 * index / keyMethodPairs.size());
-      }
+    for (int index = 0; index < keyMethodPairs.size(); index+=1) {
+      Pair<String, String> pair = keyMethodPairs.get(index);
+      showKeyMethodPair(pair, 1.0 * index / keyMethodPairs.size());
     }
+  }
 
   /**
    * Shows the key -> method pair on the screen - builds the Button representing the key and the
@@ -98,19 +103,19 @@ public class KeyBinder extends Group {
    *               keyButton in the parent
    */
   private void showKeyMethodPair(Pair<String, String> pair, double offset) {
-        Text method = new Text(pair.getValue());
-        method.setLayoutX(COLUMN1X);
-        method.setLayoutY(START_VISIBLE_Y + VISIBLE_Y * offset);
+    Text method = new Text(pair.getValue());
+    method.setLayoutX(COLUMN1X);
+    method.setLayoutY(START_VISIBLE_Y + VISIBLE_Y * offset);
 
-        Button keyButton = new Button(pair.getKey());
-        keyButton.setId(pair.getKey());
-        keyButton.setOnAction(e -> enableUpdate(keyButton.getId()));
-        keyButton.setOnKeyPressed(this::handleKey);
-        keyButton.setLayoutX(COLUMN2X);
-        keyButton.setLayoutY(START_VISIBLE_Y + VISIBLE_Y * offset);
+    Button keyButton = new Button(pair.getKey());
+    keyButton.setId(pair.getKey());
+    keyButton.setOnAction(e -> enableUpdate(keyButton.getId()));
+    keyButton.setOnKeyPressed(e -> handleKey(e));
+    keyButton.setLayoutX(COLUMN2X);
+    keyButton.setLayoutY(START_VISIBLE_Y + VISIBLE_Y * offset);
 
-        getChildren().addAll(method, keyButton);
-    }
+    getChildren().addAll(method, keyButton);
+  }
 
   /**
    * Enables updating of the key -> method pairing - called after the user clicks on a button to
@@ -120,10 +125,10 @@ public class KeyBinder extends Group {
    * @param currentKey the String representation of the current key being updated
    */
   private void enableUpdate(String currentKey) {
-        isUpdatingKey = true;
-        currentKeyBeingUpdated = currentKey;
-        refactorUpdateLabel(getValueFromBundle(UPDATE_LABEL_TEXT) + currentKey);
-    }
+    isUpdatingKey = true;
+    currentKeyBeingUpdated = currentKey;
+    refactorUpdateLabel(getValueFromBundle(UPDATE_LABEL_TEXT) + currentKey);
+  }
 
   /**
    * Handles the event where a key has been pressed - sets the isUpdatingKey variable to false,
@@ -132,13 +137,13 @@ public class KeyBinder extends Group {
    *
    * @param event the KeyEvent that has occurred
    */
-   void handleKey(KeyEvent event) {
-      if (isUpdatingKey) {
-        isUpdatingKey = false;
-        refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
-        updateKeyBinding(event.getCode().toString());
-      }
+  void handleKey(KeyEvent event) {
+    if (isUpdatingKey) {
+      isUpdatingKey = false;
+      refactorUpdateLabel(getValueFromBundle(WAITING_FOR_UPDATE_TEXT));
+      updateKeyBinding(event.getCode().toString());
     }
+  }
 
   /**
    * Tries to replace the key currentlyBeingUpdated with the key userKey - first check the
@@ -166,7 +171,7 @@ public class KeyBinder extends Group {
    */
   public String getValueFromBundle(String key) {
     String value = bundle.getString(key);
-    if (value.equals(null)) {
+    if (value!=null) {
       return value;
     }
     return "";

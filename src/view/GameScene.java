@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import controller.GameController;
 import javafx.scene.text.Text;
+import api.view.IGameScene;
 
 /**
  * Represents one scene in our GameView - holds data and methods beyond that of a typical Scene
@@ -19,7 +20,7 @@ import javafx.scene.text.Text;
  *
  * @author Alex Lu & Edem Ahorlu
  */
-public class GameScene extends Scene {
+public class GameScene extends Scene implements IGameScene {
   private final Group root;
   private final String sceneId;
   protected final double WIDTH;
@@ -58,7 +59,8 @@ public class GameScene extends Scene {
   /**
    * Sets the background Rectangle for the game
    */
-  private void makeBackground() {
+  @Override
+  public void makeBackground() {
     Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
     background.setId(BACKGROUND);
     root.getChildren().add(background);
@@ -68,7 +70,8 @@ public class GameScene extends Scene {
   /**
    * Makes the error text label that will appear at the top of the screen
    */
-  private void makeErrorText() {
+  @Override
+  public void makeErrorText() {
     errorLabel = new Text();
     errorLabel.setText("");
     errorLabel.setId("scoreStyle");
@@ -83,6 +86,7 @@ public class GameScene extends Scene {
    * Updates the error text label that will appear at the top of the screen
    * @param newText the new text to fill that label
    */
+  @Override
   public void updateErrorText(String newText)  {
     errorLabel.setVisible(true);
 
@@ -93,6 +97,7 @@ public class GameScene extends Scene {
   /**
    * Hides the error text from view
    */
+  @Override
   public void hideErrorText() {
     errorLabel.setVisible(false);
   }
@@ -101,6 +106,7 @@ public class GameScene extends Scene {
    * Returns the text in the error label
    * @return the text of errorLabel
    */
+  @Override
   public String getErrorText() {
     return errorLabel.getText();
   }
@@ -110,6 +116,7 @@ public class GameScene extends Scene {
    * Sets the controller associated with this particular scene
    * @param cont the controller to serve as the game scene's controller
    */
+  @Override
   public void setGameController(GameController cont) {
     controller = cont;
     controller.setId("#" + CONTROLLER);
@@ -120,6 +127,7 @@ public class GameScene extends Scene {
    * Adds buttons from a file to the controller
    * @param file the file containing the buttons to be included
    */
+  @Override
   public void addButtonsToControllerFromFile(String file) {
     try {
       controller.addButtonsFromFile(file);
@@ -135,6 +143,7 @@ public class GameScene extends Scene {
    * @param extension the allowed extension for each option (i.e. include if ".jpeg")
    * @param method the method to be called by the OptionsSelector
    */
+  @Override
   public void buildOptionsSelectorFromFolderForController(String folder, String extension,
       String method) {
     try {
@@ -145,7 +154,11 @@ public class GameScene extends Scene {
     }
   }
 
-
+  /**
+   * Builds an OptionsSelector object from a list
+   * @param choices the list of choices from which the user can select
+   * @param method the String representation of the method to be called
+   */
   public void buildOptionsSelectorFromListForController(List<String> choices, String method) {
     try {
       controller.buildOptionsSelector(choices, method);
@@ -159,6 +172,7 @@ public class GameScene extends Scene {
    * Adds a node element to the root node of the GameScene (i.e. button, controller, etc.)
    * @param toBeAdded the Node to be inserted
    */
+  @Override
   public void addElementToRoot(Node toBeAdded) {
     root.getChildren().add(toBeAdded);
   }
@@ -167,6 +181,7 @@ public class GameScene extends Scene {
    * Returns the controller associated with this GameScene
    * @return controller
    */
+  @Override
   public GameController getGameController() {
     return controller;
   }
@@ -175,6 +190,7 @@ public class GameScene extends Scene {
    * Removes a node element from the root node of the GameScene (i.e. button, controller, etc.)
    * @param toBeRemoved the Node to be removed
    */
+  @Override
   public void removeElementFromRoot(Node toBeRemoved) {
     root.getChildren().remove(toBeRemoved);
   }
@@ -186,6 +202,7 @@ public class GameScene extends Scene {
    * @return the node if it exists in the GameScene
    */
 
+  @Override
   public Node lookupElementInRoot(String id) {
     Node element = root.lookup("#" + id);
     if (element != null) {
@@ -198,6 +215,7 @@ public class GameScene extends Scene {
    * Updates the resource bundle displaying text for each scene
    * @param name the name of the resource bundle
    */
+  @Override
   public void updateResources(String name) {
     FolderParser parser = new FolderParser(LANGUAGE_FOLDERPATH_LONG, PROPERTIES_EXTENSION);
     if (parser.getFilenamesFromFolder().contains(name)) {
@@ -212,6 +230,7 @@ public class GameScene extends Scene {
    * Updates the stylesheet of this GameScene
    * @param name the name of the new stylesheet
    */
+  @Override
   public void updateStylesheet(String name) {
       FolderParser parser = new FolderParser(STYLESHEET_PATH_LONG, CSS_EXTENSION);
       if (parser.getFilenamesFromFolder().contains(name)) {
@@ -226,6 +245,7 @@ public class GameScene extends Scene {
    * Returns the scene id
    * @return sceneId
    */
+  @Override
   public String getSceneId() {
     return sceneId;
   }
@@ -235,6 +255,7 @@ public class GameScene extends Scene {
    * @param key the key in resourceBundle
    * @return the value in resourceBundle
    */
+  @Override
   public String getValueFromBundle(String key) {
     String value = bundle.getString(key);
     if (value!=null) {

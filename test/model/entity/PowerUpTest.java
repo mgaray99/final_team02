@@ -2,10 +2,9 @@ package model.entity;
 
 import model.Level;
 import model.collision.Direction;
-import model.configuration.EntityFactory;
-import model.configuration.GameConfiguration;
-import model.configuration.InvalidFileException;
-import model.configuration.LevelLoader;
+import model.configuration.*;
+import api.model.configuration.IGameConfiguration;
+import api.model.entity.IEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,9 +17,9 @@ public class PowerUpTest {
 
     @Test
     public void playerSpawnsAndConsumesPowerUp() throws InvalidFileException {
-        GameConfiguration gameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
-        LevelLoader levelLoader = new LevelLoader(gameConfiguration.getLevelFile(), new EntityFactory());
-        Level level = new Level(levelLoader);
+        IGameConfiguration IGameConfiguration = new GameConfiguration(TEST_CONFIGURATION);
+        ILevelLoader ILevelLoader = new LevelLoader(IGameConfiguration.getLevelFile(), new EntityFactory());
+        Level level = new Level(ILevelLoader);
         PowerUpBlock powerUpBlock = null;
         Player player = null;
         for(IEntity entity : level.getCopyOfEntityList()){

@@ -2,6 +2,7 @@ package model.scroll;
 
 import model.Level;
 import model.entity.Player;
+import api.model.scroll.Scroller;
 
 public class ManualScroller implements Scroller {
     protected double leftBound;
