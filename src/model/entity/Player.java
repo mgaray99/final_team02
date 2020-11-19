@@ -103,18 +103,24 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   }
 
   public void translateHitBox() {
-      this.getHitBox().translateY(this.getYVel());
-      this.getHitBox().translateX(this.getXVel());
+    Modifier movementSpeedModifier = this.getModifiers().get(Modifier.ModifierType.MOVEMENT_SPEED);
+    double movementSpeedModifierValue = movementSpeedModifier != null ? movementSpeedModifier.getValue() : 1;
+    this.getHitBox().translateX(this.getXVel() * movementSpeedModifierValue);
+
+    Modifier jumpSpeedModifier = this.getModifiers().get(Modifier.ModifierType.JUMP_SPEED);
+    double jumpSpeedModifierValue = jumpSpeedModifier != null ? jumpSpeedModifier.getValue() : 1;
+    this.getHitBox().translateY(this.getYVel() * jumpSpeedModifierValue);
+
     this.currentCollision.clear();
   }
 
   protected void applyGravity() {
+    double currentYVelWithAppliedGravityFactor = this.getYVel() + GRAVITY_FACTOR;
     if (this.getModifiers().containsKey(Modifier.ModifierType.GRAVITY)) {
-      this.setYVel(
-          this.getYVel() + GRAVITY_FACTOR * this.getModifiers().get(Modifier.ModifierType.GRAVITY)
-              .getValue());
+      double gravityModifierValue = this.getModifiers().get(Modifier.ModifierType.GRAVITY).getValue();
+      this.setYVel(currentYVelWithAppliedGravityFactor * gravityModifierValue);
     } else {
-      this.setYVel(this.getYVel() + GRAVITY_FACTOR);
+      this.setYVel(currentYVelWithAppliedGravityFactor);
     }
   }
 
