@@ -7,6 +7,8 @@ public class MarioPlayer extends Player {
   private static final double MARIO_JUMP_SPEED = -0.35;
   private static final double MAX_MOVE_SPEED = 0.15;
   private static final double MOVE_ACCELERATION = 0.015;
+  //GRACE_BEFORE_JUMP is there to prevent a graphical glitch where Mario gets
+  //very jittery when he tries to jump directly into a block
   private boolean GRACE_BEFORE_JUMP = true;
 
   public MarioPlayer(double x, double y) {
