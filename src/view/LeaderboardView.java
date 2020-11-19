@@ -9,18 +9,18 @@ import model.score.GameLeaderboard;
 
 public class LeaderboardView extends Group {
 
-  private GameLeaderboard leaderboard;
+  private final GameLeaderboard leaderboard;
 
-  private String path;
-  private Text title;
+  private final String path;
   private List<Text> scoreTexts;
+  private Text title;
 
   private static final int NUM_SCORES = 10;
 
-  private double xOffset;
-  private double yOffset;
-  private double width;
-  private double height;
+  private final double xOffset;
+  private final double yOffset;
+  private final double width;
+  private final double height;
 
   public LeaderboardView(String filepath, double x, double y, double w, double h)
       throws FileNotFoundException {

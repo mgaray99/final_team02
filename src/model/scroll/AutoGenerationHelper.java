@@ -1,20 +1,16 @@
 package model.scroll;
 
-import java.util.Map;
 import java.util.Optional;
-
 import model.Level;
 import model.autogenerator.AutoGenerator;
 import model.autogenerator.GenerationException;
 import model.configuration.EntityFactory;
-import model.configuration.LevelDecoder;
 import model.entity.IEntity;
 
 public class AutoGenerationHelper {
 
-  private AutoGenerator generator;
-  private EntityFactory factory;
-  private Map<String, String> decoderMap;
+  private final AutoGenerator generator;
+  private final EntityFactory factory;
   protected String[][] currentGeneration;
 
 
@@ -22,8 +18,6 @@ public class AutoGenerationHelper {
     try {
       factory = new EntityFactory();
       generator = new AutoGenerator(generatorPath);
-      LevelDecoder decoder = new LevelDecoder();
-      decoderMap = decoder.getIdToEntityMap();
       currentGeneration = generator.generateNextBlock();
     }
     catch (Exception e) {

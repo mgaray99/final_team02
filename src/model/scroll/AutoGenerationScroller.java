@@ -8,7 +8,7 @@ import model.entity.Player;
 
 public class AutoGenerationScroller extends AutoScroller {
   private double flagX;
-  private AutoGenerationHelper helper;
+  private final AutoGenerationHelper helper;
   private final int GENERATE_MAX_BOUND;
   private static final String EXCEPTION_MESSAGE = "Failed to build auto-generation";
 

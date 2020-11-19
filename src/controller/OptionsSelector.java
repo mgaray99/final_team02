@@ -22,8 +22,6 @@ import javafx.scene.control.Button;
 
 public class OptionsSelector extends Group implements ButtonPushHandler {
 
-  private static final String PREV_COMMAND = "PrevCommand";
-  private static final String NEXT_COMMAND = "NextCommand";
   private static final String OPTION1 = "Option1";
   private static final String OPTION2 = "Option2";
   private static final String OPTION3 = "Option3";

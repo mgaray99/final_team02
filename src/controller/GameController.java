@@ -16,16 +16,16 @@ import javafx.scene.input.KeyEvent;
  */
 public class GameController extends Group implements ButtonPushHandler {
 
-  private static double WIDTH = 800;
-  private static double HEIGHT = 800;
+  private static final double WIDTH = 800;
+  private static final double HEIGHT = 800;
   private static String OPTIONS_SELECTOR_EVENTTYPE = "push";
   private static final EventType CONTROLLER_EVENT = new EventType("controller");
-  private List<String> buffer;
+  private final List<String> buffer;
 
   public GameController() {
     buffer = new ArrayList<>();
-    setOnKeyPressed(event -> handleKeyPress(event));
-    setOnKeyReleased(event -> handleKeyRelease(event));
+    setOnKeyPressed(this::handleKeyPress);
+    setOnKeyReleased(this::handleKeyRelease);
     setFocusTraversable(true);
     setFocused(true);
   }

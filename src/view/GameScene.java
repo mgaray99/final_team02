@@ -20,8 +20,8 @@ import javafx.scene.text.Text;
  * @author Alex Lu & Edem Ahorlu
  */
 public class GameScene extends Scene {
-  private Group root;
-  private String sceneId;
+  private final Group root;
+  private final String sceneId;
   protected final double WIDTH;
   protected final double HEIGHT;
   private GameController controller;
@@ -188,7 +188,7 @@ public class GameScene extends Scene {
 
   public Node lookupElementInRoot(String id) {
     Node element = root.lookup("#" + id);
-    if (!element.equals(null)) {
+    if (element != null) {
       return element;
     }
     throw new NullPointerException("Node not found!");

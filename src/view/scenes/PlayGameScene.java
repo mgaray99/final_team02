@@ -1,8 +1,5 @@
 package view.scenes;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -157,12 +154,12 @@ public class PlayGameScene extends GameScene {
    * @return a boolean revealing whether or not the text is valid
    */
   private boolean checkIsValidText(String text) {
-    List<String> bannedList= Arrays.asList(bannedCharacters);
     boolean containsBannedChar = false;
 
-    for (String bannedChar : bannedList) {
-      if (text.indexOf(bannedChar) >= 0) {
+    for (String bannedChar : bannedCharacters) {
+      if (text.contains(bannedChar)) {
         containsBannedChar = true;
+        break;
       }
     }
 

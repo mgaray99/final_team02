@@ -1,25 +1,20 @@
 package model.score;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class GameLeaderboard {
-  private String path;
-  private File leaderboardFile;
+  private final String path;
   private List<ScoreTuple> scoresList;
-  private Scanner leaderboardScanner;
+  private final Scanner leaderboardScanner;
   private String title;
-  private static String PATH_START = "./src/resources/leaderboards/";
+  private static final String PATH_START = "./src/resources/leaderboards/";
 
   /**
    * @param filepath the filepath to the leaderboard xml file
@@ -27,7 +22,7 @@ public class GameLeaderboard {
   public GameLeaderboard(String filepath) throws FileNotFoundException {
     path = filepath;
 
-    leaderboardFile = new File(PATH_START + filepath);
+    File leaderboardFile = new File(PATH_START + filepath);
     leaderboardScanner = new Scanner(leaderboardFile);
 
 

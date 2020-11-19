@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
 
 public class KeyBinder extends Group {
@@ -34,8 +31,6 @@ public class KeyBinder extends Group {
     private ResourceBundle bundle;
 
     public KeyBinder(ResourceBundle resourceBundle) {
-        this.prefWidth(WIDTH);
-        this.prefHeight(HEIGHT);
         bundle = resourceBundle;
         isUpdatingKey = false;
         currentKeyBeingUpdated = "";
@@ -110,7 +105,7 @@ public class KeyBinder extends Group {
         Button keyButton = new Button(pair.getKey());
         keyButton.setId(pair.getKey());
         keyButton.setOnAction(e -> enableUpdate(keyButton.getId()));
-        keyButton.setOnKeyPressed(e -> handleKey(e));
+        keyButton.setOnKeyPressed(this::handleKey);
         keyButton.setLayoutX(COLUMN2X);
         keyButton.setLayoutY(START_VISIBLE_Y + VISIBLE_Y * offset);
 
@@ -171,7 +166,7 @@ public class KeyBinder extends Group {
    */
   public String getValueFromBundle(String key) {
     String value = bundle.getString(key);
-    if (value!=null) {
+    if (value.equals(null)) {
       return value;
     }
     return "";

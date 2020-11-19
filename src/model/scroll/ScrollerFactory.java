@@ -4,7 +4,6 @@ import model.autogenerator.GenerationException;
 
 public class ScrollerFactory {
 
-  private static final String SCROLLER = "Scroller";
   private static final String MANUAL = "Manual";
   private static final String AUTO = "Auto";
   private static final String DOODLE = "Doodle";
@@ -39,13 +38,13 @@ public class ScrollerFactory {
    */
   private Scroller buildScrollerFromArgs(String identifier, String[] constructorArgs)
   throws GenerationException {
-    switch (identifier) {
-      case MANUAL: return buildManualScroller(constructorArgs);
-      case AUTO: return buildAutoScroller(constructorArgs);
-      case DOODLE: return buildDoodleGenerationScroller(constructorArgs);
-      case AUTO_GENERATION: return buildAutoGenerationScroller(constructorArgs);
-      default: return new AutoScroller(0,0, false);
-    }
+    return switch (identifier) {
+      case MANUAL -> buildManualScroller(constructorArgs);
+      case AUTO -> buildAutoScroller(constructorArgs);
+      case DOODLE -> buildDoodleGenerationScroller(constructorArgs);
+      case AUTO_GENERATION -> buildAutoGenerationScroller(constructorArgs);
+      default -> new AutoScroller(0, 0, false);
+    };
   }
 
   /**

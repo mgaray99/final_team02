@@ -5,7 +5,7 @@ public class RandomGeneration extends GenerationInstruction {
   private static final String LEFT = "LEFT";
   private static final String UP = "UP";
 
-  private String[] specifications;
+  private final String[] specifications;
   private boolean growsLeft;
   private boolean growsUp;
 
@@ -63,7 +63,7 @@ public class RandomGeneration extends GenerationInstruction {
    * and if width is 2 and height is 4, the startRow would be X - 2 and the endRow would be X and the
    * startCol would be Y and endCol would be Y + 4)
    *
-   * @param growthString
+   * @param growthString the String specifying the direction the generation grows in
    */
   private void setDirectionOfGrowth(String growthString) {
     String[] xyDirections = growthString.split(":");
@@ -76,7 +76,7 @@ public class RandomGeneration extends GenerationInstruction {
    * @param xArg either the starting x coordinate or "R" if we should randomize to calculate it
    */
   private void buildStartRow(String xArg) {
-    startRow = decodeStartArg(xArg, numRows);
+    startRow = decodeStartArg(xArg);
   }
 
   /**
@@ -84,7 +84,7 @@ public class RandomGeneration extends GenerationInstruction {
    * @param yArg either the starting y coordinate or "U" if we should randomize to calculate it
    */
   private void buildStartCol(String yArg) {
-    startCol = decodeStartArg(yArg, numCols);
+    startCol = decodeStartArg(yArg);
   }
 
   /**
@@ -92,12 +92,9 @@ public class RandomGeneration extends GenerationInstruction {
    * parameters)
    *
    * @param arg the String configuration argyment
-   * @param numOffset either numRows or numCols depending on if we're decoding the startRow or
-   *                  startCol (i.e. this will be multiplied by a random number to return a
-   *                 value in the range [0, numOffset])
    * @return an int based on the String argument
    */
-  private int decodeStartArg(String arg, int numOffset) {
+  private int decodeStartArg(String arg) {
     if (arg.charAt(0) == 'U') {
       UniformRandomizer randomizer = new UniformRandomizer(arg);
       return randomizer.getUniformValue();
@@ -125,7 +122,7 @@ public class RandomGeneration extends GenerationInstruction {
    * @param firstPoint the value of the starting point
    * @param length the length from the firstPoint that the secondPoint is (note,
    *               this length may be negative)
-   * @param maxAllowed
+   * @param maxAllowed the maximum possible size for the start and end points
    * @return an array startAndEnd with the following characteristics:
    *         startAndEnd[0] < startAndEnd[1]
    *         startAndEnd[0] >= 0
@@ -140,8 +137,7 @@ public class RandomGeneration extends GenerationInstruction {
     int checkedStart = Math.max(start, 0);
     int checkedEnd = Math.min(end, maxAllowed);
 
-    int[] startAndEnd = {checkedStart, checkedEnd};
-    return startAndEnd;
+    return new int[]{checkedStart, checkedEnd};
   }
 
   /**

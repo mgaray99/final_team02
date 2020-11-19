@@ -21,13 +21,13 @@ import model.entity.IEntity;
 
 public class Texturer {
   private Map<String, ImageView> textureMap;
-  private Group textureGroup;
+  private final Group textureGroup;
   private final double WIDTH;
   private final double HEIGHT;
   private final Image MISSING_IMAGE;
   private double numBlocksWide;
   private double numBlocksHigh;
-  private String path;
+  private final String path;
 
   private static final String FILEPATH_START = "resources/images/texturefiles/";
 
@@ -75,7 +75,7 @@ public class Texturer {
    * Builds a TreeMap based on a properties file
    * @param propertiesPath the String path leading to the .properties file
    * @return a new Map of properties
-   * @throws IOException
+   * @throws IOException ioe
    */
   private TreeMap buildPropertiesMap(String propertiesPath) throws IOException,
       NullPointerException {
@@ -136,7 +136,7 @@ public class Texturer {
 
   /**
    * Inserts the new textures into textureGroup
-   * @param entityList
+   * @param entityList the entity list for whom we'll be applying the textures
    */
   private void insertNewTextures(List<IEntity> entityList) {
     entityList.forEach(entity -> addNewTexture(entity));
@@ -144,7 +144,7 @@ public class Texturer {
 
   /**
    * Adds a single new texture to the group textureGroup
-   * @param currentEntity
+   * @param currentEntity the IEntity for whom we will be adding the texture
    */
   private void addNewTexture(IEntity currentEntity) {
     Image image;

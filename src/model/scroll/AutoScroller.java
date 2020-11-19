@@ -1,9 +1,7 @@
 package model.scroll;
 
-import java.util.List;
 import model.HitBox;
 import model.Level;
-import model.entity.IEntity;
 import model.entity.Player;
 
 public class AutoScroller implements Scroller{

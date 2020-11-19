@@ -16,8 +16,8 @@ import model.configuration.ModelExceptionReason;
 
 public class KeyInputter {
 
-  private KeyInputterMethodCaller methodCaller;
-  private Map<String, String> keyToMethodMap;
+  private final KeyInputterMethodCaller methodCaller;
+  private final Map<String, String> keyToMethodMap;
   private String lastMethodFromKeyPress;
   private static final String FILEPATH_START = "resources/keyinputs/";
   private static final String KEY_METHOD_ERROR = "KEY_METHOD_ERROR";
