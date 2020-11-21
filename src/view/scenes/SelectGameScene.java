@@ -4,6 +4,13 @@ import java.util.Arrays;
 import javafx.scene.Group;
 import view.GameScene;
 
+/**
+ * builds the scene that allows the user to select the game versions available
+ *
+ * @author Alex Lu
+ */
+
+
 public class SelectGameScene extends GameScene {
   private static final String ID = "GAMEVERSION";
   private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump",

@@ -10,6 +10,13 @@ import view.LeaderboardView;
 import api.view.scenes.IHighScoreScene;
 
 
+/**
+ * builds scene that allows the user view the various high scores on the leaderboard
+ *
+ * @author Alex Lu
+ */
+
+
 public class HighScoreScene extends GameScene implements IHighScoreScene {
 
 

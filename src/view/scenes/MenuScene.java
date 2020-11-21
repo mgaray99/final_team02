@@ -8,6 +8,13 @@ import javafx.scene.image.ImageView;
 import view.GameScene;
 import api.view.scenes.IMenuScene;
 
+
+/**builds the scene that has all the buttons on the splashscreen
+ *
+ * @author Alex Lu
+ *
+ */
+
 public class MenuScene extends GameScene implements IMenuScene {
 
     private static final String ID = "HOME_SCREEN";
