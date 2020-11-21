@@ -13,15 +13,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * Is responsible for creating Buttons from a config file that takes the form XXXX.txt. The first
- * line of this file should be an ID of some kind (i.e. MAIN_SCENE) and the other lines should run
- * as BUTTON_ID XCOORD YCOORD BUTTON_WIDTH BUTTON_HEIGHT.
- * <p>
- * (i.e. PushCommand 0.5 0.5 0.4 0.2 sets the x coordinate at location 0.5 * WIDTH, y coordinate 0.5
- * * HEIGHT, button width at 0.4 * WIDTH and button height at 0.2 * HEIGHT)
- * <p>
- * This builder sets the action for the push of a button to handler.handlePush(BUTTON_ID) for all
- * buttons so that the handler knows that the button with BUTTON_ID was pushed
+ * Is responsible for creating Buttons from a config file that takes the form XXXX.xml. For
+ * instructions on how to write such a config file, as well as an in depth description of the
+ * definitions of element tags within existing config files, please refer to the README
  *
  * @author Alex Lu
  */

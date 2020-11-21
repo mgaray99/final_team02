@@ -2,8 +2,25 @@ package model.autogenerator;
 
 import api.model.autogenerator.IConstantGeneration;
 
+/**
+ * The purpose of this class is to serve as a constant set of instructions, or instructions that
+ * will be the same every time they are queried by AutoGenerator (return the same startRow, endRow
+ * etc. when asked where to fill in the generation with entities). AutoGenerator contains a list of
+ * these keeping track of all of the different constant instructions to execute when making a new
+ * generation (2D String array) in AutoGenerator.
+ *
+ * @author Alex Lu
+ */
 public class ConstantGeneration extends GenerationInstruction implements IConstantGeneration {
 
+  /**
+   * Instantiates a ConstantGeneration object
+   *
+   * @param rows the number of rows in the master 2D array returned by AutoGenerator
+   * @param cols the number of cols in the master 2D array returned by AutoGenerator
+   * @param args the String arguments used to build this ConstantGeneration object (see
+   *             buildInstruction(args) for more details)
+   */
   public ConstantGeneration(int rows, int cols, String[] args) {
     super(rows, cols);
 

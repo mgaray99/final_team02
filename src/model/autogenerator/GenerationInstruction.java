@@ -2,6 +2,15 @@ package model.autogenerator;
 
 import api.model.autogenerator.IGenerationInstruction;
 
+/**
+ * This class is the abstract super class that ConstantGeneration and RandomGeneration extend. It
+ * contains data on the number of max allowed rows (i.e. numRows) and the number of max allowed
+ * columns (i.e. numCols) and has a few variables startRow, endRow, startCol, endCol and entityType
+ * that allow AutoGenerator to insert entity type into the generation between startRow and endRow
+ * and startCol and endCol
+ *
+ * @author Alex Lu
+ */
 public abstract class GenerationInstruction implements IGenerationInstruction {
 
   protected int numRows;
@@ -18,10 +27,7 @@ public abstract class GenerationInstruction implements IGenerationInstruction {
 
   /**
    * Builds a generation instruction (i.e. if you pass (6, 4) your parent generation might look like
-   * 0,0,0,0,0,0
-   * 0,0,0,0,0,0
-   * 0,0,0,0,0,0
-   * 0,0,0,0,0,0
+   * 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0
    *
    * @param rows the number of blocks wide of the new block that we're building the generation for
    * @param cols the number of blocks tall of the new block that we're building the generation for
@@ -72,22 +78,17 @@ public abstract class GenerationInstruction implements IGenerationInstruction {
   }
 
 
-
-
-
   /**
-   * Checks to make sure that startRow, endRow, startCol and endCol all have valid values.
-   * If not, throws an exception
+   * Checks to make sure that startRow, endRow, startCol and endCol all have valid values. If not,
+   * throws an exception
    */
   @Override
   public void validate() {
     if (endCol < startCol || endRow < startRow) {
       throwGenerationException();
-    }
-    else if (endCol > numCols - 1 || endRow > numRows - 1) {
+    } else if (endCol > numCols - 1 || endRow > numRows - 1) {
       throwGenerationException();
-    }
-    else if (startRow < 0 || startCol < 0) {
+    } else if (startRow < 0 || startCol < 0) {
       throwGenerationException();
     }
   }

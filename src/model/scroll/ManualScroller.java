@@ -4,6 +4,14 @@ import model.Level;
 import model.entity.Player;
 import api.model.scroll.Scroller;
 
+/**
+ * This class's responsibility is to manually scroll the level (i.e. to move the visible
+ * pane defining which part of the level the user sees dependently on the userinput) It, like
+ * all scrollers, is primarily used in the scroll() method in the Level class, where the Level
+ * object calls scroller.scroll(this [i.e. the Level object], gamePlayer)
+ *
+ * @author Alex Lu
+ */
 public class ManualScroller implements Scroller {
     protected double leftBound;
     protected double rightBound;
@@ -17,6 +25,23 @@ public class ManualScroller implements Scroller {
     public static final int ALWAYS_SCROLL = 0;
     private static final int SCORE_FROM_SCROLL = 0;
 
+  /**
+   * Instantiates and configures a ManualScroller object
+   *
+   * @param l the boundary for player movement (i.e. x = l) where if the player goes to its left,
+   *          the game will scroll left
+   * @param r the boundary for player movement (i.e. x = r) where if the player goes to its right,
+   *          the game will scroll right
+   * @param u the boundary for player movement (i.e. y = u) where if the player goes above it, the
+   *          game will scroll up
+   * @param d the boundary for player movement (i.e. y = d) where if the player goes below it, the
+   *          game will scroll up
+   *
+   *          Note: a value of 0 to l, r, u or d means that the game will scroll in that direction
+   *          if the player moves in the direction regardless of their location Note: a value of -1
+   *          to l, r, u or d means that the game will never scroll in that relevant direction
+   *          regardless of the player's location or movement
+   */
     public ManualScroller(double l, double r, double u, double d) {
       leftBound = l;
       rightBound = r;

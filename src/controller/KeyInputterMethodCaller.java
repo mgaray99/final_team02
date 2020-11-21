@@ -4,10 +4,24 @@ import api.controller.IKeyInputterMethodCaller;
 import api.model.IKeyPressFunctions;
 import api.model.IGameModel;
 
+/**
+ * This class' job is to call methods on a GameModel in order to control the player movement,
+ * jumping or other user-dependent states in the GameModel. It is used primarily by KeyInputter in
+ * order to call methods on the GameModel that KeyInputter saved as an instance variable during
+ * construction
+ *
+ * @author Alex Lu
+ */
 public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
+
   private IGameModel model;
   private IKeyPressFunctions functions;
 
+  /**
+   * Constructs a KeyInputterMethodCaller object
+   *
+   * @param mo the GameModel object that this class will call methods on
+   */
   public KeyInputterMethodCaller(IGameModel mo) {
     model = mo;
     functions = model.getKeyPressFunctions();
@@ -52,8 +66,7 @@ public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
   public void pause() {
     if (functions.isPaused()) {
       functions.resumeGame();
-    }
-    else {
+    } else {
       functions.pauseGame();
     }
   }
