@@ -3,6 +3,13 @@ package view.scenes;
 import javafx.scene.Group;
 import view.GameScene;
 
+/**
+ * scene that allows the user apply different textures to the game
+ *
+ * @author Alex Lu
+ */
+
+
 public class TextureSwapScene extends GameScene {
   private static final String ID = "TEXTURE_SWAP";
   private static final String TEXTURES_FOLDERPATH = "./src/resources/images/texturefiles";

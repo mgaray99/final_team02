@@ -5,6 +5,13 @@ import javafx.scene.Group;
 import view.GameScene;
 import api.view.scenes.IControlsScene;
 
+/**
+ * builds scene that allows the user set different keys to control characters in the game
+ *
+ * @author Alex Lu
+ */
+
+
 public class ControlsScene extends GameScene implements IControlsScene {
 
   private static final String ID = "CONTROLS";
