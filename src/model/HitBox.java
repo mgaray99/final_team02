@@ -34,8 +34,9 @@ public class HitBox implements IHitBox {
    * calculates its right and bottom coordinates
    * by storing its size. In our project as it currently is,
    * all HitBoxes have the same size.
-   * @param xLeft
-   * @param yTop
+   *
+   * @param xLeft left coordinate of hitBox
+   * @param yTop top coordinate of hitBox
    */
   public HitBox(double xLeft, double yTop){
     this.xLeft = xLeft;
@@ -47,10 +48,10 @@ public class HitBox implements IHitBox {
   /**
    * This alternative constructor could be used to make HitBoxes of
    * different sizes, but we do not use this in our project.
-   * @param xLeft
-   * @param yTop
-   * @param xSize
-   * @param ySize
+   * @param xLeft left coordinate of hitBox
+   * @param yTop top coordinate of hitBox
+   * @param xSize size of hitBox in the x direction
+   * @param ySize size of hitBox in the y direction
    */
   public HitBox(double xLeft, double yTop, int xSize, int ySize) {
     this.xLeft = xLeft;
