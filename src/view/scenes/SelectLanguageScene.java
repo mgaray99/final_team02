@@ -3,6 +3,13 @@ package view.scenes;
 import javafx.scene.Group;
 import view.GameScene;
 
+/**
+ * builds the scene that allows the user to select different languages
+ *
+ * @author Edem Ahorlu
+ */
+
+
 public class SelectLanguageScene extends GameScene {
   private static final String ID = "SELECT_RESOURCE_BUNDLE";
   private static final String LANGUAGE_FOLDERPATH = "./src/resources/resourcebundles";
