@@ -19,7 +19,7 @@ Hours Spent:
 
 Alex Lu: ~35
 
-Mike Garey:
+Mike Garay: ~35
 
 Edem Ahorlu: ~35
 
@@ -35,6 +35,14 @@ various features including textures, splash screens, display enemies,
 power ups, and scores among others.
 
 Mike Garay:
+My role was primarily working on the backend with Ryan.
+Together, we implemented the entity hierarchy (entities are the building blocks
+that make up our levels) and wrote the Level class. 
+I was responsible for making the various interfaces used by the entities,
+including power-up logic. I also worked with Alex to make LevelLoader and EntityFactory
+to load in levels and create entities through reflection. Additionally,
+I wrote basic game configuration and made the api package storing all of our interfaces for
+the project.
 
 Ryan Krakower:
 My role was primarily working on the backend with Mike.
@@ -117,7 +125,7 @@ Features implemented:
   won't be there for that scene though)
 * Our error messages are pulled from language files in ./src/resources/resourcebundles and thus 
   will be displayed in other languages if the user has chosen to run the program in those languages 
-* Our test library was extensive. We finished with 148 tests in the final stretches of our project, 
+* Our test library was extensive. We finished with 151 tests in the final stretches of our project, 
   achieving the 80% line coverage target discussed in class and exceeding it with a final coverage
   of 85%.
 
@@ -132,7 +140,7 @@ Assumptions or Simplifications:
 * Every entity is the same size and shape (a square). This assumption made it easier to 
   read/write levels and to make HitBoxes and collision mechanics. 
   The only downside is that it limits our options for resizing entities.
-* The game scene is always the same size
+* The game scene is always the same size.
 
 
 Interesting data files:
@@ -206,4 +214,4 @@ particular project is our strongest of the year. The free rein to take this proj
 direction we wanted to was initially scary, but later proved to be one of the best parts of the
 project because we were able to realize our vision of what the final product would look like, rather
 than being confined to what the project specifications. This served as a remarkable catalyst for
-self motivation and helped us to the achieve results we wanted.
+self motivation and helped us to achieve the results we wanted.
