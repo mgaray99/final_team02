@@ -8,6 +8,8 @@ import api.model.IKeyPressFunctions;
  * the player is moving left, whether the player is moving right, and if the player
  * is jumping. This class contains getters and setters for those booleans.
  *
+ * This is used by Level to determine how entities should be moved.
+ *
  * @author Ryan Krakower
  */
 public class KeyPressFunctions implements IKeyPressFunctions {
@@ -46,8 +48,8 @@ public class KeyPressFunctions implements IKeyPressFunctions {
   }
 
   /**
-   * Getter for isPlayerMovingRight
-   * @return movePlayerRight (if it returns true, the model should move the player right)
+   * Getter for isPlayerJumping
+   * @return jumpPlayer (if it returns true, the model should attempt to make the player jump)
    */
   @Override
   public boolean isPlayerJumping() {

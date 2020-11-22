@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
+/**
+ * A class for decoding entities from their ids in a level file
+ * @author Alex Lu
+ */
 public class LevelDecoder implements ILevelDecoder {
   private Map<String, String> keyToEntityTypeMap;
   private static final String ID_TO_ENTITY_PATH =
@@ -19,7 +23,8 @@ public class LevelDecoder implements ILevelDecoder {
 
   /**
    * Builds a map, mapping String ids -> String entity types (i.e. "1" -> "PLAYER")
-   * @throws IOException
+   * @throws IOException if an error occurred when reading from the input stream
+   * @throws NullPointerException if the Map is constructed with null values
    */
   @Override
   public void buildKeyToEntityTypeMap() throws IOException, NullPointerException {
