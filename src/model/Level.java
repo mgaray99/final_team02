@@ -17,6 +17,7 @@ import java.util.Optional;
 
 /**
  * The class that "plays" a game.
+ *
  * It contains a step function which repeatedly runs through the necessary logic to
  * animate and control a game. It contains all of the entities that are in the level,
  * and manipulates them as the game progresses.
@@ -39,14 +40,33 @@ public class Level implements ILevel {
   public api.model.IKeyPressFunctions IKeyPressFunctions = new KeyPressFunctions();
 
   private Scroller scroller;
+  private ILevelLoader loader;
+
+
+  // NOTE: There are multiple lists of entities in Level, based on their
+  // class type. This is a violation of the Polymorphism principle, but we did
+  // it anyway because we thought it would cut down the code's runtime
+  // and avoid having to loop through every single entity for every
+  // single function. For example, when checking collisions, it loops through
+  // every entity in movableEntityList, and for each of those entities, loops through
+  // every single entity in entityList (which contains all entities). If it had to loop
+  // through every entity, for every entity, the runtime of this would be O(n^2), instead
+  // of O(mn), with m being much smaller than n. This could have decreased performance and
+  // made the game laggy.
+  //
+  // In hindsight, if we had made every entity have a simple return statement for each type of
+  // method it did not need, this could have allowed us to abide by the Polymorphism rule,
+  // and also help with the Liskov Substitution Principle because we would not need to know what
+  // subclass a given object is before calling a method. I'm not sure how much
+  // this would have increased runtime.
+
+  private List<IEntity> entityList;
   private List<Player> playerList;
   private List<Enemy> enemyList;
   private List<IMovable> movableEntityList = new ArrayList<>();
   private List<PowerUp> powerUpList;
   private List<Block> blockList;
-  private List<IEntity> entityList;
   private List<IWinnable> winnableList;
-  private ILevelLoader loader;
 
   private int levelLength;
   private int levelWidth;

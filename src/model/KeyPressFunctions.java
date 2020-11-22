@@ -14,6 +14,15 @@ import api.model.IKeyPressFunctions;
  */
 public class KeyPressFunctions implements IKeyPressFunctions {
 
+  // NOTE: This is not an "active class," since it only consists of getters
+  // and setters. I made this class to reduce the amount that Level needs to do,
+  // since I felt that class was already getting too long. In addition, this class makes
+  // it easy for the controller to update the game based on what key is pressed, and also
+  // makes it easy to add new types of key presses by adding a new boolean / getter / setter
+  // to this class. In hindsight, maybe this could have been in Level, but I feel that having
+  // this class overall made the project easier to maintain and made it easier to wrap my head
+  // around how the key presses affect the game.
+
   private boolean isPaused = false;
   private boolean movePlayerLeft = false;
   private boolean movePlayerRight = false;
