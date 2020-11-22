@@ -21,6 +21,12 @@ import java.util.Optional;
  * animate and control a game. It contains all of the entities that are in the level,
  * and manipulates them as the game progresses.
  *
+ * GameModel contains an instance of this class and is responsible for
+ * calling the step function.
+ *
+ * GameView calls getAllEntitiesInLevel to take in the entity list. This entity
+ * list contains the information that the view will display to the end user.
+ *
  * @author Ryan Krakower
  * @author Mike Garay
  */
@@ -400,7 +406,7 @@ public class Level implements ILevel {
         }
       }
     }
-  };
+  }
 
 
   /**
@@ -468,8 +474,14 @@ public class Level implements ILevel {
   }
 
   /**
-   * Gets a copy of the list containing every entity in the level
-   * @return entityList
+   * Gets a copy of the list containing every player in the level.
+   * This method is called by GameView, and used to gain information
+   * on every entity that will be displayed to the end user.
+   *
+   * Changing the contents of this list will NOT
+   * change the Entity information stored in Level.
+   *
+   * @return playerList
    */
   @Override
   public List<IEntity> getCopyOfEntityList() {
@@ -477,7 +489,13 @@ public class Level implements ILevel {
   }
 
   /**
-   * Gets the list containing every entity in the level
+   * Gets the list containing every entity in the level.
+   * This is used internally in Level for the purpose of
+   * iterating through all entities.
+   *
+   * Changing the contents of this list WILL
+   * change the Entity information stored in Level.
+   *
    * @return entityList
    */
   @Override

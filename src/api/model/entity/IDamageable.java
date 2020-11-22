@@ -43,10 +43,20 @@ public interface IDamageable {
      */
     ICollisionHandler getReceivesDamageDirections();
 
+    /**
+     * Determines whether or not this entity is dead - by default, it checks if its health is less than or equal to 0
+     * @return Whether or not this entity is dead
+     */
     default boolean isDead(){
         return this.getHealth() <= 0;
     }
 
+    /**
+     * Attempts to apply damage to the other IDamageable passed in if damage can be applied to the direction
+     * and the other IDamageable can receive damage from that direction
+     * @param damageable The other IDamageable entity to potentially apply damage to
+     * @param currentCollidingDirections The current directions through which this entity is colliding with the other entity
+     */
     default void attemptApplyDamage(IDamageable damageable, CollisionDirections currentCollidingDirections){
         boolean isOnSameTeam = this.isOnSameTeam(damageable);
         boolean isEmpty =  currentCollidingDirections.isEmpty();
@@ -61,17 +71,36 @@ public interface IDamageable {
         }
     }
 
+    /**
+     * Determines whether or not this entity can apply damage through the direction passed in
+     * @param direction The direction to check if damage can be applied to
+     * @return Whether or not this entity can apply damage through the direction passed in
+     */
     default boolean canApplyDamageToDirection(Direction direction){
         return this.getAppliesDamageDirections().contains(direction);
     }
 
+    /**
+     * Determines whether or not this entity can receive damage from the direction passed in
+     * @param direction The direction to check if damage can be received from
+     * @return Whether or not this entity can recieve damage from the direction passed in
+     */
     default boolean canReceiveDamageFromDirection(Direction direction){
         return this.getReceivesDamageDirections().contains(direction);
     }
 
+    /**
+     * Determines if this entity and the other IDamageable entity are on the same team
+     * @param damageable The other IDamageable entity to check the team of
+     * @return Whether or not this entity and the IDamageable entity passed in are on the same team
+     */
     default boolean isOnSameTeam(IDamageable damageable){
         return this.getTeam() == damageable.getTeam();
     }
 
+    /**
+     * Obtains the Team this entity belongs to
+     * @return The Team this entity belongs to
+     */
     Teams getTeam();
 }

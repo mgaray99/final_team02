@@ -119,7 +119,13 @@ stylesheet, texture pack) based on the .properties file that configured the game
   * The game scene is always the same size.
 
 
-# Address significant differences between the original plan and the final version of the project
+# address significant differences between the original plan and the final version of the project
+Our final version of the project was much like we had planned originally with the only significant differences
+being additional features implemented. The features which made the final version of our project significantly
+different from the original plan are giving the user the ability to set the keys to control characters in each version
+of the game and letting the user apply different textures to game.
 
 
-# Describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline
+
+
+# describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline

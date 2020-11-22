@@ -12,6 +12,7 @@ import api.model.IGameModel;
 import api.model.IKeyPressFunctions;
 import api.model.configuration.IGameConfiguration;
 
+
 public class GameModel implements IGameModel {
 
     private IGameConfiguration gameConfiguration;
