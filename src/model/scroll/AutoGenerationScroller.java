@@ -6,12 +6,33 @@ import model.autogenerator.GenerationException;
 import api.model.entity.IEntity;
 import model.entity.Player;
 
+/**
+ * This class's responsibility is to automatically scroll the level (i.e. to move the visible pane
+ * defining which part of the level the user sees independently of any user input) while also
+ * generating new chunks of entities and inserting those chunks into the level to simulate infinite
+ * automatic level generation. It uses an AutoGenerationHelper to accomplish this generation.
+ *
+ * It, like all scrollers, is primarily used in the scroll() method in the Level class, where the
+ * Level object calls scroller.scroll(this [i.e. the Level object], gamePlayer)
+ *
+ * @author Alex Lu
+ */
 public class AutoGenerationScroller extends AutoScroller {
   private double flagX;
   private final AutoGenerationHelper helper;
   private final int GENERATE_MAX_BOUND;
   private static final String EXCEPTION_MESSAGE = "Failed to build auto-generation";
 
+  /**
+   * Instantiates an AutoGenerationScroller object
+   * @param xScr the amount by which this scroller will translate the x components of all Entities
+   *        in the level it is scrolling each time this scroller scrolls it
+   * @param yScr the amount by which this scroller will translate the y components of all Entities
+   *        in the level it is scrolling each time this scroller scrolls it
+   * @param pScrolls true if the player's location stays fixed on the screen after a
+   *        scroll, false if not
+   * @param path a String reference to the xml file to be used to generate levels
+   */
   public AutoGenerationScroller(double xScr, double yScr, boolean pScrolls, String path) {
     super(xScr,yScr, pScrolls);
 
