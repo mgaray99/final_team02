@@ -123,7 +123,9 @@ stylesheet, texture pack) based on the .properties file that configured the game
 Our final version of the project was much like we had planned originally with the only significant differences
 being additional features implemented. The features which made the final version of our project significantly
 different from the original plan are giving the user the ability to set the keys to control characters in each version
-of the game and letting the user apply different textures to game.
+of the game and letting the user apply different textures to game. Also, the final API was much more fleshed out
+than what we had planned, since we underestimated how much interfacing would be necessary for the size of
+the project.
 
 
 # describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline
@@ -153,10 +155,103 @@ is missing, that entity will appear as a black square in View.
 ### Adding new Entity types
 This is a bit tricker. Because we planned on making a few additional types of bricks, I will use 
 a new brick type as an example.
+
 * Adding a breakable brick: 
 1. Make a new class, called BreakableBlock, that extends the appropriate class (in this case, Block) 
-and implements any necessary interfaces (in this case, IDamageable).
-2. Program
-3. Make 
+and implements any necessary interfaces (in this case, IDamageable). We will assume
+that a breakable block can only be broken from the bottom, aka the colliding IDamageable
+needs to be able to apply damage top-wise.
+
+2. Make a mapping for it under the properties file src/resources/game_configuration/entityids.properties.
+Give it a number as a key that is different from all the other keys, and make the value "BreakableBlock".
+
+3. Make a level file that contains any entities you want to make up the level, including the new BreakableBlock
+entity you just made. Put the path of that level file in the game configuration you are using to run
+the game.
+
+4. Make a texture pack mapping for it (see above).
+
+5. Override the default method IDamageable#attemptApplyDamage in the Player class to allow
+it to damage a BreakableBlock if it collides with it top-wise. Alternatively, amend the 
+implementation of IDamageable#getAppliesDamageDirections in Player so Players can apply damage 
+through a top-wise collision. 
+
+6. Load up the game and play your level, now breakable blocks should be destroyed when the player
+collides with it top-wise.
     
 ### Adding new game types
+
+1. Make a new properties file under src/resources/game_configuration.
+
+Here are the original mappings for supermario.properties as an example for what mappings you'd need to
+make a default Super Mario Game: 
+
+```properties
+level=front_end_level.csv
+keys=mariokeyinputs.properties
+textures=mariotextures.properties
+scroller=Manual,3,8,-1,-1
+autofile=NA
+player=MarioPlayer
+leaderboard=supermarioleaderboard.csv
+nextfile=mariolevel2.properties
+```
+
+"level" maps to the level CSV file you plan to use for the game.
+"keys" maps to the properties file that contains the key inputs you want for your game type.
+"textures" maps to the properties files that contains the textures you want for your game type. 
+    Put NA if not desired.
+"scroller" maps to the scroller arguments you want to pass in to the scroller.
+"autofile" maps to the type of auto generation arguments you want to pass in to the auto generator.
+    Put NA if not desired.
+"player" maps to the name of the player class you want for your game type. 
+"leaderboard" maps to the leaderboard CSV file you plan to use for scorekeeping.
+"nextfile" maps to the properties file of the next level. 
+    Put NA if not desired.
+
+2. In the class src/view/scenes/SelectGameScene.java, add the name of your game type to the GAME_TYPES.
+The name of the game type will be converted to lowercase and the spaces will be removed. The resulting
+String must be the name of the properties file to use for the game configuration. For example, to add a new game
+type called "Super Mario Galaxy", you would add "Super Mario Galaxy" to GAME_TYPES:
+
+```java
+public class SelectGameScene extends GameScene{
+    
+private static final String[] GAME_TYPES = {"Super Mario", "Flappy Bird", "Doodle Jump",
+      "Mario Infinity", "Doodle Jump 2", "Super Mario Galaxy"};
+}
+```
+
+in addition to naming your properties file supermariogalaxy.properties.
+
+### Adding a new level
+
+Create a new CSV file containing an assortment of entity ids to make up your level 
+(see src/resources/game_configuration/entityids.properties). The best place to put it
+so it can use the default path is at the top level of the data folder.
+
+Here, 2 represents "Enemy", 3 represents "Block", 
+5 represents "PowerUpBlock", 6 represents "MarioPlayer", 9 represents "Goal"
+and anything else that doesn't have a mapping in entityids.properties is treated as "empty"
+and doesn't add any entities to the level at those coordinates.
+
+```
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,3,0
+0,0,0,0,3,3,3,5,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,3,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,3,0,3,0,0,3,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,3,0,3,3,3,3,0
+6,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,3,0,3,0,0,0,0,3,0
+3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+```
+
+In your game's configuration properties file, map the level key to the name of this CSV file.
+If it is not using the default path, then you will need to specify the full path.
