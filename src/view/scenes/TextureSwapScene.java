@@ -4,7 +4,7 @@ import javafx.scene.Group;
 import view.GameScene;
 
 /**
- * scene that allows the user apply different textures to the game
+ * Scene that allows the user apply different textures to the game
  *
  * @author Alex Lu
  */
@@ -16,6 +16,13 @@ public class TextureSwapScene extends GameScene {
   private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
 
+  /**
+   * Constructs a new TextureSwapScene object
+   *
+   * @param myRoot a Group node that will be the scene's root
+   * @param width  the width of the visible component of the scene
+   * @param height the height of the visible component of the scene
+   */
   public TextureSwapScene(Group myRoot, double width, double height) {
     super(myRoot, ID, width, height);
 

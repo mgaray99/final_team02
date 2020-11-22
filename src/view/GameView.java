@@ -27,7 +27,7 @@ import api.view.IGameView;
 
 /**
  * The view for our game - handles scene changes and updates to graphical appearance (i.e. language
- * and stylesheet
+ * and stylesheet) and also updates the model
  *
  * @author Alex Lu & Edem Ahorlu
  */
@@ -49,7 +49,7 @@ public class GameView extends Application implements IGameView {
 
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
-  private static final double ANIMATION_SPEED = 1/60.0;
+  private static final double ANIMATION_SPEED = 1 / 60.0;
   private static final String PROPERTIES_EXTENSION = ".properties";
   private static final String TEXTURES = "textures";
   private static final String SECRET_CONFIG_PATH = "/secret/masteregg.properties";
@@ -73,25 +73,26 @@ public class GameView extends Application implements IGameView {
 
   /**
    * Begins our view, (i.e. builds the scene and group objects responsible for showing our project)
+   *
    * @param sta the main stage of the program
    */
   @Override
   public void start(Stage sta) {
-      stage = sta;
+    stage = sta;
 
-      buildScenes();
-      buildScenesList();
-      listenOnControllers();
+    buildScenes();
+    buildScenesList();
+    listenOnControllers();
 
-      resetScenes();
-      configPath = "doodlejump.properties";
-      prepareAnimation();
-      buildModel();
-      resetScenes();
+    resetScenes();
+    configPath = "doodlejump.properties";
+    prepareAnimation();
+    buildModel();
+    resetScenes();
 
-      stage.setScene(menuScene);
-      stage.setResizable(false);
-      stage.show();
+    stage.setScene(menuScene);
+    stage.setResizable(false);
+    stage.show();
   }
 
   /**
@@ -144,7 +145,7 @@ public class GameView extends Application implements IGameView {
       model = new GameModel(new GameConfiguration(configPath));
       inputter = new KeyInputter(model);
       texturer = new Texturer(WIDTH, HEIGHT, model.getTexturesPath(),
-          (Group)playGameScene.lookup("#" + TEXTURES));
+          (Group) playGameScene.lookup("#" + TEXTURES));
       start();
     } catch (InvalidFileException | NullPointerException | GenerationException ex) {
       currentScene.updateErrorText(currentScene.getValueFromBundle("BUILD_MODEL_ERROR"));
@@ -158,14 +159,11 @@ public class GameView extends Application implements IGameView {
   public void update() {
     if (!currentScene.equals(playGameScene)) {
       return;
-    }
-    else if (model.getLevel().isLevelLost()) {
+    } else if (model.getLevel().isLevelLost()) {
       levelLost();
-    }
-    else if (model.getLevel().isLevelWon()) {
+    } else if (model.getLevel().isLevelWon()) {
       levelWon();
-    }
-    else if (!model.getLevel().isSaving()){
+    } else if (!model.getLevel().isSaving()) {
       normalUpdate();
     }
   }
@@ -201,16 +199,15 @@ public class GameView extends Application implements IGameView {
 
     if (nextLevel != null && nextLevel.equals("Goal")) {
       finishedFinalLevel();
-    }
-    else {
+    } else {
       loadNextLevel(nextLevel);
     }
     model.getLevel().setLevelWon(false);
   }
 
   /**
-   * Handles the situation where the user has just completed the final level in a finite
-   * level chain (i.e. finished level 3, 3 is the last level
+   * Handles the situation where the user has just completed the final level in a finite level chain
+   * (i.e. finished level 3, 3 is the last level
    */
   @Override
   public void finishedFinalLevel() {
@@ -227,8 +224,8 @@ public class GameView extends Application implements IGameView {
     String badConfig = currentScene.getValueFromBundle("BUILD_MODEL_ERROR");
 
     if (currentScene.getErrorText().equals(badConfig)) {
-        setScene(selectGameScene);
-        selectGameScene.updateErrorText(badConfig);
+      setScene(selectGameScene);
+      selectGameScene.updateErrorText(badConfig);
     }
   }
 
@@ -236,7 +233,9 @@ public class GameView extends Application implements IGameView {
    * gets score from model
    */
   @Override
-  public int getScore() {return model.getScore();}
+  public int getScore() {
+    return model.getScore();
+  }
 
 
   /**
@@ -256,15 +255,16 @@ public class GameView extends Application implements IGameView {
    */
   @Override
   public void listenOnControllers() {
-      for (IGameScene scene : IGameScenes) {
-        GameController cont = scene.getGameController();
-        cont.addEventHandler(EventType.ROOT, event -> handleControllerEvent(cont, event));
-      }
+    for (IGameScene scene : IGameScenes) {
+      GameController cont = scene.getGameController();
+      cont.addEventHandler(EventType.ROOT, event -> handleControllerEvent(cont, event));
+    }
   }
 
   /**
    * Handles an event in the controller by screening it and then passing it to performReflection
-   * @param cont the GameController that fired the event
+   *
+   * @param cont  the GameController that fired the event
    * @param event the Event that has occured
    */
   @Override
@@ -278,6 +278,7 @@ public class GameView extends Application implements IGameView {
 
   /**
    * Handles the event of a key press
+   *
    * @param key the key that has been pressed
    */
   @Override
@@ -291,8 +292,7 @@ public class GameView extends Application implements IGameView {
       } else if (!model.getLevel().isSaving()) {
         currentScene.updateErrorText("");
       }
-    }
-    catch (KeyInputterMissingMethodException kimie) {
+    } catch (KeyInputterMissingMethodException kimie) {
       String message = currentScene.getValueFromBundle(kimie.getMessage());
       currentScene.updateErrorText(message);
     }
@@ -300,14 +300,14 @@ public class GameView extends Application implements IGameView {
 
   /**
    * Handles the event of a key release
+   *
    * @param key the key that has been pressed
    */
   @Override
   public void keyReleased(String key) {
     try {
       inputter.keyReleased(key);
-    }
-    catch (KeyInputterMissingMethodException kimie) {
+    } catch (KeyInputterMissingMethodException kimie) {
       String message = currentScene.getValueFromBundle(kimie.getMessage());
       currentScene.updateErrorText(message);
     }
@@ -315,27 +315,28 @@ public class GameView extends Application implements IGameView {
 
   /**
    * Reflectively calls the method as specified in reflectionArgs
+   *
    * @param reflectionArgs - either a 1 or 2 String List containing either a method with no
    *                       parameters or a method with one String parameter
    */
   @Override
   public void performReflection(List<String> reflectionArgs) {
-      try {
-        if (reflectionArgs.size() == 1) {
-          Method method = this.getClass().getDeclaredMethod(reflectionArgs.get(0));
-          method.invoke(this);
-        } else if (reflectionArgs.size() == 2) {
-          Method method = this.getClass().getDeclaredMethod(reflectionArgs.get(0), String.class);
-          method.invoke(this, reflectionArgs.get(1));
-        }
+    try {
+      if (reflectionArgs.size() == 1) {
+        Method method = this.getClass().getDeclaredMethod(reflectionArgs.get(0));
+        method.invoke(this);
+      } else if (reflectionArgs.size() == 2) {
+        Method method = this.getClass().getDeclaredMethod(reflectionArgs.get(0), String.class);
+        method.invoke(this, reflectionArgs.get(1));
       }
-      catch (Exception e) {
-        // Do nothing
-      }
+    } catch (Exception e) {
+      // Do nothing
+    }
   }
 
   /**
    * Switches the stylesheets of all scenes to the stylesheet referenced by name
+   *
    * @param name the name of the stylesheet (i.e. dark/light)
    */
   @Override
@@ -347,6 +348,7 @@ public class GameView extends Application implements IGameView {
 
   /**
    * Updates the language bundles that writes to all of the buttons
+   *
    * @param name the name of the resourcebundle
    */
   @Override
@@ -358,6 +360,7 @@ public class GameView extends Application implements IGameView {
 
   /**
    * Switches the scene to the viewName indexed by view
+   *
    * @param scene the scene to become the new scene
    */
   @Override
@@ -375,7 +378,9 @@ public class GameView extends Application implements IGameView {
    * Switches to the menu screen
    */
   @Override
-  public void switchToHomeScreen() { setScene(menuScene); }
+  public void switchToHomeScreen() {
+    setScene(menuScene);
+  }
 
   /**
    * Switches to Css Stylesheet Selection Screen
@@ -389,20 +394,25 @@ public class GameView extends Application implements IGameView {
    * Switches to Select Language Screen
    */
   @Override
-  public void switchToSelectLanguageScreen() {setScene(selectLanguageScene);
+  public void switchToSelectLanguageScreen() {
+    setScene(selectLanguageScene);
   }
 
   /**
    * Switches to Select Game Type Screen
    */
   @Override
-  public void selectGameTypeScreen() {setScene(selectGameScene);}
+  public void selectGameTypeScreen() {
+    setScene(selectGameScene);
+  }
 
   /**
    * Switches to a Texture Selection Screen
    */
   @Override
-  public void switchToTextureSwapScreen() { setScene(textureSwapScene); }
+  public void switchToTextureSwapScreen() {
+    setScene(textureSwapScene);
+  }
 
   /**
    * Launches a save box to save the current state of the level in a csv file
@@ -416,7 +426,7 @@ public class GameView extends Application implements IGameView {
    * Ends Game
    */
   @Override
-  public void endGame(){
+  public void endGame() {
     animation.stop();
     stage.close();
   }
@@ -432,12 +442,13 @@ public class GameView extends Application implements IGameView {
 
   /**
    * Changes the texture file determining textures to the one indexed by path
+   *
    * @param texturePath the String path leading to the textures
    */
-   @Override
-   public void switchTextures(String texturePath) {
+  @Override
+  public void switchTextures(String texturePath) {
     texturer = new Texturer(WIDTH, HEIGHT, (texturePath + PROPERTIES_EXTENSION),
-        (Group)playGameScene.lookup("#" + TEXTURES));
+        (Group) playGameScene.lookup("#" + TEXTURES));
   }
 
   /**
@@ -454,7 +465,7 @@ public class GameView extends Application implements IGameView {
    */
   @Override
   public void switchToControlScreen() {
-    KeyBinder binder = (KeyBinder)controlsScene.lookupElementInRoot(
+    KeyBinder binder = (KeyBinder) controlsScene.lookupElementInRoot(
         "KeyBinder");
     binder.updateKeyInputScreen(inputter);
     setScene(controlsScene);
@@ -467,8 +478,7 @@ public class GameView extends Application implements IGameView {
   public void resetLevel() {
     try {
       model.resetLevel();
-    }
-    catch (InvalidFileException ife) {
+    } catch (InvalidFileException ife) {
       currentScene.updateErrorText(currentScene.getValueFromBundle("RESET_LEVEL_ERROR"));
     }
   }
@@ -477,7 +487,9 @@ public class GameView extends Application implements IGameView {
    * Switches back to the last view
    */
   @Override
-  public void back() { setScene(lastScene); }
+  public void back() {
+    setScene(lastScene);
+  }
 
   /**
    * Starts the game
@@ -491,10 +503,13 @@ public class GameView extends Application implements IGameView {
    * Returns to the home screen
    */
   @Override
-  public void homeScreen() { setScene(menuScene); }
+  public void homeScreen() {
+    setScene(menuScene);
+  }
 
   /**
    * For testing - return the GameModel
+   *
    * @return model
    */
   @Override
@@ -504,6 +519,7 @@ public class GameView extends Application implements IGameView {
 
   /**
    * For testing - set model = m
+   *
    * @param m the model to replace GameView's current model
    */
   @Override
@@ -513,16 +529,22 @@ public class GameView extends Application implements IGameView {
 
   /**
    * For testing - return the config path
+   *
    * @return configPath
    */
   @Override
-  public String getConfigPath() { return configPath; }
+  public String getConfigPath() {
+    return configPath;
+  }
 
   /**
    * For testing - return the String filepath that's being used to generate textures
+   *
    * @return texturer.getPath()
    */
   @Override
-  public String getTexturerPath() { return texturer.getPath(); }
+  public String getTexturerPath() {
+    return texturer.getPath();
+  }
 
 }

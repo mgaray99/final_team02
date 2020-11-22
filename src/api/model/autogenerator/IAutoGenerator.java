@@ -1,20 +1,14 @@
 package api.model.autogenerator;
 
-import model.autogenerator.GenerationInstruction;
-import model.autogenerator.XMLHelper;
-
+/**
+ * The AutoGenerator interface
+ */
 public interface IAutoGenerator {
-    void buildSpecification(XMLHelper helper);
 
-    void setDimensions(XMLHelper helper);
-
-    void setDefault(XMLHelper helper);
-
+    /**
+     * Builds the 2D String array that represents the entities who fill the next block
+     *
+     * @return the 2D String array of new entity representations
+     */
     String[][] generateNextBlock();
-
-    void fillInDefaultValues();
-
-    void executeAllSpecifications();
-
-    void executeSpecification(GenerationInstruction spec);
 }
