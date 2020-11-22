@@ -12,6 +12,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * This class is used by AutoGenerator to parse the xml file it uses for configuration and to
+ * translate its XML syntax into a list of ConstantInstruction, RandomInstruction, and primitive
+ * values (i.e. 15 for numRows, etc.). AutoGenerator then queries this object to get access to these
+ * lists and primitive values for use in generation
+ *
+ * @author Alex Lu
+ */
 public class XMLHelper {
 
   private final Element root;
@@ -37,8 +45,8 @@ public class XMLHelper {
    *
    * @param x the String filepath leading to the xml file
    * @throws ParserConfigurationException pce
-   * @throws IOException ioe
-   * @throws SAXException se
+   * @throws IOException                  ioe
+   * @throws SAXException                 se
    */
   public XMLHelper(String x) throws ParserConfigurationException, IOException, SAXException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -51,8 +59,9 @@ public class XMLHelper {
   }
 
   /**
-   * Creates a list of all RandomGeneration elements specified by the
-   * XML file and then returns them
+   * Creates a list of all RandomGeneration elements specified by the XML file and then returns
+   * them
+   *
    * @return a list of RandomGeneration objects
    */
   public List<RandomGeneration> getRandomGenerations() {
@@ -60,7 +69,7 @@ public class XMLHelper {
     NodeList randoms = root.getElementsByTagName(RANDOM);
 
     for (int index = 0; index < randoms.getLength(); index += 1) {
-      Element random = (Element)randoms.item(index);
+      Element random = (Element) randoms.item(index);
       RandomGeneration gen = buildRandomGeneration(random);
       randomGenerations.add(gen);
     }
@@ -70,6 +79,7 @@ public class XMLHelper {
 
   /**
    * Builds a RandomGeneration object from a correctly formatted Element constant
+   *
    * @param random the Element node to be used to build the RandomGeneration
    * @return a ConstantGeneration object as specified in random
    */
@@ -87,8 +97,9 @@ public class XMLHelper {
   }
 
   /**
-   * Creates a list of all ConstantGeneration elements specified by the
-   * XML file and then returns them
+   * Creates a list of all ConstantGeneration elements specified by the XML file and then returns
+   * them
+   *
    * @return a list of ConstantGeneration objects
    */
   public List<ConstantGeneration> getConstantGenerations() {
@@ -96,7 +107,7 @@ public class XMLHelper {
     NodeList constants = root.getElementsByTagName(CONSTANT);
 
     for (int index = 0; index < constants.getLength(); index += 1) {
-      Element constant = (Element)constants.item(index);
+      Element constant = (Element) constants.item(index);
       ConstantGeneration gen = buildConstantGeneration(constant);
       constantGenerations.add(gen);
     }
@@ -106,6 +117,7 @@ public class XMLHelper {
 
   /**
    * Builds a ConstantGeneration object from a correctly formatted Element constant
+   *
    * @param constant the Element node to be used to build the ConstantGeneration
    * @return a ConstantGeneration object as specified in constant
    */
@@ -121,6 +133,7 @@ public class XMLHelper {
 
   /**
    * Determines the default entity value specified by the XML file
+   *
    * @return the default entity value
    */
   public String getDefaultEntity() {
@@ -132,33 +145,36 @@ public class XMLHelper {
 
   /**
    * Returns the number of rows associated with the generation as specified in the XML file
+   *
    * @return the number of rows to be generated
    */
   public int getNumRows() {
     Element dimensions = getElementByTagName(root, DIMENSIONS);
     Element rows = getElementByTagName(dimensions, ROWS);
-    String rowString =  rows.getTextContent();
+    String rowString = rows.getTextContent();
     return Integer.parseInt(rowString);
   }
 
   /**
    * Returns the number of cols associated with the generation as specified in the XML file
+   *
    * @return the number of cols to be generated
    */
   public int getNumCols() {
     Element dimensions = getElementByTagName(root, DIMENSIONS);
     Element cols = getElementByTagName(dimensions, COLS);
-    String colString =  cols.getTextContent();
+    String colString = cols.getTextContent();
     return Integer.parseInt(colString);
   }
 
   /**
    * Returns the first instance of a node with tag name tagName in parent
-   * @param parent the parent node
+   *
+   * @param parent  the parent node
    * @param tagName the String tag name
    * @return the first instance of a node with tagName in parent
    */
   private Element getElementByTagName(Element parent, String tagName) {
-    return  (Element)parent.getElementsByTagName(tagName).item(0);
+    return (Element) parent.getElementsByTagName(tagName).item(0);
   }
 }

@@ -3,6 +3,9 @@ package api.model.scroll;
 import model.Level;
 import model.entity.Player;
 
+/**
+ * The Scroller interface
+ */
 public interface Scroller {
     int NUM_BLOCKS = 15;
 

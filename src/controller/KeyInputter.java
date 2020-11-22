@@ -17,6 +17,13 @@ import api.model.IGameModel;
 import model.configuration.InvalidFileException;
 import model.configuration.ModelExceptionReason;
 
+/**
+ * This class' job is to take in Strings that correspond to key presses (i.e. a String of "A" means
+ * that we're telling KeyInputter that a key A was pressed) and to translate those Strings into
+ * method calls, which KeyInputMethodCaller will then call on a GameModel object
+ *
+ * @author Alex Lu
+ */
 public class KeyInputter implements IKeyInputter {
 
   private final IKeyInputterMethodCaller methodCaller;
@@ -26,6 +33,10 @@ public class KeyInputter implements IKeyInputter {
   private static final String KEY_METHOD_ERROR = "KEY_METHOD_ERROR";
   private final String[] bannedKeys = {"ENTER", "ESC", "TAB"};
 
+  /**
+   * @param model the GameModel to whom we will pass inputs captured from the keyboard
+   * @throws InvalidFileException ife
+   */
   public KeyInputter(IGameModel model) throws InvalidFileException {
     methodCaller = new KeyInputterMethodCaller(model);
     lastMethodFromKeyPress = "";
@@ -40,10 +51,10 @@ public class KeyInputter implements IKeyInputter {
    * @param path the filepath of the new .txt file
    */
   @Override
-  public void loadKeyInputsFromFile(String path) throws InvalidFileException{
+  public void loadKeyInputsFromFile(String path) throws InvalidFileException {
     try {
       Properties properties = new Properties();
-      InputStream stream =  getClass().getClassLoader().getResourceAsStream(FILEPATH_START +
+      InputStream stream = getClass().getClassLoader().getResourceAsStream(FILEPATH_START +
           path);
       properties.load(stream);
       Map<String, String> loadedMap = new TreeMap(properties);
@@ -51,8 +62,7 @@ public class KeyInputter implements IKeyInputter {
       keyToMethodMap.clear();
       loadedMap.keySet().forEach(key -> keyToMethodMap.put(key, loadedMap.get(key)));
 
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       throw new InvalidFileException(ModelExceptionReason.FILE_NOT_FOUND, "File not found");
     }
   }
@@ -61,7 +71,7 @@ public class KeyInputter implements IKeyInputter {
    * Swaps replacementKey for currentKey in the key -> method map. (i.e. if currentKey -> down and
    * replacementKey -> null, then afterwards, replacementKey -> down and currentKey -> null
    *
-   * @param currentKey the key currently associated with the method
+   * @param currentKey     the key currently associated with the method
    * @param replacementKey the key that you want to replace currentKey as being associated with that
    *                       method
    */
@@ -89,8 +99,8 @@ public class KeyInputter implements IKeyInputter {
   }
 
   /**
-   * Handles the event that a key has been released - checks to make sure there is a method to call on
-   * that key press and if so calls keyPressed
+   * Handles the event that a key has been released - checks to make sure there is a method to call
+   * on that key press and if so calls keyPressed
    *
    * @param press the String representation of the key that has been pressed
    */
@@ -103,8 +113,8 @@ public class KeyInputter implements IKeyInputter {
   }
 
   /**
-   * Handles the event where a key has been pressed (invariant - we know that key corresponds to
-   * a method) and then invokes the method stored in the map
+   * Handles the event where a key has been pressed (invariant - we know that key corresponds to a
+   * method) and then invokes the method stored in the map
    *
    * @param methodPath the String representation of the method to be called
    */
@@ -118,8 +128,10 @@ public class KeyInputter implements IKeyInputter {
       throw new KeyInputterMissingMethodException(KEY_METHOD_ERROR);
     }
   }
+
   /**
    * Returns a mapping of keys to methods (defensively create rather than return existing map
+   *
    * @return a mapping of String keys to String methods
    */
   @Override
@@ -131,6 +143,7 @@ public class KeyInputter implements IKeyInputter {
 
   /**
    * Checks to make sure that a key is valid
+   *
    * @param key the String key
    * @return a boolean revealing whether or not the key is valid
    */
@@ -142,6 +155,7 @@ public class KeyInputter implements IKeyInputter {
 
   /**
    * For testing - return the String representation of the last method to occur out of a key press
+   *
    * @return the String representation of the last method to be called
    */
   @Override

@@ -20,7 +20,16 @@ import model.HitBox;
 import api.model.entity.IEntity;
 import api.view.ITexturer;
 
+
+/**
+ * This class constructs and returns a list of ImageView objects that have location and size to
+ * represent game textures. It is primarily called in GameView's update method which uses a Texturer
+ * object to update all of the textures displayed to the screen.
+ *
+ * @author Alex Lu
+ */
 public class Texturer implements ITexturer {
+
   private Map<String, ImageView> textureMap;
   private final Group textureGroup;
   private final double WIDTH;
@@ -33,12 +42,13 @@ public class Texturer implements ITexturer {
   private static final String FILEPATH_START = "resources/images/texturefiles/";
 
   /**
+   * Constructs a new Texturer object
    *
-   * @param w the WIDTH of the screen
-   * @param h the HEIGHT of the screen
+   * @param w        the WIDTH of the screen
+   * @param h        the HEIGHT of the screen
    * @param filepath the filepath leading to the file containing the texture data that ImageBuilder
-   *             will use to create the ImageViews
-   * @param tGroup the Group that will contain the textures
+   *                 will use to create the ImageViews
+   * @param tGroup   the Group that will contain the textures
    */
   public Texturer(double w, double h, String filepath, Group tGroup) {
     WIDTH = w;
@@ -46,7 +56,7 @@ public class Texturer implements ITexturer {
     textureGroup = tGroup;
     path = filepath;
 
-    MISSING_IMAGE = buildMissingImage(1,1);
+    MISSING_IMAGE = buildMissingImage(1, 1);
 
     List<ImageView> viewList = buildViewList(FILEPATH_START + path);
     constructTextureMap(viewList);
@@ -54,6 +64,7 @@ public class Texturer implements ITexturer {
 
   /**
    * Builds a list of ImageViews from a properties file
+   *
    * @param propertiesPath the filepath leading to the .properties file
    */
   @Override
@@ -67,14 +78,14 @@ public class Texturer implements ITexturer {
         viewList.add(buildImageView(id, value));
       }
       return viewList;
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       return new ArrayList<>();
     }
   }
 
   /**
    * Builds a TreeMap based on a properties file
+   *
    * @param propertiesPath the String path leading to the .properties file
    * @return a new Map of properties
    * @throws IOException ioe
@@ -83,14 +94,15 @@ public class Texturer implements ITexturer {
   public TreeMap buildPropertiesMap(String propertiesPath) throws IOException,
       NullPointerException {
     Properties properties = new Properties();
-    InputStream stream =  getClass().getClassLoader().getResourceAsStream(propertiesPath);
+    InputStream stream = getClass().getClassLoader().getResourceAsStream(propertiesPath);
     properties.load(stream);
     return new TreeMap(properties);
   }
 
   /**
    * Constructs an ImageView with ID of id and Image from filepath
-   * @param id the id to give the ImageView
+   *
+   * @param id       the id to give the ImageView
    * @param filepath the filepath leading to the correct image
    * @return a new ImageView
    */
@@ -102,8 +114,7 @@ public class Texturer implements ITexturer {
     try {
       Image image = new Image(new FileInputStream(filepath));
       view.setImage(image);
-    }
-    catch (FileNotFoundException fnfe) {
+    } catch (FileNotFoundException fnfe) {
       view.setImage(MISSING_IMAGE);
     }
 
@@ -112,6 +123,7 @@ public class Texturer implements ITexturer {
 
   /**
    * Builds the map String ids -> ImageViews
+   *
    * @param viewList the List<ImageView> to build the map on top of
    */
   @Override
@@ -122,6 +134,7 @@ public class Texturer implements ITexturer {
 
   /**
    * Updates the textures
+   *
    * @param entityList the list of Entities to be textured
    */
   @Override
@@ -143,6 +156,7 @@ public class Texturer implements ITexturer {
 
   /**
    * Inserts the new textures into textureGroup
+   *
    * @param entityList the entity list for whom we'll be applying the textures
    */
   @Override
@@ -152,6 +166,7 @@ public class Texturer implements ITexturer {
 
   /**
    * Adds a single new texture to the group textureGroup
+   *
    * @param currentEntity the IEntity for whom we will be adding the texture
    */
   @Override
@@ -159,12 +174,11 @@ public class Texturer implements ITexturer {
     Image image;
     try {
       image = textureMap.get(currentEntity.getType()).getImage();
-    }
-    catch (NullPointerException npe) {
+    } catch (NullPointerException npe) {
       image = MISSING_IMAGE;
     }
 
-    ImageView view  = new ImageView(image);
+    ImageView view = new ImageView(image);
     placeLocationOfView(currentEntity, view);
     textureGroup.getChildren().add(view);
   }
@@ -172,24 +186,27 @@ public class Texturer implements ITexturer {
   /**
    * Sets the ImageView's location in textureGroup to reflect the x and y coordinates in
    * currentEntity
+   *
    * @param currentEntity the Entity whose texture is being placed in (x,y) space
-   * @param view the ImageView representing that texture
+   * @param view          the ImageView representing that texture
    */
   @Override
   public void placeLocationOfView(IEntity currentEntity, ImageView view) {
     HitBox hitBox = currentEntity.getHitBox();
 
-    view.setX(hitBox.getXLeft() * WIDTH/ numBlocksWide);
-    view.setY(hitBox.getYTop() * HEIGHT/ numBlocksHigh);
-    view.setFitWidth(WIDTH/ numBlocksWide);
-    view.setFitHeight(HEIGHT/ numBlocksHigh);
-    view.setId(currentEntity.getType() + "x" + (int)hitBox.getXLeft() + "y" + (int)hitBox.getYTop());
+    view.setX(hitBox.getXLeft() * WIDTH / numBlocksWide);
+    view.setY(hitBox.getYTop() * HEIGHT / numBlocksHigh);
+    view.setFitWidth(WIDTH / numBlocksWide);
+    view.setFitHeight(HEIGHT / numBlocksHigh);
+    view.setId(
+        currentEntity.getType() + "x" + (int) hitBox.getXLeft() + "y" + (int) hitBox.getYTop());
   }
 
   /**
    * Builds an image of width x height filled with black pixels
+   *
    * @param height the height of the image to be drawn
-   * @param width the width of the image to be drawn
+   * @param width  the width of the image to be drawn
    * @return an image filled in all block
    */
   @Override
@@ -208,6 +225,7 @@ public class Texturer implements ITexturer {
 
   /**
    * For testing - return the String filepath leading to the file generating the textures
+   *
    * @return path
    */
   @Override

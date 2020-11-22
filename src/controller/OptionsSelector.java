@@ -12,11 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 /**
- * Works as a UI - friendly ComboBox of sorts - takes in a list of Strings as presents an interface
- * where the user can see three choices as well as options to move backwards or forwards in the list
- * (with list wrapping available). In the event that the user clicks on any of the three choices,
- * the OptionsSelector will set the text in its buffer to be the text of the button that the user
- * pressed and then will dispatch an event.
+ * Works as a UI - friendly ComboBox of sorts - takes in a list of Strings and presents an interface
+ * where the user can select from three choices as well as options to move backwards or forwards in
+ * the list of choices (with list wrapping available). In the event that the user clicks on any of
+ * the three choices, the OptionsSelector will set the text in its buffer to be the text of the
+ * button that the user pressed and then will dispatch an event to reveal that the user has made a
+ * choice.
  *
  * @author Alex Lu
  */
@@ -61,7 +62,7 @@ public class OptionsSelector extends Group implements IOptionsSelector {
     choices = new ArrayList<>();
     copyIntoChoices(c);
 
-    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS  + EXTENSION);
+    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS + EXTENSION);
 
     buildButtons();
     regenerateOptions();
@@ -81,11 +82,11 @@ public class OptionsSelector extends Group implements IOptionsSelector {
    * config file as specified by OPTIONS_SELECTOR_CONFIG_PATH
    */
   private void buildButtons() throws BuilderInstantiationException {
-      ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT,
-          OPTIONS_SELECTOR_CONFIG_PATH, this);
-      if (builder.getStateReferenced().equals(TITLE)) {
-        super.getChildren().addAll(builder.getFoundButtons());
-      }
+    ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT,
+        OPTIONS_SELECTOR_CONFIG_PATH, this);
+    if (builder.getStateReferenced().equals(TITLE)) {
+      super.getChildren().addAll(builder.getFoundButtons());
+    }
   }
 
   /**
@@ -94,13 +95,11 @@ public class OptionsSelector extends Group implements IOptionsSelector {
    *
    * @param type the method name to be called which was pushed
    */
-
   @Override
   public void handlePush(String type) {
     try {
       getClass().getDeclaredMethod(type).invoke(this);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       //DO NOTHING
     }
   }
@@ -163,7 +162,7 @@ public class OptionsSelector extends Group implements IOptionsSelector {
    */
   @Override
   public void updateBundle(String path) {
-    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS+ "." + path);
+    resourceBundle = ResourceBundle.getBundle(RESOURCES + LABELS + "." + path);
     updateAllButtonBundles();
     regenerateOptions();
   }
@@ -195,7 +194,8 @@ public class OptionsSelector extends Group implements IOptionsSelector {
       choosableOptionOffset = 0;
       return 0;
     } else if (offset < 0) {
-      choosableOptionOffset = Math.max((options.size() - 1) / OptionsSelector.NUM_OPTION_BUTTONS, 0);
+      choosableOptionOffset = Math
+          .max((options.size() - 1) / OptionsSelector.NUM_OPTION_BUTTONS, 0);
       return choosableOptionOffset * OptionsSelector.NUM_OPTION_BUTTONS;
     }
     return offset;
