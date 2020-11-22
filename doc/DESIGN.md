@@ -1,10 +1,10 @@
-# names of all people who worked on the project
+# Names of all people who worked on the project
   * Alex Lu
   * Mike Garay
   * Edem Ahorlu
   * Ryan Krakower
 
-# each person's role in developing the project
+# Each person's role in developing the project
 
 Edem Ahorlu: 
 My role as a teammate is working on the frontend of the game.
@@ -38,16 +38,76 @@ end. I also did a lot of work with controller and controller testing, and built
 the automatic level generation and scroller packages as well as their associated tests
 
 
-# what are the project's design goals, specifically what kinds of new features did you want to make easy to add
+# What are the project's design goals, specifically what kinds of new features did you want to make easy to add
 
+Our project had three main design goals. First, we wanted our design to be data driven. We wanted
+nothing to be hardcoded into our program, with all configuration for levels and stylesheets 
+configured through .properties files. Please see below for an example .properties file that 
+configures a level:
 
+![hello](propertiesshot.png)
 
-# describe the high-level design of your project, focusing on the purpose and interaction of the core classes
+As one can see, we achieved our goal of having the config file take data inputs to build
+a game rather than having the data hardcoded in. This data driven approach makes it easy
+for us to build different types of levels for our three game types by changing the level structure 
+file, scroller, automatic level generation configuration, gametextures and allowed key controls.
 
+A second major design goal was substitutability, especially at runtime. We wanted the user to be 
+able to change most of the interactive experience that they received when running our program.
+All text displayed to the screen is derived from .properties language files, including error
+messages, which display in different languages if necessary. The user can change this language file
+that determines text as well as the stylesheet and texture pack to any valid substitute by clicking
+buttons in the UI. Additionally, the user can rebind keys as they desire during game time.
 
+Finally, we wanted our design to be extensible. We built the Scroller and Entity inheritance
+hierarchies in ways that allow for the creation of new scroller classes with different behavior
+or new Entity subclasses that acted or appeared differently. This is an example of our adherence 
+to the open-closed principle, as we wanted those inheritance hierarchies to be open to 
+extension, without needing to be changed.
 
+# Describe the high-level design of your project, focusing on the purpose and interaction of the core classes
 
-# what assumptions or decisions were made to simplify your project's design, especially those that affected adding required features
+Our project is built around the model-view-controller pattern, with the model, view and 
+controller packages being the three top level packages in src. 
+
+First, in examining controller, the core class is GameController. Many of the other classes
+in the controller package create objects that are contained in GameController's root node. 
+To discuss the most important contributors, GameController uses ButtonBuilder to create buttons
+for interactivity and it contains OptionsSelector objects which serve as visually robust ComboBoxes
+which allow the user to choose from a list of choices. GameController reads the inputs from these
+objects and then calls the dispatchEvent() method to alert the rest of the program that an event
+has occurred.
+
+Next, in examining view, the core class is GameView, which contains a GameModel object as instance
+data and updates it every fraction of a second. During these updates it also uses Texturer to update
+the position and existence of all textures on the screen. GameView also contains a list of different 
+GameScene subclasses, all of which are contained in the scenes package and represent one type of
+scene (i.e. menu scene, play game scene change key bindings scene, etc.) that the user might be
+looking at at any given time. 
+
+GameView receives the inputs from GameController by listening to the GameController in the current 
+scene via the observer pattern. These can include key inputs, which it passes to the KeyInputter 
+class to pass into the model, or button pushes, or selections on an OptionsSelector. Button pushes 
+and selections on an OptionsSelector pass through the performReflection() method to be translated 
+into method calls (i.e. each message passed to GameView by GameController has a String that will
+result in a method call) that do things such as changing the GameScene on display or changing a
+stylesheet or resource bundle.
+
+Finally, in model there are five packages, scroll, entity, configuration, autogenerator and score.
+The entity package contains the configuration for different Entity types like Player and Enemy, the
+configuration class is responsible for translating a game .properties file like the one shown above 
+into Level and GameModel objects, the scroll class scrolls the level by moving entity positions, 
+the autogenerator package generates new chunks of levels to be explored during game time (i.e. 
+infinite level generation for Doodle Jump) and the score package contains classes to keep track of 
+high scores.
+
+One primary classes in model, Level, represents an instance of the level that the player is on, 
+and contains the controlled player object, which moves in response to key inputs, as well as a list
+of entities. GameModel, on the other hand, is a forward facing class that receives update commands
+from view, and also uses the configuration package to tell the view what to display (i.e. 
+stylesheet, texture pack) based on the .properties file that configured the game being played.
+
+# What assumptions or decisions were made to simplify your project's design, especially those that affected adding required features
    * We put a lot of our data files in the "resources" package instead of in "data"
    * We decided to place some of our test files in this package as well in order to circumvent issues
   related to not being able to locate test files if they weren't in the folder where the classes
@@ -59,5 +119,7 @@ the automatic level generation and scroller packages as well as their associated
   * The game scene is always the same size.
 
 
-# address significant differences between the original plan and the final version of the project
-# describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline
+# Address significant differences between the original plan and the final version of the project
+
+
+# Describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline
