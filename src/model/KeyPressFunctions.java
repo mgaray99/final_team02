@@ -46,8 +46,8 @@ public class KeyPressFunctions implements IKeyPressFunctions {
   }
 
   /**
-   * Getter for isPlayerMovingRight
-   * @return movePlayerRight (if it returns true, the model should move the player right)
+   * Getter for isPlayerJumping
+   * @return jumpPlayer (if it returns true, the model should attempt to make the player jump)
    */
   @Override
   public boolean isPlayerJumping() {
