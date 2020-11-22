@@ -6,6 +6,8 @@ package api.model;
  * the player is moving left, whether the player is moving right, and if the player
  * is jumping. This class contains getters and setters for those booleans.
  *
+ * This is used by Level to determine how entities should be moved.
+ *
  * @author Ryan Krakower
  */
 public interface IKeyPressFunctions {
