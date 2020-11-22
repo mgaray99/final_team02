@@ -36,6 +36,8 @@ public class GameController extends Group implements IGameController {
   }
 
   /**
+   * Adds an OptionsSelector from a folder
+   *
    * @param folder    the folder containing the list of options (i.e. "./ooga/resources/buttons")
    * @param extension the allowed extension for each option (i.e. include if ".jpeg")
    * @param method    the method to be called by the OptionsSelector
@@ -76,7 +78,6 @@ public class GameController extends Group implements IGameController {
    *
    * @param file the filepath of the button file
    */
-
   @Override
   public void addButtonsFromFile(String file) throws BuilderInstantiationException {
     ButtonBuilder builder = new ButtonBuilder(WIDTH, HEIGHT, file, this);
@@ -123,6 +124,11 @@ public class GameController extends Group implements IGameController {
     fillBuffer("keyReleased", keyArgs);
   }
 
+  /**
+   * Updates the ResourceBundle for the GameController
+   *
+   * @param name the String name of the ResourceBundle (i.e. "English" for English.properties
+   */
   @Override
   public void updateResources(String name) {
     for (Node n : getChildren()) {

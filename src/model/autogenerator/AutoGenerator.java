@@ -53,8 +53,7 @@ public class AutoGenerator implements IAutoGenerator {
    *
    * @param helper the XML helper object which will generate what is necessary
    */
-  @Override
-  public void buildSpecification(XMLHelper helper) {
+  private void buildSpecification(XMLHelper helper) {
     setDimensions(helper);
     setDefault(helper);
 
@@ -67,8 +66,7 @@ public class AutoGenerator implements IAutoGenerator {
    * Updates the specification of the AutoGenerator such that its default entityType equals
    * something in the lineParts array
    */
-  @Override
-  public void setDimensions(XMLHelper helper) {
+  private void setDimensions(XMLHelper helper) {
     numCols = helper.getNumCols();
     numRows = helper.getNumRows();
   }
@@ -77,8 +75,7 @@ public class AutoGenerator implements IAutoGenerator {
    * Updates the specification of the AutoGenerator such that its default entityType equals
    * something in the lineParts array
    */
-  @Override
-  public void setDefault(XMLHelper helper) {
+  private void setDefault(XMLHelper helper) {
     defaultValue = helper.getDefaultEntity();
   }
 
@@ -99,8 +96,7 @@ public class AutoGenerator implements IAutoGenerator {
    * Fills the new block with default entity entityType (i.e. what will be present at a location in
    * the game matrix if there aren't any other entity values to overwrite it)
    */
-  @Override
-  public void fillInDefaultValues() {
+  private void fillInDefaultValues() {
     for (int row = 0; row < numRows; row += 1) {
       for (int column = 0; column < numCols; column += 1) {
         newBlock[row][column] = defaultValue;
@@ -112,8 +108,7 @@ public class AutoGenerator implements IAutoGenerator {
    * Reads each of the GenerationInstruction objects in the specifications list and then calls
    * executeSpecification on that
    */
-  @Override
-  public void executeAllSpecifications() {
+  private void executeAllSpecifications() {
     constantSpecifications.forEach(genInst -> executeSpecification(genInst));
 
     randomSpecifications.forEach(genInst -> genInst.regenerate());
@@ -125,8 +120,7 @@ public class AutoGenerator implements IAutoGenerator {
    *
    * @param spec the GenerationInstruction to apply to the newBlock
    */
-  @Override
-  public void executeSpecification(GenerationInstruction spec) {
+  private void executeSpecification(GenerationInstruction spec) {
     for (int row = spec.getStartRow(); row <= spec.getEndRow(); row += 1) {
       for (int column = spec.getStartCol(); column <= spec.getEndCol(); column += 1) {
         newBlock[row][column] = spec.getEntityTypeToInsert();

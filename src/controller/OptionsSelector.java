@@ -95,7 +95,6 @@ public class OptionsSelector extends Group implements IOptionsSelector {
    *
    * @param type the method name to be called which was pushed
    */
-
   @Override
   public void handlePush(String type) {
     try {

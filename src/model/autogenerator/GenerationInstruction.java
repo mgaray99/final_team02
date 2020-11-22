@@ -27,7 +27,12 @@ public abstract class GenerationInstruction implements IGenerationInstruction {
 
   /**
    * Builds a generation instruction (i.e. if you pass (6, 4) your parent generation might look like
-   * 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0
+   * 0,0,0,0
+   * 0,0,0,0
+   * 0,0,0,0
+   * 0,0,0,0
+   * 0,0,0,0
+   * 0,0,0,0
    *
    * @param rows the number of blocks wide of the new block that we're building the generation for
    * @param cols the number of blocks tall of the new block that we're building the generation for

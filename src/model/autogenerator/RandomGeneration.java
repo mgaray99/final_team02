@@ -81,7 +81,7 @@ public class RandomGeneration extends GenerationInstruction implements IRandomGe
    *
    * @param growthString the String specifying the direction the generation grows in
    */
-  public void setDirectionOfGrowth(String growthString) {
+  private void setDirectionOfGrowth(String growthString) {
     String[] xyDirections = growthString.split(":");
     growsLeft = xyDirections[0].equals(RandomGeneration.LEFT);
     growsUp = xyDirections[1].equals(RandomGeneration.UP);
@@ -127,7 +127,7 @@ public class RandomGeneration extends GenerationInstruction implements IRandomGe
    * @param randomizedString the String prepared to be passed into the randomizer
    * @return the random number
    */
-  public int getNumberFromRandomizedString(String randomizedString) {
+  private int getNumberFromRandomizedString(String randomizedString) {
     if (randomizedString.charAt(0) == 'R') {
       Randomizer randomizer = new Randomizer(randomizedString);
       return randomizer.getRandomValue();
@@ -146,7 +146,7 @@ public class RandomGeneration extends GenerationInstruction implements IRandomGe
    * @return an array startAndEnd with the following characteristics: startAndEnd[0] <
    * startAndEnd[1] startAndEnd[0] >= 0 startAndEnd[1] <= maxAllowed
    */
-  public int[] getStartAndEnd(int firstPoint, int length, int maxAllowed) {
+  private int[] getStartAndEnd(int firstPoint, int length, int maxAllowed) {
     int secondPoint = firstPoint + length;
 
     int start = Math.min(firstPoint, secondPoint);
@@ -163,7 +163,7 @@ public class RandomGeneration extends GenerationInstruction implements IRandomGe
    *
    * @param randomizedWidth the String prepared to be passed into the randomizer
    */
-  public void buildRowDepth(String randomizedWidth) {
+  private void buildRowDepth(String randomizedWidth) {
     int rowDepth = getNumberFromRandomizedString(randomizedWidth) - 1;
 
     if (growsUp) {
@@ -180,7 +180,7 @@ public class RandomGeneration extends GenerationInstruction implements IRandomGe
    *
    * @param randomizedHeight the String prepared to be passed into the randomizer
    */
-  public void buildColDepth(String randomizedHeight) {
+  private void buildColDepth(String randomizedHeight) {
     int colDepth = getNumberFromRandomizedString(randomizedHeight) - 1;
 
     if (growsLeft) {

@@ -72,6 +72,10 @@ public class LeaderboardView extends Group implements ILeaderboardView {
     getChildren().add(title);
   }
 
+  /**
+   * Builds the score text
+   * @param index the index of the score text label
+   */
   @Override
   public void buildScoreText(double index) {
     Text scoreText = new Text();

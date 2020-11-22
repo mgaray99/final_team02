@@ -72,7 +72,7 @@ public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
   }
 
   /**
-   * Tells the model to move the player left
+   * Tells the model to stop moving the player left
    */
   @Override
   public void leftRelease() {
@@ -80,7 +80,7 @@ public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
   }
 
   /**
-   * Tells the model to move right
+   * Tells the model to stop moving the player right
    */
   @Override
   public void rightRelease() {
@@ -88,7 +88,7 @@ public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
   }
 
   /**
-   * Tells the model to move up (i.e. jump)
+   * Tells the model to stop the jump
    */
   @Override
   public void upRelease() {
@@ -96,7 +96,7 @@ public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
   }
 
   /**
-   * Tells the model to move down (i.e. crouch)
+   * Tells the model to stop the down (i.e. crouch)
    */
   @Override
   public void downRelease() {
@@ -104,7 +104,7 @@ public class KeyInputterMethodCaller implements IKeyInputterMethodCaller {
   }
 
   /**
-   * Tells the model to pause
+   * Tells the model to release pause
    */
   @Override
   public void pauseRelease() {

@@ -119,6 +119,7 @@ public class GameLeaderboard implements IGameLeaderboard {
    *
    * @param toBeAdded the tuple to be added to the leaderboard
    */
+  @Override
   public void addScoreTuple(IScoreTuple toBeAdded) throws IOException {
     scoresList.add(toBeAdded);
     writeTupleToFile(toBeAdded);
@@ -130,6 +131,7 @@ public class GameLeaderboard implements IGameLeaderboard {
    *
    * @param toBeWritten the tuple whose data will be saved in a file
    */
+  @Override
   public void writeTupleToFile(IScoreTuple toBeWritten) throws IOException {
     String line = toBeWritten.getName() + "," + toBeWritten.getScore();
 

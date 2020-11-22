@@ -216,7 +216,6 @@ public class GameScene extends Scene implements IGameScene {
    * @param id the id to be looked up
    * @return the node if it exists in the GameScene
    */
-
   @Override
   public Node lookupElementInRoot(String id) {
     Node element = root.lookup("#" + id);
