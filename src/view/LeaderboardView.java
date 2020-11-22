@@ -9,6 +9,13 @@ import model.score.GameLeaderboard;
 import api.model.score.IGameLeaderboard;
 import api.view.ILeaderboardView;
 
+/**
+ * This class is the visual representation of a leaderboard of high scores for a single game. It is
+ * something of a "view" counterpart to GameLeaderboard. Its primary use is in HighScoreScene, which
+ * contains a few LeaderboardView objects that display high score data about different games
+ *
+ * @author Alex Lu
+ */
 public class LeaderboardView extends Group implements ILeaderboardView {
 
 
@@ -48,7 +55,7 @@ public class LeaderboardView extends Group implements ILeaderboardView {
     buildTitle();
     scoreTexts = new ArrayList<>();
 
-    for (int index = 1; index <= NUM_SCORES; index+=1) {
+    for (int index = 1; index <= NUM_SCORES; index += 1) {
       buildScoreText(index);
     }
   }
@@ -59,7 +66,7 @@ public class LeaderboardView extends Group implements ILeaderboardView {
   @Override
   public void buildTitle() {
     title = new Text();
-    title.setLayoutX(xOffset + width/4);
+    title.setLayoutX(xOffset + width / 4);
     title.setLayoutY(yOffset);
     title.setText(leaderboard.getTitle());
     getChildren().add(title);
@@ -81,7 +88,7 @@ public class LeaderboardView extends Group implements ILeaderboardView {
   public void updateLeaderboard() throws FileNotFoundException {
     IGameLeaderboard tempBoard = new GameLeaderboard(path);
 
-    for (int index = 1; index <=10; index+=1) {
+    for (int index = 1; index <= 10; index += 1) {
       Text currentScoreText = scoreTexts.get(index - 1);
       currentScoreText.setText(index + ". "
           + tempBoard.getScoreTupleAtPlace(index));

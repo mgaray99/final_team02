@@ -15,12 +15,12 @@ import api.view.IGameScene;
 
 /**
  * Represents one scene in our GameView - holds data and methods beyond that of a typical Scene
- * object like a GameController variable and methods to update the text of all of its
- * children node
+ * object like a GameController variable and methods to update the text of all of its children node
  *
  * @author Alex Lu & Edem Ahorlu
  */
 public class GameScene extends Scene implements IGameScene {
+
   private final Group root;
   private final String sceneId;
   protected final double WIDTH;
@@ -40,6 +40,14 @@ public class GameScene extends Scene implements IGameScene {
   private static final String DEFAULT_LANGUAGE = "English";
 
 
+  /**
+   * Constructs a GameScene object
+   *
+   * @param myRoot the Group object that will become the scene's root node
+   * @param id     a String id for the scene to identify itself with
+   * @param width  the width of the visual component of the scene
+   * @param height the height of the visual component of the scene
+   */
   public GameScene(Group myRoot, String id, double width, double height) {
     super(myRoot, width, height);
     root = myRoot;
@@ -61,7 +69,7 @@ public class GameScene extends Scene implements IGameScene {
    */
   @Override
   public void makeBackground() {
-    Rectangle background = new Rectangle(WIDTH,HEIGHT, Color.WHITE);
+    Rectangle background = new Rectangle(WIDTH, HEIGHT, Color.WHITE);
     background.setId(BACKGROUND);
     root.getChildren().add(background);
     background.toBack();
@@ -79,15 +87,16 @@ public class GameScene extends Scene implements IGameScene {
     root.getChildren().add(errorLabel);
 
     errorLabel.setLayoutX(WIDTH / 2 - errorLabel.getLayoutBounds().getWidth() / 2);
-    errorLabel.setLayoutY(HEIGHT/10);
+    errorLabel.setLayoutY(HEIGHT / 10);
   }
 
   /**
    * Updates the error text label that will appear at the top of the screen
+   *
    * @param newText the new text to fill that label
    */
   @Override
-  public void updateErrorText(String newText)  {
+  public void updateErrorText(String newText) {
     errorLabel.setVisible(true);
 
     errorLabel.setText(newText);
@@ -104,6 +113,7 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Returns the text in the error label
+   *
    * @return the text of errorLabel
    */
   @Override
@@ -114,6 +124,7 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Sets the controller associated with this particular scene
+   *
    * @param cont the controller to serve as the game scene's controller
    */
   @Override
@@ -125,51 +136,52 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Adds buttons from a file to the controller
+   *
    * @param file the file containing the buttons to be included
    */
   @Override
   public void addButtonsToControllerFromFile(String file) {
     try {
       controller.addButtonsFromFile(file);
-    }
-    catch (BuilderInstantiationException bie) {
+    } catch (BuilderInstantiationException bie) {
       updateErrorText(getValueFromBundle(bie.getMessage()));
     }
   }
 
   /**
    * Builds an option selector for the controller associated with the scene
-   * @param folder the folder containing the list of options (i.e. "./ooga/resources/buttons")
+   *
+   * @param folder    the folder containing the list of options (i.e. "./ooga/resources/buttons")
    * @param extension the allowed extension for each option (i.e. include if ".jpeg")
-   * @param method the method to be called by the OptionsSelector
+   * @param method    the method to be called by the OptionsSelector
    */
   @Override
   public void buildOptionsSelectorFromFolderForController(String folder, String extension,
       String method) {
     try {
       controller.addOptionsSelectorFromFolder(folder, extension, method);
-    }
-    catch (BuilderInstantiationException bie) {
+    } catch (BuilderInstantiationException bie) {
       updateErrorText(getValueFromBundle(bie.getMessage()));
     }
   }
 
   /**
    * Builds an OptionsSelector object from a list
+   *
    * @param choices the list of choices from which the user can select
-   * @param method the String representation of the method to be called
+   * @param method  the String representation of the method to be called
    */
   public void buildOptionsSelectorFromListForController(List<String> choices, String method) {
     try {
       controller.buildOptionsSelector(choices, method);
-    }
-    catch (BuilderInstantiationException bie) {
+    } catch (BuilderInstantiationException bie) {
       updateErrorText(getValueFromBundle(bie.getMessage()));
     }
   }
 
   /**
    * Adds a node element to the root node of the GameScene (i.e. button, controller, etc.)
+   *
    * @param toBeAdded the Node to be inserted
    */
   @Override
@@ -179,6 +191,7 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Returns the controller associated with this GameScene
+   *
    * @return controller
    */
   @Override
@@ -188,6 +201,7 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Removes a node element from the root node of the GameScene (i.e. button, controller, etc.)
+   *
    * @param toBeRemoved the Node to be removed
    */
   @Override
@@ -198,6 +212,7 @@ public class GameScene extends Scene implements IGameScene {
   /**
    * Looks up an element in the GameScene and returns it if found, otherwise throws a
    * NullPointerException
+   *
    * @param id the id to be looked up
    * @return the node if it exists in the GameScene
    */
@@ -213,6 +228,7 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Updates the resource bundle displaying text for each scene
+   *
    * @param name the name of the resource bundle
    */
   @Override
@@ -228,21 +244,23 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Updates the stylesheet of this GameScene
+   *
    * @param name the name of the new stylesheet
    */
   @Override
   public void updateStylesheet(String name) {
-      FolderParser parser = new FolderParser(STYLESHEET_PATH_LONG, CSS_EXTENSION);
-      if (parser.getFilenamesFromFolder().contains(name)) {
-        getStylesheets().clear();
-        getStylesheets().add(STYLESHEET_PATH + name + CSS_EXTENSION);
-      } else {
-        updateErrorText(getValueFromBundle("UPDATE_STYLE_SHEET_ERROR"));
-      }
+    FolderParser parser = new FolderParser(STYLESHEET_PATH_LONG, CSS_EXTENSION);
+    if (parser.getFilenamesFromFolder().contains(name)) {
+      getStylesheets().clear();
+      getStylesheets().add(STYLESHEET_PATH + name + CSS_EXTENSION);
+    } else {
+      updateErrorText(getValueFromBundle("UPDATE_STYLE_SHEET_ERROR"));
+    }
   }
 
   /**
    * Returns the scene id
+   *
    * @return sceneId
    */
   @Override
@@ -252,13 +270,14 @@ public class GameScene extends Scene implements IGameScene {
 
   /**
    * Returns the value corresponding to key in the resouce bundle
+   *
    * @param key the key in resourceBundle
    * @return the value in resourceBundle
    */
   @Override
   public String getValueFromBundle(String key) {
     String value = bundle.getString(key);
-    if (value!=null) {
+    if (value != null) {
       return value;
     }
     return "";

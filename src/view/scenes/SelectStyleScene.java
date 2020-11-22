@@ -16,6 +16,13 @@ public class SelectStyleScene extends GameScene {
   private static final String CSS_EXTENSION = ".css";
   private static final String BUTTON_FOLDERPATH_SLASH = "./src/resources/buttons/";
 
+  /**
+   * Constructs a new SelectStyleScene object
+   *
+   * @param myRoot a Group node that will be the scene's root
+   * @param width  the width of the visible component of the scene
+   * @param height the height of the visible component of the scene
+   */
   public SelectStyleScene(Group myRoot, double width, double height) {
     super(myRoot, ID, width, height);
 

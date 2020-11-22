@@ -13,7 +13,13 @@ import model.score.ScoreTuple;
 import view.GameScene;
 import api.view.scenes.IPlayGameScene;
 
+/**
+ * Builds the scene that displays when the user is playing a game
+ *
+ * @author Alex Lu & Edem Ahorlu
+ */
 public class PlayGameScene extends GameScene implements IPlayGameScene {
+
   private static final String ID = "GAME";
   private static final String TEXTFIELD_ID = "TEXTFIELD";
   private static final String SCOREFIELD_ID = "SCOREFIELD";
@@ -24,7 +30,7 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
   private static final String CSV_EXTENSION = ".csv";
   private static final String SAVE_FILEPATH = "data/saves/";
 
-  private static final String[] bannedCharacters = {"\n", "/", ".", ",","\\"};
+  private static final String[] bannedCharacters = {"\n", "/", ".", ",", "\\"};
 
   private Text scoreLabel;
   private Level currentLevel;
@@ -32,11 +38,18 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
   private TextField scoreField;
   private TextField saveField;
 
+  /**
+   * Constructs a new PlayGameScene object
+   *
+   * @param myRoot a Group node that will be the scene's root
+   * @param width  the width of the visible component of the scene
+   * @param height the height of the visible component of the scene
+   */
   public PlayGameScene(Group myRoot, double width, double height) {
     super(myRoot, ID, width, height);
 
     addButtonsToControllerFromFile(
-        BUTTON_FOLDERPATH_SLASH + ID.toLowerCase()+ "buttons.xml");
+        BUTTON_FOLDERPATH_SLASH + ID.toLowerCase() + "buttons.xml");
 
     addTexturesGroup();
     buildSavingFunctionality();
@@ -52,13 +65,14 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
     scoreLabel = new Text();
     scoreLabel.setText("");
     scoreLabel.setLayoutX(WIDTH / 2 - scoreLabel.getLayoutBounds().getWidth() / 2);
-    scoreLabel.setLayoutY(HEIGHT/20);
+    scoreLabel.setLayoutY(HEIGHT / 20);
     scoreLabel.setId("errorStyle");
     addElementToRoot(scoreLabel);
   }
 
   /**
    * Updates and recenters the score text
+   *
    * @param update the new text to be displayed
    */
   @Override
@@ -96,14 +110,15 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
 
   /**
    * Pins a textfield to the center of the screen and makes it invisible
+   *
    * @param field the field in question
    */
   @Override
   public void buildTextField(TextField field) {
-    field.setMinWidth(WIDTH/8);
-    field.setMinHeight(HEIGHT/20);
-    field.setLayoutX(WIDTH/2 - field.getMinWidth());
-    field.setLayoutY(HEIGHT/2 - field.getMinHeight());
+    field.setMinWidth(WIDTH / 8);
+    field.setMinHeight(HEIGHT / 20);
+    field.setLayoutX(WIDTH / 2 - field.getMinWidth());
+    field.setLayoutY(HEIGHT / 2 - field.getMinHeight());
     field.setVisible(false);
     field.toFront();
   }
@@ -135,12 +150,13 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
 
   /**
    * Handles the event that a key was pressed in the textfield
+   *
    * @param event the key event that has occurred
    */
   @Override
   public void handleTextFieldPress(KeyEvent event) {
     if (event.getCode().equals(KeyCode.ENTER)) {
-        attemptSave();
+      attemptSave();
     }
   }
 
@@ -149,18 +165,18 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
    */
   @Override
   public void attemptSave() {
-    if(checkIsValidText(saveField.getText())) {
+    if (checkIsValidText(saveField.getText())) {
       finalizeSave();
-    }
-    else {
+    } else {
       saveField.clear();
       updateErrorText(getValueFromBundle("SAVE_ERROR"));
     }
   }
 
   /**
-   * Checks to make sure text is longer than 0 characters and does not contain a space for its
-   * final character
+   * Checks to make sure text is longer than 0 characters and does not contain a space for its final
+   * character
+   *
    * @param text the text to be checked
    * @return a boolean revealing whether or not the text is valid
    */
@@ -192,14 +208,14 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
 
   /**
    * Attempts to save the score
+   *
    * @param key the key that was pressed
    */
   @Override
   public void attemptScoreSave(KeyEvent key) {
     if (key.getCode().equals(KeyCode.ENTER) && checkIsValidText(scoreField.getText())) {
       finalizeScoreSave();
-    }
-    else if (key.getCode().equals(KeyCode.ENTER)){
+    } else if (key.getCode().equals(KeyCode.ENTER)) {
       scoreField.clear();
       updateErrorText(getValueFromBundle("SCORE_ERROR"));
     }
@@ -214,8 +230,7 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
       GameLeaderboard leaderboard = new GameLeaderboard(scorePath);
       ScoreTuple tuple = new ScoreTuple(scoreField.getText(), currentLevel.getScore());
       leaderboard.addScoreTuple(tuple);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       updateErrorText(getValueFromBundle("FINAL_SCORE_ERROR"));
     }
 
@@ -229,8 +244,7 @@ public class PlayGameScene extends GameScene implements IPlayGameScene {
   /**
    * Allows the user to attempt to save
    *
-   * @param path the String path leading to the high score file in which to save
-   *             high scores
+   * @param path  the String path leading to the high score file in which to save high scores
    * @param level the level that has just been lost
    */
   @Override
