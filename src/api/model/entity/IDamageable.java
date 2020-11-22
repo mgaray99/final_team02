@@ -4,7 +4,10 @@ import model.collision.CollisionDirections;
 import model.collision.Direction;
 import model.entity.Teams;
 import api.model.collision.ICollisionHandler;
-
+/**
+ * An interface used for entities that can take and receive damage
+ * @author Mike Garay
+ */
 public interface IDamageable {
 
     /**
