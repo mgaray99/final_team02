@@ -69,3 +69,36 @@ of the game and letting the user apply different textures to game.
 
 
 # describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline
+
+### Adding new texture packs:
+ 1. Create a new package inside src/resources/images/gametextures.
+ 2. Add images (square images are better) to use for textures.
+ 3. Add a properties files to src/resources/images/texturefiles. The name of this file
+ will be displayed to the user when prompted to select a texture for the game.
+ 4. Change the value of the texture keys in the properties file to point to the appropriate images.
+  
+ here is an example:
+ 
+ ```properties
+Block=src/resources/images/gametextures/mario/barrierblockbrown.png
+Enemy=src/resources/images/gametextures/mario/beetle.png
+Player=src/resources/images/gametextures/mario/luigi.png
+PowerUpBlock=src/resources/images/gametextures/mario/powerupblock.jpeg
+PowerUp=src/resources/images/gametextures/mario/powerup.png
+Goal=src/resources/images/gametextures/mario/goal.png
+```
+
+In our program's current form, only these six keys are necessary 
+to fully texture the game levels. If a texture
+is missing, that entity will appear as a black square in View.
+
+### Adding new Entity types
+This is a bit tricker. Because we planned on making a few additional types of bricks, I will use 
+a new brick type as an example.
+* Adding a breakable brick: 
+1. Make a new class, called BreakableBlock, that extends the appropriate class (in this case, Block) 
+and implements any necessary interfaces (in this case, IDamageable).
+2. Program
+3. Make 
+    
+### Adding new game types
