@@ -4,7 +4,12 @@ import api.model.configuration.IGameConfiguration;
 
 import java.io.File;
 import java.util.Properties;
-
+/**
+ * An class responsible for creating the game configuration
+ * It contains methods for obtaining the configured values from the game configuration
+ * for use by the rest of the program
+ * @author Mike Garay and Alex Lu
+ */
 public class GameConfiguration implements IGameConfiguration {
     public static final String LEVEL_KEY = "level";
     private static final String TEXTURES_KEY = "textures";
@@ -19,16 +24,33 @@ public class GameConfiguration implements IGameConfiguration {
     private final Properties properties;
     private File levelFile;
 
+    /**
+     * Constructs a game configuration given a resource file name
+     * It uses this class to obtain the class loader for the input stream
+     * As well as the resource file name to load the config using the input stream
+     * @param resource A String representing the name of a properties file
+     */
     public GameConfiguration(String resource){
         this.properties = FileHelper.createPropertiesAndTryLoadFromResource(this.getClass(), resource);
         this.setLevelFile();
     }
 
+    /**
+     * Constructs a game configuration given a resource file name and a class
+     * It uses the class passed in to obtain the class loader for the input stream
+     * As well as the resource file name to load the config using the input stream
+     * @param resource A String representing the name of a properties file
+     * @param clazz A class used to obtain the class loader for the input stream
+     */
     public GameConfiguration(String resource, Class clazz){
         this.properties = FileHelper.createPropertiesAndTryLoadFromResource(clazz, resource);
         this.setLevelFile();
     }
-
+    /**
+     * sets the level file for the level
+     * If it fails to retrieve the level file from the config file
+     * It uses a default level path
+     */
     @Override
     public void setLevelFile() {
         String levelFileName = this.properties.getProperty(LEVEL_KEY);
@@ -105,6 +127,10 @@ public class GameConfiguration implements IGameConfiguration {
         }*/
     }
 
+    /**
+     * Obtains the level file used for the current level
+     * @return A File representing the level file
+     */
     @Override
     public File getLevelFile() {
         return this.levelFile;

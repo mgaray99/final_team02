@@ -46,48 +46,97 @@ public class LevelLoader implements ILevelLoader {
         this.initializeEntityLists(levelFileIn);
         entityCopy = defensivelyCopyList(entityList);
     }
-
+    /**
+     * Accessor for the length of the level loaded in
+     * @return The length of the level loaded in
+     */
     @Override
     public int getLevelLength() {
         return levelLength;
     }
-
+    /**
+     * Accessor for the width of the level loaded in
+     * @return The width of the level loaded in
+     */
     @Override
     public int getLevelWidth() {
         return levelWidth;
     }
 
+
+    /**
+     * Accessor for a copy of the list of player entities,
+     * to prevent direct modification of the original list
+     * @return A defensive copy of the list of player entities
+     */
     @Override
     public List<Player> getCopyOfPlayerList() {
         return new ArrayList<>(playerList);
     }
 
+    /**
+     * Accessor for a copy of the list of IMovable entities,
+     * to prevent direct modification of the original list
+     * @return A defensive copy of the list of IMovable entities
+     */
     @Override
     public List<IMovable> getCopyOfMovableEntityList() { return new ArrayList<>(movableEntityList);}
 
+    /**
+     * Accessor for a copy of the list of IWinnable entities,
+     * to prevent direct modification of the original list
+     * @return A defensive copy of the list of IWinnable entities
+     */
     @Override
     public List<IWinnable> getCopyOfWinnableList() { return new ArrayList<>(winnableList);}
 
+    /**
+     * Accessor for a copy of the list of enemy entities,
+     * to prevent direct modification of the original list
+     * @return A defensive copy of the list of enemy entities
+     */
     @Override
     public List<Enemy> getCopyOfEnemyList() {
         return new ArrayList<Enemy>(enemyList);
     }
 
+    /**
+     * Accessor for a copy of the list of block entities,
+     * to prevent direct modification of the original list
+     * @return A defensive copy of the list of block entities
+     */
     @Override
     public List<Block> getCopyOfBlockList() {
         return new ArrayList<Block>(blockList);
     }
 
+    /**
+     * Accessor for a copy of the list of power-up entities,
+     * to prevent direct modification of the original list
+     * @return A defensive copy of the list of power-up entities
+     */
     @Override
     public List<PowerUp> getCopyOfPowerUpList() {
         return new ArrayList<PowerUp>(powerUpList);
     }
 
+    /**
+     * Accessor for a copy of the list of all entities,
+     * to prevent direct modification of the original list
+     * @return A defensive copy of the list of all entities
+     */
     @Override
     public List<IEntity> getCopyOfEntityList() {
         return new ArrayList<IEntity>(entityList);
     }
 
+    /**
+     * Initializes all of the entity lists during initial level construction
+     * It should create entity instances using an IEntityFactory,
+     * then call addEntityToLists to add the instance to the lists they belong in
+     * @param levelFileIn The level file to initialize the entity lists from
+     * @throws InvalidFileException if the level file could not be found
+     */
     @Override
     public void initializeEntityLists(File levelFileIn) throws InvalidFileException {
         try {
@@ -114,6 +163,12 @@ public class LevelLoader implements ILevelLoader {
         }
     }
 
+    /**
+     * Adds an entity instance to the main IEntity list,
+     * as well as any other specific entity lists the entity
+     * should be a part of. Uses downcasting.
+     * @param entity
+     */
     @Override
     public void addEntityToLists(IEntity entity) {
         if(entity != null) {
@@ -180,6 +235,11 @@ public class LevelLoader implements ILevelLoader {
 
     }
 
+    /**
+     * Handles any exceptions thrown during construction of a level loader
+     * @param levelFileIn The level file
+     * @throws InvalidFileException A custom exception that communicates file read failures during level creation
+     */
     @Override
     public void handleConstructionExceptions(File levelFileIn) throws InvalidFileException {
         if(levelFileIn.isDirectory()){
