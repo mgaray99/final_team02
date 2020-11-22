@@ -126,8 +126,6 @@ different from the original plan are giving the user the ability to set the keys
 of the game and letting the user apply different textures to game.
 
 
-
-
 # describe, in detail, how to add new features to your project, especially ones you were not able to complete by the deadline
 
 ### Adding new texture packs:
