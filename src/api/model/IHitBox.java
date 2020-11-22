@@ -9,6 +9,8 @@ import model.collision.CollisionDirections;
  * It is also capable of detecting collisions with other HitBoxes,
  * and returning the direction(s) of the collision.
  *
+ * This is used by all entities for collision checking and to store position.
+ *
  * @author Ryan Krakower
  */
 public interface IHitBox {
