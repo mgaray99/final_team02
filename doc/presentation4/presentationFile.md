@@ -305,7 +305,7 @@ public class AutoScroller implements Scroller
 
 ![hello](planned-entityhierarchy.jpg)
 
-![hello](entity-interfaces.jpg)
+![hello](entity-interfaces.png)
 
 ![hello](entityhierarchy.png)
 
