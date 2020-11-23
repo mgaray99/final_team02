@@ -27,7 +27,7 @@ public class TexturerTest extends DukeApplicationTest{
   private static final double DEFAULT_BLOCKS_WIDE = 10;
   private static final double DEFAULT_BLOCKS_HIGH = 10;
   private static final String TEST_ENTITY = "entity";
-  private static final String PATH = "images/texturefiles/gametextures.properties";
+  private static final String PATH = "resources/images/texturefiles/gametextures.properties";
   private static final double WIDTH = 800;
   private static final double HEIGHT = 800;
 
