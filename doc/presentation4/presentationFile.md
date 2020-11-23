@@ -88,7 +88,7 @@ public interface IEntity {
     String getType();
 }
 ```
-**Implemented by Player**
+**PLAYER (abridged version)**
 
 ```java
 /**
@@ -120,53 +120,6 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
     this.setHealth(100);
     this.setCollisionDamage(100);
   }
-
-  /**
-   * Updates the velocity of the player given key inputs
-   * @param leftKey A boolean reprsenting whether or not the "move left" key was pressed
-   * @param rightKey A boolean representing whether or not the "move right" key was pressed
-   * @param jumpKey A boolean representing whether or not the "jump" key was pressed
-   */
-  public abstract void updateVelocity(boolean leftKey, boolean rightKey, boolean jumpKey);
-
-  /**
-   * An accessor for the movement speed modifier value of an IPlayer
-   * @implNote : It should return a default value if the modifier is not present
-   * @return The movement speed modifier value of an IPlayer
-   */
-  @Override
-  public double getMovementSpeedModifierValue(){
-    Modifier movementSpeedModifier = this.getModifiers().get(Modifier.ModifierType.MOVEMENT_SPEED);
-    return movementSpeedModifier != null ? movementSpeedModifier.getValue() : 1;
-  }
-
-  /**
-   * An accessor for the movement speed modifier value of an IPlayer
-   * @implNote : It should return a default value if the modifier is not present
-   * @return The jump speed modifier value of an IPlayer
-   */
-  @Override
-  public double getJumpSpeedModifierValue(){
-    Modifier jumpSpeedModifier = this.getModifiers().get(Modifier.ModifierType.JUMP_SPEED);
-    return jumpSpeedModifier != null ? jumpSpeedModifier.getValue() : 1;
-  }
-
-  /**
-   * An accessor for the anti-gravity modifier value of an IPlayer
-   * @implNote : It should return a default value if the modifier is not present
-   * @return The anti-gravity modifier value of an IPlayer
-   */
-  @Override
-  public double getAntiGravityModifierValue(){
-    Modifier gravityModifier = this.getModifiers().get(Modifier.ModifierType.ANTI_GRAVITY);
-    return gravityModifier != null ? gravityModifier.getValue() : 1;
-  }
-
-  /**
-   * Updates the position of this player - Should be used for game type specific
-   * position updates determines by the extending class
-   */
-  public abstract void updatePosition();
 
   /**
    * A  handler for checking any collisions between this entity and another entity
@@ -267,137 +220,10 @@ public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer 
   public String getType() {
     return type;
   }
-
-  /**
-   * Obtains whether or not this entity is "grounded", aka
-   * it should not be considered airborne
-   * @return Whether or not this entity is grounded
-   */
-  @Override
-  public boolean getGrounded() {
-    return grounded;
-  }
-
-  /**
-   * Sets whether or not this entity is "grounded", aka
-   * whether or not is should be considered airborne
-   * @param grounded The boolean to set the grounded value to
-   */
-  @Override
-  public void setGrounded(boolean grounded) {
-    this.grounded = grounded;
-  }
-
-  /**
-   * Translates the hitbox of this player using its current velocity
-   * then clears its current collision handler
-   */
-  public void translateHitBox() {
-    this.getHitBox().translateX(this.getXVel());
-    this.getHitBox().translateY(this.getYVel());
-    this.currentCollision.clear();
-  }
-
-  // applies gravity to the player, taking into account the anti-gravity modifier it may have
-  protected void applyGravity() {
-    double antiGravityValue = this.getAntiGravityModifierValue();
-    double adjustedAntiGravityValue = 1 - ((antiGravityValue - 1));
-    double yVelWithGravity = this.getYVel() + (GRAVITY_FACTOR * adjustedAntiGravityValue);
-    this.setYVel(yVelWithGravity);
-  }
-
-  /**
-   * Accesses the current health of this damageable
-   * @return the current health of this damageable
-   */
-  @Override
-  public double getHealth() {
-    return this.health;
-  }
-
-  /**
-   * Sets the current health of this damageable
-   * @param health The health to set the health of this damageable to
-   */
-  @Override
-  public void setHealth(double health) {
-    this.health = health;
-  }
-
-  /**
-   * Accesses the current collision damage of this damageable
-   * @return The current collision damage of this damageable
-   */
-  @Override
-  public double getCollisionDamage() {
-    return this.damage;
-  }
-
-  /**
-   * Sets the current collision damage of this damageable
-   * @param collisionDamage The collision damage to set the collision damage of this damageable to
-   */
-  @Override
-  public void setCollisionDamage(double collisionDamage) {
-    this.damage = collisionDamage;
-  }
-
-  /**
-   * Returns a list of CollisionDirections that this damageable can apply damage from
-   * @return The list of CollisionDirections that this damageable can apply damage from
-   */
-  @Override
-  public ICollisionHandler getAppliesDamageDirections() {
-    return new CollisionDirections(Collections.singletonList(Direction.BOTTOM));
-  }
-
-  /**
-   * Returns a list of CollisionDirections that this damageable can receive damage from
-   * @return The list of CollisionDirections that this damageable can receive damage from
-   */
-  @Override
-  public ICollisionHandler getReceivesDamageDirections() {
-    return new CollisionDirections(Arrays.asList(Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT));
-  }
-
-  // obtains the current collision handler instance of this player
-  protected ICollisionHandler getCurrentCollision() {
-    return this.currentCollision;
-  }
-
-  /**
-   * An accessor for the ModifierType to Modifier map of an IPlayer
-   * @return The ModifierType to Modifier map of an IPlayer
-   */
-  @Override
-  public Map<Modifier.ModifierType, Modifier> getModifiers() {
-    return this.modifiers;
-  }
-
-  /**
-   * Obtains the Team this entity belongs to
-   * @return The Team this entity belongs to
-   */
-  @Override
-  public Teams getTeam() {
-    return Teams.PLAYER;
-  }
-
-  /**
-   * Determines whether or not this entity is dead - by default, it checks if its health is less than or equal to 0
-   * @return Whether or not this entity is dead
-   */
-  @Override
-  public boolean isDead() {
-    return this.health <= 0;
-  }
 }
 ```
 
 **SCROLLER**
-
-* Scroller - three main methods - getScoreFromScroll(), scroll(level, player), reset()
-    * Use case: ManualScroller and AutoScroller
     
 ```java
 /**
