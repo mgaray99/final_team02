@@ -53,8 +53,8 @@ public class Level {
 ![hello](propertiesshot.png)
 
 ####APIs and use cases: 5 min - Mike and Alex
-* IEntity - the basic functions it provides to create any game object for the platformer API
-    * Use case: Its implementation into the Moveable interface, which itself is used to provide movement capability on top of basic entity properties to the Player and Enemy
+
+**IENTITY**
 
 ```java
 /**
@@ -88,9 +88,142 @@ public interface IEntity {
     String getType();
 }
 ```
+**PLAYER (abridged version)**
 
-* Scroller - three main methods - getScoreFromScroll(), scroll(level, player), reset()
-    * Use case: ManualScroller and AutoScroller
+```java
+/**
+ * A class for entities that are players
+ * @author Mike Garay and Ryan Krakower
+ */
+public abstract class Player implements IEntity, IMovable, IDamageable, IPlayer {
+
+  //private final String type = this.getClass().getSimpleName();
+  private final String type = "Player";
+  public static final int GRACE_PERIOD = 1;
+  public static final double GRAVITY_FACTOR = 0.015f;
+  private double xVel = 0;
+  private double yVel = 0;
+  protected HitBox hitBox;
+  private boolean grounded = true;
+  private double health = 0;
+  private double damage = 0;
+  private final Map<Modifier.ModifierType, Modifier> modifiers = new HashMap<>();
+  private ICollisionHandler currentCollision = new CollisionDirections();
+
+  /**
+   * Constructs a Player given an x-coordinate and a y-coordinate
+   * @param x The x-coordinate to construct this Player's Hitbox with
+   * @param y The y-coordinate to construct this Player's Hitbox with
+   */
+  public Player(double x, double y){
+    this.hitBox = new HitBox(x, y);
+    this.setHealth(100);
+    this.setCollisionDamage(100);
+  }
+
+  /**
+   * A  handler for checking any collisions between this entity and another entity
+   *
+   * If the other entity is an instance of IDamageable, this player attempts to apply damage to it
+   *
+   * If the other entity is an instance of IEmpowering and the collision directions are not empty,
+   * this player attempts to retrieve a modifier from it and then has it call
+   * IEmpowering#sethasAppliedModifier to true if the player successfully obtains the modifier
+   *
+   * If the other entity is an instance of ISpawner and the collision directions are not empty,
+   *
+   * ISpawner#attemptCreateAndAddSpawn is called to attempt to make it spawn an entity
+   * If the entity is an instance of IWinnable and the collision directions are not empty,
+   * IWinnable#setHasWon is called to set it to true that the player has "won" it
+   *
+   * @param entity The other entity to check for any possible collisions with
+   */
+  public void checkCollision(IEntity entity) {
+    CollisionDirections collision = hitBox.getCollisionDirections(entity.getHitBox());
+    currentCollision.add(collision);
+    this.processCurrentCollision(entity, collision);
+    if (entity instanceof IDamageable) {
+      this.attemptApplyDamage((IDamageable) entity, collision);
+    }
+    if (entity instanceof IEmpowering && !collision.isEmpty()) {
+      IEmpowering empowering = (IEmpowering) entity;
+      if (!empowering.hasAppliedModifier()) {
+        if(empowering.getModifier() != null){
+          this.applyModifier(empowering.getModifier());
+        }
+        empowering.setHasAppliedModifier(true);
+      }
+    }
+    if (entity instanceof ISpawner && !collision.isEmpty()) {
+      ISpawner spawner = (ISpawner) entity;
+      spawner.attemptCreateAndAddSpawn(collision);
+    }
+    if (entity instanceof IWinnable && !collision.isEmpty()) {
+      IWinnable goal = (IWinnable) entity;
+      goal.setHasWon(true);
+    }
+  }
+
+  /**
+   * Obtains the stored Hitbox instance of the entity
+   * @apiNote : This should be amended to return an IHitbox instance, not a Hitbox instance
+   * @return The Hitbox instance stored in the entity instance
+   */
+  @Override
+  public HitBox getHitBox() {
+    return hitBox;
+  }
+
+  /**
+   * Sets the x velocity for this entity
+   * @param xVel The x velocity to set for this entity
+   */
+  @Override
+  public void setXVel(double xVel) {
+    this.xVel = xVel;
+  }
+
+  /**
+   * Sets the y velocity for this entity
+   * @param yVel The y velocity to set for this entity
+   */
+  @Override
+  public void setYVel(double yVel) {
+    this.yVel = yVel;
+  }
+
+  /**
+   * Obtains the x velocity for this entity
+   * @return The current x velocity of this entity
+   */
+  @Override
+  public double getXVel() {
+    return xVel;
+  }
+
+  /**
+   * Obtains the y velocity for this entity
+   * @return The current y velocity of this entity
+   */
+  @Override
+  public double getYVel() {
+    return yVel;
+  }
+
+  /**
+   * Obtains a String representing the stored type of this entity
+   * This should usually obtain the name of the implementing class
+   * and can be used to avoid instanceof/downcasting if not absolutely required
+   * @return A String representing the type of this entity
+   */
+  @Override
+  public String getType() {
+    return type;
+  }
+}
+```
+
+**SCROLLER**
     
 ```java
 /**
@@ -119,6 +252,8 @@ public interface Scroller {
     int getScoreFromScroll();
 }
 ```
+
+**AUTOSCROLLER**
 
 ```java
 public class AutoScroller implements Scroller
@@ -163,7 +298,12 @@ public class AutoScroller implements Scroller
 ####Two designs (MVC and entity hierarchy): 5 min - Mike and Edem
 
 * Model-view-controller was something that remained consistent since the beginning of the project - we wanted to make sure the user only had direct access to the controller, which would handle manipulating model, which would handle updating what was seen by the user in view. It also made it simpler to divide up the work for the project, as 2 people would work on view/controller while 2 people worked on model.
+
+![hello](model-view-controller.png)
+
 * Entity hierarchy - originally it was more abstraction/inheritance based, with a single Entity class being the superclass of all other entity classes on top of a lot of other abstractions. By the end, the Entity superclass turned into the IEntity interface, and there was less of a hierarchy overall and more reliance on interfaces to give each type of entity its necessary properties.
+
+![hello](planned_entityhierarchy.jpg)
 
 ![hello](entityhierarchy.png)
 
@@ -174,20 +314,30 @@ public class AutoScroller implements Scroller
     * It allowed for flexibility and adaptability since we were able to take feedback from each milestone and better design  features we implemented that 
     * Helped track progress as we proceeded with the project
     * It made identifying code errors/bugs easier since each milestone had specific features that needed to be implemented
+    
 * Something each team member learned about managing large project
     * Better grasp of git and gitlab and learnt how to manage merge conflicts better
     * Learn how to respect each other’s opinions and respond to constructive feedback
     * Large projects can be better managed when broken down into smaller chunks
     * Managing large projects requires increased collaboration since different members work individually on different aspects of the project which are supposed to be integrated
+
+* Things we improved, things we can still improve
+    * We improved on moving past differences, listening and actually considering each others views about various design decisions
+    * We improved on managing our projects better with git. We started off with a lot of merge conflicts and haven’t had that in these past couple of days
+    * We can still improve on our punctuality to team meetings
+    * We could have improved on having each member talk a little bit about code they implemented to help team member’s have a rough idea about each other’s progress
+
 * One thing we each learned about positive team culture
     * Created an environment where everybody can express their views without fear of any form of judgement
     * Fostered collaboration since team members were ready to help each other
     * Encouraged positivity which helped us accomplish all goals we set at the beginning of the project
     * Fostered a social community where we got to interact and talk about stuff outside the project: including recommendations for movies and tv shows, and helping other team members on programming stuff outside class
+
 * Revisit team contract, one thing we each learned about communicating and solving problems 
     * Problems between team members could be easily resolved by allowing the parties involved voice out their complaints with other team members mediating.
     * Conflicting team decisions were easily resolved by analyzing the pros and cons of each idea and voting the best idea
     * Respecting and listening to each other fostered positive team work
+    * Showing gratitude for a favor and giving compliments like nice job, well done, and you’re a genius boosted camaraderie and created a more social environment
 
 
 
