@@ -174,20 +174,30 @@ public class AutoScroller implements Scroller
     * It allowed for flexibility and adaptability since we were able to take feedback from each milestone and better design  features we implemented that 
     * Helped track progress as we proceeded with the project
     * It made identifying code errors/bugs easier since each milestone had specific features that needed to be implemented
+    
 * Something each team member learned about managing large project
     * Better grasp of git and gitlab and learnt how to manage merge conflicts better
     * Learn how to respect each other’s opinions and respond to constructive feedback
     * Large projects can be better managed when broken down into smaller chunks
     * Managing large projects requires increased collaboration since different members work individually on different aspects of the project which are supposed to be integrated
+
+* Things we improved, things we can still improve
+    * We improved on moving past differences, listening and actually considering each others views about various design decisions
+    * We improved on managing our projects better with git. We started off with a lot of merge conflicts and haven’t had that in these past couple of days
+    * We can still improve on our punctuality to team meetings
+    * We could have improved on having each member talk a little bit about code they implemented to help team member’s have a rough idea about each other’s progress
+
 * One thing we each learned about positive team culture
     * Created an environment where everybody can express their views without fear of any form of judgement
     * Fostered collaboration since team members were ready to help each other
     * Encouraged positivity which helped us accomplish all goals we set at the beginning of the project
     * Fostered a social community where we got to interact and talk about stuff outside the project: including recommendations for movies and tv shows, and helping other team members on programming stuff outside class
+
 * Revisit team contract, one thing we each learned about communicating and solving problems 
     * Problems between team members could be easily resolved by allowing the parties involved voice out their complaints with other team members mediating.
     * Conflicting team decisions were easily resolved by analyzing the pros and cons of each idea and voting the best idea
     * Respecting and listening to each other fostered positive team work
+    * Showing gratitude for a favor and giving compliments like nice job, well done, and you’re a genius boosted camaraderie and created a more social environment
 
 
 
