@@ -298,7 +298,12 @@ public class AutoScroller implements Scroller
 ####Two designs (MVC and entity hierarchy): 5 min - Mike and Edem
 
 * Model-view-controller was something that remained consistent since the beginning of the project - we wanted to make sure the user only had direct access to the controller, which would handle manipulating model, which would handle updating what was seen by the user in view. It also made it simpler to divide up the work for the project, as 2 people would work on view/controller while 2 people worked on model.
+
+![hello](model-view-controller.png)
+
 * Entity hierarchy - originally it was more abstraction/inheritance based, with a single Entity class being the superclass of all other entity classes on top of a lot of other abstractions. By the end, the Entity superclass turned into the IEntity interface, and there was less of a hierarchy overall and more reliance on interfaces to give each type of entity its necessary properties.
+
+![hello](planned_entityhierarchy.png)
 
 ![hello](entityhierarchy.png)
 
