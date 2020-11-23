@@ -39,7 +39,7 @@ public class Texturer implements ITexturer {
   private double numBlocksHigh;
   private final String path;
 
-  private static final String FILEPATH_START = "images/texturefiles/";
+  private static final String FILEPATH_START = "resources/images/texturefiles/";
 
   /**
    * Constructs a new Texturer object
