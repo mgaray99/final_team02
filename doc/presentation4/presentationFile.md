@@ -303,7 +303,7 @@ public class AutoScroller implements Scroller
 
 * Entity hierarchy - originally it was more abstraction/inheritance based, with a single Entity class being the superclass of all other entity classes on top of a lot of other abstractions. By the end, the Entity superclass turned into the IEntity interface, and there was less of a hierarchy overall and more reliance on interfaces to give each type of entity its necessary properties.
 
-![hello](planned_entityhierarchy.png)
+![hello](planned_entityhierarchy.jpg)
 
 ![hello](entityhierarchy.png)
 
