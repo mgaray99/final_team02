@@ -53,6 +53,7 @@ public class Level {
 ![hello](propertiesshot.png)
 
 ####APIs and use cases: 5 min - Mike and Alex
+
 **IENTITY**
 
 ```java
@@ -87,7 +88,7 @@ public interface IEntity {
     String getType();
 }
 ```
-**Implemented by Player (through the extending interface IMovable)**
+**Implemented by Player**
 
 ```java
 /**
